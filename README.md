@@ -1,4 +1,5 @@
 # HuongBien
 
 # Thành viên
-Nguyen Trung Nguyen
+1. Nguyen Tran Gia Si
+2. Nguyen Trung Nguyen
