@@ -1,5 +1,5 @@
 .all-bg {
-    -fx-background-image: url('../img/all_ui/all-bg.png');
+    -fx-background-image: url('../img/background/all-bg.png');
     -fx-background-color: black;
     -fx-background-size: cover;
     -fx-background-position: left;
@@ -52,12 +52,12 @@
     -fx-border-width: 0 0 1px 0;
 }
 
-.main-hover {
+.main-theme-color {
     -fx-background-color: #318DD1;
     -fx-text-fill: white;
 }
 
-.main-hover:hover {
-    -fx-background-color: #56c8ed;
+.main-theme-color:hover {
+    -fx-background-color: #96c8ed;
     -fx-text-fill: black;
 }
