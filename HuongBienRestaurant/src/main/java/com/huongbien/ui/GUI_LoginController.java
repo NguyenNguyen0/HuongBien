@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
@@ -14,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,6 +62,7 @@ public class GUI_LoginController implements Initializable {
     @FXML
     void btn_exit(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle("Exit");
         alert.setHeaderText("Bạn có muốn thoát khỏi?");
         ButtonType btn_ok = new ButtonType("Ok");
@@ -70,11 +75,6 @@ public class GUI_LoginController implements Initializable {
         } else if (result.isPresent() && result.get() == btn_cancel) {
             txt_empID.requestFocus();
         }
-    }
-
-    @FXML
-    void btn_login(ActionEvent event) {
-
     }
 
     @FXML
@@ -101,6 +101,29 @@ public class GUI_LoginController implements Initializable {
             compoent_hide.setVisible(true);
             txt_pwdHide.setText(txt_pwdShow.getText()+"");
             status = false;
+        }
+    }
+
+    @FXML
+    void handleLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Main.fxml"));
+            Parent root = loader.load();
+
+            Scene mainScene = new Scene(root);
+
+            Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            loginStage.close();
+
+            Stage mainStage = new Stage();
+            mainStage.setScene(mainScene);
+            mainStage.setMaximized(true);
+            mainStage.setTitle("Dashboard - Huong Bien Restaurant");
+            mainStage.initStyle(StageStyle.UNDECORATED);
+            mainStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
