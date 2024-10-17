@@ -9,17 +9,19 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class GUI_Login extends Application {
+public class GUI_Main extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_Main.fxml"));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
-        primaryStage.setTitle("Login - Huong Bien Restaurant");
+        primaryStage.setTitle("Dashboard - Huong Bien Restaurant");
         primaryStage.setMaximized(true);
         primaryStage.show();
-    }
-    public static void main(String[] args) {
-        launch();
     }
 }
