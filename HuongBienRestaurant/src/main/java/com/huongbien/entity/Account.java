@@ -3,39 +3,31 @@ package com.huongbien.entity;
 import java.util.Objects;
 
 public class Account {
-    private String userName;
+    private String username;
     private String hashcode;
     private String role;
     private String email;
     private Boolean isActive;
-    private Employee employee;
+    private Employee employeeInfo;
     private byte[] avatar;
 
     public Account() {}
 
-    public Account(String userName, String hashcode, String role, String email, Boolean isActive, Employee employee, byte[] avatar) {
-        setUserName(userName);
+    public Account(String username, String hashcode, String role, String email, Boolean isActive, Employee employeeInfo, byte[] avatar) {
+        setUsername(username);
         setHashcode(hashcode);
         setRole(role);
         setEmail(email);
         setIsActive(isActive);
-        setEmployee(employee);
+        setEmployeeInfo(employeeInfo);
         setAvatar(avatar);
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        if (userName == null || userName.trim().isEmpty()) {
+    public void setUsername(String employeeId) {
+        if (employeeId == null || employeeId.trim().isEmpty()) {
             throw new IllegalArgumentException("User name cannot be empty");
         }
-        this.userName = userName;
-    }
-
-    public String getHashcode() {
-        return hashcode;
+        this.username = employeeId;
     }
 
     public void setHashcode(String hashcode) {
@@ -45,19 +37,11 @@ public class Account {
         this.hashcode = hashcode;
     }
 
-    public String getRole() {
-        return role;
-    }
-
     public void setRole(String role) {
         if (role == null || (!role.equals("Manager") && !role.equals("Waiter"))) {
             throw new IllegalArgumentException("Role must be either Manager or Waiter");
         }
         this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
@@ -67,10 +51,6 @@ public class Account {
         this.email = email;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
     public void setIsActive(Boolean isActive) {
         if (isActive == null) {
             throw new IllegalArgumentException("isActive cannot be null");
@@ -78,31 +58,51 @@ public class Account {
         this.isActive = isActive;
     }
 
-    public byte[] getAvatar() {
-        return avatar;
-    }
-
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public void setEmployeeInfo(Employee employeeInfo) {
+        this.employeeInfo = employeeInfo;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public String getUsername() {
+        return username;
+    }
+
+    public String getHashcode() {
+        return hashcode;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public Employee getEmployeeInfo() {
+        return employeeInfo;
     }
 
     @Override
     public String toString() {
         return "Account{" +
-                "userName='" + userName + '\'' +
+                "username='" + username + '\'' +
                 ", hashcode='" + hashcode + '\'' +
                 ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
                 ", isActive=" + isActive +
-                ", employee=" + employee +
+                ", employeeInfo=" + employeeInfo +
                 '}';
     }
 
@@ -111,12 +111,12 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Objects.equals(userName, account.userName);
+        return Objects.equals(username, account.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(userName);
+        return Objects.hashCode(username);
     }
 }
 

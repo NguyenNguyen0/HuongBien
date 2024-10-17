@@ -3,35 +3,44 @@ package com.huongbien.entity;
 import java.util.Objects;
 
 public class Table {
-    private String tableId;
+    private String id;
+    private String name;
+    private int floor;
     private int seats;
-    private String location;
     private boolean isAvailable;
     private TableType tableType;
 
-    public Table() {}
+    public Table() {
+    }
 
-    public Table(String tableId, int seats, String location, boolean isAvailable, TableType tableType) {
-        setTableId(tableId);
+    public Table(String id, String name, int floor, int seats, boolean isAvailable, TableType tableType) {
+        setId(id);
+        setName(name);
+        setFloor(floor);
         setSeats(seats);
-        setLocation(location);
         setIsAvailable(isAvailable);
         setTableType(tableType);
     }
 
-    public String getTableId() {
-        return tableId;
-    }
-
-    public void setTableId(String tableId) {
-        if (tableId == null || !tableId.matches("^T\\dB\\d{3}$")) {
+    public void setId(String id) {
+        if (id == null || !id.matches("^T\\dB\\d{3}$")) {
             throw new IllegalArgumentException("Invalid table ID format");
         }
-        this.tableId = tableId;
+        this.id = id;
     }
 
-    public int getSeats() {
-        return seats;
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+        this.name = name;
+    }
+
+    public void setFloor(int floor) {
+        if (floor < 0) {
+            throw new IllegalArgumentException("Floor must be 0 or greater");
+        }
+        this.floor = floor;
     }
 
     public void setSeats(int seats) {
@@ -41,39 +50,45 @@ public class Table {
         this.seats = seats;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        if (location == null || location.trim().isEmpty()) {
-            throw new IllegalArgumentException("Location cannot be empty");
-        }
-        this.location = location;
-    }
-
-    public boolean getIsAvailable() {
-        return isAvailable;
-    }
-
     public void setIsAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable;
-    }
-
-    public TableType getTableType() {
-        return tableType;
     }
 
     public void setTableType(TableType tableType) {
         this.tableType = tableType;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public TableType getTableType() {
+        return tableType;
+    }
+
     @Override
     public String toString() {
         return "Table{" +
-                "tableId='" + tableId + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", floor=" + floor +
                 ", seats=" + seats +
-                ", location='" + location + '\'' +
                 ", isAvailable=" + isAvailable +
                 ", tableType=" + tableType +
                 '}';
@@ -84,12 +99,12 @@ public class Table {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Table table = (Table) o;
-        return Objects.equals(tableId, table.tableId);
+        return Objects.equals(id, table.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(tableId);
+        return Objects.hashCode(id);
     }
 }
 

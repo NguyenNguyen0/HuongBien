@@ -17,20 +17,20 @@ public class TableType {
         this.tableId = String.format("LB%03d", tableNumber);
     }
 
-    public String getTableId() {
-        return tableId;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTableId() {
+        return tableId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {

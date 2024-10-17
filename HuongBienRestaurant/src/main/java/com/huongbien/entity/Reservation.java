@@ -2,6 +2,8 @@ package com.huongbien.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Reservation {
     private String reservationId;
@@ -15,15 +17,17 @@ public class Reservation {
     private double refundDeposit;
     private Payment payment;
     private Employee employee;
-    private Table table;
+    private ArrayList<Table> tables;
     private Customer customer;
+    private ArrayList<FoodOrder> foods;
 
 
     public Reservation() {}
 
     public Reservation(String reservationId, String partyType, int partySize, LocalDate reservationDate,
                        LocalTime reservationTime, LocalDate receiveDate, String status, double deposit,
-                       double refundDeposit, Payment payment, Employee employee, Table table, Customer customer) {
+                       double refundDeposit, Payment payment, Employee employee, ArrayList<Table> tables,
+                       Customer customer, ArrayList<FoodOrder> foods) {
         setReservationId(reservationId);
         setPartyType(partyType);
         setPartySize(partySize);
@@ -35,12 +39,9 @@ public class Reservation {
         setRefundDeposit(refundDeposit);
         setPayment(payment);
         setEmployee(employee);
-        setTable(table);
+        setTables(tables);
         setCustomer(customer);
-    }
-
-    public String getReservationId() {
-        return reservationId;
+        setFoods(foods);
     }
 
     public void setReservationId(String reservationId) {
@@ -50,10 +51,6 @@ public class Reservation {
         this.reservationId = reservationId;
     }
 
-    public String getPartyType() {
-        return partyType;
-    }
-
     public void setPartyType(String partyType) {
         if (partyType == null || partyType.trim().isEmpty()) {
             throw new IllegalArgumentException("Party type cannot be empty");
@@ -61,19 +58,11 @@ public class Reservation {
         this.partyType = partyType;
     }
 
-    public int getPartySize() {
-        return partySize;
-    }
-
     public void setPartySize(int partySize) {
-        if (partySize <= 0) {
+        if (partySize <= 1) {
             throw new IllegalArgumentException("Party size must be greater than 0");
         }
         this.partySize = partySize;
-    }
-
-    public LocalDate getReservationDate() {
-        return reservationDate;
     }
 
     public void setReservationDate(LocalDate reservationDate) {
@@ -83,19 +72,11 @@ public class Reservation {
         this.reservationDate = reservationDate;
     }
 
-    public LocalTime getReservationTime() {
-        return reservationTime;
-    }
-
     public void setReservationTime(LocalTime reservationTime) {
         if (reservationTime == null || (reservationDate.equals(LocalDate.now()) && reservationTime.isAfter(LocalTime.now()))) {
             throw new IllegalArgumentException("Reservation time must be before the current time if the reservation is for today");
         }
         this.reservationTime = reservationTime;
-    }
-
-    public LocalDate getReceiveDate() {
-        return receiveDate;
     }
 
     public void setReceiveDate(LocalDate receiveDate) {
@@ -105,16 +86,12 @@ public class Reservation {
         this.receiveDate = receiveDate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
     public void setStatus(String status) {
+        if (status == null || status.trim().isEmpty()) {
+            this.status = "Chờ";
+            return;
+        }
         this.status = status;
-    }
-
-    public double getDeposit() {
-        return deposit;
     }
 
     public void setDeposit(double deposit) {
@@ -124,19 +101,11 @@ public class Reservation {
         this.deposit = deposit;
     }
 
-    public double getRefundDeposit() {
-        return refundDeposit;
-    }
-
     public void setRefundDeposit(double refundDeposit) {
         if (refundDeposit < 0) {
             throw new IllegalArgumentException("Refund deposit must be greater than or equal to 0");
         }
         this.refundDeposit = refundDeposit;
-    }
-
-    public Payment getPayment() {
-        return payment;
     }
 
     public void setPayment(Payment payment) {
@@ -146,10 +115,6 @@ public class Reservation {
         this.payment = payment;
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
     public void setEmployee(Employee employee) {
         if (employee == null) {
             throw new IllegalArgumentException("Employee cannot be null");
@@ -157,19 +122,11 @@ public class Reservation {
         this.employee = employee;
     }
 
-    public Table getTable() {
-        return table;
-    }
-
-    public void setTable(Table table) {
-        if (table == null) {
+    public void setTables(ArrayList<Table> tables) {
+        if (tables == null) {
             throw new IllegalArgumentException("Table cannot be null");
         }
-        this.table = table;
-    }
-
-    public Customer getCustomer() {
-        return customer;
+        this.tables = tables;
     }
 
     public void setCustomer(Customer customer) {
@@ -177,6 +134,66 @@ public class Reservation {
             throw new IllegalArgumentException("Customer cannot be null");
         }
         this.customer = customer;
+    }
+
+    public void setFoods(ArrayList<FoodOrder> foods) {
+        this.foods = foods;
+    }
+
+    public String getReservationId() {
+        return reservationId;
+    }
+
+    public String getPartyType() {
+        return partyType;
+    }
+
+    public int getPartySize() {
+        return partySize;
+    }
+
+    public LocalDate getReservationDate() {
+        return reservationDate;
+    }
+
+    public LocalTime getReservationTime() {
+        return reservationTime;
+    }
+
+    public LocalDate getReceiveDate() {
+        return receiveDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public double getDeposit() {
+        return deposit;
+    }
+
+    public double getRefundDeposit() {
+        return refundDeposit;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public ArrayList<Table> getTables() {
+        return tables;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public ArrayList<FoodOrder> getFoods() {
+        return foods;
     }
 
     @Override
@@ -193,8 +210,21 @@ public class Reservation {
                 ", refundDeposit=" + refundDeposit +
                 ", payment=" + payment +
                 ", employee=" + employee +
-                ", table=" + table +
+                ", tables=" + tables +
                 ", customer=" + customer +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return Objects.equals(reservationId, that.reservationId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(reservationId);
     }
 }

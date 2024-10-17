@@ -27,14 +27,6 @@ public class Promotion {
         setMinimumOrderAmount(minimumOrderAmount);
     }
 
-    public Promotion(String promotionId) {
-        setPromotion_id(promotionId);
-    }
-
-    public String getPromotion_id() {
-        return promotionId;
-    }
-
     public void setPromotion_id(String promotionId) {
         if (promotionId == null || promotionId.isEmpty()) {
             LocalDate currentDate = LocalDate.now();
@@ -46,19 +38,11 @@ public class Promotion {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("'name': tên khuyến mãi không được để trống");
         }
         this.name = name;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
     }
 
     public void setStartDate(LocalDate startDate) {
@@ -68,10 +52,6 @@ public class Promotion {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
     public void setEndDate(LocalDate endDate) {
         if (endDate != null && startDate != null && endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("endDate phải sau ngày bắt đầu mở giảm giá");
@@ -79,16 +59,8 @@ public class Promotion {
         this.endDate = endDate;
     }
 
-    public boolean isUsed() {
-        return isUsed;
-    }
-
     public void setIsUsed(boolean isUsed) {
         this.isUsed = isUsed;
-    }
-
-    public double getDiscount() {
-        return discount;
     }
 
     public void setDiscount(double discount) {
@@ -98,16 +70,8 @@ public class Promotion {
         this.discount = discount;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public double getMinimumOrderAmount() {
-        return minimumOrderAmount;
     }
 
     public void setMinimumOrderAmount(double minimumOrderAmount) {
@@ -115,6 +79,38 @@ public class Promotion {
             throw new IllegalArgumentException("MinimumOrderAmount phải lớn hơn 0");
         }
         this.minimumOrderAmount = minimumOrderAmount;
+    }
+
+    public String getPromotion_id() {
+        return promotionId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getMinimumOrderAmount() {
+        return minimumOrderAmount;
     }
 
     @Override

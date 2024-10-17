@@ -2,34 +2,34 @@ package com.huongbien.entity;
 
 import java.util.Objects;
 
-public class OrderDetail {
-    private String orderDetailId;
+public class FoodOrder {
+    private String foodOrderId;
     private int quantity;
     private String note;
     private double salePrice;
-    private Cuisine cuisine;
+    private final Cuisine cuisine;
 
-    public OrderDetail() {}
-
-    public OrderDetail(String orderDetailId, int quantity, String note, double salePrice, Cuisine cuisine) {
-        setOrderDetailId(orderDetailId);
-        setQuantity(quantity);
-        setNote(note);
-        setSalePrice(salePrice);
-        setCuisine(cuisine);
+    public FoodOrder(double salePrice, String note, int quantity, String foodOrderId, Cuisine cuisine) {
+        this.salePrice = salePrice;
+        this.note = note;
+        this.quantity = quantity;
+        this.foodOrderId = foodOrderId;
+        this.cuisine = cuisine;
     }
 
-    public void setOrderDetailId(String orderDetailId) {
-        if (orderDetailId == null || !orderDetailId.matches("^HD\\d{13}CT\\d{3}$")) {
-            throw new IllegalArgumentException("Invalid order detail ID format");
+    public void setFoodOrderId(String foodOrderId) {
+        if (foodOrderId == null || !foodOrderId.matches("^FO\\d{13}$")) {
+            throw new IllegalArgumentException("Invalid food order ID format");
         }
-        this.orderDetailId = orderDetailId;
+
+        this.foodOrderId = foodOrderId;
     }
 
     public void setQuantity(int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
         }
+
         this.quantity = quantity;
     }
 
@@ -41,15 +41,16 @@ public class OrderDetail {
         if (salePrice <= 0) {
             throw new IllegalArgumentException("Sale price must be greater than 0");
         }
+
         this.salePrice = salePrice;
     }
 
-    public void setCuisine(Cuisine cuisine) {
-        this.cuisine = cuisine;
+    public Cuisine getCuisine() {
+        return cuisine;
     }
 
-    public String getOrderDetailId() {
-        return orderDetailId;
+    public String getFoodOrderId() {
+        return foodOrderId;
     }
 
     public int getQuantity() {
@@ -64,14 +65,10 @@ public class OrderDetail {
         return salePrice;
     }
 
-    public Cuisine getCuisine() {
-        return cuisine;
-    }
-
     @Override
     public String toString() {
-        return "OrderDetail{" +
-                "orderDetailId='" + orderDetailId + '\'' +
+        return "FoodOrder{" +
+                "foodOrderId='" + foodOrderId + '\'' +
                 ", quantity=" + quantity +
                 ", note='" + note + '\'' +
                 ", salePrice=" + salePrice +
@@ -83,13 +80,12 @@ public class OrderDetail {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderDetail that = (OrderDetail) o;
-        return Objects.equals(orderDetailId, that.orderDetailId);
+        FoodOrder foodOrder = (FoodOrder) o;
+        return Objects.equals(foodOrderId, foodOrder.foodOrderId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(orderDetailId);
+        return Objects.hashCode(foodOrderId);
     }
 }
-

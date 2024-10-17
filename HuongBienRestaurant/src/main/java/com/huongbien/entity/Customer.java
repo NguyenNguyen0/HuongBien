@@ -7,7 +7,7 @@ public class Customer {
     private String customerId;
     private String name;
     private String address;
-    private Boolean gender;
+    private boolean gender;
     private String phoneNumber;
     private String email;
     private LocalDate birthday;
@@ -15,9 +15,13 @@ public class Customer {
     private int accumulatedPoints;
     private String memberShip;
 
-    public Customer() {}
+//  Dành cho khách vãng lai 
+    public Customer() {
+        setCustomerId("KH0000000");
+        setName("Khách vãng lai");
+    }
 
-    public Customer(String customerId, String name, String address, Boolean gender,
+    public Customer(String customerId, String name, String address, boolean gender,
                     String phoneNumber, String email, LocalDate birthday,
                     LocalDate registrationDate, int accumulatedPoints, String memberShip) {
         setCustomerId(customerId);
@@ -32,19 +36,11 @@ public class Customer {
         setMemberShip(memberShip);
     }
 
-    public String getCustomerId() {
-        return customerId;
-    }
-
     public void setCustomerId(String customerId) {
         if (customerId == null || !customerId.matches("^KH\\d{6}\\d{3}$")) {
             throw new IllegalArgumentException("Invalid customer ID");
         }
         this.customerId = customerId;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
@@ -54,71 +50,36 @@ public class Customer {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public Boolean getGender() {
-        return gender;
-    }
-
-    public void setGender(Boolean gender) {
-        if (gender == null) {
-            throw new IllegalArgumentException("Gender cannot be null");
-        }
+    public void setGender(boolean gender) {
         this.gender = gender;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || !phoneNumber.matches("^0\\d{9}$")) {
+        if (phoneNumber == null || phoneNumber.matches("^0\\d{9}$")) {
+            this.phoneNumber = phoneNumber;
+        } else {
             throw new IllegalArgumentException("Invalid phone number");
         }
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
-        if (email == null || !email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+        if (email == null || email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            this.email = email;
+        } else {
             throw new IllegalArgumentException("Invalid email");
         }
-        this.email = email;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
     }
 
     public void setBirthday(LocalDate birthday) {
-        if (birthday == null || birthday.isAfter(LocalDate.now().minusYears(18))) {
-            throw new IllegalArgumentException("Customer must be at least 18 years old");
-        }
         this.birthday = birthday;
     }
 
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
     public void setRegistrationDate(LocalDate registrationDate) {
-        if (registrationDate == null || registrationDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Registration date must be before or equal to today");
-        }
         this.registrationDate = registrationDate;
-    }
-
-    public int getAccumulatedPoints() {
-        return accumulatedPoints;
     }
 
     public void setAccumulatedPoints(int accumulatedPoints) {
@@ -128,15 +89,52 @@ public class Customer {
         this.accumulatedPoints = accumulatedPoints;
     }
 
-    public String getMemberShip() {
-        return memberShip;
+    public void setMemberShip(String memberShip) {
+        if (memberShip == null || memberShip.equals("VIP") || memberShip.equals("Thường")) {
+            this.memberShip = memberShip;
+        } else {
+            throw new IllegalArgumentException("Membership must be either VIP or Thường");
+        }
     }
 
-    public void setMemberShip(String memberShip) {
-        if (memberShip == null || (!memberShip.equals("VIP") && !memberShip.equals("Regular"))) {
-            throw new IllegalArgumentException("Membership must be either VIP or Regular");
-        }
-        this.memberShip = memberShip;
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public boolean getGender() {
+        return gender;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public int getAccumulatedPoints() {
+        return accumulatedPoints;
+    }
+
+    public String getMemberShip() {
+        return memberShip;
     }
 
     @Override

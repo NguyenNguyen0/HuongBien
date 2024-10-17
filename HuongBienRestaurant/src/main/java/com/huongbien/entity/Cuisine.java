@@ -21,19 +21,11 @@ public class Cuisine {
         setCategory(category);
     }
 
-    public String getCuisineId() {
-        return cuisineId;
-    }
-
     public void setCuisineId(String cuisineId) {
         if (cuisineId == null || !cuisineId.matches("^M\\d{3}$")) {
             throw new IllegalArgumentException("Invalid cuisine ID format");
         }
         this.cuisineId = cuisineId;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
@@ -43,19 +35,11 @@ public class Cuisine {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
     public void setPrice(double price) {
         if (price <= 0) {
             throw new IllegalArgumentException("Price must be greater than 0");
         }
         this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {
@@ -65,20 +49,36 @@ public class Cuisine {
         this.description = description;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
     public void setImage(byte[] image) {
         this.image = image;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getCuisineId() {
+        return cuisineId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     @Override
