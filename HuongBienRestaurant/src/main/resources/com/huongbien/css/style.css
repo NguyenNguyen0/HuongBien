@@ -7,7 +7,7 @@
 }
 
 .gradient-main {
-    -fx-background-color: linear-gradient(to right, #2E3192, #1BFFFF);
+    -fx-background-color: linear-gradient(to bottom, #2E3192, #1BFFFF);
 }
 
 .main-color {
@@ -73,11 +73,6 @@
     -fx-text-fill: white;
 }
 
-.main-theme-color:hover {
-    -fx-background-color: #96c8ed;
-    -fx-text-fill: black;
-}
-
 .color-menubar {
     -fx-background-color: rgba(255, 255, 255, 0.5);
 }
@@ -85,4 +80,28 @@
 .border-line-top {
     -fx-border-color: white transparent transparent transparent;
     -fx-border-width: 1px 0 0 0;
+}
+
+.border-line-bottom {
+    -fx-border-color: transparent transparent white transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.border-line-top-bot {
+    -fx-border-color: white transparent white transparent;
+    -fx-border-width: 1px 0 1px 0;
+}
+
+.titled-pane > .title {
+    -fx-background-color: transparent;
+    -fx-padding: 20px 0 0 0;
+}
+
+.titled-pane > .content {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+#menu_hide_manage_icon {
+    -fx-translate-x: 8px;
 }

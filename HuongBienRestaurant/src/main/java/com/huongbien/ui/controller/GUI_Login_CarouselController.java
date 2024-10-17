@@ -1,23 +1,16 @@
-package com.huongbien.ui;
+package com.huongbien.ui.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Time;
 import java.util.ResourceBundle;
 
 public class GUI_Login_CarouselController implements Initializable {
@@ -31,6 +24,9 @@ public class GUI_Login_CarouselController implements Initializable {
     private AnchorPane slide03;
 
     @FXML
+    private AnchorPane slide04;
+
+    @FXML
     private Button next;
 
     @Override
@@ -38,6 +34,7 @@ public class GUI_Login_CarouselController implements Initializable {
         slide01.setTranslateY(0);
         slide02.setTranslateY(700);
         slide03.setTranslateY(1400);
+        slide04.setTranslateY(2100);
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(3.5), event -> autoSlide())
@@ -53,21 +50,25 @@ public class GUI_Login_CarouselController implements Initializable {
             translateAnimation(0.5, slide01, -700);
             translateAnimation(0.5, slide02, -700);
             translateAnimation(0.5, slide03, -700);
+            translateAnimation(0.5, slide04, -700);
             currentSlide = 1;
         } else if (currentSlide == 1) {
             translateAnimation(0.5, slide01, -700);
             translateAnimation(0.5, slide02, -700);
             translateAnimation(0.5, slide03, -700);
+            translateAnimation(0.5, slide04, -700);
             currentSlide = 2;
         } else if (currentSlide == 2) {
             translateAnimation(0.5, slide01, -700);
             translateAnimation(0.5, slide02, -700);
             translateAnimation(0.5, slide03, -700);
+            translateAnimation(0.5, slide04, -700);
             currentSlide = 3;
         } else if(currentSlide == 3) {
             slide01.setTranslateY(0);
             slide02.setTranslateY(700);
             slide03.setTranslateY(1400);
+            slide04.setTranslateY(2100);
             currentSlide = 0;
         }
     }

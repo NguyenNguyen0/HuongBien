@@ -3,10 +3,16 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -14,17 +20,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="1068.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.GUI_MainController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1044.0" prefWidth="1127.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_MainController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="gradient-main">
+      <BorderPane prefHeight="200.0" prefWidth="1159.0" styleClass="gradient-main">
          <left>
             <HBox fx:id="menubar_hide" prefHeight="553.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Button fx:id="btn_menu_hide" mnemonicParsing="false" onAction="#btn_menu_hide" prefHeight="70.0" prefWidth="100.0" styleClass="transperant">
+                        <Button fx:id="btn_menu_hide" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btn_menu_hide" prefHeight="80.0" prefWidth="100.0">
                            <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icon/dashboard/menu-24px.png" />
                                  </image>
@@ -33,20 +39,228 @@
                                  </cursor>
                               </ImageView>
                            </graphic>
+                           <styleClass>
+                              <String fx:value="transperant" />
+                              <String fx:value="border-line-bottom" />
+                           </styleClass>
+                           <tooltip>
+                              <Tooltip text="Menu">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
                         </Button>
-                        <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="btn_exit_hide" mnemonicParsing="false" onAction="#btn_exit_hide" prefHeight="70.0" prefWidth="100.0" styleClass="transperant">
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btn_home_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
                            <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icon/dashboard/power-off-24px.png" />
+                                    <Image url="@../icon/dashboard/home-24px.png" />
                                  </image>
                                  <cursor>
                                     <Cursor fx:constant="CLOSED_HAND" />
                                  </cursor>
                               </ImageView>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Trang chủ">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
                         </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btn_lookup_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/search-24px.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Trang chủ">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#btn_preOrder_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/order-24px.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Đặt trước">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#btn_order_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/table-order-24px.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Đặt bàn">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#btn_listOrder_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/ordered-24px.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Đơn đặt">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#btn_statistic_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/statistics-24px.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Thống kê">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Button>
+                        <MenuButton alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#btn_bill_hide">
+                                 <graphic>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Hoá đơn">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#btn_cuisine_hide">
+                                 <graphic>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Món ăn">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#btn_table_hide">
+                                 <graphic>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Bàn ăn">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#btn_customer_hide">
+                                 <graphic>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Khách hàng">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#btn_employee_hide">
+                                 <graphic>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Nhân viên">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#btn_promotion_hide">
+                                 <graphic>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Khuyến mãi">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </MenuItem>
+                          </items>
+                           <graphic>
+                              <ImageView fx:id="menu_hide_manage_icon" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/edit-24px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Quản lý">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </MenuButton>
                      </children>
                   </VBox>
                </children>
@@ -60,39 +274,61 @@
             </HBox>
          </left>
          <center>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <BorderPane fx:id="compoent_main" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <top>
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="766.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox prefHeight="70.0" prefWidth="104.0">
+                        <VBox prefHeight="70.0" prefWidth="150.0">
                            <children>
                               <Pane prefHeight="200.0" prefWidth="200.0" />
                               <Pane fx:id="panel_line" prefHeight="200.0" prefWidth="200.0" styleClass="border-line-top" />
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="173.0">
+                        <VBox alignment="CENTER" prefHeight="70.0">
                            <children>
-                              <Label text="xxxxx" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="label_title" text="Trang chủ" textAlignment="CENTER" textFill="WHITE">
                                  <font>
-                                    <Font name="Calibri Bold" size="24.0" />
+                                    <Font name="Arial Bold" size="20.0" />
                                  </font>
                               </Label>
                            </children>
+                           <HBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </HBox.margin>
                         </VBox>
-                        <VBox prefHeight="70.0" prefWidth="65.0" HBox.hgrow="ALWAYS">
+                        <VBox prefHeight="70.0" prefWidth="160.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Pane prefHeight="200.0" prefWidth="200.0" />
+                              <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                               <Pane prefHeight="200.0" prefWidth="200.0" styleClass="border-line-top" />
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="94.0">
+                        <VBox alignment="CENTER" prefHeight="70.0">
                            <children>
-                              <Label fx:id="label_day" text="xxxday" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="label_time" text="**:**:**" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="17.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="label_date" text="xx/xx/xxxx" textAlignment="CENTER" textFill="WHITE">
+                           </children>
+                           <HBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="70.0">
+                           <children>
+                              <Label fx:id="label_day" text="******" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="70.0">
+                           <children>
+                              <Label fx:id="label_date" text="**/**/****" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="17.0" />
                                  </font>
@@ -102,24 +338,23 @@
                               </Label>
                            </children>
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets />
                            </HBox.margin>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="82.0">
+                        <VBox prefHeight="70.0" prefWidth="73.0">
                            <children>
-                              <Label textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="label_time" text="xx:xx:xx" textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="17.0" />
-                                 </font>
-                              </Label>
+                              <Pane prefHeight="200.0" prefWidth="200.0" />
+                              <Pane fx:id="panel_line1" prefHeight="200.0" prefWidth="200.0" styleClass="border-line-top">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Pane>
                            </children>
+                           <HBox.margin>
+                              <Insets left="10.0" right="10.0" />
+                           </HBox.margin>
                         </VBox>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="151.0">
+                        <HBox alignment="CENTER" prefHeight="70.0">
                            <children>
                               <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="border-radis-50">
                                  <image>
@@ -129,9 +364,9 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <Label text="xxx" textAlignment="CENTER" textFill="WHITE">
+                              <Label text="Paul Nguyen" textAlignment="CENTER" textFill="WHITE">
                                  <font>
-                                    <Font name="Calibri Bold" size="24.0" />
+                                    <Font name="Calibri Bold" size="17.0" />
                                  </font>
                               </Label>
                               <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -139,7 +374,19 @@
                                     <Image url="@../icon/dashboard/down-arrow-16px.png" />
                                  </image>
                                  <HBox.margin>
-                                    <Insets right="10.0" />
+                                    <Insets />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" onMouseClicked="#btn_exit" prefHeight="70.0">
+                           <children>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" styleClass="border-radis-50">
+                                 <image>
+                                    <Image url="@../icon/dashboard/power-off-24px.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="15.0" right="15.0" />
                                  </HBox.margin>
                               </ImageView>
                            </children>
@@ -147,17 +394,6 @@
                      </children>
                   </HBox>
                </top>
-               <center>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" right="10.0" />
-                     </BorderPane.margin>
-                     <styleClass>
-                        <String fx:value="bg-radis-15" />
-                        <String fx:value="color-menubar" />
-                     </styleClass>
-                  </BorderPane>
-               </center>
             </BorderPane>
          </center>
       </BorderPane>
@@ -166,36 +402,251 @@
             <HBox fx:id="main_overlay" onMouseClicked="#menu_overlay" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER" />
          </center>
          <left>
-            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <StackPane prefHeight="617.0" prefWidth="250.0" BorderPane.alignment="CENTER">
                <children>
                   <VBox fx:id="menubar_overlay" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: black;" />
                   <VBox prefHeight="553.0" prefWidth="230.0">
                      <children>
-                        <Button fx:id="btn_menu_show" alignment="CENTER" mnemonicParsing="false" onAction="#btn_menu_show" prefHeight="70.0" prefWidth="250.0" styleClass="transperant" text=" Menu" textFill="WHITE">
+                        <Button fx:id="btn_menu_show" alignment="CENTER" mnemonicParsing="false" onAction="#btn_menu_show" prefHeight="70.0" prefWidth="250.0" text=" Menu" textFill="WHITE">
                            <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icon/dashboard/menu-24px.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                            <font>
-                              <Font name="System Bold" size="20.0" />
+                              <Font name="System Bold" size="22.0" />
                            </font>
+                           <styleClass>
+                              <String fx:value="transperant" />
+                              <String fx:value="border-line-bottom" />
+                           </styleClass>
                         </Button>
-                        <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="btn_exit_show" alignment="CENTER" mnemonicParsing="false" onAction="#btn_exit_show" prefHeight="70.0" prefWidth="250.0" styleClass="transperant" text="Thoát" textFill="WHITE">
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_home_show" prefHeight="65.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icon/dashboard/power-off-24px.png" />
+                                    <Image url="@../icon/dashboard/home-24px.png" />
                                  </image>
+                                 <HBox.margin>
+                                    <Insets left="40.0" right="10.0" />
+                                 </HBox.margin>
                               </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </Button>
+                              <Label text="Trang chủ" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_lookup_show" prefHeight="65.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/search-24px.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="40.0" right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label text="Tra cứu" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_preOrder_show" prefHeight="65.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/order-24px.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="40.0" right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label text="Đặt trước" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_order_show" prefHeight="65.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/table-order-24px.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="40.0" right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label text="Đặt bàn" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_listOrder_show" prefHeight="65.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/ordered-24px.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="40.0" right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label text="Đơn đặt" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_statistic_show" prefHeight="65.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/dashboard/statistics-24px.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="40.0" right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label text="Thống kê" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Accordion>
+                          <panes>
+                            <TitledPane prefWidth="230.0" styleClass="border-line-top" text="Quản lý" textFill="WHITE">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="366.0" prefWidth="228.0">
+                                       <children>
+                                          <VBox prefHeight="368.0" prefWidth="228.0">
+                                             <children>
+                                                <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_bill_show" prefHeight="60.0" prefWidth="200.0">
+                                                   <children>
+                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icon/dashboard/invoice-24px.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="40.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Hoá đơn" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_cuisine_show" prefHeight="60.0" prefWidth="200.0">
+                                                   <children>
+                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icon/dashboard/cuisine-24px.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="40.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Món ăn" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_table_show" prefHeight="60.0" prefWidth="200.0">
+                                                   <children>
+                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icon/dashboard/table-24px.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="40.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Bàn ăn" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_customer_show" prefHeight="60.0" prefWidth="200.0">
+                                                   <children>
+                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icon/dashboard/customer-24px.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="40.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Khách hàng" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_employee_show" prefHeight="60.0" prefWidth="200.0">
+                                                   <children>
+                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icon/dashboard/employee-24px.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="40.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Nhân viên" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_promotion_show" prefHeight="60.0" prefWidth="200.0">
+                                                   <children>
+                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icon/dashboard/promotions-24px.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="40.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Khuyến mãi" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                            </TitledPane>
+                          </panes>
+                        </Accordion>
+                        <Accordion />
                      </children>
                      <StackPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

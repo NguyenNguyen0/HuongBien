@@ -1,4 +1,4 @@
-package com.huongbien.ui;
+package com.huongbien.ui.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
