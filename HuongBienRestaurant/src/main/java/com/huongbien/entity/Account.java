@@ -7,13 +7,13 @@ public class Account {
     private String hashcode;
     private String role;
     private String email;
-    private Boolean isActive;
+    private boolean isActive;
     private Employee employeeInfo;
     private byte[] avatar;
 
     public Account() {}
 
-    public Account(String username, String hashcode, String role, String email, Boolean isActive, Employee employeeInfo, byte[] avatar) {
+    public Account(String username, String hashcode, String role, String email, boolean isActive, Employee employeeInfo, byte[] avatar) {
         setUsername(username);
         setHashcode(hashcode);
         setRole(role);
@@ -51,10 +51,7 @@ public class Account {
         this.email = email;
     }
 
-    public void setIsActive(Boolean isActive) {
-        if (isActive == null) {
-            throw new IllegalArgumentException("isActive cannot be null");
-        }
+    public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 
@@ -82,7 +79,7 @@ public class Account {
         return email;
     }
 
-    public Boolean getIsActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 

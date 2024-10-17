@@ -35,6 +35,7 @@ CREATE TABLE Employee (
     email NVARCHAR(20),
     hireDate DATE NOT NULL,
     position NVARCHAR(20) NOT NULL,
+	workHours REAL NOT NULL,
     hourlyPay REAL NOT NULL,
     salary REAL NOT NULL,
 

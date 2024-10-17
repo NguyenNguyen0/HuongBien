@@ -54,7 +54,7 @@ public class Employee {
     }
 
     public void setName(String name) {
-        if (name == null || !name.matches("^[a-zA-Z]+(\\s[a-zA-Z]+)+$")) {
+        if (name == null || name.isBlank() || name.split(" ").length < 2) {
             throw new IllegalArgumentException("Họ tên không không được rỗng và phải có ít nhất hai từ");
         }
         this.name = name;
