@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -17,7 +19,7 @@ public class Promotion {
 
     public Promotion(String promotionId, String name, LocalDate startDate, LocalDate endDate,
                      boolean isUsed, double discount, String description, double minimumOrderAmount) {
-        setPromotion_id(promotionId);
+        setPromotionId(promotionId);
         setName(name);
         setStartDate(startDate);
         setEndDate(endDate);
@@ -27,15 +29,21 @@ public class Promotion {
         setMinimumOrderAmount(minimumOrderAmount);
     }
 
-    public void setPromotion_id(String promotionId) {
-        if (promotionId == null || promotionId.isEmpty()) {
+    public void setPromotionId(String promotionId) {
+        if (promotionId == null) {
             LocalDate currentDate = LocalDate.now();
             String dateStr = String.format("%02d%02d%02d", currentDate.getYear() % 100,
                     currentDate.getMonthValue(), currentDate.getDayOfMonth());
-            this.promotionId = "KM" + dateStr + String.format("%03d", 1);
-        } else {
-            this.promotionId = promotionId;
+            this.promotionId = String.format("KM%s%03d", dateStr, Utils.randomNumber(1, 999));
+            return;
         }
+
+        if (promotionId.matches("^KM\\d{6}$")) {
+            this.promotionId = promotionId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid promotionId format");
     }
 
     public void setName(String name) {

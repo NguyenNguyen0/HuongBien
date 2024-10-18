@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.util.Objects;
 
 public class Cuisine {
@@ -10,8 +12,6 @@ public class Cuisine {
     private byte[] image;
     private Category category;
 
-    public Cuisine() {}
-
     public Cuisine(String cuisineId, String name, double price, String description, byte[] image, Category category) {
         setCuisineId(cuisineId);
         setName(name);
@@ -21,11 +21,29 @@ public class Cuisine {
         setCategory(category);
     }
 
+    public Cuisine(String name, double price, String description, byte[] image, Category category) {
+        setCuisineId(null);
+        setName(name);
+        setPrice(price);
+        setDescription(description);
+        setImage(image);
+        setCategory(category);
+    }
+
+    public Cuisine() {}
+
     public void setCuisineId(String cuisineId) {
-        if (cuisineId == null || !cuisineId.matches("^M\\d{3}$")) {
-            throw new IllegalArgumentException("Invalid cuisine ID format");
+        if (cuisineId == null) {
+            this.cuisineId = String.format("M%03d", Utils.randomNumber(1, 999));
+            return;
         }
-        this.cuisineId = cuisineId;
+
+        if (cuisineId.matches("^M\\d{3}$")) {
+            this.cuisineId = cuisineId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid cuisine ID format");
     }
 
     public void setName(String name) {

@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.util.Objects;
 
 public class Category {
@@ -13,12 +15,26 @@ public class Category {
         setDescription(description);
     }
 
+    public Category(String name, String description) {
+        setCategoryId(null);
+        setName(name);
+        setDescription(description);
+    }
+
+    public Category() {}
+
     public void setCategoryId(String categoryId) {
-        if (categoryId != null && categoryId.matches("^CG\\d{3}$")) {
-            this.categoryId = categoryId;
-        } else {
-            throw new IllegalArgumentException("Invalid categoryId format. Expected format: CGxxx (e.g., CG002).");
+        if (categoryId == null) {
+            this.categoryId = String.format("CG%03d", Utils.randomNumber(1, 999));
+            return;
         }
+
+        if (categoryId.matches("^CG\\d{3}$")) {
+            this.categoryId = categoryId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid categoryId format. Expected format: CG-xxx.");
     }
 
     public void setName(String name) {
@@ -47,10 +63,6 @@ public class Category {
 
     public String getDescription() {
         return description;
-    }
-
-    public static String generateCategoryId(int number) {
-        return String.format("CG%03d", number);
     }
 
     @Override

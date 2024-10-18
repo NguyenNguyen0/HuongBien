@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -43,14 +45,45 @@ public class Employee {
         setManager(manager);
     }
 
+    public Employee(String name, String phoneNumber, String citizenIDNumber,
+                    boolean gender, String address, LocalDate birthday, String email,
+                    String position, double workHours, double hourlyPay, double salary,
+                    Employee manager) {
+        setEmployeeId(null);
+        setName(name);
+        setPhoneNumber(phoneNumber);
+        setCitizenIDNumber(citizenIDNumber);
+        setGender(gender);
+        setAddress(address);
+        setBirthday(birthday);
+        setEmail(email);
+        setStatus("đang làm");
+        setHireDate(LocalDate.now());
+        setPosition(position);
+        setWorkHours(workHours);
+        setHourlyPay(hourlyPay);
+        setSalary(salary);
+        setManager(manager);
+    }
+
     public void setEmployeeId(String employeeId) {
-        if (employeeId == null || employeeId.isEmpty()) {
+        if (employeeId == null) {
             LocalDate currentDate = LocalDate.now();
-            String dateStr = String.format("%02d%02d", currentDate.getYear() % 100, currentDate.getMonthValue());
-            this.employeeId = "NV" + dateStr + String.format("%03d", 1);
-        } else {
-            this.employeeId = employeeId;
+            this.employeeId = String.format("NV%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
         }
+
+        if (employeeId.matches("^NV\\d{9}$")) {
+            this.employeeId = employeeId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid employeeId format");
     }
 
     public void setName(String name) {

@@ -1,6 +1,9 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -20,7 +23,9 @@ public class Order {
     private Customer customer;
     private Employee employee;
 
-    public Order() {}
+    public Order() {
+        setOrderId(null);
+    }
 
     public Order(String orderId, LocalDate orderDate, String notes, double paymentAmount,
                  double dispensedAmount, double totalAmount, double discount,
@@ -41,11 +46,47 @@ public class Order {
         setEmployee(employee);
     }
 
+    public Order(String notes, double paymentAmount, double dispensedAmount,
+                 double totalAmount, ArrayList<OrderDetail> orderDetails,
+                 Promotion promotion, Payment payment, ArrayList<Table> tables,
+                 Customer customer, Employee employee) {
+        setOrderId(null);
+        setOrderDate(LocalDate.now());
+        setNotes(notes);
+        setPaymentAmount(paymentAmount);
+        setDispensedAmount(dispensedAmount);
+        setTotalAmount(totalAmount);
+        setDiscount(promotion.getDiscount());
+        setOrderDetails(orderDetails);
+        setPromotion(promotion);
+        setPayment(payment);
+        setTables(tables);
+        setCustomer(customer);
+        setEmployee(employee);
+    }
+
     public void setOrderId(String orderId) {
-        if (orderId == null || !orderId.matches("^HD\\d{4}\\d{4}\\d{3}$")) {
-            throw new IllegalArgumentException("Invalid order ID format");
+        if (orderId == null) {
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            this.orderId = String.format("HD%02d%02d%02d%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    currentTime.getHour(),
+                    currentTime.getMinute(),
+                    currentTime.getSecond(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
         }
-        this.orderId = orderId;
+
+        if (orderId.matches("^HD\\d{15}$")) {
+            this.orderId = orderId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid order ID format");
     }
 
     public void setOrderDate(LocalDate orderDate) {

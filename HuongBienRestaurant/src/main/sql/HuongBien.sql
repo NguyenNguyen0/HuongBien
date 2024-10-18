@@ -9,7 +9,7 @@ GO
 
 -- Tạo bảng Customer
 CREATE TABLE Customer (
-    id CHAR(9) PRIMARY KEY,
+    id CHAR(11) PRIMARY KEY,
     name NVARCHAR(30),
     [address] NVARCHAR(100),
     gender BIT DEFAULT NULL,
@@ -24,22 +24,22 @@ GO
 
 -- Tạo bảng Employee
 CREATE TABLE Employee (
-    id CHAR(9) PRIMARY KEY,
+    id CHAR(11) PRIMARY KEY,
     name NVARCHAR(30) NOT NULL,
-    address NVARCHAR(100) NOT NULL,
+    address NVARCHAR(200) NOT NULL,
     gender BIT NOT NULL,
     birthday DATE NOT NULL,
     citizenIDNumber CHAR(13) NOT NULL,
     status NVARCHAR(15) NOT NULL,
     phoneNumber CHAR(10) NOT NULL,
-    email NVARCHAR(20),
+    email NVARCHAR(30),
     hireDate DATE NOT NULL,
     position NVARCHAR(20) NOT NULL,
 	workHours REAL NOT NULL,
     hourlyPay REAL NOT NULL,
     salary REAL NOT NULL,
 
-    managerId CHAR(9) NULL,
+    managerId CHAR(11) NULL,
     FOREIGN KEY (managerId) REFERENCES Employee(id),
 );
 GO
@@ -59,7 +59,7 @@ GO
 
 -- Tạo bảng Payment
 CREATE TABLE Payment (
-    id CHAR(14) PRIMARY KEY,
+    id CHAR(17) PRIMARY KEY,
     amount REAL NOT NULL,
     paymentDate DATE NOT NULL,
     paymentMethod NVARCHAR(50),
@@ -69,8 +69,8 @@ GO
 
 -- Tạo bảng Account
 CREATE TABLE Account (
-    username CHAR(9) PRIMARY KEY, -- username
-    hashcode NVARCHAR(100) NOT NULL,
+    username CHAR(11) PRIMARY KEY, -- employeeId
+    hashcode NVARCHAR(64) NOT NULL,
     role NVARCHAR(15) NOT NULL,
     email NVARCHAR(25) NOT NULL,
     isActive BIT DEFAULT 1,
@@ -82,7 +82,7 @@ GO
 
 -- Tạo bảng TableType
 CREATE TABLE TableType (
-    id CHAR(4) PRIMARY KEY,
+    id CHAR(5) PRIMARY KEY,
     name NVARCHAR(40) NOT NULL,
     description NVARCHAR(100) NOT NULL
 );
@@ -96,7 +96,7 @@ CREATE TABLE [Table] (
     [floor] INT NOT NULL,
     isAvailable BIT NOT NULL DEFAULT 1,
 
-    tableTypeId CHAR(4),
+    tableTypeId CHAR(5),
     FOREIGN KEY (tableTypeId) REFERENCES TableType(id),
 );
 GO
@@ -115,7 +115,7 @@ CREATE TABLE Cuisine (
     name NVARCHAR(40) NOT NULL,
     price REAL NOT NULL,
     description NVARCHAR(50) NOT NULL,
-    image VARBINARY(MAX) NOT NULL,
+    image VARBINARY(MAX),
 
     categoryId CHAR(5),
     FOREIGN KEY (categoryId) REFERENCES Category(id),
@@ -124,7 +124,7 @@ GO
 
 -- Tạo bảng Reservation
 CREATE TABLE Reservation (
-    id CHAR(9) PRIMARY KEY,
+    id CHAR(17) PRIMARY KEY,
     partyType NVARCHAR(20) NOT NULL,
     partySize INT NOT NULL CHECK (partySize >= 1),
     reservationDate DATE NOT NULL,
@@ -134,10 +134,10 @@ CREATE TABLE Reservation (
     deposit REAL NOT NULL CHECK (deposit >= 0),
     refundDeposit REAL NOT NULL,
 
-    employeeId CHAR(9),
-    customerId CHAR(9),
+    employeeId CHAR(11),
+    customerId CHAR(11),
     tableId CHAR(6),
-    paymentId CHAR(14),
+    paymentId CHAR(17),
     FOREIGN KEY (employeeId) REFERENCES Employee(id),
     FOREIGN KEY (customerId) REFERENCES Customer(id),
     FOREIGN KEY (tableId) REFERENCES [Table](id),
@@ -147,13 +147,13 @@ GO
 
 -- Tạo bảng FoodOrder
 CREATE TABLE FoodOrder (
-    id CHAR(14) PRIMARY KEY,
+    id CHAR(22) PRIMARY KEY,
     quantity INT CHECK (quantity >= 1),
     note NVARCHAR(100),
     salePrice REAL NOT NULL,
 
     cuisineId CHAR(4),
-    reservationId CHAR(9),
+    reservationId CHAR(17),
     FOREIGN KEY (cuisineId) REFERENCES Cuisine(id),
     FOREIGN KEY (reservationId) REFERENCES Reservation(id),
 );
@@ -161,7 +161,7 @@ GO
 
 -- Tạo bảng Order
 CREATE TABLE [Order] (
-    id CHAR(13) PRIMARY KEY,
+    id CHAR(17) PRIMARY KEY,
     orderDate DATE NOT NULL,
     notes NVARCHAR(100) NOT NULL,
     vatTax REAL DEFAULT 0.1,
@@ -170,10 +170,10 @@ CREATE TABLE [Order] (
     totalAmount REAL NOT NULL,
     discount REAL DEFAULT 0,
 
-    customerId CHAR(9),
-    employeeId CHAR(9),
+    customerId CHAR(11),
+    employeeId CHAR(11),
     promotionId CHAR(11),
-    paymentId CHAR(14),
+    paymentId CHAR(17),
     tableId CHAR(6),
     FOREIGN KEY (customerId) REFERENCES Customer(id),
     FOREIGN KEY (employeeId) REFERENCES Employee(id),
@@ -185,13 +185,13 @@ GO
 
 -- Tạo bảng OrderDetail
 CREATE TABLE OrderDetail (
-    id CHAR(19) PRIMARY KEY,
+    id CHAR(22) PRIMARY KEY,
     quantity INT CHECK (quantity >= 1),
     note NVARCHAR(100),
     salePrice REAL NOT NULL,
 
     cuisineId CHAR(4),
-    orderId CHAR(13),
+    orderId CHAR(17),
     FOREIGN KEY (cuisineId) REFERENCES Cuisine(id),
     FOREIGN KEY (orderId) REFERENCES [Order](id),
 );
