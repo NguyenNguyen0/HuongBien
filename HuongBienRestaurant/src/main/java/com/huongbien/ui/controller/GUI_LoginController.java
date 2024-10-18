@@ -145,6 +145,7 @@ public class GUI_LoginController implements Initializable {
             if (account == null) {
                 text_message.setText("Tài khoản không tồn tại.");
                 text_message.setStyle("-fx-text-fill: red;");
+                return;
             }
 //            text_message.setText(passwordHash);
             if (passwordHash.equals(account.getHashcode()) && username.equals(account.getUsername())) {
