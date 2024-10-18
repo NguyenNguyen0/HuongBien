@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,8 +20,7 @@ public class Category_DAO extends Base_DAO<Category>{
 
     @Override
     public boolean add(Category object) {
-        // Assuming you have a database connection named `connection`
-        String sql = "INSERT INTO category (categoryId, name, description) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO category (id, name, description) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, object.getCategoryId());
             stmt.setString(2, object.getName());
@@ -35,13 +35,43 @@ public class Category_DAO extends Base_DAO<Category>{
 
     @Override
     public boolean update(Category object) {
-        return false;
+        String sql = "UPDATE category SET name = ?, description = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, object.getName());
+            stmt.setString(2, object.getDescription());
+            stmt.setString(3, object.getCategoryId());
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public List<Category> get() {
-        return List.of();
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT id, name, description FROM category";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String categoryId = rs.getString("id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+
+                Category category = new Category(categoryId, name, description);
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
     }
+
 
     @Override
     public Category get(String id) {
