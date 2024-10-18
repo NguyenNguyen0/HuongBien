@@ -23,23 +23,27 @@
          <children>
             <VBox alignment="CENTER" prefHeight="496.0" prefWidth="700.0" style="-fx-background-radius: 20; -fx-background-color: rgba(255, 255, 255, 0.8);">
                <children>
-                  <HBox alignment="CENTER" prefHeight="65.0" prefWidth="200.0" styleClass="border-bottom">
+                  <VBox alignment="CENTER" prefHeight="371.0" prefWidth="700.0">
                      <children>
-                        <Label prefHeight="38.0" prefWidth="140.0" text="ĐĂNG NHẬP">
-                           <font>
-                              <Font name="Arial Bold" size="23.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets left="250.0" right="250.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <VBox alignment="CENTER" prefHeight="244.0" prefWidth="700.0">
-                     <children>
+                        <HBox alignment="CENTER" prefHeight="52.0" prefWidth="200.0" styleClass="border-bottom">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="38.0" prefWidth="170.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="27.0" prefWidth="172.0" text="ĐĂNG NHẬP">
+                                       <font>
+                                          <Font name="Arial Bold" size="23.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="250.0" right="250.0" />
+                           </VBox.margin>
+                        </HBox>
                         <HBox alignment="CENTER" prefHeight="60.0" prefWidth="599.0">
                            <children>
-                              <TextField fx:id="txt_empID" focusTraversable="false" prefHeight="58.0" prefWidth="536.0" promptText="Mã nhân viên" styleClass="transperant" text="admin">
+                              <TextField fx:id="txt_empID" focusTraversable="false" prefHeight="58.0" prefWidth="536.0" promptText="Mã nhân viên" styleClass="transperant">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -61,7 +65,7 @@
                                  <children>
                                     <AnchorPane fx:id="compoent_hide" prefHeight="58.0" prefWidth="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <PasswordField fx:id="txt_pwdHide" focusTraversable="false" layoutX="-3.0" prefHeight="58.0" prefWidth="502.0" promptText="Mật khẩu" styleClass="transperant" text="sapassword">
+                                          <PasswordField fx:id="txt_pwdHide" focusTraversable="false" layoutX="-3.0" prefHeight="58.0" prefWidth="502.0" promptText="Mật khẩu" styleClass="transperant">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
@@ -70,7 +74,7 @@
                                     </AnchorPane>
                                     <AnchorPane fx:id="compoent_show" layoutX="-10.0" layoutY="10.0" prefHeight="60.0" prefWidth="500.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <TextField fx:id="txt_pwdShow" prefHeight="60.0" prefWidth="501.0" promptText="Mật khẩu" styleClass="transperant" text="123456">
+                                          <TextField fx:id="txt_pwdShow" prefHeight="60.0" prefWidth="501.0" promptText="Mật khẩu" styleClass="transperant">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
@@ -107,40 +111,33 @@
                               </Button>
                            </children>
                         </HBox>
-                     </children>
-                  </VBox>
-                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="560.0">
-                     <children>
-                        <Pane prefHeight="200.0" prefWidth="200.0">
-                           <cursor>
-                              <Cursor fx:constant="DEFAULT" />
-                           </cursor>
+                        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="700.0">
                            <children>
-                              <CheckBox layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkBox_remember" prefHeight="20.0" prefWidth="135.0" text="Nhớ mật khẩu">
+                              <CheckBox mnemonicParsing="false" onAction="#checkBox_remember" prefHeight="20.0" prefWidth="135.0" text="Nhớ mật khẩu">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </CheckBox>
+                              <Pane prefHeight="18.0" prefWidth="130.0" HBox.hgrow="ALWAYS">
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </Pane>
+                              <Label fx:id="text_message" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="296.0" text="Liên hệ quản lý để được cấp lại mật khẩu" textAlignment="RIGHT">
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                            </children>
-                        </Pane>
-                        <Pane prefHeight="25.0" prefWidth="130.0">
-                           <cursor>
-                              <Cursor fx:constant="DEFAULT" />
-                           </cursor>
-                        </Pane>
-                        <Label prefHeight="21.0" prefWidth="296.0" text="Liên hệ quản lý để được cấp lại mật khẩu" textAlignment="CENTER">
-                           <cursor>
-                              <Cursor fx:constant="DEFAULT" />
-                           </cursor>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="70.0" right="70.0" top="10.0" />
+                           </VBox.margin>
+                        </HBox>
                      </children>
-                     <VBox.margin>
-                        <Insets left="70.0" right="70.0" />
-                     </VBox.margin>
-                  </HBox>
+                  </VBox>
                </children>
             </VBox>
          </children>

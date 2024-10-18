@@ -20,7 +20,7 @@ public class GUI_Lookup extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_Lookup.fxml"));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
-        primaryStage.setTitle("Order - Huong Bien Restaurant");
+        primaryStage.setTitle("Lookup - Huong Bien Restaurant");
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

@@ -5,12 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-    private static Connection connection = null;
+    public static Connection connection = null;
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=HuongBien";
     private static final String USER = "sa";
     private static final String PASSWORD = "sapassword";
 
-    private Database() {}
+    private Database() {
+    }
 
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
@@ -33,7 +34,7 @@ public class Database {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("Connection closed!");
+                System.out.println("Connection closed! i cư i cư");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
