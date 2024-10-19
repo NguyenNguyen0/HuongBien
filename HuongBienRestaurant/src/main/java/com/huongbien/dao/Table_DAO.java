@@ -59,7 +59,6 @@ public class Table_DAO extends Base_DAO<Table> {
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
                 table.setIsAvailable(resultSet.getBoolean("isAvailable"));
-                // Load table type if necessary
                 tables.add(table);
             }
         } catch (SQLException e) {
@@ -81,12 +80,26 @@ public class Table_DAO extends Base_DAO<Table> {
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
                 table.setIsAvailable(resultSet.getBoolean("isAvailable"));
-                // Load table type if necessary
                 return table;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean delete(String id) {
+        if (id == null || id.isEmpty() || id.isBlank()) {
+            throw new IllegalArgumentException("ID cannot be null or empty");
+        }
+
+        String sql = "DELETE FROM [Table] WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, id);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

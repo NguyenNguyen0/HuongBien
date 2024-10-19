@@ -4,7 +4,6 @@ import com.huongbien.entity.FoodOrder;
 import com.huongbien.entity.Cuisine;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FoodOrder_DAO extends Base_DAO<FoodOrder> {
@@ -53,73 +52,14 @@ public class FoodOrder_DAO extends Base_DAO<FoodOrder> {
 
     @Override
     public List<FoodOrder> get() {
-        List<FoodOrder> foodOrders = new ArrayList<>();
-        String sql = "SELECT fo.id, fo.quantity, fo.note, fo.salePrice, fo.cuisineId, " +
-                "c.name, c.price, c.description, c.image " +
-                "FROM FoodOrder fo " +
-                "JOIN Cuisine c ON fo.cuisineId = c.id";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                FoodOrder foodOrder = new FoodOrder(
-                        rs.getDouble("salePrice"),
-                        rs.getString("note"),
-                        rs.getInt("quantity"),
-                        rs.getString("id"),
-                        new Cuisine(
-                                rs.getString("cuisineId"),
-                                rs.getString("name"),
-                                rs.getDouble("price"),
-                                rs.getString("description"),
-                                rs.getBytes("image"),
-                                null
-                        )
-                );
-                foodOrders.add(foodOrder);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return foodOrders;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'get'");
     }
 
     @Override
     public FoodOrder get(String id) {
-        FoodOrder foodOrder = null;
-        String sql = "SELECT fo.id, fo.quantity, fo.note, fo.salePrice, fo.cuisineId, " +
-                "c.name, c.price, c.description, c.image " +
-                "FROM FoodOrder fo " +
-                "JOIN Cuisine c ON fo.cuisineId = c.id " +
-                "WHERE fo.id = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    foodOrder = new FoodOrder(
-                            rs.getDouble("salePrice"),
-                            rs.getString("note"),
-                            rs.getInt("quantity"),
-                            rs.getString("id"),
-                            new Cuisine(
-                                    rs.getString("cuisineId"),
-                                    rs.getString("name"),
-                                    rs.getDouble("price"),
-                                    rs.getString("description"),
-                                    rs.getBytes("image"),
-                                    null
-                            )
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return foodOrder;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'get'");
     }
+
 }

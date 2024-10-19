@@ -62,7 +62,7 @@ public class Employee_DAO extends Base_DAO<Employee> {
             stmt.setDouble(12, object.getHourlyPay());
             stmt.setDouble(13, object.getSalary());
             stmt.setString(14, object.getManager() != null ? object.getManager().getEmployeeId() : null);
-            stmt.setString(15, object.getEmployeeId()); 
+            stmt.setString(15, object.getEmployeeId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -85,7 +85,19 @@ public class Employee_DAO extends Base_DAO<Employee> {
                 employee.setGender(rs.getBoolean("gender"));
                 employee.setAddress(rs.getString("address"));
                 employee.setBirthday(rs.getDate("birthday").toLocalDate());
-                employee.setEmail(rs.getString("email"));
+
+                String email = rs.getString("email");
+                if (email != null) {
+                    try {
+                        employee.setEmail(email);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Email không hợp lệ cho nhân viên ID: " + rs.getString("id") + ". Chi tiết: " + e.getMessage());
+                        continue;
+                    }
+                } else {
+                    employee.setEmail(null);
+                }
+
                 employee.setStatus(rs.getString("status"));
                 employee.setHireDate(rs.getDate("hireDate").toLocalDate());
                 employee.setPosition(rs.getString("position"));
@@ -116,20 +128,26 @@ public class Employee_DAO extends Base_DAO<Employee> {
                 employee.setGender(rs.getBoolean("gender"));
                 employee.setAddress(rs.getString("address"));
                 employee.setBirthday(rs.getDate("birthday").toLocalDate());
-                employee.setEmail(rs.getString("email"));
+
+                String email = rs.getString("email");
+                if (email != null) {
+                    employee.setEmail(email);
+                } else {
+                    employee.setEmail(null);
+                }
+
                 employee.setStatus(rs.getString("status"));
                 employee.setHireDate(rs.getDate("hireDate").toLocalDate());
                 employee.setPosition(rs.getString("position"));
                 employee.setWorkHours(rs.getDouble("workHours"));
                 employee.setHourlyPay(rs.getDouble("hourlyPay"));
                 employee.setSalary(rs.getDouble("salary"));
-                // Giả định rằng bạn có một phương thức để lấy Manager từ ID
-                // employee.setManager(getManagerById(rs.getString("managerId")));
                 return employee;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null; // Không tìm thấy nhân viên
+        return null;
     }
+
 }

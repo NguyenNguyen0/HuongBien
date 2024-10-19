@@ -18,7 +18,7 @@ public class Promotion_DAO extends Base_DAO<Promotion> {
 
     @Override
     public boolean add(Promotion promotion) {
-        String sql = "INSERT INTO promotion (promotionId, name, startDate, endDate, isUsed, discount, description, minimumOrderAmount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO promotion (id, name, startDate, endDate, isUsed, discount, description, minimumOrderAmount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, promotion.getPromotion_id());
             stmt.setString(2, promotion.getName());
@@ -39,7 +39,7 @@ public class Promotion_DAO extends Base_DAO<Promotion> {
 
     @Override
     public boolean update(Promotion promotion) {
-        String sql = "UPDATE promotion SET name = ?, startDate = ?, endDate = ?, isUsed = ?, discount = ?, description = ?, minimumOrderAmount = ? WHERE promotionId = ?";
+        String sql = "UPDATE promotion SET name = ?, startDate = ?, endDate = ?, isUsed = ?, discount = ?, description = ?, minimumOrderAmount = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, promotion.getName());
             stmt.setDate(2, java.sql.Date.valueOf(promotion.getStartDate()));
@@ -61,14 +61,15 @@ public class Promotion_DAO extends Base_DAO<Promotion> {
     @Override
     public List<Promotion> get() {
         List<Promotion> promotions = new ArrayList<>();
-        String sql = "SELECT promotionId, name, startDate, endDate, isUsed, discount, description, minimumOrderAmount FROM promotion";
+        String sql = "SELECT id, name, startDate, endDate, isUsed, discount, description, minimumOrderAmount FROM Promotion";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Promotion promotion = new Promotion();
-                promotion.setPromotion_id(rs.getString("promotionId"));
+                String promotionId = rs.getString("id");
+                promotion.setPromotionId(promotionId);
                 promotion.setName(rs.getString("name"));
                 promotion.setStartDate(rs.getDate("startDate").toLocalDate());
                 promotion.setEndDate(rs.getDate("endDate").toLocalDate());
@@ -78,7 +79,6 @@ public class Promotion_DAO extends Base_DAO<Promotion> {
                 promotion.setMinimumOrderAmount(rs.getDouble("minimumOrderAmount"));
                 promotions.add(promotion);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,17 +86,18 @@ public class Promotion_DAO extends Base_DAO<Promotion> {
         return promotions;
     }
 
+
     @Override
     public Promotion get(String id) {
         Promotion promotion = null;
-        String sql = "SELECT promotionId, name, startDate, endDate, isUsed, discount, description, minimumOrderAmount FROM promotion WHERE promotionId = ?";
+        String sql = "SELECT id, name, startDate, endDate, isUsed, discount, description, minimumOrderAmount FROM promotion WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     promotion = new Promotion();
-                    promotion.setPromotion_id(rs.getString("promotionId"));
+                    promotion.setPromotionId(rs.getString("id"));
                     promotion.setName(rs.getString("name"));
                     promotion.setStartDate(rs.getDate("startDate").toLocalDate());
                     promotion.setEndDate(rs.getDate("endDate").toLocalDate());
@@ -114,7 +115,7 @@ public class Promotion_DAO extends Base_DAO<Promotion> {
     }
 
     public boolean delete(String id) {
-        String sql = "DELETE FROM promotion WHERE promotionId = ?";
+        String sql = "DELETE FROM promotion WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
 

@@ -3,7 +3,6 @@ package com.huongbien.dao;
 import com.huongbien.entity.Customer;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +53,8 @@ public class Customer_DAO extends Base_DAO<Customer> {
             stmt.setString(9, customer.getMemberShip());
             stmt.setString(10, customer.getCustomerId());
 
+            System.out.println("Updating customer: " + customer.toString());
+
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
         } catch (SQLException e) {
@@ -61,6 +62,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
             return false;
         }
     }
+
 
     @Override
     public List<Customer> get() {

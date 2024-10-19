@@ -17,7 +17,7 @@ public class TableType_DAO extends Base_DAO<TableType> {
     }
 
     public boolean delete(String id) {
-        if (id.isEmpty() || id.isBlank()) {
+        if (id == null || id.isEmpty() || id.isBlank()) {
             throw new NullPointerException("ID is null");
         }
 
@@ -79,11 +79,11 @@ public class TableType_DAO extends Base_DAO<TableType> {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                int tableNumber = resultSet.getInt("id");
+                String tableId = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
 
-                TableType tableType = new TableType(tableNumber, name, description);
+                TableType tableType = new TableType(tableId, name, description);
                 tableTypes.add(tableType);
             }
         } catch (SQLException e) {
@@ -103,11 +103,11 @@ public class TableType_DAO extends Base_DAO<TableType> {
             preparedStatement.setString(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int tableNumber = resultSet.getInt("id");
+                String tableId = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
 
-                return new TableType(tableNumber, name, description);
+                return new TableType(tableId, name, description);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,5 +115,7 @@ public class TableType_DAO extends Base_DAO<TableType> {
 
         return null;
     }
+
+
 
 }
