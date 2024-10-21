@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.util.Objects;
 
 public class FoodOrder {
@@ -7,18 +9,26 @@ public class FoodOrder {
     private int quantity;
     private String note;
     private double salePrice;
-    private final Cuisine cuisine;
+    private Cuisine cuisine;
 
-    public FoodOrder(double salePrice, String note, int quantity, String foodOrderId, Cuisine cuisine) {
+//  truyền mã FoodOrder hoặc truyền mã Reservation để tự động tạo mã mới nếu tạo FoodOrder mới
+    public FoodOrder( String foodOrderId, double salePrice, String note, int quantity, Cuisine cuisine) {
+        this.foodOrderId = foodOrderId;
         this.salePrice = salePrice;
         this.note = note;
         this.quantity = quantity;
-        this.foodOrderId = foodOrderId;
         this.cuisine = cuisine;
     }
 
+    public FoodOrder() {}
+
     public void setFoodOrderId(String foodOrderId) {
-        if (foodOrderId == null || !foodOrderId.matches("^FO\\d{13}$")) {
+        if (foodOrderId != null && foodOrderId.length() == 17) {
+            this.foodOrderId = String.format("%sDM%03d", foodOrderId, Utils.randomNumber(1, 999));
+            return;
+        }
+
+        if (foodOrderId == null || !foodOrderId.matches("^DB\\d{15}DM\\d{3}$")) {
             throw new IllegalArgumentException("Invalid food order ID format");
         }
 
@@ -43,6 +53,10 @@ public class FoodOrder {
         }
 
         this.salePrice = salePrice;
+    }
+
+    public void setCuisine(Cuisine cuisine) {
+        this.cuisine = cuisine;
     }
 
     public Cuisine getCuisine() {

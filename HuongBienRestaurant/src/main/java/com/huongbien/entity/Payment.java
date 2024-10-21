@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,6 +15,8 @@ public class Payment {
     private LocalTime paymentTime;
     private String paymentMethod;
 
+    public Payment() {}
+
     public Payment(String paymentId, double amount, LocalDate paymentDate, String paymentMethod, LocalTime paymentTime) {
         setPaymentId(paymentId);
         setAmount(amount);
@@ -21,12 +25,36 @@ public class Payment {
         setPaymentTime(paymentDate, paymentTime);
     }
 
+    public Payment(double amount, LocalDate paymentDate, String paymentMethod, LocalTime paymentTime) {
+        setPaymentId(null);
+        setAmount(amount);
+        setPaymentDate(paymentDate);
+        setPaymentMethod(paymentMethod);
+        setPaymentTime(paymentDate, paymentTime);
+    }
+
     public void setPaymentId(String paymentId) {
-        if (paymentId != null && paymentId.matches("^P\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{3}$")) {
-            this.paymentId = paymentId;
-        } else {
-            throw new IllegalArgumentException("Invalid paymentId format. Expected format: P-yy-mm-dd-hh-MM-xxx");
+        if (paymentId == null) {
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            this.paymentId = String.format("TT%02d%02d%02d%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    currentTime.getHour(),
+                    currentTime.getMinute(),
+                    currentTime.getSecond(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
         }
+
+        if (paymentId.matches("^TT\\d{15}$")) {
+            this.paymentId = paymentId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid paymentId format. Expected format: TT-yy-mm-dd-hh-MM-ss-xxx");
     }
 
     public void setAmount(double amount) {

@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -44,11 +46,48 @@ public class Reservation {
         setFoods(foods);
     }
 
+    public Reservation(String partyType, int partySize, LocalDate reservationDate,
+                       LocalTime reservationTime, LocalDate receiveDate, String status, double deposit,
+                       double refundDeposit, Payment payment, Employee employee, ArrayList<Table> tables,
+                       Customer customer, ArrayList<FoodOrder> foods) {
+        setReservationId(null);
+        setPartyType(partyType);
+        setPartySize(partySize);
+        setReservationDate(reservationDate);
+        setReservationTime(reservationTime);
+        setReceiveDate(receiveDate);
+        setStatus(status);
+        setDeposit(deposit);
+        setRefundDeposit(refundDeposit);
+        setPayment(payment);
+        setEmployee(employee);
+        setTables(tables);
+        setCustomer(customer);
+        setFoods(foods);
+    }
+
     public void setReservationId(String reservationId) {
-        if (reservationId == null || !reservationId.matches("^DB\\d{6}\\d{3}$")) {
-            throw new IllegalArgumentException("Invalid reservation ID format");
+        if (reservationId == null) {
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            this.reservationId = String.format("DB%02d%02d%02d%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    currentTime.getHour(),
+                    currentTime.getMinute(),
+                    currentTime.getSecond(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
         }
-        this.reservationId = reservationId;
+
+        if (!reservationId.matches("^DB\\d{15}$")) {
+            this.reservationId = reservationId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid reservation ID format. Expected format: DB-yy-mm-dd-hh-MM-ss-xxx");
     }
 
     public void setPartyType(String partyType) {

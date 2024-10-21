@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.util.Objects;
 
 public class Table {
@@ -10,8 +12,7 @@ public class Table {
     private boolean isAvailable;
     private TableType tableType;
 
-    public Table() {
-    }
+    public Table() {}
 
     public Table(String id, String name, int floor, int seats, boolean isAvailable, TableType tableType) {
         setId(id);
@@ -22,11 +23,27 @@ public class Table {
         setTableType(tableType);
     }
 
+    public Table(String name, int floor, int seats, boolean isAvailable, TableType tableType) {
+        setId(null);
+        setName(name);
+        setFloor(floor);
+        setSeats(seats);
+        setIsAvailable(isAvailable);
+        setTableType(tableType);
+    }
+
     public void setId(String id) {
-        if (id == null || !id.matches("^T\\dB\\d{3}$")) {
-            throw new IllegalArgumentException("Invalid table ID format");
+        if (id == null) {
+            this.id = String.format("T%01d%03d", this.floor, Utils.randomNumber(1, 999));
+            return;
         }
-        this.id = id;
+
+        if (id.matches("^T\\dB\\d{3}$")) {
+            this.id = id;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid table ID format");
     }
 
     public void setName(String name) {

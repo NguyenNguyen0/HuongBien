@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.util.Objects;
 
 public class Account {
@@ -11,7 +13,14 @@ public class Account {
     private Employee employeeInfo;
     private byte[] avatar;
 
-    public Account() {}
+    public Account(String username, String password, String role, String email, byte[] avatar) {
+        setUsername(username);
+        setHashcode(Utils.hashPassword(password));
+        setRole(role);
+        setIsActive(true);
+        setEmail(email);
+        setAvatar(avatar);
+    }
 
     public Account(String username, String hashcode, String role, String email, boolean isActive, Employee employeeInfo, byte[] avatar) {
         setUsername(username);
@@ -22,6 +31,8 @@ public class Account {
         setEmployeeInfo(employeeInfo);
         setAvatar(avatar);
     }
+
+    public Account() {}
 
     public void setUsername(String employeeId) {
         if (employeeId == null || employeeId.trim().isEmpty()) {

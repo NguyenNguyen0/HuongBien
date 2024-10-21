@@ -1,6 +1,6 @@
 package com.huongbien.entity;
 
-import javafx.scene.image.Image;
+import com.huongbien.utils.Utils;
 
 import java.util.Objects;
 
@@ -9,14 +9,32 @@ public class TableType {
     private String name;
     private String description;
 
-    TableType(int tableNumber, String name, String description) {
-        this.setTableId(tableNumber);
+    public TableType() {}
+
+    public TableType(String tableId, String name, String description) {
+        this.setTableId(tableId);
         this.setName(name);
         this.setDescription(description);
     }
 
-    public void setTableId(int tableNumber) {
-        this.tableId = String.format("LB%03d", tableNumber);
+    public TableType(String name, String description) {
+        this.setTableId(null);
+        this.setName(name);
+        this.setDescription(description);
+    }
+
+    public void setTableId(String tableId) {
+        if (tableId == null) {
+            this.tableId = "LB" + Utils.randomNumber(1, 999);
+            return;
+        }
+
+        if (tableId.matches("^LB\\d{3}$")) {
+            this.tableId = tableId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid tableId format");
     }
 
     public void setName(String name) {

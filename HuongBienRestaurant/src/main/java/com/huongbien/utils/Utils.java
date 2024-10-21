@@ -35,4 +35,9 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
+//   Hàm random số
+    public static int randomNumber(int min, int max) {
+        return (int) (Math.random() * (max - min + 1)) + min;
+    }
 }

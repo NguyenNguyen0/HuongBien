@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -15,11 +17,7 @@ public class Customer {
     private int accumulatedPoints;
     private String memberShip;
 
-//  Dành cho khách vãng lai 
-    public Customer() {
-        setCustomerId("KH0000000");
-        setName("Khách vãng lai");
-    }
+    public Customer() {}
 
     public Customer(String customerId, String name, String address, boolean gender,
                     String phoneNumber, String email, LocalDate birthday,
@@ -36,11 +34,38 @@ public class Customer {
         setMemberShip(memberShip);
     }
 
+    public Customer(String name, String address, boolean gender,
+                    String phoneNumber, String email, LocalDate birthday) {
+        setCustomerId(null);
+        setName(name);
+        setAddress(address);
+        setGender(gender);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        setBirthday(birthday);
+        setRegistrationDate(LocalDate.now());
+        setAccumulatedPoints(1000);
+        setMemberShip("thường");
+    }
+
     public void setCustomerId(String customerId) {
-        if (customerId == null || !customerId.matches("^KH\\d{6}\\d{3}$")) {
-            throw new IllegalArgumentException("Invalid customer ID");
+        if (Customer.this.customerId == null) {
+            LocalDate currentDate = LocalDate.now();
+            this.customerId = String.format("KH%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
         }
-        this.customerId = customerId;
+
+        if (customerId.matches("^NV\\d{9}$")) {
+            this.customerId = customerId;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid customer ID");
     }
 
     public void setName(String name) {
