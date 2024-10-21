@@ -1,6 +1,7 @@
 package com.huongbien.dao;
 
 import com.huongbien.entity.Table;
+import com.huongbien.entity.TableType;
 
 import java.sql.*;
 import java.util.ArrayList;
