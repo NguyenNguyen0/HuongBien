@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +22,12 @@ public class GUI_OrderCuisineItemController implements Initializable {
     @FXML
     private ImageView imgCuisine;
 
+    @FXML
+    private Label lbl_cuisineName;
+
+    @FXML
+    private Label lbl_cuisinePrice;
+
     private GUI_OrderCuisineController orderCuisineController;
 
     public void setOrderCuisineController(GUI_OrderCuisineController orderCuisineController) {
@@ -28,8 +35,8 @@ public class GUI_OrderCuisineItemController implements Initializable {
     }
 
     public void setData(Cuisine cuisine) {
-        Image image = new Image(getClass().getResourceAsStream(cuisine.getImgCuisineImg()));
-        imgCuisine.setImage(image);
+        lbl_cuisineName.setText(cuisine.getName());
+        lbl_cuisinePrice.setText(cuisine.getPrice()+"");
     }
 
     @Override
@@ -40,7 +47,6 @@ public class GUI_OrderCuisineItemController implements Initializable {
 
     @FXML
     void ml_getInfoCuisine(MouseEvent event) {
-        System.out.println("Hello world");
-        orderCuisineController.lbl_textMe.setText("Hello world");
+
     }
 }

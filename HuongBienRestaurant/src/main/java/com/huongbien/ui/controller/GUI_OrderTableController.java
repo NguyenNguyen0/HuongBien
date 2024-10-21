@@ -1,6 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.entity.TableItem;
+import com.huongbien.entity.Table;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,7 +25,7 @@ public class GUI_OrderTableController implements Initializable {
 
     @FXML
     private GridPane compoent_gridTable;
-    private List<TableItem> tables;
+    private List<Table> tables;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -40,7 +40,7 @@ public class GUI_OrderTableController implements Initializable {
                 GUI_OrderTableItemController gui_orderTableItemController = fxmlLoader.getController();
                 gui_orderTableItemController.setData(tables.get(i));
 
-                if (columns == 5) {
+                if (columns == 4) {
                     columns = 0;
                     ++rows;
                 }
@@ -57,76 +57,23 @@ public class GUI_OrderTableController implements Initializable {
         compoent_gridTable.prefWidthProperty().bind(compoent_scrollPane.widthProperty());
     }
 
-    private List<TableItem> data() {
-        List<TableItem> ls = new ArrayList<>();
+    private List<Table> data() {
+        List<Table> ls = new ArrayList<>();
 
-        TableItem tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-vip-open-64px.png");
-        ls.add(tableItem);
+        Table table = new Table();
+        table.setName("Bàn 01");
+        table.setSeats(5);
+        ls.add(table);
 
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-vip-open-64px.png");
-        ls.add(tableItem);
+        table = new Table();
+        table.setName("Bàn 02");
+        table.setSeats(10);
+        ls.add(table);
 
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-vip-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
-
-        tableItem = new TableItem();
-        tableItem.setImg("/com/huongbien/icon/order/table-normal-open-64px.png");
-        ls.add(tableItem);
+        table = new Table();
+        table.setName("Bàn 03");
+        table.setSeats(15);
+        ls.add(table);
 
         return ls;
     }

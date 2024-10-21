@@ -9,30 +9,17 @@ public class Cuisine {
     private String description;
     private byte[] image;
     private Category category;
-    //
-    private String imgCuisineImg; //test
 
     public Cuisine() {}
 
-    public Cuisine(String cuisineId, String name, double price, String description, byte[] image, Category category, String imgCuisineImg) {
+    public Cuisine(String cuisineId, String name, double price, String description, byte[] image, Category category) {
         setCuisineId(cuisineId);
         setName(name);
         setPrice(price);
         setDescription(description);
         setImage(image);
         setCategory(category);
-        this.imgCuisineImg = imgCuisineImg;
     }
-
-    //test data
-    public String getImgCuisineImg() {
-        return imgCuisineImg;
-    }
-
-    public void setImgCuisineImg(String imgCuisineImg) {
-        this.imgCuisineImg = imgCuisineImg;
-    }
-    //test-data
 
     public void setCuisineId(String cuisineId) {
         if (cuisineId == null || !cuisineId.matches("^M\\d{3}$")) {

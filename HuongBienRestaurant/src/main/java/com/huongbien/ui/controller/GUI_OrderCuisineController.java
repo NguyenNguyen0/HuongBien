@@ -37,9 +37,6 @@ public class GUI_OrderCuisineController implements Initializable {
     @FXML
     private GridPane compoent_gridBill;
 
-    @FXML
-    public Label lbl_textMe;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //cuisine
@@ -80,27 +77,8 @@ public class GUI_OrderCuisineController implements Initializable {
         List<Cuisine> ls = new ArrayList<>();
 
         Cuisine cuisine = new Cuisine();
-        cuisine.setImgCuisineImg("/com/huongbien/img/cuisine/alaska.png");
-        ls.add(cuisine);
-
-        cuisine = new Cuisine();
-        cuisine.setImgCuisineImg("/com/huongbien/img/cuisine/alaska.png");
-        ls.add(cuisine);
-
-        cuisine = new Cuisine();
-        cuisine.setImgCuisineImg("/com/huongbien/img/cuisine/alaska.png");
-        ls.add(cuisine);
-
-        cuisine = new Cuisine();
-        cuisine.setImgCuisineImg("/com/huongbien/img/cuisine/alaska.png");
-        ls.add(cuisine);
-
-        cuisine = new Cuisine();
-        cuisine.setImgCuisineImg("/com/huongbien/img/cuisine/alaska.png");
-        ls.add(cuisine);
-
-        cuisine = new Cuisine();
-        cuisine.setImgCuisineImg("/com/huongbien/img/cuisine/cadieuhong.jpg");
+        cuisine.setName("Tôm hùm");
+        cuisine.setPrice(120030);
         ls.add(cuisine);
 
         return ls;
