@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Promotion_DAO extends Base_DAO<Promotion> {
-    private Connection connection;
+    private final Connection connection;
 
     public Promotion_DAO(Connection connection) {
         this.connection = connection;

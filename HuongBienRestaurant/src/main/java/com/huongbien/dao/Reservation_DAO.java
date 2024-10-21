@@ -123,6 +123,8 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
             Customer_DAO customerDao = new Customer_DAO(connection);
             Employee_DAO employeeDao = new Employee_DAO(connection);
             Payment_DAO paymentDao = new Payment_DAO(connection);
+            Table_DAO tableDao = new Table_DAO(connection);
+            FoodOrder_DAO foodOrderDao = new FoodOrder_DAO(connection);
 
             if (rs.next()) {
                 reservation = new Reservation();
@@ -139,6 +141,8 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
                 reservation.setCustomer(customerDao.get(rs.getString("customerId")));
                 reservation.setEmployee(employeeDao.get(rs.getString("employeeId")));
                 reservation.setPayment(paymentDao.get(rs.getString("paymentId")));
+                reservation.setTables(tableDao.getAllByReservationId(reservation.getReservationId()));
+                reservation.setFoodOrders(foodOrderDao.getAllByReservationId(reservation.getReservationId()));
             }
         } catch (SQLException e) {
             e.printStackTrace();

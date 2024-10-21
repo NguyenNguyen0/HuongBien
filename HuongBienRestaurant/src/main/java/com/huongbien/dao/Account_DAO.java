@@ -1,6 +1,5 @@
 package com.huongbien.dao;
 
-import com.huongbien.database.Database;
 import com.huongbien.entity.Account;
 import com.huongbien.utils.Utils;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Account_DAO extends Base_DAO<Account> {
-    private Connection connection = null;
+    private final Connection connection;
 
     public Account_DAO(Connection connection) {
         this.connection = connection;

@@ -97,8 +97,8 @@ public class FoodOrder_DAO extends Base_DAO<FoodOrder> {
         return foodOrder;
     }
 
-    public List<FoodOrder> getAllByReservationId(String reservationId) {
-        List<FoodOrder> foodOrders = new ArrayList<>();
+    public ArrayList<FoodOrder> getAllByReservationId(String reservationId) {
+        ArrayList<FoodOrder> foodOrders = new ArrayList<>();
 
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT id, quantity, salePrice, note, cuisineId FROM FoodOrder WHERE reservationId = ?");

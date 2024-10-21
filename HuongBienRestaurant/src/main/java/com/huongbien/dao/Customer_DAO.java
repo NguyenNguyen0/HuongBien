@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer_DAO extends Base_DAO<Customer> {
-    private Connection connection;
+    private final Connection connection;
 
     public Customer_DAO(Connection connection) {
         this.connection = connection;

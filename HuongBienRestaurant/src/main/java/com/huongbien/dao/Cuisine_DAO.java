@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cuisine_DAO extends Base_DAO<Cuisine>{
-    private Connection connection = null;
-    private Category_DAO categoryDao = null;
+    private final Connection connection;
+    private final Category_DAO categoryDao;
 
     public Cuisine_DAO(Connection connection) {
         this.connection = connection;

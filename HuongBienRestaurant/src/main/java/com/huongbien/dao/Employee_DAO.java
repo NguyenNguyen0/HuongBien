@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Employee_DAO extends Base_DAO<Employee> {
-    private Connection connection = null;
+    private final Connection connection;
 
     public Employee_DAO(Connection connection) {
         this.connection = connection;

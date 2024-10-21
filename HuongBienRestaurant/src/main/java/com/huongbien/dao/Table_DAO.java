@@ -107,8 +107,8 @@ public class Table_DAO extends Base_DAO<Table> {
         }
     }
 
-    public List<Table> getAllByReservationId (String reservationId) {
-        List<Table> tables = new ArrayList<>();
+    public ArrayList<Table> getAllByReservationId (String reservationId) {
+        ArrayList<Table> tables = new ArrayList<>();
         String sql = "SELECT * FROM [Table] WHERE id IN (SELECT tableId FROM Reservation_Table WHERE reservationId = ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, reservationId);
@@ -161,7 +161,7 @@ public class Table_DAO extends Base_DAO<Table> {
         return true;
     }
 
-    public boolean addTablesToOrder(String orderId, ArrayList<Table> tables) {
+    public void addTablesToOrder(String orderId, ArrayList<Table> tables) {
         String sql = "INSERT INTO Order_Table (orderId, tableId) VALUES (?, ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -170,13 +170,12 @@ public class Table_DAO extends Base_DAO<Table> {
             for (Table table : tables) {
                 statement.setString(2, table.getId());
                 if (statement.executeUpdate() <= 0) {
-                    return false;
+                    return;
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return true;
     }
 }
