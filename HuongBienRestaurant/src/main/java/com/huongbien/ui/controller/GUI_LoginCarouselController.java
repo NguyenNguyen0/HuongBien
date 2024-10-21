@@ -13,7 +13,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GUI_Login_CarouselController implements Initializable {
+public class GUI_LoginCarouselController implements Initializable {
     @FXML
     private AnchorPane slide01;
 

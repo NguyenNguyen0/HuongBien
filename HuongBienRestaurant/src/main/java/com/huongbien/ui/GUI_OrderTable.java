@@ -5,11 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class GUI_ManageBill extends Application {
+public class GUI_OrderTable extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -17,10 +16,10 @@ public class GUI_ManageBill extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_ManageBill.fxml"));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_OrderTable.fxml"));
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
-        primaryStage.setTitle("Manage Bill - Huong Bien Restaurant");
+        primaryStage.setTitle("Order - Huong Bien Restaurant");
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

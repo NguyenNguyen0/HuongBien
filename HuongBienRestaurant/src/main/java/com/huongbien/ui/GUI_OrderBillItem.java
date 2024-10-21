@@ -9,7 +9,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class GUI_Main extends Application {
+public class GUI_OrderBillItem extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -17,11 +17,11 @@ public class GUI_Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_OrderBillItem.fxml"));
 //        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
-        primaryStage.setTitle("Dashboard - Huong Bien Restaurant");
-        primaryStage.setMaximized(true);
+        primaryStage.setTitle("Bill Item - Huong Bien Restaurant");
+//        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 }

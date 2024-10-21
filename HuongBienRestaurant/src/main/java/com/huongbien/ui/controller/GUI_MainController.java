@@ -83,136 +83,112 @@ public class GUI_MainController implements Initializable {
     }
 
     //eventNav
-    private void openHome() {
+    private void openHome() throws IOException {
         label_title.setText("Trang chủ");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Home.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Home.fxml"));
+        BorderPane home = loader.load();
+        compoent_main.setCenter(home);
+        home.prefWidthProperty().bind(compoent_main.widthProperty());
+        home.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openLookup() {
+    private void openLookup() throws IOException {
         label_title.setText("Tra cứu");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Lookup.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Lookup.fxml"));
+        BorderPane lookup = loader.load();
+        compoent_main.setCenter(lookup);
+        lookup.prefWidthProperty().bind(compoent_main.widthProperty());
+        lookup.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openPreOrder() {
+    private void openPreOrder() throws IOException {
         label_title.setText("Đặt trước");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_PreOrder.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_PreOrder.fxml"));
+        BorderPane preOrder = loader.load();
+        compoent_main.setCenter(preOrder);
+        preOrder.prefWidthProperty().bind(compoent_main.widthProperty());
+        preOrder.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openOrder() {
-        label_title.setText("Đặt bàn");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Order.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void openOrder() throws IOException {
+        label_title.setText("Đặt món (Test Screen)");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderTable.fxml"));
+        BorderPane order = loader.load();
+        compoent_main.setCenter(order);
+        order.prefWidthProperty().bind(compoent_main.widthProperty());
+        order.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openListOrder() {
+    private void openListOrder() throws IOException {
         label_title.setText("Đơn đặt");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ListOrder.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ListOrder.fxml"));
+        BorderPane listOrder = loader.load();
+        compoent_main.setCenter(listOrder);
+        listOrder.prefWidthProperty().bind(compoent_main.widthProperty());
+        listOrder.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openStatistics() {
+    private void openStatistics() throws IOException {
         label_title.setText("Thống kê");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Statistics.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Statistics.fxml"));
+        BorderPane statistics = loader.load();
+        compoent_main.setCenter(statistics);
+        statistics.prefWidthProperty().bind(compoent_main.widthProperty());
+        statistics.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageBill() {
+    private void openManageBill() throws IOException {
         label_title.setText("Quản lý hoá đơn");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageBill.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageInvoice.fxml"));
+        BorderPane manageBill = loader.load();
+        compoent_main.setCenter(manageBill);
+        manageBill.prefWidthProperty().bind(compoent_main.widthProperty());
+        manageBill.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageCuisine() {
+    private void openManageCuisine() throws IOException {
         label_title.setText("Quản lý món ăn");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageCuisine.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageCuisine.fxml"));
+        BorderPane manageCuisine = loader.load();
+        compoent_main.setCenter(manageCuisine);
+        manageCuisine.prefWidthProperty().bind(compoent_main.widthProperty());
+        manageCuisine.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageTable() {
+    private void openManageTable() throws IOException {
         label_title.setText("Quản lý bàn ăn");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageTable.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageTable.fxml"));
+        BorderPane manageTable = loader.load();
+        compoent_main.setCenter(manageTable);
+        manageTable.prefWidthProperty().bind(compoent_main.widthProperty());
+        manageTable.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageCustomer() {
+    private void openManageCustomer() throws IOException {
         label_title.setText("Quản lý khách hàng");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageCustomer.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageCustomer.fxml"));
+        BorderPane manageCustomer = loader.load();
+        compoent_main.setCenter(manageCustomer);
+        manageCustomer.prefWidthProperty().bind(compoent_main.widthProperty());
+        manageCustomer.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageEmployee() {
+    private void openManageEmployee() throws IOException {
         label_title.setText("Quản lý nhân viên");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageEmployee.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageEmployee.fxml"));
+        BorderPane manageEmployee = loader.load();
+        compoent_main.setCenter(manageEmployee);
+        manageEmployee.prefWidthProperty().bind(compoent_main.widthProperty());
+        manageEmployee.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManagePromotion() {
+    private void openManagePromotion() throws IOException {
         label_title.setText("Quản lý khuyến mãi");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManagePromotion.fxml"));
-            Parent home_page = loader.load();
-            compoent_main.setCenter(home_page);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManagePromotion.fxml"));
+        BorderPane managePromotion = loader.load();
+        compoent_main.setCenter(managePromotion);
+        managePromotion.prefWidthProperty().bind(compoent_main.widthProperty());
+        managePromotion.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
     private void hideMenu() {
@@ -250,62 +226,62 @@ public class GUI_MainController implements Initializable {
     }
 
     @FXML
-    void btn_lookup_hide(ActionEvent event) {
-        openLookup();
-    }
-
-    @FXML
-    void btn_home_hide(ActionEvent event) {
+    void btn_home_hide(ActionEvent event) throws IOException {
         openHome();
     }
 
     @FXML
-    void btn_preOrder_hide(ActionEvent event) {
+    void btn_lookup_hide(ActionEvent event) throws IOException {
+        openLookup();
+    }
+
+    @FXML
+    void btn_preOrder_hide(ActionEvent event) throws IOException {
         openPreOrder();
     }
 
     @FXML
-    void btn_order_hide(ActionEvent event) {
+    void btn_order_hide(ActionEvent event) throws IOException {
         openOrder();
     }
 
     @FXML
-    void btn_listOrder_hide(ActionEvent event) {
+    void btn_listOrder_hide(ActionEvent event) throws IOException {
         openListOrder();
     }
 
     @FXML
-    void btn_statistic_hide(ActionEvent event) {
+    void btn_statistic_hide(ActionEvent event) throws IOException {
         openStatistics();
     }
 
     @FXML
-    void btn_bill_hide(ActionEvent event) {
+    void btn_bill_hide(ActionEvent event) throws IOException {
         openManageBill();
     }
 
     @FXML
-    void btn_cuisine_hide(ActionEvent event) {
+    void btn_cuisine_hide(ActionEvent event) throws IOException {
         openManageCuisine();
     }
 
     @FXML
-    void btn_table_hide(ActionEvent event) {
+    void btn_table_hide(ActionEvent event) throws IOException {
         openManageTable();
     }
 
     @FXML
-    void btn_customer_hide(ActionEvent event) {
+    void btn_customer_hide(ActionEvent event) throws IOException {
         openManageCustomer();
     }
 
     @FXML
-    void btn_employee_hide(ActionEvent event) {
+    void btn_employee_hide(ActionEvent event) throws IOException {
         openManageCustomer();
     }
 
     @FXML
-    void btn_promotion_hide(ActionEvent event) {
+    void btn_promotion_hide(ActionEvent event) throws IOException {
         openManagePromotion();
     }
 
@@ -316,73 +292,73 @@ public class GUI_MainController implements Initializable {
     }
 
     @FXML
-    void btn_home_show(MouseEvent event) {
+    void btn_home_show(MouseEvent event) throws IOException {
         hideMenu();
         openHome();
     }
 
     @FXML
-    void btn_lookup_show(MouseEvent event) {
+    void btn_lookup_show(MouseEvent event) throws IOException {
         hideMenu();
         openLookup();
     }
 
     @FXML
-    void btn_preOrder_show(MouseEvent event) {
+    void btn_preOrder_show(MouseEvent event) throws IOException {
         hideMenu();
         openPreOrder();
     }
 
     @FXML
-    void btn_order_show(MouseEvent event) {
+    void btn_order_show(MouseEvent event) throws IOException {
         hideMenu();
         openOrder();
     }
 
     @FXML
-    void btn_listOrder_show(MouseEvent event) {
+    void btn_listOrder_show(MouseEvent event) throws IOException {
         hideMenu();
         openListOrder();
     }
 
     @FXML
-    void btn_statistic_show(MouseEvent event) {
+    void btn_statistic_show(MouseEvent event) throws IOException {
         hideMenu();
         openStatistics();
     }
 
     @FXML
-    void btn_bill_show(MouseEvent event) {
+    void btn_bill_show(MouseEvent event) throws IOException {
         hideMenu();
         openManageBill();
     }
 
     @FXML
-    void btn_cuisine_show(MouseEvent event) {
+    void btn_cuisine_show(MouseEvent event) throws IOException {
         hideMenu();
         openManageCuisine();
     }
 
     @FXML
-    void btn_table_show(MouseEvent event) {
+    void btn_table_show(MouseEvent event) throws IOException {
         hideMenu();
         openManageTable();
     }
 
     @FXML
-    void btn_customer_show(MouseEvent event) {
+    void btn_customer_show(MouseEvent event) throws IOException {
         hideMenu();
         openManageCustomer();
     }
 
     @FXML
-    void btn_employee_show(MouseEvent event) {
+    void btn_employee_show(MouseEvent event) throws IOException {
         hideMenu();
         openManageEmployee();
     }
 
     @FXML
-    void btn_promotion_show(MouseEvent event) {
+    void btn_promotion_show(MouseEvent event) throws IOException {
         hideMenu();
         openManagePromotion();
     }

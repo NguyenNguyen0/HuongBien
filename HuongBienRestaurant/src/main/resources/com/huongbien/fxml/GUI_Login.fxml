@@ -43,7 +43,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="60.0" prefWidth="599.0">
                            <children>
-                              <TextField fx:id="txt_empID" focusTraversable="false" prefHeight="58.0" prefWidth="536.0" promptText="Mã nhân viên" styleClass="transperant">
+                              <TextField fx:id="txt_empID" focusTraversable="false" onKeyPressed="#txt_empID" prefHeight="58.0" prefWidth="536.0" promptText="Mã nhân viên" styleClass="transperant">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -65,7 +65,7 @@
                                  <children>
                                     <AnchorPane fx:id="compoent_hide" prefHeight="58.0" prefWidth="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <PasswordField fx:id="txt_pwdHide" focusTraversable="false" layoutX="-3.0" prefHeight="58.0" prefWidth="502.0" promptText="Mật khẩu" styleClass="transperant">
+                                          <PasswordField fx:id="txt_pwdHide" focusTraversable="false" layoutX="-3.0" onKeyPressed="#txt_pwdHide" prefHeight="58.0" prefWidth="502.0" promptText="Mật khẩu" styleClass="transperant">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
@@ -74,7 +74,7 @@
                                     </AnchorPane>
                                     <AnchorPane fx:id="compoent_show" layoutX="-10.0" layoutY="10.0" prefHeight="60.0" prefWidth="500.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <TextField fx:id="txt_pwdShow" prefHeight="60.0" prefWidth="501.0" promptText="Mật khẩu" styleClass="transperant">
+                                          <TextField fx:id="txt_pwdShow" onKeyPressed="#txt_pwdShow" prefHeight="60.0" prefWidth="501.0" promptText="Mật khẩu" styleClass="transperant">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
@@ -87,6 +87,9 @@
                                  <image>
                                     <Image url="@../icon/mg_login/eye-16px.png" />
                                  </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </ImageView>
                            </children>
                            <VBox.margin>
@@ -104,10 +107,13 @@
                               <Insets left="70.0" right="70.0" top="20.0" />
                            </VBox.margin>
                            <children>
-                              <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="60.0" prefWidth="600.0" style="-fx-border-width: 0; -fx-background-radius: 20;" styleClass="main-theme-color" text="ĐĂNG NHẬP" textFill="WHITE">
+                              <Button fx:id="handleLogin" mnemonicParsing="false" onAction="#handleLogin" prefHeight="60.0" prefWidth="600.0" style="-fx-border-width: 0; -fx-background-radius: 20;" styleClass="main-theme-color" text="ĐĂNG NHẬP" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                            </children>
                         </HBox>
@@ -117,6 +123,9 @@
                                  <font>
                                     <Font size="15.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </CheckBox>
                               <Pane prefHeight="18.0" prefWidth="130.0" HBox.hgrow="ALWAYS">
                                  <cursor>
@@ -154,6 +163,9 @@
          <BorderPane.margin>
             <Insets bottom="10.0" right="10.0" top="10.0" />
          </BorderPane.margin>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
    </top>
 </BorderPane>
