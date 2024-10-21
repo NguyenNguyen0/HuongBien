@@ -14,21 +14,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import static com.huongbien.database.Database.connection;
 
 public class GUI_LoginController implements Initializable {
     @FXML
@@ -50,20 +49,20 @@ public class GUI_LoginController implements Initializable {
     private AnchorPane compoent_show;
 
     @FXML
-    private ImageView exit;
-
-    @FXML
     private ImageView togglePwdBtn;
 
     @FXML
     private Label text_message;
+
+    @FXML
+    private Button handleLogin;
 
     //DAO
     private Account_DAO accountDao;
 
     private void loadCarousel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Login_Carousel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_LoginCarousel.fxml"));
             Parent carousel = loader.load();
             borderPaneCarousel.setCenter(carousel);
         } catch (IOException e) {
@@ -147,12 +146,9 @@ public class GUI_LoginController implements Initializable {
                 text_message.setStyle("-fx-text-fill: red;");
                 return;
             }
-//            text_message.setText(passwordHash);
-            if (passwordHash.equals(account.getHashcode()) && username.equals(account.getUsername())) {
+            if (username.equals(account.getUsername().trim()) && passwordHash.equals(account.getHashcode().trim())) {
                 text_message.setText("Đăng nhập thành công");
                 text_message.setStyle("-fx-text-fill: green;");
-
-                //load main
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Main.fxml"));
                     Parent root = loader.load();
@@ -179,6 +175,41 @@ public class GUI_LoginController implements Initializable {
             throw new RuntimeException(e);
         } finally {
             Database.closeConnection();
+        }
+    }
+
+    @FXML
+    void txt_empID(KeyEvent event) {
+        if (event.getCode() == KeyCode.TAB) {
+            if (txt_pwdHide.isVisible()) {
+                txt_pwdHide.requestFocus();
+            }
+            if (txt_pwdShow.isVisible()) {
+                txt_pwdShow.requestFocus();
+            }
+        }
+        if (event.getCode() == KeyCode.ENTER) {
+            handleLogin.fire();
+        }
+    }
+
+    @FXML
+    void txt_pwdHide(KeyEvent event) {
+        if (event.getCode() == KeyCode.TAB) {
+            handleLogin.requestFocus();
+        }
+        if (event.getCode() == KeyCode.ENTER) {
+            handleLogin.fire();
+        }
+    }
+
+    @FXML
+    void txt_pwdShow(KeyEvent event) {
+        if (event.getCode() == KeyCode.TAB) {
+            handleLogin.requestFocus();
+        }
+        if (event.getCode() == KeyCode.ENTER) {
+            handleLogin.fire();
         }
     }
 

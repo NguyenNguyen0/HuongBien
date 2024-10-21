@@ -1,5 +1,5 @@
 package com.huongbien.ui.controller;
 
-public class GUI_LookupController {
+public class GUI_OrderBillItemController {
 
 }

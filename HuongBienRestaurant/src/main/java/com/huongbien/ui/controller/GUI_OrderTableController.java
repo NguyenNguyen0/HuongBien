@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class GUI_OrderController implements Initializable {
+public class GUI_OrderTableController implements Initializable {
     @FXML
     private ScrollPane compoent_scrollPane;
 
     @FXML
-    private HBox compoent_HBox;
+    private HBox compoent_HB_Table;
 
     @FXML
     private GridPane compoent_gridTable;

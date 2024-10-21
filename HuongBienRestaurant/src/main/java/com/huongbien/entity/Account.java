@@ -38,9 +38,9 @@ public class Account {
     }
 
     public void setRole(String role) {
-        if (role == null || (!role.equals("Manager") && !role.equals("Waiter"))) {
-            throw new IllegalArgumentException("Role must be either Manager or Waiter");
-        }
+//        if (role == null || (!role.equals("Manager") && !role.equals("Waiter"))) {
+//            throw new IllegalArgumentException("Role must be either Manager or Waiter");
+//        }
         this.role = role;
     }
 
@@ -103,13 +103,13 @@ public class Account {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Account account = (Account) o;
-        return Objects.equals(username, account.username);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Account account = (Account) o;
+//        return Objects.equals(username, account.username);
+//    }
 
     @Override
     public int hashCode() {

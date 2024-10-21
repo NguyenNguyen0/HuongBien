@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="815.0" prefWidth="1319.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderController">
+<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="815.0" prefWidth="1319.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderTableController">
    <top>
       <HBox prefHeight="161.0" prefWidth="1319.0" BorderPane.alignment="CENTER">
          <children>
@@ -233,7 +233,7 @@
    <center>
       <ScrollPane fx:id="compoent_scrollPane" hbarPolicy="NEVER" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
          <content>
-            <HBox fx:id="compoent_HBox" alignment="CENTER">
+            <HBox fx:id="compoent_HB_Table" alignment="CENTER">
                <children>
                   <GridPane fx:id="compoent_gridTable" alignment="CENTER">
                     <rowConstraints>

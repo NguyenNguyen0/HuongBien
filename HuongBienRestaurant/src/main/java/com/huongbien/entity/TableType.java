@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import javafx.scene.image.Image;
+
 import java.util.Objects;
 
 public class TableType {

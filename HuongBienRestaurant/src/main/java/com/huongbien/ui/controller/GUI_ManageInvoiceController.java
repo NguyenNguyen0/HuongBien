@@ -1,5 +1,5 @@
 package com.huongbien.ui.controller;
 
-public class GUI_ManageBillController {
+public class GUI_ManageInvoiceController {
 
 }
