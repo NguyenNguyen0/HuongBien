@@ -112,7 +112,7 @@ public class GUI_MainController implements Initializable {
 
     private void openOrder() throws IOException {
         label_title.setText("Đặt món (Test Screen)");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderTable.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderCuisine.fxml"));
         BorderPane order = loader.load();
         compoent_main.setCenter(order);
         order.prefWidthProperty().bind(compoent_main.widthProperty());

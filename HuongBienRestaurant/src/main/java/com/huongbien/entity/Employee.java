@@ -67,23 +67,22 @@ public class Employee {
     }
 
     public void setEmployeeId(String employeeId) {
-        if (employeeId == null) {
-            LocalDate currentDate = LocalDate.now();
-            this.employeeId = String.format("NV%02d%02d%02d%03d",
-                    currentDate.getYear() % 100,
-                    currentDate.getMonthValue(),
-                    currentDate.getDayOfMonth(),
-                    Utils.randomNumber(1, 999)
-            );
-            return;
-        }
-
-        if (employeeId.matches("^NV\\d{9}$")) {
-            this.employeeId = employeeId;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid employeeId format");
+//        if (employeeId == null) {
+//            LocalDate currentDate = LocalDate.now();
+//            this.employeeId = String.format("NV%02d%02d%02d%03d",
+//                    currentDate.getYear() % 100,
+//                    currentDate.getMonthValue(),
+//                    currentDate.getDayOfMonth(),
+//                    Utils.randomNumber(1, 999)
+//            );
+//            return;
+//        }
+//        if (employeeId.matches("^NV\\d{9}$")) {
+//            this.employeeId = employeeId;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Invalid employeeId format");
+        this.employeeId = employeeId;
     }
 
     public void setName(String name) {

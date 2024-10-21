@@ -1,5 +1,7 @@
 package com.huongbien.ui.controller;
 
+import com.huongbien.dao.Table_DAO;
+import com.huongbien.database.Database;
 import com.huongbien.entity.Table;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,8 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,11 +25,11 @@ public class GUI_OrderTableController implements Initializable {
     private ScrollPane compoent_scrollPane;
 
     @FXML
-    private HBox compoent_HB_Table;
-
-    @FXML
     private GridPane compoent_gridTable;
     private List<Table> tables;
+
+    //DAO
+    private Table_DAO table_DAO;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -58,23 +62,25 @@ public class GUI_OrderTableController implements Initializable {
     }
 
     private List<Table> data() {
-        List<Table> ls = new ArrayList<>();
+        try {
+            Connection connection = Database.getConnection();
+            table_DAO = new Table_DAO(connection);
 
-        Table table = new Table();
-        table.setName("Bàn 01");
-        table.setSeats(5);
-        ls.add(table);
+            List<Table> ls = table_DAO.get();
+            return ls;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Database.closeConnection();
+        }
+//
+//        List<Table> ls = new ArrayList<>();
 
-        table = new Table();
-        table.setName("Bàn 02");
-        table.setSeats(10);
-        ls.add(table);
+//        Table table = new Table();
+//        table.setName("Bàn 01");
+//        table.setSeats(5);
+//        ls.add(table);
 
-        table = new Table();
-        table.setName("Bàn 03");
-        table.setSeats(15);
-        ls.add(table);
-
-        return ls;
+//        return ls;
     }
 }

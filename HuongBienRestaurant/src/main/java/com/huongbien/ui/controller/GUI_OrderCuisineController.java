@@ -1,6 +1,10 @@
 package com.huongbien.ui.controller;
 
+import com.huongbien.dao.Cuisine_DAO;
+import com.huongbien.dao.Table_DAO;
+import com.huongbien.database.Database;
 import com.huongbien.entity.Cuisine;
+import com.huongbien.entity.Table;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,6 +17,8 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -36,6 +42,9 @@ public class GUI_OrderCuisineController implements Initializable {
 
     @FXML
     private GridPane compoent_gridBill;
+
+    //DAO
+    private Cuisine_DAO cuisine_DAO;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -74,13 +83,25 @@ public class GUI_OrderCuisineController implements Initializable {
     }
 
     private List<Cuisine> data() {
-        List<Cuisine> ls = new ArrayList<>();
+        try {
+            Connection connection = Database.getConnection();
+            cuisine_DAO = new Cuisine_DAO(connection);
 
-        Cuisine cuisine = new Cuisine();
-        cuisine.setName("Tôm hùm");
-        cuisine.setPrice(120030);
-        ls.add(cuisine);
+            List<Cuisine> ls = cuisine_DAO.get();
+            return ls;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Database.closeConnection();
+        }
 
-        return ls;
+//        List<Cuisine> ls = new ArrayList<>();
+//
+//        Cuisine cuisine = new Cuisine();
+//        cuisine.setName("Tôm hùm");
+//        cuisine.setPrice(120030);
+//        ls.add(cuisine);
+//
+//        return ls;
     }
 }
