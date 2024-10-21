@@ -21,7 +21,7 @@ public class Reservation {
     private Employee employee;
     private ArrayList<Table> tables;
     private Customer customer;
-    private ArrayList<FoodOrder> foods;
+    private ArrayList<FoodOrder> foodOrders;
 
 
     public Reservation() {}
@@ -29,7 +29,7 @@ public class Reservation {
     public Reservation(String reservationId, String partyType, int partySize, LocalDate reservationDate,
                        LocalTime reservationTime, LocalDate receiveDate, String status, double deposit,
                        double refundDeposit, Payment payment, Employee employee, ArrayList<Table> tables,
-                       Customer customer, ArrayList<FoodOrder> foods) {
+                       Customer customer, ArrayList<FoodOrder> foodOrders) {
         setReservationId(reservationId);
         setPartyType(partyType);
         setPartySize(partySize);
@@ -43,18 +43,17 @@ public class Reservation {
         setEmployee(employee);
         setTables(tables);
         setCustomer(customer);
-        setFoods(foods);
+        setFoodOrders(foodOrders);
     }
 
     public Reservation(String partyType, int partySize, LocalDate reservationDate,
                        LocalTime reservationTime, LocalDate receiveDate, String status, double deposit,
                        double refundDeposit, Payment payment, Employee employee, ArrayList<Table> tables,
-                       Customer customer, ArrayList<FoodOrder> foods) {
-        setReservationId(null);
+                       Customer customer, ArrayList<FoodOrder> foodOrders) {
         setPartyType(partyType);
         setPartySize(partySize);
-        setReservationDate(reservationDate);
-        setReservationTime(reservationTime);
+        setReservationDate(LocalDate.now());
+        setReservationTime(LocalTime.now());
         setReceiveDate(receiveDate);
         setStatus(status);
         setDeposit(deposit);
@@ -63,13 +62,14 @@ public class Reservation {
         setEmployee(employee);
         setTables(tables);
         setCustomer(customer);
-        setFoods(foods);
+        setFoodOrders(foodOrders);
+        setReservationId(null);
     }
 
     public void setReservationId(String reservationId) {
         if (reservationId == null) {
-            LocalDate currentDate = LocalDate.now();
-            LocalTime currentTime = LocalTime.now();
+            LocalDate currentDate = getReservationDate();
+            LocalTime currentTime = getReservationTime();
             this.reservationId = String.format("DB%02d%02d%02d%02d%02d%02d%03d",
                     currentDate.getYear() % 100,
                     currentDate.getMonthValue(),
@@ -82,7 +82,7 @@ public class Reservation {
             return;
         }
 
-        if (!reservationId.matches("^DB\\d{15}$")) {
+        if (reservationId.matches("^DB\\d{15}$")) {
             this.reservationId = reservationId;
             return;
         }
@@ -99,36 +99,44 @@ public class Reservation {
 
     public void setPartySize(int partySize) {
         if (partySize <= 1) {
-            throw new IllegalArgumentException("Party size must be greater than 0");
+            throw new IllegalArgumentException("Party size must be greater than 1");
         }
         this.partySize = partySize;
     }
 
     public void setReservationDate(LocalDate reservationDate) {
-        if (reservationDate == null || reservationDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Reservation date must be today or earlier");
+//        if (reservationDate == null || reservationDate.isAfter(LocalDate.now())) {
+//            throw new IllegalArgumentException("Reservation date must be today or earlier");
+//        }
+        if (reservationDate == null) {
+            throw new IllegalArgumentException("Reservation date cannot be null");
         }
         this.reservationDate = reservationDate;
     }
 
     public void setReservationTime(LocalTime reservationTime) {
-        if (reservationTime == null || (reservationDate.equals(LocalDate.now()) && reservationTime.isAfter(LocalTime.now()))) {
-            throw new IllegalArgumentException("Reservation time must be before the current time if the reservation is for today");
+//        if (reservationTime == null || (reservationDate.equals(LocalDate.now()) && reservationTime.isAfter(LocalTime.now()))) {
+//            throw new IllegalArgumentException("Reservation time must be before the current time if the reservation is for today");
+//        }
+        if (reservationTime == null) {
+            throw new IllegalArgumentException("Reservation time cannot be null");
         }
         this.reservationTime = reservationTime;
     }
 
     public void setReceiveDate(LocalDate receiveDate) {
-        if (receiveDate == null || receiveDate.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Receive date must be today or later");
+//        if (receiveDate == null || receiveDate.isBefore(LocalDate.now())) {
+//            throw new IllegalArgumentException("Receive date must be today or later");
+//        }
+        if (receiveDate == null) {
+            throw new IllegalArgumentException("Receive date cannot be null");
         }
         this.receiveDate = receiveDate;
     }
 
     public void setStatus(String status) {
         if (status == null || status.trim().isEmpty()) {
-            this.status = "Chờ";
-            return;
+            throw new IllegalArgumentException("Status cannot be empty");
         }
         this.status = status;
     }
@@ -175,8 +183,8 @@ public class Reservation {
         this.customer = customer;
     }
 
-    public void setFoods(ArrayList<FoodOrder> foods) {
-        this.foods = foods;
+    public void setFoodOrders(ArrayList<FoodOrder> foodOrders) {
+        this.foodOrders = foodOrders;
     }
 
     public String getReservationId() {
@@ -231,8 +239,8 @@ public class Reservation {
         return customer;
     }
 
-    public ArrayList<FoodOrder> getFoods() {
-        return foods;
+    public ArrayList<FoodOrder> getFoodOrders() {
+        return foodOrders;
     }
 
     @Override

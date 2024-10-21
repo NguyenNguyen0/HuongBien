@@ -40,4 +40,15 @@ public class Utils {
     public static int randomNumber(int min, int max) {
         return (int) (Math.random() * (max - min + 1)) + min;
     }
+
+//    Hàm chuyển membershipLevel từ int sang String
+    public static String toStringMembershipLevel (int membershipLevel) {
+        return switch (membershipLevel) {
+            case 0 -> "Đồng";
+            case 1 -> "Bạc";
+            case 2 -> "Vàng";
+            case 3 -> "Kim cương";
+            default -> throw new IllegalArgumentException("Membership must in [0, 1, 2, 3]");
+        };
+    }
 }

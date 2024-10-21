@@ -17,6 +17,8 @@ public class Payment_DAO extends Base_DAO<Payment> {
 
     @Override
     public boolean add(Payment payment) {
+        if (payment == null) return false;
+
         String sql = "INSERT INTO Payment (id, amount, paymentDate, paymentMethod, paymentTime) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, payment.getPaymentId());

@@ -1,6 +1,8 @@
 package com.huongbien.dao;
 
 import com.huongbien.entity.Order;
+import com.huongbien.entity.OrderDetail;
+import com.huongbien.entity.Table;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order_DAO extends Base_DAO<Order> {
-    private Connection connection = null;
+    private final Connection connection;
 
     public Order_DAO(Connection connection) {
         this.connection = connection;
@@ -18,8 +20,12 @@ public class Order_DAO extends Base_DAO<Order> {
 
     @Override
     public boolean add(Order object) {
-        String sql = "INSERT INTO [Order] (id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId, tableId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [Order] (id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            Payment_DAO paymentDao = new Payment_DAO(connection);
+            OrderDetail_DAO orderDetailDao = new OrderDetail_DAO(connection);
+            Table_DAO tableDao = new Table_DAO(connection);
+
             stmt.setString(1, object.getOrderId());
             stmt.setDate(2, java.sql.Date.valueOf(object.getOrderDate()));
             stmt.setString(3, object.getNotes());
@@ -30,11 +36,15 @@ public class Order_DAO extends Base_DAO<Order> {
             stmt.setDouble(8, object.getDiscount());
             stmt.setString(9, object.getCustomer().getCustomerId());
             stmt.setString(10, object.getEmployee().getEmployeeId());
-            stmt.setString(11, object.getPromotion() != null ? object.getPromotion().getPromotion_id() : null);
+            stmt.setString(11, object.getPromotion() != null ? object.getPromotion().getPromotionId() : null);
             stmt.setString(12, object.getPayment() != null ? object.getPayment().getPaymentId() : null);
-            stmt.setString(13, object.getTables() != null && !object.getTables().isEmpty() ? object.getTables().get(0).getId() : null);
+            paymentDao.add(object.getPayment());
 
             int rowAffected = stmt.executeUpdate();
+
+            tableDao.addTablesToOrder(object.getOrderId(), object.getTables());
+            orderDetailDao.add(object.getOrderDetails());
+
             return rowAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,9 +52,11 @@ public class Order_DAO extends Base_DAO<Order> {
         }
     }
 
+//    TODO: cập nhận lại update cho khớp với yêu cầu chương trình
+//    Tạm thời không sử dụng phương thức update này
     @Override
     public boolean update(Order object) {
-        String sql = "UPDATE [Order] SET orderDate = ?, notes = ?, vatTax = ?, paymentAmount = ?, dispensedAmount = ?, totalAmount = ?, discount = ?, customerId = ?, employeeId = ?, promotionId = ?, paymentId = ?, tableId = ? WHERE id = ?";
+        String sql = "UPDATE [Order] SET orderDate = ?, notes = ?, vatTax = ?, paymentAmount = ?, dispensedAmount = ?, totalAmount = ?, discount = ?, customerId = ?, employeeId = ?, promotionId = ?, paymentId = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDate(1, java.sql.Date.valueOf(object.getOrderDate()));
             stmt.setString(2, object.getNotes());
@@ -55,10 +67,9 @@ public class Order_DAO extends Base_DAO<Order> {
             stmt.setDouble(7, object.getDiscount());
             stmt.setString(8, object.getCustomer().getCustomerId());
             stmt.setString(9, object.getEmployee().getEmployeeId());
-            stmt.setString(10, object.getPromotion() != null ? object.getPromotion().getPromotion_id() : null);
+            stmt.setString(10, object.getPromotion() != null ? object.getPromotion().getPromotionId() : null);
             stmt.setString(11, object.getPayment() != null ? object.getPayment().getPaymentId() : null);
-            stmt.setString(12, object.getTables() != null && !object.getTables().isEmpty() ? object.getTables().get(0).getId() : null); // Chỉ lấy ID của bàn đầu tiên
-            stmt.setString(13, object.getOrderId());
+            stmt.setString(12, object.getOrderId());
 
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
@@ -71,10 +82,15 @@ public class Order_DAO extends Base_DAO<Order> {
     @Override
     public List<Order> get() {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId, tableId FROM [Order]";
+        String sql = "SELECT id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId FROM [Order]";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            Customer_DAO customerDao = new Customer_DAO(connection);
+            Employee_DAO employeeDao = new Employee_DAO(connection);
+            Promotion_DAO promotionDao = new Promotion_DAO(connection);
+            Payment_DAO paymentDao = new Payment_DAO(connection);
+            OrderDetail_DAO orderDetailDao = new OrderDetail_DAO(connection);
+            Table_DAO tableDao = new Table_DAO(connection);
 
             while (rs.next()) {
                 Order order = new Order();
@@ -85,12 +101,13 @@ public class Order_DAO extends Base_DAO<Order> {
                 order.setDispensedAmount(rs.getDouble("dispensedAmount"));
                 order.setTotalAmount(rs.getDouble("totalAmount"));
                 order.setDiscount(rs.getDouble("discount"));
+                order.setCustomer(customerDao.get(rs.getString("customerId")));
+                order.setEmployee(employeeDao.get(rs.getString("employeeId")));
+                order.setPromotion(promotionDao.get(rs.getString("promotionId")));
+                order.setPayment(paymentDao.get(rs.getString("paymentId")));
 
-                String customerId = rs.getString("customerId");
-                order.setCustomer(new Customer_DAO(connection).get(customerId));
-
-                String employeeId = rs.getString("employeeId");
-                order.setEmployee(new Employee_DAO(connection).get(employeeId));
+                order.setOrderDetails((ArrayList<OrderDetail>) orderDetailDao.getAllByOrderId(order.getOrderId()));
+                order.setTables((ArrayList<Table>) tableDao.getAllByOrderId(order.getOrderId()));
 
                 orders.add(order);
             }
@@ -105,11 +122,18 @@ public class Order_DAO extends Base_DAO<Order> {
     @Override
     public Order get(String id) {
         Order order = null;
-        String sql = "SELECT id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId, tableId FROM [Order] WHERE id = ?";
+        String sql = "SELECT id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId FROM [Order] WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
+                Customer_DAO customerDao = new Customer_DAO(connection);
+                Employee_DAO employeeDao = new Employee_DAO(connection);
+                Promotion_DAO promotionDao = new Promotion_DAO(connection);
+                Payment_DAO paymentDao = new Payment_DAO(connection);
+                OrderDetail_DAO orderDetailDao = new OrderDetail_DAO(connection);
+                Table_DAO tableDao = new Table_DAO(connection);
+
                 if (rs.next()) {
                     order = new Order();
                     order.setOrderId(rs.getString("id"));
@@ -119,11 +143,13 @@ public class Order_DAO extends Base_DAO<Order> {
                     order.setDispensedAmount(rs.getDouble("dispensedAmount"));
                     order.setTotalAmount(rs.getDouble("totalAmount"));
                     order.setDiscount(rs.getDouble("discount"));
-                    String customerId = rs.getString("customerId");
-                    order.setCustomer(new Customer_DAO(connection).get(customerId));
-                    String employeeId = rs.getString("employeeId");
-                    order.setEmployee(new Employee_DAO(connection).get(employeeId));
+                    order.setCustomer(customerDao.get(rs.getString("customerId")));
+                    order.setEmployee(employeeDao.get(rs.getString("employeeId")));
+                    order.setPromotion(promotionDao.get(rs.getString("promotionId")));
+                    order.setPayment(paymentDao.get(rs.getString("paymentId")));
 
+                    order.setOrderDetails((ArrayList<OrderDetail>) orderDetailDao.getAllByOrderId(order.getOrderId()));
+                    order.setTables((ArrayList<Table>) tableDao.getAllByOrderId(order.getOrderId()));
                 }
             }
         } catch (SQLException e) {

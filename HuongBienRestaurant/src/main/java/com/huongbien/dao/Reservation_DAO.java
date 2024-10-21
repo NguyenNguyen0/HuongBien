@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Reservation_DAO extends Base_DAO<Reservation> {
-    private Connection connection;
+    private final Connection connection;
 
     public Reservation_DAO(Connection connection) {
         this.connection = connection;
@@ -18,8 +18,11 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
 
     @Override
     public boolean add(Reservation object) {
-        String sql = "INSERT INTO reservation (id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO reservation (id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit, employeeId, customerId, paymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            Payment_DAO paymentDao = new Payment_DAO(connection);
+            FoodOrder_DAO foodOrderDao = new FoodOrder_DAO(connection);
+
             stmt.setString(1, object.getReservationId());
             stmt.setString(2, object.getPartyType());
             stmt.setInt(3, object.getPartySize());
@@ -29,8 +32,15 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
             stmt.setString(7, object.getStatus());
             stmt.setDouble(8, object.getDeposit());
             stmt.setDouble(9, object.getRefundDeposit());
+            stmt.setString(10, object.getEmployee().getEmployeeId());
+            stmt.setString(11, object.getCustomer().getCustomerId());
+            stmt.setString(12, object.getPayment().getPaymentId());
+            paymentDao.add(object.getPayment());
 
             int rowAffected = stmt.executeUpdate();
+
+            foodOrderDao.add(object.getFoodOrders());
+
             return rowAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,9 +48,11 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
         }
     }
 
+//    TODO: cập nhận lại update cho khớp với yêu cầu chương trình
+//    Tạm thời không sử dụng phương thức update này
     @Override
     public boolean update(Reservation object) {
-        String sql = "UPDATE reservation SET partyType = ?, partySize = ?, reservationDate = ?, reservationTime = ?, receiveDate = ?, status = ?, deposit = ?, refundDeposit = ? WHERE id = ?";
+        String sql = "UPDATE reservation SET partyType = ?, partySize = ?, reservationDate = ?, reservationTime = ?, receiveDate = ?, status = ?, deposit = ?, refundDeposit = ?, employeeId = ?, customerId = ?, paymentId = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, object.getPartyType());
             stmt.setInt(2, object.getPartySize());
@@ -50,7 +62,10 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
             stmt.setString(6, object.getStatus());
             stmt.setDouble(7, object.getDeposit());
             stmt.setDouble(8, object.getRefundDeposit());
-            stmt.setString(9, object.getReservationId());
+            stmt.setString(9, object.getEmployee().getEmployeeId());
+            stmt.setString(10, object.getCustomer().getCustomerId());
+            stmt.setString(11, object.getPayment().getPaymentId());
+            stmt.setString(12, object.getReservationId());
 
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
@@ -63,10 +78,13 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
     @Override
     public List<Reservation> get() {
         List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit FROM reservation";
+        String sql = "SELECT id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit, customerId, employeeId, paymentId FROM reservation";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
+            Customer_DAO customerDao = new Customer_DAO(connection);
+            Employee_DAO employeeDao = new Employee_DAO(connection);
+            Payment_DAO paymentDao = new Payment_DAO(connection);
 
             while (rs.next()) {
                 Reservation reservation = new Reservation();
@@ -79,6 +97,11 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
                 reservation.setStatus(rs.getString("status"));
                 reservation.setDeposit(rs.getDouble("deposit"));
                 reservation.setRefundDeposit(rs.getDouble("refundDeposit"));
+
+                reservation.setCustomer(customerDao.get(rs.getString("customerId")));
+                reservation.setEmployee(employeeDao.get(rs.getString("employeeId")));
+                reservation.setPayment(paymentDao.get(rs.getString("paymentId")));
+
                 reservations.add(reservation);
             }
 
@@ -92,23 +115,34 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
     @Override
     public Reservation get(String id) {
         Reservation reservation = null;
-        String sql = "SELECT id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit FROM reservation WHERE id = ?";
+        String sql = "SELECT id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit, customerId, employeeId, paymentId FROM reservation WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    reservation = new Reservation();
-                    reservation.setReservationId(rs.getString("id"));
-                    reservation.setPartyType(rs.getString("partyType"));
-                    reservation.setPartySize(rs.getInt("partySize"));
-                    reservation.setReservationDate(rs.getDate("reservationDate").toLocalDate());
-                    reservation.setReservationTime(rs.getTime("reservationTime").toLocalTime());
-                    reservation.setReceiveDate(rs.getDate("receiveDate").toLocalDate());
-                    reservation.setStatus(rs.getString("status"));
-                    reservation.setDeposit(rs.getDouble("deposit"));
-                    reservation.setRefundDeposit(rs.getDouble("refundDeposit"));
-                }
+            ResultSet rs = stmt.executeQuery();
+            Customer_DAO customerDao = new Customer_DAO(connection);
+            Employee_DAO employeeDao = new Employee_DAO(connection);
+            Payment_DAO paymentDao = new Payment_DAO(connection);
+            Table_DAO tableDao = new Table_DAO(connection);
+            FoodOrder_DAO foodOrderDao = new FoodOrder_DAO(connection);
+
+            if (rs.next()) {
+                reservation = new Reservation();
+                reservation.setReservationId(rs.getString("id"));
+                reservation.setPartyType(rs.getString("partyType"));
+                reservation.setPartySize(rs.getInt("partySize"));
+                reservation.setReservationDate(rs.getDate("reservationDate").toLocalDate());
+                reservation.setReservationTime(rs.getTime("reservationTime").toLocalTime());
+                reservation.setReceiveDate(rs.getDate("receiveDate").toLocalDate());
+                reservation.setStatus(rs.getString("status"));
+                reservation.setDeposit(rs.getDouble("deposit"));
+                reservation.setRefundDeposit(rs.getDouble("refundDeposit"));
+
+                reservation.setCustomer(customerDao.get(rs.getString("customerId")));
+                reservation.setEmployee(employeeDao.get(rs.getString("employeeId")));
+                reservation.setPayment(paymentDao.get(rs.getString("paymentId")));
+                reservation.setTables(tableDao.getAllByReservationId(reservation.getReservationId()));
+                reservation.setFoodOrders(foodOrderDao.getAllByReservationId(reservation.getReservationId()));
             }
         } catch (SQLException e) {
             e.printStackTrace();

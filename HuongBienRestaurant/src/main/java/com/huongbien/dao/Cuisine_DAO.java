@@ -9,11 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cuisne_DAO extends Base_DAO<Cuisine>{
-    private Connection connection = null;
+public class Cuisine_DAO extends Base_DAO<Cuisine>{
+    private final Connection connection;
+    private final Category_DAO categoryDao;
 
-    public Cuisne_DAO(Connection connection){
+    public Cuisine_DAO(Connection connection) {
         this.connection = connection;
+        this.categoryDao = new Category_DAO(connection);
     }
     @Override
     public boolean add(Cuisine object) {
@@ -57,7 +59,7 @@ public class Cuisne_DAO extends Base_DAO<Cuisine>{
     @Override
     public List<Cuisine> get() {
         List<Cuisine> cuisines = new ArrayList<>();
-        String sql = "SELECT id, name, price, description, image FROM Cuisine";
+        String sql = "SELECT id, name, price, description, image, categoryId FROM Cuisine";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -69,6 +71,7 @@ public class Cuisne_DAO extends Base_DAO<Cuisine>{
                 cuisine.setPrice(rs.getDouble("price"));
                 cuisine.setDescription(rs.getString("description"));
                 cuisine.setImage(rs.getBytes("image"));
+                cuisine.setCategory(categoryDao.get(rs.getString("categoryId")));
                 cuisines.add(cuisine);
             }
 
@@ -94,8 +97,7 @@ public class Cuisne_DAO extends Base_DAO<Cuisine>{
                     cuisine.setPrice(rs.getDouble("price"));
                     cuisine.setDescription(rs.getString("description"));
                     cuisine.setImage(rs.getBytes("image"));
-                    String categoryId = rs.getString("categoryID");
-                    cuisine.setCategory(new Category_DAO(connection).get(categoryId));
+                    cuisine.setCategory(categoryDao.get(rs.getString("categoryID")));
                 }
             }
         } catch (SQLException e) {

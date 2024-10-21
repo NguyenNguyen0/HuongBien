@@ -18,7 +18,7 @@ CREATE TABLE Customer (
     birthday DATE,
     registrationDate DATE,
     accumulatedPoints INT DEFAULT 0,
-    membership NVARCHAR(10),
+    membershiplevel INT,
 );
 GO
 
@@ -50,19 +50,20 @@ CREATE TABLE Promotion (
     name NVARCHAR(30) NOT NULL,
     startDate DATE NOT NULL,
     endDate DATE NOT NULL,
-    isUsed BIT DEFAULT 0,
-    discount REAL CHECK (discount >= 0),
+    discount REAL,
     description NVARCHAR(100),
-    minimumOrderAmount REAL CHECK (minimumOrderAmount >= 0),
+    minimumOrderAmount REAL,
+    membershipLevel INT NOT NULL
 );
 GO
+
 
 -- Tạo bảng Payment
 CREATE TABLE Payment (
     id CHAR(17) PRIMARY KEY,
     amount REAL NOT NULL,
     paymentDate DATE NOT NULL,
-    paymentMethod NVARCHAR(50),
+    paymentMethod NVARCHAR(20),
     paymentTime TIME NOT NULL,
 );
 GO
@@ -126,21 +127,19 @@ GO
 CREATE TABLE Reservation (
     id CHAR(17) PRIMARY KEY,
     partyType NVARCHAR(20) NOT NULL,
-    partySize INT NOT NULL CHECK (partySize >= 1),
+    partySize INT NOT NULL,
     reservationDate DATE NOT NULL,
     reservationTime TIME NOT NULL,
     receiveDate DATE NOT NULL,
     status NVARCHAR(50) NOT NULL,
-    deposit REAL NOT NULL CHECK (deposit >= 0),
+    deposit REAL NOT NULL,
     refundDeposit REAL NOT NULL,
 
     employeeId CHAR(11),
     customerId CHAR(11),
-    tableId CHAR(6),
     paymentId CHAR(17),
     FOREIGN KEY (employeeId) REFERENCES Employee(id),
     FOREIGN KEY (customerId) REFERENCES Customer(id),
-    FOREIGN KEY (tableId) REFERENCES [Table](id),
     FOREIGN KEY (paymentId) REFERENCES Payment(id),
 );
 GO
@@ -168,18 +167,16 @@ CREATE TABLE [Order] (
     paymentAmount REAL NOT NULL,
     dispensedAmount REAL NOT NULL,
     totalAmount REAL NOT NULL,
-    discount REAL DEFAULT 0,
+    discount REAL,
 
-    customerId CHAR(11),
+    customerId CHAR(11) NULL,
     employeeId CHAR(11),
     promotionId CHAR(11),
     paymentId CHAR(17),
-    tableId CHAR(6),
     FOREIGN KEY (customerId) REFERENCES Customer(id),
     FOREIGN KEY (employeeId) REFERENCES Employee(id),
     FOREIGN KEY (promotionId) REFERENCES Promotion(id),
-    FOREIGN KEY	(paymentId ) REFERENCES Payment(id),
-	FOREIGN KEY (tableId) REFERENCES [Table](id)
+    FOREIGN KEY	(paymentId ) REFERENCES Payment(id)
 );
 GO
 
@@ -194,5 +191,25 @@ CREATE TABLE OrderDetail (
     orderId CHAR(17),
     FOREIGN KEY (cuisineId) REFERENCES Cuisine(id),
     FOREIGN KEY (orderId) REFERENCES [Order](id),
+);
+GO
+
+-- Tạo bảng Order_Table
+CREATE TABLE Order_Table (
+    orderId CHAR(17),
+    tableId CHAR(6),
+    PRIMARY KEY (orderId, tableId),
+    FOREIGN KEY (orderId) REFERENCES [Order](id),
+	FOREIGN KEY (tableId) REFERENCES [Table](id)
+);
+GO
+
+-- Tạo bảng Reservation_Table
+CREATE TABLE Reservation_Table (
+    reservationId CHAR(17),
+    tableId CHAR(6),
+    PRIMARY KEY (reservationId, tableId),
+    FOREIGN KEY (reservationId) REFERENCES [Reservation](id),
+	FOREIGN KEY (tableId) REFERENCES [Table](id)
 );
 GO

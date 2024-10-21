@@ -1,6 +1,5 @@
 package com.huongbien.dao;
 
-import com.huongbien.database.Database;
 import com.huongbien.entity.Category;
 
 import java.sql.Connection;
@@ -12,7 +11,7 @@ import java.util.List;
 
 
 public class Category_DAO extends Base_DAO<Category>{
-    private Connection connection = null;
+    private final Connection connection;
 
     public Category_DAO(Connection connection) {
         this.connection = connection;
@@ -90,5 +89,18 @@ public class Category_DAO extends Base_DAO<Category>{
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean delete(String id) {
+        String sql = "DELETE FROM category WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableType_DAO extends Base_DAO<TableType> {
-    private Connection connection = null;
+    private final Connection connection;
 
     public TableType_DAO(Connection connection) {
         this.connection = connection;

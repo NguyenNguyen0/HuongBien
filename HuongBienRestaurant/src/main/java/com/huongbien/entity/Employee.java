@@ -88,21 +88,21 @@ public class Employee {
 
     public void setName(String name) {
         if (name == null || name.isBlank() || name.split(" ").length < 2) {
-            throw new IllegalArgumentException("Họ tên không không được rỗng và phải có ít nhất hai từ");
+            throw new IllegalArgumentException("Invalid name");
         }
         this.name = name;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber == null || !phoneNumber.matches("^0\\d{9}$")) {
-            throw new IllegalArgumentException("'phoneNumber' không được rỗng, gồm 10 kí tự và bắt đầu bằng số 0");
+            throw new IllegalArgumentException("Invalid phone number");
         }
         this.phoneNumber = phoneNumber;
     }
 
     public void setCitizenIDNumber(String citizenIDNumber) {
         if (citizenIDNumber == null || citizenIDNumber.trim().isEmpty()) {
-            throw new IllegalArgumentException("'citizenIDNumber' không được rỗng");
+            throw new IllegalArgumentException("Invalid citizenIDNumber");
         }
         this.citizenIDNumber = citizenIDNumber;
     }
@@ -117,49 +117,54 @@ public class Employee {
 
     public void setBirthday(LocalDate birthday) {
         if (birthday != null && LocalDate.now().minusYears(18).isBefore(birthday)) {
-            throw new IllegalArgumentException("Nhân viên phải >=18 tuổi");
+            throw new IllegalArgumentException("Employee age must greater than 18");
         }
         this.birthday = birthday;
     }
 
     public void setEmail(String email) {
-        if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            throw new IllegalArgumentException("email phải là đuôi @....com");
+        if (email == null || email.isEmpty()) {
+            this.email = null;
+            return;
         }
-        this.email = email;
+
+        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            this.email = email;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid email");
     }
 
     public void setStatus(String status) {
         if (status == null || status.trim().isEmpty()) {
-            throw new IllegalArgumentException("Status không được rỗng");
+            throw new IllegalArgumentException("Invalid status");
         }
         this.status = status;
     }
 
     public void setHireDate(LocalDate hireDate) {
-        if (hireDate != null && hireDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("hireDate phải trước ngày hiện tại");
-        }
         this.hireDate = hireDate;
     }
 
     public void setPosition(String position) {
-        if (!"Phục vụ".equals(position) && !"Quản lí".equals(position)) {
-            throw new IllegalArgumentException("Position phải là 'Phục vụ' hoặc 'Quản lí'");
+        if (position == null || position.trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid position");
         }
+
         this.position = position;
     }
 
     public void setWorkHours(double workHours) {
         if (workHours <= 0) {
-            throw new IllegalArgumentException("workHours: số giờ làm phải lớn hơn 0");
+            throw new IllegalArgumentException("workHour must greater than 0");
         }
         this.workHours = workHours;
     }
 
     public void setHourlyPay(double hourlyPay) {
         if (hourlyPay < 20000) {
-            throw new IllegalArgumentException("hourlyPay: Số lương theo giờ tối thiểu là 20k");
+            throw new IllegalArgumentException("hourlyPay must greater than or equal 20000");
         }
         this.hourlyPay = hourlyPay;
     }
