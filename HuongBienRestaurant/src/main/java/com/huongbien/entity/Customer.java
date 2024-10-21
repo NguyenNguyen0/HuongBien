@@ -15,13 +15,13 @@ public class Customer {
     private LocalDate birthday;
     private LocalDate registrationDate;
     private int accumulatedPoints;
-    private String memberShip;
+    private int membershipLevel;
 
     public Customer() {}
 
     public Customer(String customerId, String name, String address, boolean gender,
                     String phoneNumber, String email, LocalDate birthday,
-                    LocalDate registrationDate, int accumulatedPoints, String memberShip) {
+                    LocalDate registrationDate, int accumulatedPoints, int memberShip) {
         setCustomerId(customerId);
         setName(name);
         setAddress(address);
@@ -31,7 +31,7 @@ public class Customer {
         setBirthday(birthday);
         setRegistrationDate(registrationDate);
         setAccumulatedPoints(accumulatedPoints);
-        setMemberShip(memberShip);
+        setMembershipLevel(memberShip);
     }
 
     public Customer(String name, String address, boolean gender,
@@ -45,11 +45,11 @@ public class Customer {
         setBirthday(birthday);
         setRegistrationDate(LocalDate.now());
         setAccumulatedPoints(1000);
-        setMemberShip("thường");
+        setMembershipLevel(0);
     }
 
     public void setCustomerId(String customerId) {
-        if (Customer.this.customerId == null) {
+        if (customerId == null) {
             LocalDate currentDate = LocalDate.now();
             this.customerId = String.format("KH%02d%02d%02d%03d",
                     currentDate.getYear() % 100,
@@ -60,7 +60,7 @@ public class Customer {
             return;
         }
 
-        if (customerId.matches("^NV\\d{9}$")) {
+        if (customerId.matches("^KH\\d{9}$")) {
             this.customerId = customerId;
             return;
         }
@@ -92,11 +92,17 @@ public class Customer {
     }
 
     public void setEmail(String email) {
-        if (email == null || email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
-            this.email = email;
-        } else {
-            throw new IllegalArgumentException("Invalid email");
+        if (email == null || email.isEmpty()) {
+            this.email = null;
+            return;
         }
+
+        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            this.email = email;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid email");
     }
 
     public void setBirthday(LocalDate birthday) {
@@ -114,12 +120,11 @@ public class Customer {
         this.accumulatedPoints = accumulatedPoints;
     }
 
-    public void setMemberShip(String memberShip) {
-        if (memberShip == null || memberShip.equals("VIP") || memberShip.equals("Thường")) {
-            this.memberShip = memberShip;
-        } else {
-            throw new IllegalArgumentException("Membership must be either VIP or Thường");
+    public void setMembershipLevel(int membershipLevel) {
+        if (membershipLevel < 0) {
+            throw new IllegalArgumentException("Membership cannot lower 0");
         }
+        this.membershipLevel = membershipLevel;
     }
 
     public String getCustomerId() {
@@ -158,8 +163,8 @@ public class Customer {
         return accumulatedPoints;
     }
 
-    public String getMemberShip() {
-        return memberShip;
+    public int getMembershipLevel() {
+        return membershipLevel;
     }
 
     @Override
@@ -174,7 +179,7 @@ public class Customer {
                 ", birthday=" + birthday +
                 ", registrationDate=" + registrationDate +
                 ", accumulatedPoints=" + accumulatedPoints +
-                ", memberShip='" + memberShip + '\'' +
+                ", membershipLevel='" + Utils.toStringMembershipLevel(membershipLevel) + '\'' +
                 '}';
     }
 

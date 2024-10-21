@@ -13,11 +13,12 @@ public class Account {
     private Employee employeeInfo;
     private byte[] avatar;
 
-    public Account(String username, String password, String role, String email, byte[] avatar) {
+    public Account(String username, String password, String role, String email, Employee employeeInfo, byte[] avatar) {
         setUsername(username);
         setHashcode(Utils.hashPassword(password));
         setRole(role);
         setIsActive(true);
+        setEmployeeInfo(employeeInfo);
         setEmail(email);
         setAvatar(avatar);
     }
@@ -49,17 +50,24 @@ public class Account {
     }
 
     public void setRole(String role) {
-        if (role == null || (!role.equals("Manager") && !role.equals("Waiter"))) {
-            throw new IllegalArgumentException("Role must be either Manager or Waiter");
+        if (role == null || role.isBlank()) {
+            throw new IllegalArgumentException("Role cannot be empty");
         }
         this.role = role;
     }
 
     public void setEmail(String email) {
-        if (email == null || !email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
-            throw new IllegalArgumentException("Invalid email format");
+        if (email == null || email.isEmpty()) {
+            this.email = null;
+            return;
         }
-        this.email = email;
+
+        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            this.email = email;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid email");
     }
 
     public void setIsActive(boolean isActive) {

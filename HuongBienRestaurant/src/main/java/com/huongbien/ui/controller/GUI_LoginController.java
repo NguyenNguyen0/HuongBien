@@ -135,7 +135,7 @@ public class GUI_LoginController implements Initializable {
         try {
             Connection connection = Database.getConnection();
             accountDao = new Account_DAO(connection);
-            //
+
             String username = txt_empID.getText();
             String password = getCurrentPwd();
             String passwordHash = Utils.hashPassword(password);

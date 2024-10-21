@@ -1,7 +1,6 @@
 package com.huongbien.dao;
 
 import com.huongbien.entity.OrderDetail;
-import com.huongbien.entity.Cuisine;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
-    private Connection connection = null;
+    private final Connection connection;
 
     public OrderDetail_DAO(Connection connection) {
         this.connection = connection;
@@ -26,7 +25,7 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
             stmt.setString(3, object.getNote());
             stmt.setDouble(4, object.getSalePrice());
             stmt.setString(5, object.getCuisine().getCuisineId());
-            stmt.setString(6, object.getOrderDetailId());
+            stmt.setString(6, object.getOrderDetailId().substring(0, 17));
 
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
@@ -44,7 +43,7 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
             stmt.setString(2, object.getNote());
             stmt.setDouble(3, object.getSalePrice());
             stmt.setString(4, object.getCuisine().getCuisineId());
-            stmt.setString(5, object.getOrderDetailId()); 
+            stmt.setString(5, object.getOrderDetailId().substring(0, 17)); // orderId
             stmt.setString(6, object.getOrderDetailId());
 
             int rowAffected = stmt.executeUpdate();
@@ -58,21 +57,20 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
     @Override
     public List<OrderDetail> get() {
         List<OrderDetail> orderDetails = new ArrayList<>();
-        String sql = "SELECT od.*, c.id AS cuisineId, c.name AS cuisineName FROM OrderDetail od LEFT JOIN Cuisine c ON od.cuisineId = c.id";
+        String sql = "SELECT id, quantity, note, salePrice, cuisineId FROM OrderDetail";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
+            Cuisine_DAO cuisineDao = new Cuisine_DAO(connection);
 
             while (rs.next()) {
-                Cuisine cuisine = new Cuisine();
-                cuisine.setCuisineId(rs.getString("cuisineId"));
-                cuisine.setName(rs.getString("cuisineName"));
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setOrderDetailId(rs.getString("id"));
                 orderDetail.setQuantity(rs.getInt("quantity"));
                 orderDetail.setNote(rs.getString("note"));
                 orderDetail.setSalePrice(rs.getDouble("salePrice"));
-                orderDetail.setCuisine(cuisine);
+                orderDetail.setCuisine(cuisineDao.get(rs.getString("cuisineId")));
+
                 orderDetails.add(orderDetail);
             }
 
@@ -86,21 +84,20 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
     @Override
     public OrderDetail get(String id) {
         OrderDetail orderDetail = null;
-        String sql = "SELECT od.*, c.id AS cuisineId, c.name AS cuisineName FROM OrderDetail od LEFT JOIN Cuisine c ON od.id = ? AND od.cuisineId = c.id";
+        String sql = "SELECT id, quantity, note, salePrice, cuisineId FROM OrderDetail WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
+            Cuisine_DAO cuisineDao = new Cuisine_DAO(connection);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Cuisine cuisine = new Cuisine();
-                    cuisine.setCuisineId(rs.getString("cuisineId"));
-                    cuisine.setName(rs.getString("cuisineName"));
                     orderDetail = new OrderDetail();
                     orderDetail.setOrderDetailId(rs.getString("id"));
                     orderDetail.setQuantity(rs.getInt("quantity"));
                     orderDetail.setNote(rs.getString("note"));
                     orderDetail.setSalePrice(rs.getDouble("salePrice"));
-                    orderDetail.setCuisine(cuisine);
+                    orderDetail.setCuisine(cuisineDao.get(rs.getString("cuisineId")));
                 }
             }
         } catch (SQLException e) {
@@ -108,5 +105,42 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
         }
 
         return orderDetail;
+    }
+
+    public List<OrderDetail> getAllByOrderId (String orderId) {
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        String sql = "SELECT id, quantity, note, salePrice, cuisineId FROM OrderDetail WHERE orderId = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, orderId);
+            ResultSet rs = stmt.executeQuery();
+            Cuisine_DAO cuisineDao = new Cuisine_DAO(connection);
+
+            while (rs.next()) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOrderDetailId(rs.getString("id"));
+                orderDetail.setQuantity(rs.getInt("quantity"));
+                orderDetail.setNote(rs.getString("note"));
+                orderDetail.setSalePrice(rs.getDouble("salePrice"));
+                orderDetail.setCuisine(cuisineDao.get(rs.getString("cuisineId")));
+
+                orderDetails.add(orderDetail);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orderDetails;
+    }
+
+    public boolean add(List<OrderDetail> orderDetails) {
+        for (OrderDetail orderDetail : orderDetails) {
+            if (!add(orderDetail)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

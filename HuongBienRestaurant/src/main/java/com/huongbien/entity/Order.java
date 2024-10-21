@@ -23,9 +23,7 @@ public class Order {
     private Customer customer;
     private Employee employee;
 
-    public Order() {
-        setOrderId(null);
-    }
+    public Order() {}
 
     public Order(String orderId, LocalDate orderDate, String notes, double paymentAmount,
                  double dispensedAmount, double totalAmount, double discount,
@@ -50,8 +48,8 @@ public class Order {
                  double totalAmount, ArrayList<OrderDetail> orderDetails,
                  Promotion promotion, Payment payment, ArrayList<Table> tables,
                  Customer customer, Employee employee) {
-        setOrderId(null);
         setOrderDate(LocalDate.now());
+        setOrderId(null);
         setNotes(notes);
         setPaymentAmount(paymentAmount);
         setDispensedAmount(dispensedAmount);
@@ -90,8 +88,8 @@ public class Order {
     }
 
     public void setOrderDate(LocalDate orderDate) {
-        if (orderDate == null || !orderDate.equals(LocalDate.now())) {
-            throw new IllegalArgumentException("Order date must be today's date");
+        if (orderDate == null) {
+            throw new IllegalArgumentException("Order date cannot be null");
         }
         this.orderDate = orderDate;
     }
@@ -136,9 +134,6 @@ public class Order {
     }
 
     public void setPromotion(Promotion promotion) {
-        if (promotion == null) {
-            throw new IllegalArgumentException("Promotion cannot be null");
-        }
         this.promotion = promotion;
     }
 

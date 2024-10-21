@@ -66,41 +66,30 @@ public class Payment {
     }
 
     public void setPaymentDate(LocalDate paymentDate) {
-        if (paymentDate.isBefore(LocalDate.now()) || paymentDate.isEqual(LocalDate.now())) {
-            this.paymentDate = paymentDate;
-        } else {
-            throw new IllegalArgumentException("Payment date must be today or in the past.");
+        if (paymentDate == null) {
+            throw new IllegalArgumentException("Payment date cannot be null.");
         }
+        this.paymentDate = paymentDate;
     }
 
     public void setPaymentMethod(String paymentMethod) {
         if (paymentMethod.equalsIgnoreCase("Chuyển khoản") ||
                 paymentMethod.equalsIgnoreCase("Tiền mặt")) {
             this.paymentMethod = paymentMethod;
-        } else {
-            throw new IllegalArgumentException("Payment method must be either 'Chuyển khoản' or 'Tiền mặt'.");
+            return;
         }
+        throw new IllegalArgumentException("Payment method must be either 'Chuyển khoản' or 'Tiền mặt'.");
     }
 
     public void setPaymentTime(LocalDate paymentDate, LocalTime paymentTime) {
-        LocalTime tenAM = LocalTime.of(10, 0);
-        LocalTime tenPM = LocalTime.of(22, 0);
-
-        if (paymentDate.isEqual(LocalDate.now())) {
-            if (paymentTime.isBefore(LocalTime.now()) || paymentTime.equals(LocalTime.now())) {
-                this.paymentTime = paymentTime;
-            } else {
-                throw new IllegalArgumentException("Payment time for today must be before or equal to the current time.");
-            }
-        } else if (paymentDate.isBefore(LocalDate.now())) {
-            if (paymentTime.isAfter(tenAM) && paymentTime.isBefore(tenPM)) {
-                this.paymentTime = paymentTime;
-            } else {
-                throw new IllegalArgumentException("Payment time for past dates must be between 10:00 and 22:00.");
-            }
-        } else {
-            throw new IllegalArgumentException("Payment date cannot be in the future.");
+        if (paymentDate == null) {
+            throw new IllegalArgumentException("Payment date cannot be null.");
         }
+
+        if (paymentTime == null) {
+            throw new IllegalArgumentException("Payment time cannot be null.");
+        }
+        this.paymentTime = paymentTime;
     }
 
     public String getPaymentId() {

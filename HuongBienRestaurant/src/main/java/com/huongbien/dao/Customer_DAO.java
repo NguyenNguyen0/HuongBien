@@ -15,7 +15,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
 
     @Override
     public boolean add(Customer customer) {
-        String sql = "INSERT INTO Customer (id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membership) "
+        String sql = "INSERT INTO Customer (id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, customer.getCustomerId());
@@ -27,7 +27,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
             stmt.setDate(7, Date.valueOf(customer.getBirthday()));
             stmt.setDate(8, Date.valueOf(customer.getRegistrationDate()));
             stmt.setInt(9, customer.getAccumulatedPoints());
-            stmt.setString(10, customer.getMemberShip());
+            stmt.setInt(10, customer.getMembershipLevel());
 
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
@@ -40,7 +40,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
     @Override
     public boolean update(Customer customer) {
         String sql = "UPDATE Customer SET name = ?, address = ?, gender = ?, phoneNumber = ?, email = ?, birthday = ?, registrationDate = ?, "
-                + "accumulatedPoints = ?, membership = ? WHERE id = ?";
+                + "accumulatedPoints = ?, membershipLevel = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, customer.getName());
             stmt.setString(2, customer.getAddress());
@@ -50,10 +50,8 @@ public class Customer_DAO extends Base_DAO<Customer> {
             stmt.setDate(6, Date.valueOf(customer.getBirthday()));
             stmt.setDate(7, Date.valueOf(customer.getRegistrationDate()));
             stmt.setInt(8, customer.getAccumulatedPoints());
-            stmt.setString(9, customer.getMemberShip());
+            stmt.setInt(9, customer.getMembershipLevel());
             stmt.setString(10, customer.getCustomerId());
-
-            System.out.println("Updating customer: " + customer.toString());
 
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
@@ -67,7 +65,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
     @Override
     public List<Customer> get() {
         List<Customer> customers = new ArrayList<>();
-        String sql = "SELECT id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membership FROM Customer";
+        String sql = "SELECT id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel FROM Customer";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -83,7 +81,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
                 customer.setBirthday(rs.getDate("birthday").toLocalDate());
                 customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
                 customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
-                customer.setMemberShip(rs.getString("membership"));
+                customer.setMembershipLevel(rs.getInt("membershipLevel"));
                 customers.add(customer);
             }
 
@@ -96,7 +94,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
     @Override
     public Customer get(String id) {
         Customer customer = null;
-        String sql = "SELECT id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membership "
+        String sql = "SELECT id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel "
                 + "FROM Customer WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -113,7 +111,7 @@ public class Customer_DAO extends Base_DAO<Customer> {
                     customer.setBirthday(rs.getDate("birthday").toLocalDate());
                     customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
                     customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
-                    customer.setMemberShip(rs.getString("membership"));
+                    customer.setMembershipLevel(rs.getInt("membershipLevel"));
                 }
             }
         } catch (SQLException e) {

@@ -34,7 +34,7 @@ public class Table {
 
     public void setId(String id) {
         if (id == null) {
-            this.id = String.format("T%01d%03d", this.floor, Utils.randomNumber(1, 999));
+            this.id = String.format("T%01dB%03d", this.floor, Utils.randomNumber(1, 999));
             return;
         }
 

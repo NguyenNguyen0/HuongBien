@@ -10,23 +10,22 @@ public class Promotion {
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
-    private boolean isUsed;
     private double discount;
     private String description;
     private double minimumOrderAmount;
+    private int membershipLevel;
 
     public Promotion() {}
 
-    public Promotion(String promotionId, String name, LocalDate startDate, LocalDate endDate,
-                     boolean isUsed, double discount, String description, double minimumOrderAmount) {
+    public Promotion(String promotionId, String name, LocalDate startDate, LocalDate endDate, double discount, String description, double minimumOrderAmount, int membershipLevel) {
         setPromotionId(promotionId);
         setName(name);
         setStartDate(startDate);
         setEndDate(endDate);
-        setIsUsed(isUsed);
         setDiscount(discount);
         setDescription(description);
         setMinimumOrderAmount(minimumOrderAmount);
+        setMembershipLevel(membershipLevel);
     }
 
     public void setPromotionId(String promotionId) {
@@ -38,7 +37,7 @@ public class Promotion {
             return;
         }
 
-        if (promotionId.matches("^KM\\d{6}$")) {
+        if (promotionId.matches("^KM\\d{9}$")) {
             this.promotionId = promotionId;
             return;
         }
@@ -48,32 +47,28 @@ public class Promotion {
 
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("'name': tên khuyến mãi không được để trống");
+            throw new IllegalArgumentException("name cannot be empty");
         }
         this.name = name;
     }
 
     public void setStartDate(LocalDate startDate) {
-        if (startDate != null && startDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("startDate phải trước hoặc là ngày hiện tại");
+        if (startDate == null) {
+            throw new IllegalArgumentException("startDate cannot be empty");
         }
         this.startDate = startDate;
     }
 
     public void setEndDate(LocalDate endDate) {
-        if (endDate != null && startDate != null && endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("endDate phải sau ngày bắt đầu mở giảm giá");
+        if (endDate == null) {
+            throw new IllegalArgumentException("endDate cannot be empty");
         }
         this.endDate = endDate;
     }
 
-    public void setIsUsed(boolean isUsed) {
-        this.isUsed = isUsed;
-    }
-
     public void setDiscount(double discount) {
         if (discount <= 0) {
-            throw new IllegalArgumentException("discount phải lớn hơn 0");
+            throw new IllegalArgumentException("discount cannot be less than 0");
         }
         this.discount = discount;
     }
@@ -84,12 +79,20 @@ public class Promotion {
 
     public void setMinimumOrderAmount(double minimumOrderAmount) {
         if (minimumOrderAmount <= 0) {
-            throw new IllegalArgumentException("MinimumOrderAmount phải lớn hơn 0");
+            throw new IllegalArgumentException("MinimumOrderAmount must greater than 0");
         }
         this.minimumOrderAmount = minimumOrderAmount;
     }
 
-    public String getPromotion_id() {
+    public void setMembershipLevel(int membershipLevel) {
+        if (membershipLevel < 0 || membershipLevel > 4) {
+            throw new IllegalArgumentException("Invalid membershipLevel");
+        }
+
+        this.membershipLevel = membershipLevel;
+    }
+
+    public String getPromotionId() {
         return promotionId;
     }
 
@@ -105,10 +108,6 @@ public class Promotion {
         return endDate;
     }
 
-    public boolean isUsed() {
-        return isUsed;
-    }
-
     public double getDiscount() {
         return discount;
     }
@@ -121,6 +120,10 @@ public class Promotion {
         return minimumOrderAmount;
     }
 
+    public int getMembershipLevel() {
+        return membershipLevel;
+    }
+
     @Override
     public String toString() {
         return "Promotion{" +
@@ -128,10 +131,9 @@ public class Promotion {
                 ", name='" + name + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", isUsed=" + isUsed +
                 ", discount=" + discount +
                 ", description='" + description + '\'' +
-                ", minimumOrderAmount=" + minimumOrderAmount +
+                ", minimumOrderAmount=" + Utils.toStringMembershipLevel(membershipLevel) +
                 '}';
     }
 

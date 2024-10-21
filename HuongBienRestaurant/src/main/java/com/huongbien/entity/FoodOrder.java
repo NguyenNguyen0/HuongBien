@@ -13,11 +13,11 @@ public class FoodOrder {
 
 //  truyền mã FoodOrder hoặc truyền mã Reservation để tự động tạo mã mới nếu tạo FoodOrder mới
     public FoodOrder( String foodOrderId, double salePrice, String note, int quantity, Cuisine cuisine) {
-        this.foodOrderId = foodOrderId;
-        this.salePrice = salePrice;
-        this.note = note;
-        this.quantity = quantity;
-        this.cuisine = cuisine;
+        setFoodOrderId(foodOrderId);
+        setSalePrice(salePrice);
+        setNote(note);
+        setQuantity(quantity);
+        setCuisine(cuisine);
     }
 
     public FoodOrder() {}

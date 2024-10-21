@@ -91,4 +91,17 @@ public class Category_DAO extends Base_DAO<Category>{
         }
         return null;
     }
+
+    public boolean delete(String id) {
+        String sql = "DELETE FROM category WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
