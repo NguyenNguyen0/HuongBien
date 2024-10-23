@@ -111,7 +111,7 @@ public class GUI_MainController implements Initializable {
     }
 
     private void openOrder() throws IOException {
-        label_title.setText("Đặt món (TestInputAccount Screen)");
+        label_title.setText("Đặt món");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderCuisine.fxml"));
         BorderPane order = loader.load();
         compoent_main.setCenter(order);
@@ -277,7 +277,7 @@ public class GUI_MainController implements Initializable {
 
     @FXML
     void btn_employee_hide(ActionEvent event) throws IOException {
-        openManageCustomer();
+        openManageEmployee();
     }
 
     @FXML

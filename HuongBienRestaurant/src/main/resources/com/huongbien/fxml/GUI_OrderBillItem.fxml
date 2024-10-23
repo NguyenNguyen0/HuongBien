@@ -53,13 +53,13 @@
             </Button>
          </children>
          <HBox.margin>
-            <Insets left="10.0" right="10.0" />
+            <Insets right="10.0" />
          </HBox.margin>
       </VBox>
       <HBox alignment="CENTER" prefHeight="70.0">
          <children>
             <Button fx:id="btn_cuisineDecrease" mnemonicParsing="false" onAction="#btn_cuisineDecrease" text="-" />
-            <Label fx:id="lbl_cuisineQuantity" alignment="CENTER" prefHeight="18.0" prefWidth="15.0" text="2">
+            <Label fx:id="lbl_cuisineQuantity" alignment="CENTER" prefWidth="30.0" text="2">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin>
@@ -73,16 +73,16 @@
             <Insets left="5.0" right="5.0" />
          </HBox.margin>
       </HBox>
-      <VBox alignment="CENTER" prefHeight="98.0" prefWidth="140.0">
+      <VBox alignment="CENTER">
          <children>
-            <Label fx:id="lbl_salePrice" alignment="CENTER" prefHeight="18.0" prefWidth="109.0" text="2.400.000đ">
+            <Label fx:id="lbl_salePrice" alignment="CENTER" prefHeight="18.0" prefWidth="150.0" text="2.400.000đ">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
          </children>
          <HBox.margin>
-            <Insets />
+            <Insets left="10.0" right="10.0" />
          </HBox.margin>
       </VBox>
       <VBox alignment="CENTER">
@@ -98,7 +98,7 @@
             </Button>
          </children>
          <HBox.margin>
-            <Insets left="5.0" right="10.0" />
+            <Insets left="5.0" right="5.0" />
          </HBox.margin>
       </VBox>
    </children>

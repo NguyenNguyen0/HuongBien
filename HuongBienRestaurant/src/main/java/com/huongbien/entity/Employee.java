@@ -86,23 +86,23 @@ public class Employee {
     }
 
     public void setName(String name) {
-        if (name == null || name.isBlank() || name.split(" ").length < 2) {
-            throw new IllegalArgumentException("Invalid name");
-        }
+//        if (name == null || name.isBlank() || name.split(" ").length < 2) {
+//            throw new IllegalArgumentException("Invalid name");
+//        }
         this.name = name;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || !phoneNumber.matches("^0\\d{9}$")) {
-            throw new IllegalArgumentException("Invalid phone number");
-        }
+//        if (phoneNumber == null || !phoneNumber.matches("^0\\d{9}$")) {
+//            throw new IllegalArgumentException("Invalid phone number");
+//        }
         this.phoneNumber = phoneNumber;
     }
 
     public void setCitizenIDNumber(String citizenIDNumber) {
-        if (citizenIDNumber == null || citizenIDNumber.trim().isEmpty()) {
-            throw new IllegalArgumentException("Invalid citizenIDNumber");
-        }
+//        if (citizenIDNumber == null || citizenIDNumber.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Invalid citizenIDNumber");
+//        }
         this.citizenIDNumber = citizenIDNumber;
     }
 
@@ -115,30 +115,30 @@ public class Employee {
     }
 
     public void setBirthday(LocalDate birthday) {
-        if (birthday != null && LocalDate.now().minusYears(18).isBefore(birthday)) {
-            throw new IllegalArgumentException("Employee age must greater than 18");
-        }
+//        if (birthday != null && LocalDate.now().minusYears(18).isBefore(birthday)) {
+//            throw new IllegalArgumentException("Employee age must greater than 18");
+//        }
         this.birthday = birthday;
     }
 
     public void setEmail(String email) {
-        if (email == null || email.isEmpty()) {
-            this.email = null;
-            return;
-        }
+//        if (email == null || email.isEmpty()) {
+//            this.email = null;
+//            return;
+//        }
+//        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+//            this.email = email;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Invalid email");
 
-        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
-            this.email = email;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid email");
+        this.email = email;
     }
 
     public void setStatus(String status) {
-        if (status == null || status.trim().isEmpty()) {
-            throw new IllegalArgumentException("Invalid status");
-        }
+//        if (status == null || status.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Invalid status");
+//        }
         this.status = status;
     }
 
@@ -147,24 +147,23 @@ public class Employee {
     }
 
     public void setPosition(String position) {
-        if (position == null || position.trim().isEmpty()) {
-            throw new IllegalArgumentException("Invalid position");
-        }
-
+//        if (position == null || position.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Invalid position");
+//        }
         this.position = position;
     }
 
     public void setWorkHours(double workHours) {
-        if (workHours <= 0) {
-            throw new IllegalArgumentException("workHour must greater than 0");
-        }
+//        if (workHours <= 0) {
+//            throw new IllegalArgumentException("workHour must greater than 0");
+//        }
         this.workHours = workHours;
     }
 
     public void setHourlyPay(double hourlyPay) {
-        if (hourlyPay < 20000) {
-            throw new IllegalArgumentException("hourlyPay must greater than or equal 20000");
-        }
+//        if (hourlyPay < 20000) {
+//            throw new IllegalArgumentException("hourlyPay must greater than or equal 20000");
+//        }
         this.hourlyPay = hourlyPay;
     }
 

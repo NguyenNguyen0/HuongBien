@@ -49,29 +49,28 @@ public class Customer {
     }
 
     public void setCustomerId(String customerId) {
-        if (customerId == null) {
-            LocalDate currentDate = LocalDate.now();
-            this.customerId = String.format("KH%02d%02d%02d%03d",
-                    currentDate.getYear() % 100,
-                    currentDate.getMonthValue(),
-                    currentDate.getDayOfMonth(),
-                    Utils.randomNumber(1, 999)
-            );
-            return;
-        }
-
-        if (customerId.matches("^KH\\d{9}$")) {
-            this.customerId = customerId;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid customer ID");
+//        if (customerId == null) {
+//            LocalDate currentDate = LocalDate.now();
+//            this.customerId = String.format("KH%02d%02d%02d%03d",
+//                    currentDate.getYear() % 100,
+//                    currentDate.getMonthValue(),
+//                    currentDate.getDayOfMonth(),
+//                    Utils.randomNumber(1, 999)
+//            );
+//            return;
+//        }
+//        if (customerId.matches("^KH\\d{9}$")) {
+//            this.customerId = customerId;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Invalid customer ID");
+        this.customerId = customerId;
     }
 
     public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty");
-        }
+//        if (name == null || name.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Name cannot be empty");
+//        }
         this.name = name;
     }
 
@@ -84,25 +83,25 @@ public class Customer {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.matches("^0\\d{9}$")) {
-            this.phoneNumber = phoneNumber;
-        } else {
-            throw new IllegalArgumentException("Invalid phone number");
-        }
+//        if (phoneNumber == null || phoneNumber.matches("^0\\d{9}$")) {
+//            this.phoneNumber = phoneNumber;
+//        } else {
+//            throw new IllegalArgumentException("Invalid phone number");
+//        }
+        this.phoneNumber = phoneNumber;
     }
 
     public void setEmail(String email) {
-        if (email == null || email.isEmpty()) {
-            this.email = null;
-            return;
-        }
-
-        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
-            this.email = email;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid email");
+//        if (email == null || email.isEmpty()) {
+//            this.email = null;
+//            return;
+//        }
+//        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+//            this.email = email;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Invalid email");
+        this.email = email;
     }
 
     public void setBirthday(LocalDate birthday) {
@@ -114,16 +113,16 @@ public class Customer {
     }
 
     public void setAccumulatedPoints(int accumulatedPoints) {
-        if (accumulatedPoints < 0) {
-            throw new IllegalArgumentException("Accumulated points must be non-negative");
-        }
+//        if (accumulatedPoints < 0) {
+//            throw new IllegalArgumentException("Accumulated points must be non-negative");
+//        }
         this.accumulatedPoints = accumulatedPoints;
     }
 
     public void setMembershipLevel(int membershipLevel) {
-        if (membershipLevel < 0) {
-            throw new IllegalArgumentException("Membership cannot lower 0");
-        }
+//        if (membershipLevel < 0) {
+//            throw new IllegalArgumentException("Membership cannot lower 0");
+//        }
         this.membershipLevel = membershipLevel;
     }
 

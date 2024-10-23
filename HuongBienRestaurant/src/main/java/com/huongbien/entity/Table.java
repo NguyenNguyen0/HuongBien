@@ -33,37 +33,38 @@ public class Table {
     }
 
     public void setId(String id) {
-        if (id == null) {
-            this.id = String.format("T%01dB%03d", this.floor, Utils.randomNumber(1, 999));
-            return;
-        }
-
-        if (id.matches("^T\\dB\\d{3}$")) {
-            this.id = id;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid table ID format");
+//        if (id == null) {
+//            this.id = String.format("T%01dB%03d", this.floor, Utils.randomNumber(1, 999));
+//            return;
+//        }
+//
+//        if (id.matches("^T\\dB\\d{3}$")) {
+//            this.id = id;
+//            return;
+//        }
+//
+//        throw new IllegalArgumentException("Invalid table ID format");
+        this.id = id;
     }
 
     public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty");
-        }
+//        if (name == null || name.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Name cannot be empty");
+//        }
         this.name = name;
     }
 
     public void setFloor(int floor) {
-        if (floor < 0) {
-            throw new IllegalArgumentException("Floor must be 0 or greater");
-        }
+//        if (floor < 0) {
+//            throw new IllegalArgumentException("Floor must be 0 or greater");
+//        }
         this.floor = floor;
     }
 
     public void setSeats(int seats) {
-        if (seats < 2) {
-            throw new IllegalArgumentException("Seats must be 2 or greater");
-        }
+//        if (seats < 2) {
+//            throw new IllegalArgumentException("Seats must be 2 or greater");
+//        }
         this.seats = seats;
     }
 

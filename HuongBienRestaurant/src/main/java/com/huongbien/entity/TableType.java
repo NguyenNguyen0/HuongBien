@@ -24,17 +24,17 @@ public class TableType {
     }
 
     public void setTableId(String tableId) {
-        if (tableId == null) {
-            this.tableId = "LB" + Utils.randomNumber(1, 999);
-            return;
-        }
+//        if (tableId == null) {
+//            this.tableId = "LB" + Utils.randomNumber(1, 999);
+//            return;
+//        }
+//        if (tableId.matches("^LB\\d{3}$")) {
+//            this.tableId = tableId;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Invalid tableId format");
 
-        if (tableId.matches("^LB\\d{3}$")) {
-            this.tableId = tableId;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid tableId format");
+        this.tableId = tableId;
     }
 
     public void setName(String name) {

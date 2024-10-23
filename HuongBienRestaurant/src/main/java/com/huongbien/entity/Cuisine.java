@@ -33,37 +33,37 @@ public class Cuisine {
     public Cuisine() {}
 
     public void setCuisineId(String cuisineId) {
-        if (cuisineId == null) {
-            this.cuisineId = String.format("M%03d", Utils.randomNumber(1, 999));
-            return;
-        }
-
-        if (cuisineId.matches("^M\\d{3}$")) {
-            this.cuisineId = cuisineId;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid cuisine ID format");
+//        if (cuisineId == null) {
+//            this.cuisineId = String.format("M%03d", Utils.randomNumber(1, 999));
+//            return;
+//        }
+//
+//        if (cuisineId.matches("^M\\d{3}$")) {
+//            this.cuisineId = cuisineId;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Invalid cuisine ID format");
+        this.cuisineId = cuisineId;
     }
 
     public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty");
-        }
+//        if (name == null || name.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Name cannot be empty");
+//        }
         this.name = name;
     }
 
     public void setPrice(double price) {
-        if (price <= 0) {
-            throw new IllegalArgumentException("Price must be greater than 0");
-        }
+//        if (price <= 0) {
+//            throw new IllegalArgumentException("Price must be greater than 0");
+//        }
         this.price = price;
     }
 
     public void setDescription(String description) {
-        if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be empty");
-        }
+//        if (description == null || description.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Description cannot be empty");
+//        }
         this.description = description;
     }
 

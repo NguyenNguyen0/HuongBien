@@ -34,61 +34,61 @@ public class Payment {
     }
 
     public void setPaymentId(String paymentId) {
-        if (paymentId == null) {
-            LocalDate currentDate = LocalDate.now();
-            LocalTime currentTime = LocalTime.now();
-            this.paymentId = String.format("TT%02d%02d%02d%02d%02d%02d%03d",
-                    currentDate.getYear() % 100,
-                    currentDate.getMonthValue(),
-                    currentDate.getDayOfMonth(),
-                    currentTime.getHour(),
-                    currentTime.getMinute(),
-                    currentTime.getSecond(),
-                    Utils.randomNumber(1, 999)
-            );
-            return;
-        }
-
-        if (paymentId.matches("^TT\\d{15}$")) {
-            this.paymentId = paymentId;
-            return;
-        }
-
-        throw new IllegalArgumentException("Invalid paymentId format. Expected format: TT-yy-mm-dd-hh-MM-ss-xxx");
+//        if (paymentId == null) {
+//            LocalDate currentDate = LocalDate.now();
+//            LocalTime currentTime = LocalTime.now();
+//            this.paymentId = String.format("TT%02d%02d%02d%02d%02d%02d%03d",
+//                    currentDate.getYear() % 100,
+//                    currentDate.getMonthValue(),
+//                    currentDate.getDayOfMonth(),
+//                    currentTime.getHour(),
+//                    currentTime.getMinute(),
+//                    currentTime.getSecond(),
+//                    Utils.randomNumber(1, 999)
+//            );
+//            return;
+//        }
+//        if (paymentId.matches("^TT\\d{15}$")) {
+//            this.paymentId = paymentId;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Invalid paymentId format. Expected format: TT-yy-mm-dd-hh-MM-ss-xxx");
+        this.paymentId = paymentId;
     }
 
     public void setAmount(double amount) {
-        if (amount > 0) {
-            this.amount = amount;
-        } else {
-            throw new IllegalArgumentException("Amount must be greater than 0.");
-        }
+//        if (amount > 0) {
+//            this.amount = amount;
+//        } else {
+//            throw new IllegalArgumentException("Amount must be greater than 0.");
+//        }
+        this.amount = amount;
     }
 
     public void setPaymentDate(LocalDate paymentDate) {
-        if (paymentDate == null) {
-            throw new IllegalArgumentException("Payment date cannot be null.");
-        }
+//        if (paymentDate == null) {
+//            throw new IllegalArgumentException("Payment date cannot be null.");
+//        }
         this.paymentDate = paymentDate;
     }
 
     public void setPaymentMethod(String paymentMethod) {
-        if (paymentMethod.equalsIgnoreCase("Chuyển khoản") ||
-                paymentMethod.equalsIgnoreCase("Tiền mặt")) {
-            this.paymentMethod = paymentMethod;
-            return;
-        }
-        throw new IllegalArgumentException("Payment method must be either 'Chuyển khoản' or 'Tiền mặt'.");
+//        if (paymentMethod.equalsIgnoreCase("Chuyển khoản") ||
+//                paymentMethod.equalsIgnoreCase("Tiền mặt")) {
+//            this.paymentMethod = paymentMethod;
+//            return;
+//        }
+//        throw new IllegalArgumentException("Payment method must be either 'Chuyển khoản' or 'Tiền mặt'.");
+        this.paymentMethod = paymentMethod;
     }
 
     public void setPaymentTime(LocalDate paymentDate, LocalTime paymentTime) {
-        if (paymentDate == null) {
-            throw new IllegalArgumentException("Payment date cannot be null.");
-        }
-
-        if (paymentTime == null) {
-            throw new IllegalArgumentException("Payment time cannot be null.");
-        }
+//        if (paymentDate == null) {
+//            throw new IllegalArgumentException("Payment date cannot be null.");
+//        }
+//        if (paymentTime == null) {
+//            throw new IllegalArgumentException("Payment time cannot be null.");
+//        }
         this.paymentTime = paymentTime;
     }
 
