@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reservation_DAO extends Base_DAO<Reservation> {
+public class DAO_Reservation extends DAO_Base<Reservation> {
     private final Connection connection;
 
-    public Reservation_DAO(Connection connection) {
+    public DAO_Reservation(Connection connection) {
         this.connection = connection;
     }
 
@@ -20,8 +20,8 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
     public boolean add(Reservation object) {
         String sql = "INSERT INTO reservation (id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit, employeeId, customerId, paymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            Payment_DAO paymentDao = new Payment_DAO(connection);
-            FoodOrder_DAO foodOrderDao = new FoodOrder_DAO(connection);
+            DAO_Payment paymentDao = new DAO_Payment(connection);
+            DAO_FoodOrder foodOrderDao = new DAO_FoodOrder(connection);
 
             stmt.setString(1, object.getReservationId());
             stmt.setString(2, object.getPartyType());
@@ -82,9 +82,9 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-            Customer_DAO customerDao = new Customer_DAO(connection);
-            Employee_DAO employeeDao = new Employee_DAO(connection);
-            Payment_DAO paymentDao = new Payment_DAO(connection);
+            DAO_Customer customerDao = new DAO_Customer(connection);
+            DAO_Employee employeeDao = new DAO_Employee(connection);
+            DAO_Payment paymentDao = new DAO_Payment(connection);
 
             while (rs.next()) {
                 Reservation reservation = new Reservation();
@@ -120,11 +120,11 @@ public class Reservation_DAO extends Base_DAO<Reservation> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
-            Customer_DAO customerDao = new Customer_DAO(connection);
-            Employee_DAO employeeDao = new Employee_DAO(connection);
-            Payment_DAO paymentDao = new Payment_DAO(connection);
-            Table_DAO tableDao = new Table_DAO(connection);
-            FoodOrder_DAO foodOrderDao = new FoodOrder_DAO(connection);
+            DAO_Customer customerDao = new DAO_Customer(connection);
+            DAO_Employee employeeDao = new DAO_Employee(connection);
+            DAO_Payment paymentDao = new DAO_Payment(connection);
+            DAO_Table tableDao = new DAO_Table(connection);
+            DAO_FoodOrder foodOrderDao = new DAO_FoodOrder(connection);
 
             if (rs.next()) {
                 reservation = new Reservation();

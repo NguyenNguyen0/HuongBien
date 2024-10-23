@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Promotion_DAO extends Base_DAO<Promotion> {
+public class DAO_Promotion extends DAO_Base<Promotion> {
     private final Connection connection;
 
-    public Promotion_DAO(Connection connection) {
+    public DAO_Promotion(Connection connection) {
         this.connection = connection;
     }
 

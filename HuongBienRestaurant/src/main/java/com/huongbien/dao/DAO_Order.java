@@ -11,10 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Order_DAO extends Base_DAO<Order> {
+public class DAO_Order extends DAO_Base<Order> {
     private final Connection connection;
 
-    public Order_DAO(Connection connection) {
+    public DAO_Order(Connection connection) {
         this.connection = connection;
     }
 
@@ -22,9 +22,9 @@ public class Order_DAO extends Base_DAO<Order> {
     public boolean add(Order object) {
         String sql = "INSERT INTO [Order] (id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            Payment_DAO paymentDao = new Payment_DAO(connection);
-            OrderDetail_DAO orderDetailDao = new OrderDetail_DAO(connection);
-            Table_DAO tableDao = new Table_DAO(connection);
+            DAO_Payment paymentDao = new DAO_Payment(connection);
+            DAO_OrderDetail orderDetailDao = new DAO_OrderDetail(connection);
+            DAO_Table tableDao = new DAO_Table(connection);
 
             stmt.setString(1, object.getOrderId());
             stmt.setDate(2, java.sql.Date.valueOf(object.getOrderDate()));
@@ -85,12 +85,12 @@ public class Order_DAO extends Base_DAO<Order> {
         String sql = "SELECT id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId FROM [Order]";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            Customer_DAO customerDao = new Customer_DAO(connection);
-            Employee_DAO employeeDao = new Employee_DAO(connection);
-            Promotion_DAO promotionDao = new Promotion_DAO(connection);
-            Payment_DAO paymentDao = new Payment_DAO(connection);
-            OrderDetail_DAO orderDetailDao = new OrderDetail_DAO(connection);
-            Table_DAO tableDao = new Table_DAO(connection);
+            DAO_Customer customerDao = new DAO_Customer(connection);
+            DAO_Employee employeeDao = new DAO_Employee(connection);
+            DAO_Promotion promotionDao = new DAO_Promotion(connection);
+            DAO_Payment paymentDao = new DAO_Payment(connection);
+            DAO_OrderDetail orderDetailDao = new DAO_OrderDetail(connection);
+            DAO_Table tableDao = new DAO_Table(connection);
 
             while (rs.next()) {
                 Order order = new Order();
@@ -127,12 +127,12 @@ public class Order_DAO extends Base_DAO<Order> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
-                Customer_DAO customerDao = new Customer_DAO(connection);
-                Employee_DAO employeeDao = new Employee_DAO(connection);
-                Promotion_DAO promotionDao = new Promotion_DAO(connection);
-                Payment_DAO paymentDao = new Payment_DAO(connection);
-                OrderDetail_DAO orderDetailDao = new OrderDetail_DAO(connection);
-                Table_DAO tableDao = new Table_DAO(connection);
+                DAO_Customer customerDao = new DAO_Customer(connection);
+                DAO_Employee employeeDao = new DAO_Employee(connection);
+                DAO_Promotion promotionDao = new DAO_Promotion(connection);
+                DAO_Payment paymentDao = new DAO_Payment(connection);
+                DAO_OrderDetail orderDetailDao = new DAO_OrderDetail(connection);
+                DAO_Table tableDao = new DAO_Table(connection);
 
                 if (rs.next()) {
                     order = new Order();

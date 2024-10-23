@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableType_DAO extends Base_DAO<TableType> {
+public class DAO_TableType extends DAO_Base<TableType> {
     private final Connection connection;
 
-    public TableType_DAO(Connection connection) {
+    public DAO_TableType(Connection connection) {
         this.connection = connection;
     }
 

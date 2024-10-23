@@ -7,10 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Account_DAO extends Base_DAO<Account> {
+public class DAO_Account extends DAO_Base<Account> {
     private final Connection connection;
 
-    public Account_DAO(Connection connection) {
+    public DAO_Account(Connection connection) {
         this.connection = connection;
     }
 
@@ -72,7 +72,7 @@ public class Account_DAO extends Base_DAO<Account> {
                 account.setRole(rs.getString("role"));
                 account.setEmail(rs.getString("email"));
                 account.setIsActive(rs.getBoolean("isActive"));
-                account.setEmployeeInfo(new Employee_DAO(connection).get(account.getUsername()));
+                account.setEmployeeInfo(new DAO_Employee(connection).get(account.getUsername()));
                 accounts.add(account);
             }
         } catch (SQLException e) {
@@ -97,7 +97,7 @@ public class Account_DAO extends Base_DAO<Account> {
                 account.setRole(rs.getString("role"));
                 account.setEmail(rs.getString("email"));
                 account.setIsActive(rs.getBoolean("isActive"));
-                account.setEmployeeInfo(new Employee_DAO(connection).get(account.getUsername()));
+                account.setEmployeeInfo(new DAO_Employee(connection).get(account.getUsername()));
             }
         } catch (SQLException e) {
             e.printStackTrace();

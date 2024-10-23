@@ -6,10 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodOrder_DAO extends Base_DAO<FoodOrder> {
+public class DAO_FoodOrder extends DAO_Base<FoodOrder> {
     private final Connection connection;
 
-    public FoodOrder_DAO(Connection connection) {
+    public DAO_FoodOrder(Connection connection) {
         this.connection = connection;
     }
 
@@ -64,7 +64,7 @@ public class FoodOrder_DAO extends Base_DAO<FoodOrder> {
                 foodOrder.setQuantity(rs.getInt("quantity"));
                 foodOrder.setSalePrice(rs.getDouble("salePrice"));
                 foodOrder.setNote(rs.getString("note"));
-                foodOrder.setCuisine(new Cuisine_DAO(connection).get(rs.getString("cuisineId")));
+                foodOrder.setCuisine(new DAO_Cuisine(connection).get(rs.getString("cuisineId")));
                 foodOrders.add(foodOrder);
             }
         } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class FoodOrder_DAO extends Base_DAO<FoodOrder> {
                 foodOrder.setQuantity(rs.getInt("quantity"));
                 foodOrder.setSalePrice(rs.getDouble("salePrice"));
                 foodOrder.setNote(rs.getString("note"));
-                foodOrder.setCuisine(new Cuisine_DAO(connection).get(rs.getString("cuisineId")));
+                foodOrder.setCuisine(new DAO_Cuisine(connection).get(rs.getString("cuisineId")));
                 return foodOrder;
             }
         } catch (SQLException e) {
@@ -110,7 +110,7 @@ public class FoodOrder_DAO extends Base_DAO<FoodOrder> {
                 foodOrder.setQuantity(rs.getInt("quantity"));
                 foodOrder.setSalePrice(rs.getDouble("salePrice"));
                 foodOrder.setNote(rs.getString("note"));
-                foodOrder.setCuisine(new Cuisine_DAO(connection).get(rs.getString("cuisineId")));
+                foodOrder.setCuisine(new DAO_Cuisine(connection).get(rs.getString("cuisineId")));
                 foodOrders.add(foodOrder);
             }
         } catch (SQLException e) {

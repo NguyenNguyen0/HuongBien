@@ -1,6 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.Account_DAO;
+import com.huongbien.dao.DAO_Account;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Account;
 import com.huongbien.utils.Utils;
@@ -58,7 +58,7 @@ public class GUI_LoginController implements Initializable {
     private Button handleLogin;
 
     //DAO
-    private Account_DAO accountDao;
+    private DAO_Account accountDao;
 
     private void loadCarousel() {
         try {
@@ -133,7 +133,7 @@ public class GUI_LoginController implements Initializable {
     void handleLogin(ActionEvent event) {
         try {
             Connection connection = Database.getConnection();
-            accountDao = new Account_DAO(connection);
+            accountDao = new DAO_Account(connection);
 
             String username = txt_empID.getText();
             String password = getCurrentPwd();

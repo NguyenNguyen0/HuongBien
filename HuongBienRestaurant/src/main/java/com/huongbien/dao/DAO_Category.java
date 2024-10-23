@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Category_DAO extends Base_DAO<Category>{
+public class DAO_Category extends DAO_Base<Category> {
     private final Connection connection;
 
-    public Category_DAO(Connection connection) {
+    public DAO_Category(Connection connection) {
         this.connection = connection;
     }
 

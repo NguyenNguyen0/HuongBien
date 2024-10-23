@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
+public class DAO_OrderDetail extends DAO_Base<OrderDetail> {
     private final Connection connection;
 
-    public OrderDetail_DAO(Connection connection) {
+    public DAO_OrderDetail(Connection connection) {
         this.connection = connection;
     }
 
@@ -61,7 +61,7 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-            Cuisine_DAO cuisineDao = new Cuisine_DAO(connection);
+            DAO_Cuisine cuisineDao = new DAO_Cuisine(connection);
 
             while (rs.next()) {
                 OrderDetail orderDetail = new OrderDetail();
@@ -88,7 +88,7 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
-            Cuisine_DAO cuisineDao = new Cuisine_DAO(connection);
+            DAO_Cuisine cuisineDao = new DAO_Cuisine(connection);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -114,7 +114,7 @@ public class OrderDetail_DAO extends Base_DAO<OrderDetail> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, orderId);
             ResultSet rs = stmt.executeQuery();
-            Cuisine_DAO cuisineDao = new Cuisine_DAO(connection);
+            DAO_Cuisine cuisineDao = new DAO_Cuisine(connection);
 
             while (rs.next()) {
                 OrderDetail orderDetail = new OrderDetail();

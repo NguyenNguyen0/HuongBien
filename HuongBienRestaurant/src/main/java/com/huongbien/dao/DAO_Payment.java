@@ -8,10 +8,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Payment_DAO extends Base_DAO<Payment> {
+public class DAO_Payment extends DAO_Base<Payment> {
     private final Connection connection;
 
-    public Payment_DAO(Connection connection) {
+    public DAO_Payment(Connection connection) {
         this.connection = connection;
     }
 

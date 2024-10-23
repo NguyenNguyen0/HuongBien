@@ -3,20 +3,15 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.Cuisine_DAO;
-import com.huongbien.dao.Table_DAO;
+import com.huongbien.dao.DAO_Cuisine;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Cuisine;
-import com.huongbien.entity.Order;
 import com.huongbien.entity.OrderDetail;
-import com.huongbien.entity.Table;
-import com.huongbien.test.ReadJSON;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -56,7 +51,7 @@ public class GUI_OrderCuisineController implements Initializable {
     public GridPane compoent_gridBill;
 
     //DAO
-    private Cuisine_DAO cuisine_DAO;
+    private DAO_Cuisine cuisine_DAO;
 
     private void loadingCuisine() {
         cuisines = new ArrayList<>(dataCuisine());
@@ -148,7 +143,7 @@ public class GUI_OrderCuisineController implements Initializable {
     private List<Cuisine> dataCuisine() {
         try {
             Connection connection = Database.getConnection();
-            cuisine_DAO = new Cuisine_DAO(connection);
+            cuisine_DAO = new DAO_Cuisine(connection);
 
             List<Cuisine> ls = cuisine_DAO.get();
             return ls;

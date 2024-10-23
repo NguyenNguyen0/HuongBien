@@ -9,13 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cuisine_DAO extends Base_DAO<Cuisine>{
+public class DAO_Cuisine extends DAO_Base<Cuisine> {
     private final Connection connection;
-    private final Category_DAO categoryDao;
+    private final DAO_Category categoryDao;
 
-    public Cuisine_DAO(Connection connection) {
+    public DAO_Cuisine(Connection connection) {
         this.connection = connection;
-        this.categoryDao = new Category_DAO(connection);
+        this.categoryDao = new DAO_Category(connection);
     }
     @Override
     public boolean add(Cuisine object) {

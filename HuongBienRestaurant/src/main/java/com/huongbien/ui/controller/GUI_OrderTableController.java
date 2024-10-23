@@ -1,6 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.Table_DAO;
+import com.huongbien.dao.DAO_Table;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Table;
 import javafx.fxml.FXML;
@@ -27,7 +27,7 @@ public class GUI_OrderTableController implements Initializable {
     private List<Table> tables;
 
     //DAO
-    private Table_DAO table_DAO;
+    private DAO_Table table_DAO;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -62,7 +62,7 @@ public class GUI_OrderTableController implements Initializable {
     private List<Table> data() {
         try {
             Connection connection = Database.getConnection();
-            table_DAO = new Table_DAO(connection);
+            table_DAO = new DAO_Table(connection);
 
             List<Table> ls = table_DAO.get();
             return ls;

@@ -1,19 +1,18 @@
 package com.huongbien.dao;
 
 import com.huongbien.entity.Table;
-import com.huongbien.entity.TableType;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table_DAO extends Base_DAO<Table> {
+public class DAO_Table extends DAO_Base<Table> {
     private final Connection connection;
-    private final TableType_DAO tableTypeDAO;
+    private final DAO_TableType tableTypeDAO;
 
-    public Table_DAO(Connection connection) {
+    public DAO_Table(Connection connection) {
         this.connection = connection;
-        this.tableTypeDAO = new TableType_DAO(connection);
+        this.tableTypeDAO = new DAO_TableType(connection);
     }
 
     @Override

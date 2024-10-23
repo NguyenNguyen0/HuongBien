@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Employee_DAO extends Base_DAO<Employee> {
+public class DAO_Employee extends DAO_Base<Employee> {
     private final Connection connection;
 
-    public Employee_DAO(Connection connection) {
+    public DAO_Employee(Connection connection) {
         this.connection = connection;
     }
 

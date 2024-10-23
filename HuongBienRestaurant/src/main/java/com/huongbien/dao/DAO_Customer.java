@@ -6,10 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer_DAO extends Base_DAO<Customer> {
+public class DAO_Customer extends DAO_Base<Customer> {
     private final Connection connection;
 
-    public Customer_DAO(Connection connection) {
+    public DAO_Customer(Connection connection) {
         this.connection = connection;
     }
 
