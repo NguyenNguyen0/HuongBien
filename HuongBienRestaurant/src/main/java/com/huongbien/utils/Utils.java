@@ -1,12 +1,12 @@
 package com.huongbien.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 
 // class Utils là để những hàm chức năng (hỗ trợ) sài chung cho nhiều nơi cho dự án
 public class Utils {
@@ -50,5 +50,37 @@ public class Utils {
             case 3 -> "Kim cương";
             default -> throw new IllegalArgumentException("Membership must in [0, 1, 2, 3]");
         };
+    }
+
+    //  Hàm ghi dữ liệu Binary xuống file text
+    public boolean WriteToFile(Object obj, String filePath) throws Exception {
+        ObjectOutputStream oos = null;
+        oos = new ObjectOutputStream(new FileOutputStream(filePath));
+        oos.writeObject(obj);
+        oos.flush();
+        oos.close();
+        return true;
+    }
+
+    // Hàm đọc dữ liệu từ file lên
+    public Object ReadFromFile(String filePath) throws Exception {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
+        Object o = ois.readObject();
+        ois.close();
+        return o;
+    }
+
+    //Write JSON
+    public static void writeJsonToFile(JsonArray jsonArray, String filePath) {
+        try (FileWriter fileWriter = new FileWriter(filePath, false)) {
+            fileWriter.write(jsonArray.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Read JSON
+    public static JsonArray readJsonFromFile(String filePath) throws FileNotFoundException {
+        return JsonParser.parseReader(new FileReader(filePath)).getAsJsonArray();
     }
 }

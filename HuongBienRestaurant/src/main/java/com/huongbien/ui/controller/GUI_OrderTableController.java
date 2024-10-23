@@ -9,9 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -75,12 +73,10 @@ public class GUI_OrderTableController implements Initializable {
         }
 //
 //        List<Table> ls = new ArrayList<>();
-
 //        Table table = new Table();
 //        table.setName("Bàn 01");
 //        table.setSeats(5);
 //        ls.add(table);
-
 //        return ls;
     }
 }

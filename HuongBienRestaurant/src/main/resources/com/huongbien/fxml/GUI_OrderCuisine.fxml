@@ -5,6 +5,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -14,7 +15,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1386.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderCuisineController">
    <right>
-      <StackPane prefWidth="650.0" BorderPane.alignment="CENTER">
+      <StackPane prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" style="-fx-background-color: brown;" visible="false">
                <children>
@@ -32,23 +33,16 @@
             </VBox>
             <BorderPane fx:id="compoent_orderBill">
                <center>
-                  <ScrollPane fx:id="compoent_scrollBill" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <ScrollPane fx:id="compoent_scrollBill" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <content>
-                        <GridPane fx:id="compoent_gridBill" style="-fx-background-color: red;">
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        <GridPane fx:id="compoent_gridBill">
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
                         </GridPane>
                      </content>
                   </ScrollPane>
                </center>
-               <bottom>
-                  <Label fx:id="lbl_textMe" text="Text Mé!" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </bottom>
             </BorderPane>
          </children>
       </StackPane>

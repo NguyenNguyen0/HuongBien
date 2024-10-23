@@ -23,14 +23,14 @@ public class OrderDetail {
     }
 
     public void setOrderDetailId(String orderDetailId) {
-        if (orderDetailId != null && orderDetailId.length() == 17) {
-            this.orderDetailId = String.format("%sCT%03d", orderDetailId, Utils.randomNumber(1, 999));
-            return;
-        }
-
-        if (orderDetailId == null || !orderDetailId.matches("^HD\\d{15}CT\\d{3}$")) {
-            throw new IllegalArgumentException("Invalid order detail ID format");
-        }
+//        if (orderDetailId != null && orderDetailId.length() == 17) {
+//            this.orderDetailId = String.format("%sCT%03d", orderDetailId, Utils.randomNumber(1, 999));
+//            return;
+//        }
+//
+//        if (orderDetailId == null || !orderDetailId.matches("^HD\\d{15}CT\\d{3}$")) {
+//            throw new IllegalArgumentException("Invalid order detail ID format");
+//        }
 
         this.orderDetailId = orderDetailId;
     }
