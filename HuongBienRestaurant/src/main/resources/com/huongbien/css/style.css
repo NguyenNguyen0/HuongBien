@@ -137,3 +137,44 @@
     -fx-border-color: transparent;
     -fx-border-width: 0;
 }
+
+/*Table View*/
+.table-view {
+    -fx-selection-bar: #b3d4fc;
+}
+
+.table-view .column-header-background {
+    -fx-padding: 20px 0px;
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-padding: 10px 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 23px;
+}
+
+.table-row-cell {
+    -fx-padding: 20px 0px;
+    -fx-font-size: 25px;
+}
+
+.table-cell {
+    -fx-alignment: CENTER;
+}
+
+/*Combobox*/
+.combo-box {
+    -fx-font-size: 25px;
+}
+
+.combo-box-popup .list-view {
+    -fx-font-size: 25px;
+}
+
+.date-picker {
+    -fx-font-size: 25px;
+}

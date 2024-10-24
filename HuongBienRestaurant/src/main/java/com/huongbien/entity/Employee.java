@@ -1,7 +1,5 @@
 package com.huongbien.entity;
 
-import com.huongbien.utils.Utils;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
