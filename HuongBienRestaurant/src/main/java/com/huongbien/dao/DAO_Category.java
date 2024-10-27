@@ -71,7 +71,6 @@ public class DAO_Category extends DAO_Base<Category> {
         return categories;
     }
 
-
     @Override
     public Category get(String id) {
         String sql = "SELECT id, name, description FROM category WHERE id = ?";
@@ -89,6 +88,28 @@ public class DAO_Category extends DAO_Base<Category> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Category> getByName(String name) {
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT id, name, description FROM category WHERE name LIKE ?;";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Category category = new Category();
+                category.setCategoryId(rs.getString("id"));
+                category.setName(rs.getString("name"));
+                category.setDescription(rs.getString("description"));
+
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
     }
 
     public boolean delete(String id) {

@@ -11,11 +11,6 @@ import java.security.NoSuchAlgorithmException;
 // class Utils là để những hàm chức năng (hỗ trợ) sài chung cho nhiều nơi cho dự án
 public class Utils {
 
-//  chuyển mảng byte thành InputStream để load ảnh lên giao diên javafx
-    public static InputStream convertToInputStream (byte[] bytes) {
-        return new ByteArrayInputStream(bytes);
-    }
-
 //  hàm băm mật khẩu bằng thuật toán sha256
     public static String hashPassword(String password) {
         try {
@@ -84,3 +79,4 @@ public class Utils {
         return JsonParser.parseReader(new FileReader(filePath)).getAsJsonArray();
     }
 }
+
