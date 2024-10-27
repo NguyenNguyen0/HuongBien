@@ -120,4 +120,62 @@ public class DAO_Customer extends DAO_Base<Customer> {
 
         return customer;
     }
+
+    public List<Customer> getByPhoneNumber(String phoneNumber) {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel FROM Customer WHERE phoneNumber LIKE ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, phoneNumber + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getString("id"));
+                customer.setName(rs.getString("name"));
+                customer.setAddress(rs.getString("address"));
+                customer.setGender(rs.getBoolean("gender"));
+                customer.setPhoneNumber(rs.getString("phoneNumber"));
+                customer.setEmail(rs.getString("email"));
+                customer.setBirthday(rs.getDate("birthday").toLocalDate());
+                customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
+                customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
+                customer.setMembershipLevel(rs.getInt("membershipLevel"));
+                customers.add(customer);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
+
+    public List<Customer> getByName(String name) {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel FROM Customer WHERE name LIKE ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getString("id"));
+                customer.setName(rs.getString("name"));
+                customer.setAddress(rs.getString("address"));
+                customer.setGender(rs.getBoolean("gender"));
+                customer.setPhoneNumber(rs.getString("phoneNumber"));
+                customer.setEmail(rs.getString("email"));
+                customer.setBirthday(rs.getDate("birthday").toLocalDate());
+                customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
+                customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
+                customer.setMembershipLevel(rs.getInt("membershipLevel"));
+                customers.add(customer);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
 }

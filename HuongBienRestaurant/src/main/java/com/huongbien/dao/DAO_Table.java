@@ -92,6 +92,28 @@ public class DAO_Table extends DAO_Base<Table> {
         return null;
     }
 
+    public List<Table> getByName(String name) {
+        List<Table> tables = new ArrayList<>();
+        String sql = "SELECT * FROM [Table] WHERE name LIKE ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name + "%");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Table table = new Table();
+                table.setId(resultSet.getString("id"));
+                table.setName(resultSet.getString("name"));
+                table.setFloor(resultSet.getInt("floor"));
+                table.setSeats(resultSet.getInt("seats"));
+                table.setIsAvailable(resultSet.getBoolean("isAvailable"));
+                table.setTableType(tableTypeDAO.get(resultSet.getString("tableTypeId")));
+                tables.add(table);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tables;
+    }
+
     public boolean delete(String id) {
         if (id == null || id.isEmpty() || id.isBlank()) {
             throw new IllegalArgumentException("ID cannot be null or empty");
