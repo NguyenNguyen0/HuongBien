@@ -63,7 +63,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txt_cuisinePrice" minHeight="50.0" styleClass="textField-line-bot">
+                              <TextField fx:id="txt_cuisinePrice" minHeight="50.0" onKeyReleased="#txt_cuisinePrice_keyReleased" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
@@ -87,7 +87,7 @@
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
                                     <ComboBox fx:id="comboBox_cuisineCategory" prefHeight="54.0" prefWidth="232.0" styleClass="textField-line-bot" />
-                                    <Button mnemonicParsing="false" onAction="#btn_cuisineEditCategory" prefHeight="54.0" prefWidth="57.0" text="Edit">
+                                    <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="57.0" text="Edit">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -106,16 +106,16 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+            <VBox prefHeight="288.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="220.0" prefWidth="670.0">
+                  <VBox prefHeight="185.0" prefWidth="670.0">
                      <children>
                         <Label text="Mô tả">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="txtArea_cuisineDescription" prefHeight="147.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="txtArea_cuisineDescription" prefHeight="152.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -127,7 +127,7 @@
                   </VBox>
                   <HBox alignment="TOP_CENTER" prefHeight="96.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="btn_cuisineMain" mnemonicParsing="false" onAction="#btn_cuisineMain" prefHeight="60.0" prefWidth="550.0" style="-fx-background-color: #761D7E;" text="Sửa món" textFill="WHITE" visible="false">
+                        <Button fx:id="btn_cuisineMain" mnemonicParsing="false" onAction="#btn_cuisineMain" prefHeight="60.0" prefWidth="550.0" style="-fx-background-color: #761D7E;" text="Sửa món" textFill="WHITE">
                            <HBox.margin>
                               <Insets top="30.0" />
                            </HBox.margin>
@@ -135,7 +135,7 @@
                               <Font name="System Bold" size="25.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btn_clearTextField" mnemonicParsing="false" onAction="#btn_clearTextField" prefHeight="58.0" prefWidth="100.0" visible="false">
+                        <Button fx:id="btn_cuisineClear" mnemonicParsing="false" onAction="#btn_cuisineClear" prefHeight="58.0" prefWidth="100.0">
                            <HBox.margin>
                               <Insets left="20.0" top="30.0" />
                            </HBox.margin>

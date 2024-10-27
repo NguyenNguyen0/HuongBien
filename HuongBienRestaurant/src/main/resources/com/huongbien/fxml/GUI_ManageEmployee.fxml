@@ -215,7 +215,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txt_empAddress" minHeight="50.0" styleClass="textField-line-bot">
+                              <TextField fx:id="txt_empAddress" editable="false" minHeight="50.0" onMouseClicked="#openInputAddress" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
@@ -382,25 +382,13 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="150.0" prefWidth="363.0">
                            <children>
-                              <Button fx:id="btn_empSearch" mnemonicParsing="false" onAction="#btn_empSearch" prefHeight="60.0" prefWidth="254.0" style="-fx-background-color: black;" text="Tìm kiếm" textFill="WHITE">
+                              <Button fx:id="btn_empSearch" mnemonicParsing="false" onAction="#btn_empSearch" prefHeight="60.0" prefWidth="326.0" style="-fx-background-color: black;" text="Tìm kiếm" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                                  <font>
                                     <Font name="System Bold" size="25.0" />
                                  </font>
-                              </Button>
-                              <Button fx:id="btn_empRefresh" mnemonicParsing="false" onAction="#btn_empRefresh" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: black;">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                                 <graphic>
-                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../icon/mg_employee/refesh.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
                               </Button>
                            </children>
                         </HBox>

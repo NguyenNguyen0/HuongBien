@@ -89,22 +89,44 @@ public class DAO_Cuisine extends DAO_Base<Cuisine> {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    cuisine = new Cuisine();
-                    cuisine.setCuisineId(rs.getString("id"));
-                    cuisine.setName(rs.getString("name"));
-                    cuisine.setPrice(rs.getDouble("price"));
-                    cuisine.setDescription(rs.getString("description"));
-                    cuisine.setImage(rs.getBytes("image"));
-                    cuisine.setCategory(categoryDao.get(rs.getString("categoryID")));
-                }
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                cuisine = new Cuisine();
+                cuisine.setCuisineId(rs.getString("id"));
+                cuisine.setName(rs.getString("name"));
+                cuisine.setPrice(rs.getDouble("price"));
+                cuisine.setDescription(rs.getString("description"));
+                cuisine.setImage(rs.getBytes("image"));
+                cuisine.setCategory(categoryDao.get(rs.getString("categoryID")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return cuisine;
+    }
+
+    public List<Cuisine> getByName(String name) {
+        List<Cuisine> cuisines = new ArrayList<>();
+        String sql = "SELECT id, name, price, description, image, categoryID FROM Cuisine WHERE name LIKE ?;";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "%" + name + "%");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Cuisine cuisine = new Cuisine();
+                cuisine.setCuisineId(rs.getString("id"));
+                cuisine.setName(rs.getString("name"));
+                cuisine.setPrice(rs.getDouble("price"));
+                cuisine.setDescription(rs.getString("description"));
+                cuisine.setImage(rs.getBytes("image"));
+                cuisine.setCategory(categoryDao.get(rs.getString("categoryID")));
+                cuisines.add(cuisine);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cuisines;
     }
 
     public boolean delete(String id) {

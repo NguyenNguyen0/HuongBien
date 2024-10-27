@@ -1,5 +1,7 @@
 package com.huongbien.entity;
 
+import com.huongbien.utils.Utils;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -65,22 +67,21 @@ public class Employee {
     }
 
     public void setEmployeeId(String employeeId) {
-//        if (employeeId == null) {
-//            LocalDate currentDate = LocalDate.now();
-//            this.employeeId = String.format("NV%02d%02d%02d%03d",
-//                    currentDate.getYear() % 100,
-//                    currentDate.getMonthValue(),
-//                    currentDate.getDayOfMonth(),
-//                    Utils.randomNumber(1, 999)
-//            );
-//            return;
-//        }
-//        if (employeeId.matches("^NV\\d{9}$")) {
-//            this.employeeId = employeeId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid employeeId format");
-        this.employeeId = employeeId;
+        if (employeeId == null) {
+            LocalDate currentDate = LocalDate.now();
+            this.employeeId = String.format("NV%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
+        }
+        if (employeeId.matches("^NV\\d{9}$")) {
+            this.employeeId = employeeId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid employeeId format");
     }
 
     public void setName(String name) {

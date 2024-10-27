@@ -1,22 +1,37 @@
 package com.huongbien.ui.controller;
 
+import com.huongbien.dao.DAO_Cuisine;
 import com.huongbien.dao.DAO_Employee;
 import com.huongbien.database.Database;
+import com.huongbien.entity.Category;
+import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.Employee;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -60,7 +75,7 @@ public class GUI_ManageEmployeeController implements Initializable {
     private RadioButton radio_empMale;
 
     @FXML
-    private TextField txt_empAddress;
+    public TextField txt_empAddress;
 
     @FXML
     private TextField txt_empCitizenID;
@@ -202,6 +217,12 @@ public class GUI_ManageEmployeeController implements Initializable {
         }
     }
 
+    public GUI_ManageEmployee_DialogAddressController gui_manageEmployee_dialogAddressController;
+
+    public void setController(GUI_ManageEmployee_DialogAddressController gui_manageEmployee_dialogAddressController){
+        this.gui_manageEmployee_dialogAddressController = gui_manageEmployee_dialogAddressController;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setCellValues();
@@ -217,7 +238,6 @@ public class GUI_ManageEmployeeController implements Initializable {
                 Connection connection = Database.getConnection();
                 DAO_Employee dao_employee = new DAO_Employee(connection);
                 Employee employee = dao_employee.get(idSelect);
-
                 txt_empName.setText(employee.getName());
                 txt_empCitizenID.setText(employee.getCitizenIDNumber());
                 txt_empPhone.setText(employee.getPhoneNumber());
@@ -226,39 +246,30 @@ public class GUI_ManageEmployeeController implements Initializable {
                 txt_empHourPay.setText(employee.getHourlyPay()+"");
                 txt_empSalary.setText(employee.getSalary()+"");
                 txt_empAddress.setText(employee.getAddress());
-//
                 if (employee.getHireDate() != null) {
                     date_empHireDate.setValue(employee.getHireDate());
                 }
-
                 comboBox_empStatus.getSelectionModel().select(employee.getStatus());
                 comboBox_empPostion.getSelectionModel().select(employee);
-
                 if (employee.getBirthday() != null) {
                     date_empBirthDate.setValue(employee.getBirthday());
                 }
-
                 if (employee.isGender()) {
                     genderGroup.selectToggle(radio_empMale);
                 }else {
                     genderGroup.selectToggle(radio_empFemale);
                 }
-
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
                 Database.closeConnection();
             }
-
             btn_empFired.setVisible(true);
             btn_empClear.setVisible(true);
             btn_empSub.setVisible(true);
             btn_empMain.setVisible(true);
-            btn_empSub.setText("Thêm");
-            btn_empMain.setText("Sửa");
-            btn_empSub.setStyle("-fx-background-color:   #1D557E");
-            btn_empMain.setStyle("-fx-background-color:  #761D7E");
             enableInput();
+            utilsButton_1();
         }
     }
 
@@ -293,14 +304,15 @@ public class GUI_ManageEmployeeController implements Initializable {
         date_empHireDate.setValue(null);
         comboBox_empStatus.getSelectionModel().clearSelection();
         comboBox_empPostion.getSelectionModel().clearSelection();
+        tabViewEmp.getSelectionModel().clearSelection();
         btn_empFired.setVisible(false);
     }
 
     public void enableInput() {
         txt_empName.setEditable(true);
         txt_empCitizenID.setEditable(true);
-        txt_empPhone.setEditable(true);
         txt_empEmail.setEditable(true);
+        txt_empPhone.setEditable(true);
         radio_empMale.setDisable(false);
         radio_empFemale.setDisable(false);
         date_empBirthDate.setDisable(false);
@@ -320,28 +332,37 @@ public class GUI_ManageEmployeeController implements Initializable {
         radio_empFemale.setDisable(true);
         date_empBirthDate.setDisable(true);
         txt_empHourPay.setEditable(false);
-        txt_empSalary.setEditable(false);
         txt_empAddress.setEditable(false);
+        txt_empSalary.setEditable(false);
         comboBox_empStatus.setDisable(true);
         comboBox_empPostion.setDisable(true);
+    }
+
+    public void utilsButton_1() {
+        btn_empSub.setText("Thêm");
+        btn_empMain.setText("Sửa");
+        btn_empSub.setStyle("-fx-background-color:   #1D557E");
+        btn_empMain.setStyle("-fx-background-color:  #761D7E");
+    }
+
+    public void utilsButton_2() {
+        btn_empSub.setText("Sửa");
+        btn_empMain.setText("Thêm");
+        btn_empSub.setStyle("-fx-background-color:   #761D7E");
+        btn_empMain.setStyle("-fx-background-color:  #1D557E");
     }
 
     @FXML
     void btn_empSub(ActionEvent event) {
         if (btn_empSub.getText().equals("Sửa")) {
-            btn_empSub.setText("Thêm");
-            btn_empMain.setText("Sửa");
-            btn_empSub.setStyle("-fx-background-color:   #1D557E");
-            btn_empMain.setStyle("-fx-background-color:  #761D7E");
+            utilsButton_1();
         } else if (btn_empSub.getText().equals("Thêm")) {
-            btn_empSub.setText("Sửa");
-            btn_empMain.setText("Thêm");
-            btn_empSub.setStyle("-fx-background-color:   #761D7E");
-            btn_empMain.setStyle("-fx-background-color:  #1D557E");
+            btn_empClear.setVisible(true);
+            btn_empFired.setVisible(false);
             btn_empSub.setVisible(false);
             btn_empMain.setVisible(true);
-            btn_empClear.setVisible(true);
             enableInput();
+            utilsButton_2();
             clearTxt();
         }
     }
@@ -349,49 +370,149 @@ public class GUI_ManageEmployeeController implements Initializable {
     @FXML
     void btn_empMain(ActionEvent event) {
         if (btn_empMain.getText().equals("Sửa")) {
-            btn_empMain.setText("Sửa");
-            btn_empSub.setText("Thêm");
-            btn_empMain.setStyle("-fx-background-color: #761D7E;");
-            btn_empSub.setStyle("-fx-background-color: #1D557E;");
-            btn_empSub.setVisible(true);
-            btn_empMain.setVisible(false);
-            disableInput();
+            //Lay ID cua table thuc hien chinh sua
+            Employee selectedItem = tabViewEmp.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                String idSelect = selectedItem.getEmployeeId();
+                double workHours = selectedItem.getWorkHours();
+                LocalDate hireDate = selectedItem.getHireDate();
+                //
+                String name = txt_empName.getText();
+                String citizenId = txt_empCitizenID.getText();
+                String phone = txt_empPhone.getText();
+                String email = txt_empEmail.getText();
+                boolean gender;
+                if (radio_empMale.isSelected()) {
+                    gender = true;
+                } else if (radio_empFemale.isSelected()) {
+                    gender = false;
+                } else {
+                    gender = false;
+                }
+                LocalDate birthDate = date_empBirthDate.getValue();
+                double hourPay = txt_empHourPay.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_empHourPay.getText().replace(".", ""));
+                double salary = txt_empSalary.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_empSalary.getText().replace(".", ""));
+                String address = txt_empAddress.getText();
+                String status = comboBox_empStatus.getValue();
+                String position = comboBox_empPostion.getValue() != null ? comboBox_empPostion.getValue().getPosition() : null;
+
+                try {
+                    DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
+                    Employee employee = new Employee(
+                            idSelect, name, phone, citizenId, gender, address,
+                            birthDate, email, status, hireDate, position, workHours, hourPay, salary, null
+                    );
+                    if (dao_employee.update(employee)) {
+                        System.out.println("Đã câp nhạt thành công");
+                    } else {
+                        System.out.println("Cập nhật nhân viên không thành công");
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    Database.closeConnection();
+                }
+            }
         } else if (btn_empMain.getText().equals("Thêm")) {
-            btn_empMain.setText("Sửa");
-            btn_empSub.setText("Thêm");
-            btn_empMain.setStyle("-fx-background-color: #761D7E;");
-            btn_empSub.setStyle("-fx-background-color: #1D557E;");
-            btn_empSub.setVisible(true);
-            btn_empMain.setVisible(false);
+            String name = txt_empName.getText();
+            String citizenId = txt_empCitizenID.getText();
+            String phone = txt_empPhone.getText();
+            String email = txt_empEmail.getText();
+            boolean gender;
+            if (radio_empMale.isSelected()) {
+                gender = true;
+            } else if (radio_empFemale.isSelected()) {
+                gender = false;
+            } else {
+                gender = false;
+            }
+            LocalDate birthDate = date_empBirthDate.getValue();
+            double hourPay = txt_empHourPay.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_empHourPay.getText().replace(".", ""));
+            double salary = txt_empSalary.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_empSalary.getText().replace(".", ""));
+            String address = txt_empAddress.getText();
+            String position = comboBox_empPostion.getValue() != null ? comboBox_empPostion.getValue().getPosition() : null;
+            double workHours = 0;
+            try {
+                DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
+                Employee employee = new Employee(name, phone, citizenId,
+                gender, address, birthDate, email, position, workHours, hourPay, salary, null);
+                if (dao_employee.add(employee)) {
+                    System.out.println("Thêm nhan vien thành công");
+                } else {
+                    System.out.println("Thêm nhan vien không thành công");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Database.closeConnection();
+            }
             clearTxt();
-            tabViewEmp.getSelectionModel().clearSelection();
         }
+        disableInput();
+        tabViewEmp.getItems().clear();
+        setCellValues();
+        btn_empClear.setVisible(false);
+        btn_empFired.setVisible(false);
+        btn_empSub.setVisible(true);
+        btn_empMain.setVisible(false);
+        utilsButton_1();
     }
 
     @FXML
     void btn_empClear(ActionEvent event) {
-        btn_empSub.setText("Thêm");
-        btn_empMain.setText("Sửa");
-        btn_empSub.setStyle("-fx-background-color:   #1D557E");
-        btn_empMain.setStyle("-fx-background-color:  #761D7E");
+        btn_empClear.setVisible(false);
+        btn_empFired.setVisible(false);
         btn_empSub.setVisible(true);
         btn_empMain.setVisible(false);
         tabViewEmp.getSelectionModel().clearSelection();
+        utilsButton_1();
+        disableInput();
         clearTxt();
     }
 
     @FXML
     void btn_empFired(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btn_empRefresh(ActionEvent event) {
-
+        //processing
+        Employee selectedItem = tabViewEmp.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            String idSelect = selectedItem.getEmployeeId();
+            try {
+                DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
+                if (dao_employee.updateStatus(idSelect, "Nghỉ việc")) {
+                    System.out.println("Sa thải nhan vien thanh cong");
+                } else {
+                    System.out.println("Sa thải nhan vien khong thanh cong");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Database.closeConnection();
+            }
+        }
+        tabViewEmp.getItems().clear();
+        setCellValues();
+        btn_empClear.fire();
+        disableInput();
     }
 
     @FXML
     void btn_empSearch(ActionEvent event) {
 
+    }
+
+    @FXML
+    void openInputAddress(MouseEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageEmployee_DialogAddress.fxml"));
+        Parent root = loader.load();
+        Stage primaryStage = new Stage();
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        Scene scene = new Scene(root, 1200, 700);
+        scene.setFill(Color.TRANSPARENT);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Diage Address - Huong Bien Restaurant");
+        primaryStage.setMaximized(true);
+        GUI_ManageEmployee_DialogAddressController dialogController = loader.getController();
+        dialogController.setGUIManageEmployeeController(this);
+        primaryStage.show();
     }
 }
