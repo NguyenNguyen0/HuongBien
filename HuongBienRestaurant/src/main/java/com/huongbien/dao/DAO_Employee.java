@@ -201,12 +201,12 @@ public class DAO_Employee extends DAO_Base<Employee> {
         return employees;
     }
 
-    public List<Employee> getCityzenIDNumber(String citizenIDNumber) {
+    public List<Employee> getEmpID(String EmpID) {
         List<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM Employee WHERE citizenIDNumber LIKE ?;";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, citizenIDNumber + "%");
+            stmt.setString(1, EmpID + "%");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Employee employee = new Employee();
@@ -230,6 +230,57 @@ public class DAO_Employee extends DAO_Base<Employee> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return employees;
+    }
+
+    public List<Employee> getByCriteria(String phoneNumber, String name, String empID) {
+        List<Employee> employees = new ArrayList<>();
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM Employee WHERE 1=1");
+        List<String> parameters = new ArrayList<>();
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            sqlBuilder.append(" AND phoneNumber LIKE ?");
+            parameters.add(phoneNumber + "%");
+        }
+        if (name != null && !name.isEmpty()) {
+            sqlBuilder.append(" AND name LIKE ?");
+            parameters.add("%" + name + "%");
+        }
+        if (empID != null && !empID.isEmpty()) {
+            sqlBuilder.append(" AND id LIKE ?");
+            parameters.add(empID + "%");
+        }
+        String sql = sqlBuilder.toString();
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            for (int i = 0; i < parameters.size(); i++) {
+                stmt.setString(i + 1, parameters.get(i));
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Employee employee = new Employee();
+                employee.setEmployeeId(rs.getString("id"));
+                employee.setName(rs.getString("name"));
+                employee.setPhoneNumber(rs.getString("phoneNumber"));
+                employee.setCitizenIDNumber(rs.getString("citizenIDNumber"));
+                employee.setGender(rs.getBoolean("gender"));
+                employee.setAddress(rs.getString("address"));
+                employee.setBirthday(rs.getDate("birthday").toLocalDate());
+                employee.setEmail(rs.getString("email"));
+                employee.setStatus(rs.getString("status"));
+                employee.setHireDate(rs.getDate("hireDate").toLocalDate());
+                employee.setPosition(rs.getString("position"));
+                employee.setWorkHours(rs.getDouble("workHours"));
+                employee.setHourlyPay(rs.getDouble("hourlyPay"));
+                employee.setSalary(rs.getDouble("salary"));
+                employee.setManager(this.get(rs.getString("managerId")));
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         return employees;
     }
 

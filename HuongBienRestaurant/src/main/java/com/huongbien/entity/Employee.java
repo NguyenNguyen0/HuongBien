@@ -57,7 +57,7 @@ public class Employee {
         setAddress(address);
         setBirthday(birthday);
         setEmail(email);
-        setStatus("đang làm");
+        setStatus("Đang làm");
         setHireDate(LocalDate.now());
         setPosition(position);
         setWorkHours(workHours);

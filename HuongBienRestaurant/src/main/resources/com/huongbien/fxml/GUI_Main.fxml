@@ -89,25 +89,6 @@
                               </Tooltip>
                            </tooltip>
                         </Button>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#btn_preOrder_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/dashboard/order-24px.png" />
-                                 </image>
-                                 <cursor>
-                                    <Cursor fx:constant="CLOSED_HAND" />
-                                 </cursor>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip text="Đặt trước">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                              </Tooltip>
-                           </tooltip>
-                        </Button>
                         <Button alignment="CENTER" mnemonicParsing="false" onAction="#btn_order_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
                            <graphic>
                               <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -121,25 +102,6 @@
                            </graphic>
                            <tooltip>
                               <Tooltip text="Đặt bàn">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                              </Tooltip>
-                           </tooltip>
-                        </Button>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#btn_listOrder_hide" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/dashboard/ordered-24px.png" />
-                                 </image>
-                                 <cursor>
-                                    <Cursor fx:constant="CLOSED_HAND" />
-                                 </cursor>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip text="Đơn đặt">
                                  <font>
                                     <Font name="System Bold" size="25.0" />
                                  </font>
@@ -167,6 +129,19 @@
                         </Button>
                         <MenuButton alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT" prefHeight="80.0" prefWidth="100.0" styleClass="transperant">
                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#btn_listOrder_hide">
+                                 <graphic>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Đơn đặt">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </MenuItem>
                             <MenuItem mnemonicParsing="false" onAction="#btn_bill_hide">
                                  <graphic>
                                     <HBox alignment="CENTER" prefHeight="80.0" prefWidth="150.0">
@@ -463,23 +438,6 @@
                               </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_preOrder_show" prefHeight="65.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/dashboard/order-24px.png" />
-                                 </image>
-                                 <HBox.margin>
-                                    <Insets left="40.0" right="10.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <Label text="Đặt trước" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
                         <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_order_show" prefHeight="65.0" prefWidth="200.0">
                            <children>
                               <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -491,23 +449,6 @@
                                  </HBox.margin>
                               </ImageView>
                               <Label text="Đặt bàn" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_listOrder_show" prefHeight="65.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/dashboard/ordered-24px.png" />
-                                 </image>
-                                 <HBox.margin>
-                                    <Insets left="40.0" right="10.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <Label text="Đơn đặt" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -531,14 +472,31 @@
                               </Label>
                            </children>
                         </HBox>
-                        <Accordion>
+                        <Accordion styleClass="border-line-top-bot">
                           <panes>
-                            <TitledPane prefWidth="230.0" styleClass="border-line-top" text="Quản lý" textFill="WHITE">
+                            <TitledPane prefWidth="230.0" text="Quản lý" textFill="WHITE">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="366.0" prefWidth="228.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="228.0">
                                        <children>
-                                          <VBox prefHeight="368.0" prefWidth="228.0">
+                                          <VBox prefHeight="431.0" prefWidth="228.0">
                                              <children>
+                                                <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_listOrder_show" prefHeight="65.0" prefWidth="200.0">
+                                                   <children>
+                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icon/dashboard/ordered-24px.png" />
+                                                         </image>
+                                                         <HBox.margin>
+                                                            <Insets left="40.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </ImageView>
+                                                      <Label text="Đơn đặt" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
                                                 <HBox alignment="CENTER_LEFT" onMouseClicked="#btn_bill_show" prefHeight="60.0" prefWidth="200.0">
                                                    <children>
                                                       <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -649,6 +607,9 @@
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
+                                 <padding>
+                                    <Insets bottom="20.0" />
+                                 </padding>
                             </TitledPane>
                           </panes>
                         </Accordion>

@@ -236,11 +236,6 @@ public class GUI_MainController implements Initializable {
     }
 
     @FXML
-    void btn_preOrder_hide(ActionEvent event) throws IOException {
-        openPreOrder();
-    }
-
-    @FXML
     void btn_order_hide(ActionEvent event) throws IOException {
         openOrder();
     }
@@ -301,12 +296,6 @@ public class GUI_MainController implements Initializable {
     void btn_lookup_show(MouseEvent event) throws IOException {
         hideMenu();
         openLookup();
-    }
-
-    @FXML
-    void btn_preOrder_show(MouseEvent event) throws IOException {
-        hideMenu();
-        openPreOrder();
     }
 
     @FXML

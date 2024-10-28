@@ -120,7 +120,7 @@ public class DAO_Category extends DAO_Base<Category> {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         }
     }

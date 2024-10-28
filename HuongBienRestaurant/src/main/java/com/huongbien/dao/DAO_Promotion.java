@@ -122,7 +122,7 @@ public class DAO_Promotion extends DAO_Base<Promotion> {
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         }
     }

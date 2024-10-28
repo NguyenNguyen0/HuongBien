@@ -17,7 +17,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -31,6 +33,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +106,7 @@ public class GUI_ManageEmployeeController implements Initializable {
     private ToggleGroup genderGroup;
 
     @FXML
-    private TextField txt_searchEmpCitizenID;
+    private TextField txt_searchEmpID;
 
     @FXML
     private TextField txt_searchEmpName;
@@ -120,13 +124,16 @@ public class GUI_ManageEmployeeController implements Initializable {
     private Button btn_empMain;
 
     @FXML
-    private Button btn_empRefresh;
-
-    @FXML
     private Button btn_empSearch;
 
     @FXML
     private Button btn_empSub;
+
+//    @FXML
+//    private Button btn_imgChooser;
+//    @FXML
+//    private ImageView imgView_emp;
+//    public byte[] imageEmpByte = null;
 
     private void setCellValues() {
         try {
@@ -192,7 +199,7 @@ public class GUI_ManageEmployeeController implements Initializable {
             DAO_Employee dao_employee = new DAO_Employee(connection);
             List<Employee> employeeList = dao_employee.get();
             List<Employee> distinctEmployees = new ArrayList<>(employeeList.stream()
-                    .filter(e -> e.getPosition() != null)
+                    .filter(e -> e.getPosition() != null && !"Quản lý".equals(e.getPosition()))
                     .collect(Collectors.toMap(Employee::getPosition, e -> e, (e1, e2) -> e1))
                     .values());
             ObservableList<Employee> employees = FXCollections.observableArrayList(distinctEmployees);
@@ -202,6 +209,7 @@ public class GUI_ManageEmployeeController implements Initializable {
                 public String toString(Employee employee) {
                     return employee != null ? employee.getPosition() : "";
                 }
+
                 @Override
                 public Employee fromString(String string) {
                     return comboBox_empPostion.getItems().stream()
@@ -219,7 +227,7 @@ public class GUI_ManageEmployeeController implements Initializable {
 
     public GUI_ManageEmployee_DialogAddressController gui_manageEmployee_dialogAddressController;
 
-    public void setController(GUI_ManageEmployee_DialogAddressController gui_manageEmployee_dialogAddressController){
+    public void setController(GUI_ManageEmployee_DialogAddressController gui_manageEmployee_dialogAddressController) {
         this.gui_manageEmployee_dialogAddressController = gui_manageEmployee_dialogAddressController;
     }
 
@@ -243,8 +251,15 @@ public class GUI_ManageEmployeeController implements Initializable {
                 txt_empPhone.setText(employee.getPhoneNumber());
                 txt_empEmail.setText(employee.getEmail());
                 txt_empEmail.setText(employee.getEmail());
-                txt_empHourPay.setText(employee.getHourlyPay()+"");
-                txt_empSalary.setText(employee.getSalary()+"");
+
+                DecimalFormat moneyFormat = new DecimalFormat("#,###");
+                //--Format
+                String formattedHourlyPay = moneyFormat.format(employee.getHourlyPay());
+                txt_empHourPay.setText(formattedHourlyPay);
+                //---------------
+                String formattedSalary = moneyFormat.format(employee.getSalary());
+                txt_empSalary.setText(formattedSalary);
+
                 txt_empAddress.setText(employee.getAddress());
                 if (employee.getHireDate() != null) {
                     date_empHireDate.setValue(employee.getHireDate());
@@ -256,7 +271,7 @@ public class GUI_ManageEmployeeController implements Initializable {
                 }
                 if (employee.isGender()) {
                     genderGroup.selectToggle(radio_empMale);
-                }else {
+                } else {
                     genderGroup.selectToggle(radio_empFemale);
                 }
             } catch (SQLException e) {
@@ -274,9 +289,9 @@ public class GUI_ManageEmployeeController implements Initializable {
     }
 
     @FXML
-    void btn_clearSearchEmpCitizenID(MouseEvent event) {
-        txt_searchEmpCitizenID.setText("");
-        txt_searchEmpCitizenID.requestFocus();
+    void btn_clearSearchEmpID(MouseEvent event) {
+        txt_searchEmpID.setText("");
+        txt_searchEmpID.requestFocus();
     }
 
     @FXML
@@ -291,7 +306,12 @@ public class GUI_ManageEmployeeController implements Initializable {
         txt_searchEmpPhone.requestFocus();
     }
 
-    public void clearTxt() {
+    //    public void clearChooserImage() {
+//        imageEmpByte = null;
+//        Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png"));
+//        imgView_emp.setImage(image);
+//    }
+    public void clear() {
         txt_empName.setText("");
         txt_empCitizenID.setText("");
         txt_empPhone.setText("");
@@ -306,36 +326,39 @@ public class GUI_ManageEmployeeController implements Initializable {
         comboBox_empPostion.getSelectionModel().clearSelection();
         tabViewEmp.getSelectionModel().clearSelection();
         btn_empFired.setVisible(false);
+//        clearChooserImage();
     }
 
     public void enableInput() {
-        txt_empName.setEditable(true);
-        txt_empCitizenID.setEditable(true);
-        txt_empEmail.setEditable(true);
-        txt_empPhone.setEditable(true);
+        txt_empName.setDisable(false);
+        txt_empCitizenID.setDisable(false);
+        txt_empEmail.setDisable(false);
+        txt_empPhone.setDisable(false);
         radio_empMale.setDisable(false);
         radio_empFemale.setDisable(false);
         date_empBirthDate.setDisable(false);
-        txt_empHourPay.setEditable(true);
-        txt_empSalary.setEditable(true);
-        txt_empAddress.setEditable(true);
+        txt_empHourPay.setDisable(false);
+        txt_empSalary.setDisable(false);
+        txt_empAddress.setDisable(false);
         comboBox_empStatus.setDisable(false);
         comboBox_empPostion.setDisable(false);
+        //img
     }
 
     public void disableInput() {
-        txt_empName.setEditable(false);
-        txt_empCitizenID.setEditable(false);
-        txt_empPhone.setEditable(false);
-        txt_empEmail.setEditable(false);
+        txt_empName.setDisable(true);
+        txt_empCitizenID.setDisable(true);
+        txt_empPhone.setDisable(true);
+        txt_empEmail.setDisable(true);
         radio_empMale.setDisable(true);
         radio_empFemale.setDisable(true);
         date_empBirthDate.setDisable(true);
-        txt_empHourPay.setEditable(false);
-        txt_empAddress.setEditable(false);
-        txt_empSalary.setEditable(false);
+        txt_empHourPay.setDisable(true);
+        txt_empSalary.setDisable(true);
+        txt_empAddress.setDisable(true);
         comboBox_empStatus.setDisable(true);
         comboBox_empPostion.setDisable(true);
+        //img
     }
 
     public void utilsButton_1() {
@@ -355,6 +378,7 @@ public class GUI_ManageEmployeeController implements Initializable {
     @FXML
     void btn_empSub(ActionEvent event) {
         if (btn_empSub.getText().equals("Sửa")) {
+//            clearChooserImage();
             utilsButton_1();
         } else if (btn_empSub.getText().equals("Thêm")) {
             btn_empClear.setVisible(true);
@@ -363,7 +387,8 @@ public class GUI_ManageEmployeeController implements Initializable {
             btn_empMain.setVisible(true);
             enableInput();
             utilsButton_2();
-            clearTxt();
+            clear();
+            comboBox_empStatus.setDisable(true);
         }
     }
 
@@ -395,7 +420,6 @@ public class GUI_ManageEmployeeController implements Initializable {
                 String address = txt_empAddress.getText();
                 String status = comboBox_empStatus.getValue();
                 String position = comboBox_empPostion.getValue() != null ? comboBox_empPostion.getValue().getPosition() : null;
-
                 try {
                     DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
                     Employee employee = new Employee(
@@ -430,12 +454,14 @@ public class GUI_ManageEmployeeController implements Initializable {
             double hourPay = txt_empHourPay.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_empHourPay.getText().replace(".", ""));
             double salary = txt_empSalary.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_empSalary.getText().replace(".", ""));
             String address = txt_empAddress.getText();
-            String position = comboBox_empPostion.getValue() != null ? comboBox_empPostion.getValue().getPosition() : null;
+            String position = comboBox_empPostion.getValue() != null
+                    ? comboBox_empPostion.getValue().getPosition()
+                    : comboBox_empPostion.getEditor().getText();
             double workHours = 0;
             try {
                 DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
                 Employee employee = new Employee(name, phone, citizenId,
-                gender, address, birthDate, email, position, workHours, hourPay, salary, null);
+                        gender, address, birthDate, email, position, workHours, hourPay, salary, null);
                 if (dao_employee.add(employee)) {
                     System.out.println("Thêm nhan vien thành công");
                 } else {
@@ -446,7 +472,7 @@ public class GUI_ManageEmployeeController implements Initializable {
             } finally {
                 Database.closeConnection();
             }
-            clearTxt();
+            clear();
         }
         disableInput();
         tabViewEmp.getItems().clear();
@@ -467,7 +493,7 @@ public class GUI_ManageEmployeeController implements Initializable {
         tabViewEmp.getSelectionModel().clearSelection();
         utilsButton_1();
         disableInput();
-        clearTxt();
+        clear();
     }
 
     @FXML
@@ -497,7 +523,30 @@ public class GUI_ManageEmployeeController implements Initializable {
 
     @FXML
     void btn_empSearch(ActionEvent event) {
-
+        tabViewEmp.getItems().clear();
+        String name = txt_searchEmpName.getText();
+        String phone = txt_searchEmpPhone.getText();
+        String empID = txt_searchEmpID.getText();
+        try {
+            DAO_Employee dao_Employee = new DAO_Employee(Database.getConnection());
+            List<Employee> employeeList = dao_Employee.getByCriteria(phone, name, empID);
+            ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
+            tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
+            tabCol_empName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            tabCol_empGender.setCellValueFactory(cellData -> {
+                boolean gender = cellData.getValue().isGender();
+                String genderText = gender ? "Nam" : "Nữ";
+                return new SimpleStringProperty(genderText);
+            });
+            tabCol_empPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+            tabCol_empPosition.setCellValueFactory(new PropertyValueFactory<>("position"));
+            tabCol_empStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+            tabViewEmp.setItems(listEmployee);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Database.closeConnection();
+        }
     }
 
     @FXML
@@ -514,5 +563,51 @@ public class GUI_ManageEmployeeController implements Initializable {
         GUI_ManageEmployee_DialogAddressController dialogController = loader.getController();
         dialogController.setGUIManageEmployeeController(this);
         primaryStage.show();
+    }
+
+    @FXML
+    void txt_empHourPay_onKeyReleased(KeyEvent event) {
+        String input = txt_empHourPay.getText().replace(".", "").replace(",", "");
+        if (input.isEmpty()) {
+            return;
+        }
+        if (input.matches("\\d*")) {
+            NumberFormat format = DecimalFormat.getInstance();
+            String formattedText = format.format(Long.parseLong(input));
+            txt_empHourPay.setText(formattedText);
+            txt_empHourPay.positionCaret(formattedText.length());
+        } else {
+            StringBuilder validInput = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                if (Character.isDigit(ch)) {
+                    validInput.append(ch);
+                }
+            }
+            txt_empHourPay.setText(validInput.toString());
+            txt_empHourPay.positionCaret(validInput.length());
+        }
+    }
+
+    @FXML
+    void txt_empSalary_onKeyReleased(KeyEvent event) {
+        String input = txt_empSalary.getText().replace(".", "").replace(",", "");
+        if (input.isEmpty()) {
+            return;
+        }
+        if (input.matches("\\d*")) {
+            NumberFormat format = DecimalFormat.getInstance();
+            String formattedText = format.format(Long.parseLong(input));
+            txt_empSalary.setText(formattedText);
+            txt_empSalary.positionCaret(formattedText.length());
+        } else {
+            StringBuilder validInput = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                if (Character.isDigit(ch)) {
+                    validInput.append(ch);
+                }
+            }
+            txt_empSalary.setText(validInput.toString());
+            txt_empSalary.positionCaret(validInput.length());
+        }
     }
 }

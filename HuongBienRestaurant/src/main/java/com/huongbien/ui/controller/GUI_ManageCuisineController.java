@@ -5,6 +5,9 @@ import com.huongbien.dao.DAO_Cuisine;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
+import com.huongbien.utils.Converter;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,10 +17,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -56,6 +64,12 @@ public class GUI_ManageCuisineController implements Initializable {
     @FXML
     private Button btn_cuisineClear;
 
+    @FXML
+    private Button btn_imgChooser;
+    @FXML
+    private ImageView imgView_cuisine;
+    public byte[] imageCuisineByte = null;
+
     private void setCellValues() {
         try {
             DAO_Cuisine dao_Cuisine = new DAO_Cuisine(Database.getConnection());
@@ -72,6 +86,7 @@ public class GUI_ManageCuisineController implements Initializable {
                     public String toString(Double price) {
                         return price != null ? priceFormat.format(price) : "";
                     }
+
                     @Override
                     public Double fromString(String string) {
                         try {
@@ -123,19 +138,19 @@ public class GUI_ManageCuisineController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setCellValues();
-        setValueCombobox();
+    public void clearChooserImage() {
+        imageCuisineByte = null;
+        Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png"));
+        imgView_cuisine.setImage(image);
     }
-
-    public void clearTxt() {
+    public void clear() {
         txt_cuisineName.setText("");
         txt_cuisinePrice.setText("");
         txtArea_cuisineDescription.setText("");
         comboBox_cuisineCategory.getSelectionModel().clearSelection();
         tabViewCuisine.getSelectionModel().clearSelection();
         btn_cuisineDelete.setVisible(false);
+        clearChooserImage();
     }
 
     public void utilsButton_1() {
@@ -153,17 +168,25 @@ public class GUI_ManageCuisineController implements Initializable {
     }
 
     void disableInput() {
-        txt_cuisineName.setEditable(false);
-        txt_cuisinePrice.setEditable(false);
+        txt_cuisineName.setDisable(true);
+        txt_cuisinePrice.setDisable(true);
         comboBox_cuisineCategory.setDisable(true);
-        txtArea_cuisineDescription.setEditable(false);
+        txtArea_cuisineDescription.setDisable(true);
+        btn_imgChooser.setDisable(true);
     }
 
     void enableInput() {
-        txt_cuisineName.setEditable(true);
-        txt_cuisinePrice.setEditable(true);
+        txt_cuisineName.setDisable(false);
+        txt_cuisinePrice.setDisable(false);
         comboBox_cuisineCategory.setDisable(false);
-        txtArea_cuisineDescription.setEditable(true);
+        txtArea_cuisineDescription.setDisable(false);
+        btn_imgChooser.setDisable(false);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setCellValues();
+        setValueCombobox();
     }
 
     @FXML
@@ -175,6 +198,17 @@ public class GUI_ManageCuisineController implements Initializable {
                 Connection connection = Database.getConnection();
                 DAO_Cuisine dao_Cuisine = new DAO_Cuisine(connection);
                 Cuisine cuisine = dao_Cuisine.get(idSelect);
+                //load img------
+                byte[] imageBytes = cuisine.getImage();
+                imageCuisineByte = imageBytes;
+                Image image;
+                if (imageBytes != null) {
+                    image = Converter.bytesToImage(imageBytes);
+                } else {
+                    image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png"));
+                }
+                imgView_cuisine.setImage(image);
+                //---------------
                 txt_cuisineName.setText(cuisine.getName());
                 //--Format Price
                 DecimalFormat priceFormat = new DecimalFormat("#,###");
@@ -206,18 +240,21 @@ public class GUI_ManageCuisineController implements Initializable {
         tabViewCuisine.getSelectionModel().clearSelection();
         utilsButton_1();
         disableInput();
-        clearTxt();
+        clear();
     }
 
     @FXML
     void btn_clearSearch(MouseEvent event) {
         txt_cuisineSearch.setText("");
         txt_cuisineSearch.requestFocus();
+        tabViewCuisine.getItems().clear();
+        setCellValues();
     }
 
     @FXML
     void btn_cuisineSub(ActionEvent event) {
         if (btn_cuisineSub.getText().equals("Sửa món")) {
+            clearChooserImage();
             utilsButton_1();
         } else if (btn_cuisineSub.getText().equals("Thêm món")) {
             btn_cuisineClear.setVisible(true);
@@ -225,8 +262,8 @@ public class GUI_ManageCuisineController implements Initializable {
             btn_cuisineSub.setVisible(false);
             btn_cuisineMain.setVisible(true);
             enableInput();
+            clear();
             utilsButton_2();
-            clearTxt();
         }
     }
 
@@ -238,14 +275,14 @@ public class GUI_ManageCuisineController implements Initializable {
             if (selectedItem != null) {
                 String idSelect = selectedItem.getCuisineId();
                 String name = txt_cuisineName.getText();
-                double price = Double.parseDouble(txt_cuisinePrice.getText().replace(".", ""));
+                double price = txt_cuisinePrice.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_cuisinePrice.getText().replace(".", ""));
                 String description = txtArea_cuisineDescription.getText();
                 String categoryId = comboBox_cuisineCategory.getValue().getCategoryId();
                 String categoryName = comboBox_cuisineCategory.getValue().getName();
                 String categoryDescription = comboBox_cuisineCategory.getValue().getDescription();
                 try {
                     DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
-                    Cuisine cuisine = new Cuisine(idSelect, name, price, description, null,
+                    Cuisine cuisine = new Cuisine(idSelect, name, price, description, imageCuisineByte,
                             new Category(categoryId, categoryName, categoryDescription)
                     );
                     if (dao_cuisine.update(cuisine)) {
@@ -261,14 +298,15 @@ public class GUI_ManageCuisineController implements Initializable {
             }
         } else if (btn_cuisineMain.getText().equals("Thêm món")) {
             String name = txt_cuisineName.getText();
-            double price = Double.parseDouble(txt_cuisinePrice.getText().replace(".", ""));
+            double price = txt_cuisinePrice.getText().isEmpty() ? 0.0 : Double.parseDouble(txt_cuisinePrice.getText().replace(".", ""));
             String description = txtArea_cuisineDescription.getText();
             String categoryId = comboBox_cuisineCategory.getValue().getCategoryId();
             String categoryName = comboBox_cuisineCategory.getValue().getName();
             String categoryDescription = comboBox_cuisineCategory.getValue().getDescription();
+
             try {
                 DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
-                Cuisine cuisine = new Cuisine(name, price, description, null,
+                Cuisine cuisine = new Cuisine(name, price, description, imageCuisineByte,
                         new Category(categoryId, categoryName, categoryDescription)
                 );
                 if (dao_cuisine.add(cuisine)) {
@@ -281,7 +319,7 @@ public class GUI_ManageCuisineController implements Initializable {
             } finally {
                 Database.closeConnection();
             }
-            clearTxt();
+            clear();
         }
         disableInput();
         tabViewCuisine.getItems().clear();
@@ -294,21 +332,15 @@ public class GUI_ManageCuisineController implements Initializable {
     }
 
     @FXML
-    void btn_cuisineDelete(ActionEvent event) {
+    void btn_cuisineDelete(ActionEvent event) throws SQLException {
         Cuisine selectedItem = tabViewCuisine.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getCuisineId();
-            try {
-                DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
-                if (dao_cuisine.delete(idSelect)) {
-                    System.out.println("xoá món thành công");
-                } else {
-                    System.out.println("xoá món không thành công");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
+            DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
+            if (dao_cuisine.delete(idSelect)) {
+                System.out.println("Xoá món thành công");
+            } else {
+                System.out.println("Xoá món không thành công");
             }
         }
         tabViewCuisine.getItems().clear();
@@ -337,6 +369,124 @@ public class GUI_ManageCuisineController implements Initializable {
             }
             txt_cuisinePrice.setText(validInput.toString());
             txt_cuisinePrice.positionCaret(validInput.length());
+        }
+    }
+
+    //search cuisine area
+    @FXML
+    void txt_cuisineSearch_clicked(MouseEvent event) {
+        tabViewCuisine.getItems().clear();
+        String input = txt_cuisineSearch.getText();
+        try {
+            DAO_Cuisine dao_Cuisine = new DAO_Cuisine(Database.getConnection());
+            List<Cuisine> cuisineList = dao_Cuisine.getByName(input);
+            //
+            ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
+            tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
+            tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            //
+            DecimalFormat priceFormat = new DecimalFormat("#,###");
+            tabCol_cuisinePrice.setCellFactory(column -> {
+                return new TextFieldTableCell<>(new StringConverter<Double>() {
+                    @Override
+                    public String toString(Double price) {
+                        return price != null ? priceFormat.format(price) : "";
+                    }
+
+                    @Override
+                    public Double fromString(String string) {
+                        try {
+                            return priceFormat.parse(string).doubleValue();
+                        } catch (Exception e) {
+                            return 0.0;
+                        }
+                    }
+                });
+            });
+            tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+            tabCol_cuisineCategory.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(cellData.getValue().getCategory().getName())
+            );
+            tabViewCuisine.setItems(listCuisine);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Database.closeConnection();
+        }
+    }
+
+    private Timeline searchDelay;
+
+    @FXML
+    void txt_cuisineSearch_onKeyReleased(KeyEvent event) {
+        if (searchDelay != null) {
+            searchDelay.stop();
+        }
+        searchDelay = new Timeline(new KeyFrame(Duration.millis(500), ae -> {
+            searchCuisine();
+        }));
+        searchDelay.setCycleCount(1);
+        searchDelay.play();
+    }
+
+    private void searchCuisine() {
+        tabViewCuisine.getItems().clear();
+        String input = txt_cuisineSearch.getText();
+        try {
+            DAO_Cuisine dao_Cuisine = new DAO_Cuisine(Database.getConnection());
+            List<Cuisine> cuisineList = dao_Cuisine.getByName(input);
+
+            ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
+            tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
+            tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+            DecimalFormat priceFormat = new DecimalFormat("#,###");
+            tabCol_cuisinePrice.setCellFactory(column -> {
+                return new TextFieldTableCell<>(new StringConverter<Double>() {
+                    @Override
+                    public String toString(Double price) {
+                        return price != null ? priceFormat.format(price) : "";
+                    }
+
+                    @Override
+                    public Double fromString(String string) {
+                        try {
+                            return priceFormat.parse(string).doubleValue();
+                        } catch (Exception e) {
+                            return 0.0;
+                        }
+                    }
+                });
+            });
+            tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+            tabCol_cuisineCategory.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(cellData.getValue().getCategory().getName())
+            );
+            tabViewCuisine.setItems(listCuisine);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Database.closeConnection();
+        }
+    }
+
+    @FXML
+    void btn_imgChooser(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+                "Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            Image image = new Image(file.toURI().toString());
+            imgView_cuisine.setImage(image);
+            //convert
+            try {
+                imageCuisineByte = Converter.fileToBytes(file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
