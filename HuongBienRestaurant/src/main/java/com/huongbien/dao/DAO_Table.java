@@ -1,5 +1,6 @@
 package com.huongbien.dao;
 
+import com.huongbien.database.Database;
 import com.huongbien.entity.Table;
 
 import java.sql.*;
@@ -32,19 +33,20 @@ public class DAO_Table extends DAO_Base<Table> {
         }
     }
 
-    @Override
-    public boolean update(Table object) {
-        String sql = "UPDATE [Table] SET name = ?, floor = ?, seats = ?, status = ?, tableTypeId = ? WHERE id = ?";
+    public boolean update(Table table) {
+        String sql = "UPDATE [Table] SET name = ?, seats = ?, floor = ?, status = ?, tableTypeId = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, object.getName());
-            statement.setInt(2, object.getFloor());
-            statement.setInt(3, object.getSeats());
-            statement.setString(4, object.getStatus());
-            statement.setString(5, object.getTableType() != null ? object.getTableType().getTableId() : null);
-            statement.setString(6, object.getId());
-            return statement.executeUpdate() > 0;
+            statement.setString(1, table.getName());
+            statement.setInt(2, table.getSeats());
+            statement.setInt(3, table.getFloor());
+            statement.setString(4, table.getStatus());
+            statement.setString(5, table.getTableType().getTableId());
+            statement.setString(6, table.getId());
+
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi SQL: " + e.getMessage());
             return false;
         }
     }
@@ -200,4 +202,20 @@ public class DAO_Table extends DAO_Base<Table> {
         }
 
     }
+
+    public List<String> getDistinctStatuses() throws SQLException {
+        List<String> statuses = new ArrayList<>();
+        String sql = "SELECT DISTINCT status FROM [Table]";
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                statuses.add(resultSet.getString("status"));
+            }
+        }
+
+        return statuses;
+    }
+
 }

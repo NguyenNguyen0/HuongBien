@@ -33,18 +33,18 @@ public class Table {
     }
 
     public void setId(String id) {
-//        if (id == null) {
-//            this.id = String.format("T%01dB%03d", this.floor, Utils.randomNumber(1, 999));
-//            return;
-//        }
-//
-//        if (id.matches("^T\\dB\\d{3}$")) {
-//            this.id = id;
-//            return;
-//        }
-//
-//        throw new IllegalArgumentException("Invalid table ID format");
-        this.id = id;
+        if (id == null) {
+            this.id = String.format("T%01dB%03d", this.floor, Utils.randomNumber(1, 999));
+            return;
+        }
+
+        if (id.matches("^T\\dB\\d{3}$")) {
+            this.id = id;
+            return;
+        }
+
+        throw new IllegalArgumentException("Invalid table ID format");
+//        this.id = id;
     }
 
     public void setName(String name) {
@@ -98,6 +98,9 @@ public class Table {
 
     public TableType getTableType() {
         return tableType;
+    }
+    public String getTableTypeName() {
+        return tableType != null ? tableType.getName() : "";
     }
 
     @Override
