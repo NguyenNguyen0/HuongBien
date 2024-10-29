@@ -44,7 +44,7 @@ public class Customer {
         setEmail(email);
         setBirthday(birthday);
         setRegistrationDate(LocalDate.now());
-        setAccumulatedPoints(1000);
+        setAccumulatedPoints(0);
         setMembershipLevel(0);
     }
 
@@ -67,9 +67,9 @@ public class Customer {
     }
 
     public void setName(String name) {
-//        if (name == null || name.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Name cannot be empty");
-//        }
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
         this.name = name;
     }
 
@@ -82,25 +82,24 @@ public class Customer {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-//        if (phoneNumber == null || phoneNumber.matches("^0\\d{9}$")) {
-//            this.phoneNumber = phoneNumber;
-//        } else {
-//            throw new IllegalArgumentException("Invalid phone number");
-//        }
+        if (phoneNumber == null || phoneNumber.matches("^0\\d{9}$")) {
+            this.phoneNumber = phoneNumber;
+        } else {
+            throw new IllegalArgumentException("Invalid phone number");
+        }
         this.phoneNumber = phoneNumber;
     }
 
     public void setEmail(String email) {
-//        if (email == null || email.isEmpty()) {
-//            this.email = null;
-//            return;
-//        }
-//        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
-//            this.email = email;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid email");
-        this.email = email;
+        if (email == null || email.isEmpty()) {
+            this.email = null;
+            return;
+        }
+        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            this.email = email;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid email");
     }
 
     public void setBirthday(LocalDate birthday) {
@@ -112,16 +111,16 @@ public class Customer {
     }
 
     public void setAccumulatedPoints(int accumulatedPoints) {
-//        if (accumulatedPoints < 0) {
-//            throw new IllegalArgumentException("Accumulated points must be non-negative");
-//        }
+        if (accumulatedPoints < 0) {
+            throw new IllegalArgumentException("Accumulated points must be non-negative");
+        }
         this.accumulatedPoints = accumulatedPoints;
     }
 
     public void setMembershipLevel(int membershipLevel) {
-//        if (membershipLevel < 0) {
-//            throw new IllegalArgumentException("Membership cannot lower 0");
-//        }
+        if (membershipLevel < 0) {
+            throw new IllegalArgumentException("Membership cannot lower 0");
+        }
         this.membershipLevel = membershipLevel;
     }
 
@@ -137,7 +136,7 @@ public class Customer {
         return address;
     }
 
-    public boolean getGender() {
+    public boolean isGender() {
         return gender;
     }
 

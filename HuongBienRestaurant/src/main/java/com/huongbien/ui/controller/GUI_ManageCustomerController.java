@@ -1,8 +1,11 @@
 package com.huongbien.ui.controller;
 
+import com.huongbien.dao.DAO_Customer;
 import com.huongbien.dao.DAO_Employee;
 import com.huongbien.database.Database;
+import com.huongbien.entity.Customer;
 import com.huongbien.entity.Employee;
+import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
+import javax.crypto.Cipher;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -61,25 +65,25 @@ public class GUI_ManageCustomerController implements Initializable {
     private RadioButton radio_customerMale;
 
     @FXML
-    private TableColumn<?, ?> tabCol_customerAccumulatedPoint;
+    private TableColumn<Customer, Integer> tabCol_customerAccumulatedPoint;
 
     @FXML
-    private TableColumn<?, ?> tabCol_customerAddress;
+    private TableColumn<Customer, String> tabCol_customerAddress;
 
     @FXML
-    private TableColumn<?, ?> tabCol_customerGender;
+    private TableColumn<Customer, String> tabCol_customerGender;
 
     @FXML
-    private TableColumn<?, ?> tabCol_customerID;
+    private TableColumn<Customer, String> tabCol_customerID;
 
     @FXML
-    private TableColumn<?, ?> tabCol_customerMemLevel;
+    private TableColumn<Customer, String> tabCol_customerMemLevel;
 
     @FXML
-    private TableColumn<?, ?> tabCol_customerName;
+    private TableColumn<Customer, String> tabCol_customerName;
 
     @FXML
-    private TableView<?> tabViewCustomer;
+    private TableView<Customer> tabViewCustomer;
 
     @FXML
     private TextField txt_customerAccumulatedPoints;
@@ -102,199 +106,245 @@ public class GUI_ManageCustomerController implements Initializable {
     @FXML
     private TextField txt_searchCustomerPhone;
 
+    private Utils utils;
+
+
     private void setCellValues() {
-//        try {
-//            Connection connection = Database.getConnection();
-//            DAO_Employee dao_Employee = new DAO_Employee(connection);
-//            List<Employee> employeeList = dao_Employee.get();
-//            ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
-//            tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
-//            tabCol_empName.setCellValueFactory(new PropertyValueFactory<>("name"));
-//            tabCol_empGender.setCellValueFactory(cellData -> {
-//                boolean gender = cellData.getValue().isGender();
-//                String genderText = gender ? "Nam" : "Nữ";
-//                return new SimpleStringProperty(genderText);
-//            });
-//            tabCol_empPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-//            tabCol_empPosition.setCellValueFactory(new PropertyValueFactory<>("position"));
-//            tabCol_empStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-//            tabViewEmp.setItems(listEmployee);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//            Database.closeConnection();
-//        }
+        try {
+            Connection connection = Database.getConnection();
+            DAO_Customer dao_customer = new DAO_Customer(connection);
+            List<Customer> customerList = dao_customer.get();
+            ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
+
+            txt_customerAddress.setEditable(true);
+            txt_customerName.setEditable(true);
+
+            tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+            tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            tabCol_customerGender.setCellValueFactory(cellData -> {
+                boolean gender = cellData.getValue().isGender();
+                String genderText = gender ? "Nam" : "Nữ";
+                return new SimpleStringProperty(genderText);
+            });
+            tabCol_customerMemLevel.setCellValueFactory(cellData -> {
+                int memberShip = cellData.getValue().getMembershipLevel();
+                String memberShipLevel = utils.toStringMembershipLevel(memberShip);
+                return new SimpleStringProperty(memberShipLevel);
+            });
+            tabCol_customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+            tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
+            tabViewCustomer.setItems(listCustomer);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Database.closeConnection();
+        }
     }
 
-    private void setValueCombobox() {
-        //Status
-//        ObservableList<String> statusList = FXCollections.observableArrayList("Đang làm", "Nghỉ phép", "Nghỉ việc");
-//        comboBox_empStatus.setItems(statusList);
-//        comboBox_empStatus.setConverter(new StringConverter<String>() {
-//            @Override
-//            public String toString(String status) {
-//                return status != null ? status : "";
-//            }
-//
-//            @Override
-//            public String fromString(String string) {
-//                return comboBox_empStatus.getItems().stream()
-//                        .filter(item -> item.equals(string))
-//                        .findFirst()
-//                        .orElse(null);
-//            }
-//        });
-////        comboBox_empStatus.getSelectionModel().selectFirst();
-//        comboBox_empStatus.setCellFactory(lv -> new ListCell<String>() {
-//            @Override
-//            protected void updateItem(String item, boolean empty) {
-//                super.updateItem(item, empty);
-//                if (item == null || empty) {
-//                    setText(null);
-//                    setDisable(false);
-//                } else {
-//                    setText(item);
-//                    if (item.equals("Nghỉ việc")) {
-//                        setDisable(true);
-//                    }
-//                }
-//            }
-//        });
-        //Position
-//        try {
-//            Connection connection = Database.getConnection();
-//            DAO_Employee dao_employee = new DAO_Employee(connection);
-//            List<Employee> employeeList = dao_employee.get();
-//            List<Employee> distinctEmployees = new ArrayList<>(employeeList.stream()
-//                    .filter(e -> e.getPosition() != null && !"Quản lý".equals(e.getPosition()))
-//                    .collect(Collectors.toMap(Employee::getPosition, e -> e, (e1, e2) -> e1))
-//                    .values());
-//            ObservableList<Employee> employees = FXCollections.observableArrayList(distinctEmployees);
-//            comboBox_empPostion.setItems(employees);
-//            comboBox_empPostion.setConverter(new StringConverter<Employee>() {
-//                @Override
-//                public String toString(Employee employee) {
-//                    return employee != null ? employee.getPosition() : "";
-//                }
-//
-//                @Override
-//                public Employee fromString(String string) {
-//                    return comboBox_empPostion.getItems().stream()
-//                            .filter(item -> item.getPosition().equals(string))
-//                            .findFirst()
-//                            .orElse(null);
-//                }
-//            });
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//            Database.closeConnection();
-//        }
-//    }
-//
-//    public void clearChooserImage() {
-//        imageEmpByte = null;
-//        Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png"));
-//        imgView_emp.setImage(image);
-    }
 
     public void clear() {
-//        txt_empName.setText("");
-//        txt_empCitizenID.setText("");
-//        txt_empPhone.setText("");
-//        txt_empEmail.setText("");
-//        genderGroup.selectToggle(null);
-//        date_empBirthDate.setValue(null);
-//        txt_empHourPay.setText("");
-//        txt_empSalary.setText("");
-//        txt_empAddress.setText("");
-//        date_empHireDate.setValue(null);
-//        comboBox_empStatus.getSelectionModel().clearSelection();
-//        comboBox_empPostion.getSelectionModel().clearSelection();
-//        tabViewEmp.getSelectionModel().clearSelection();
-//        btn_empFired.setVisible(false);
-//        clearChooserImage();
+        txt_customerName.setText("");
+        txt_customerPhone.setText("");
+        txt_customerEmail.setText("");
+        date_customerBirthDate.setValue(null);
+        genderGroup.selectToggle(null);
+        date_registrationDate.setValue(null);
+        txt_customerAddress.setText("");
+        txt_customerMembershipLevel.setText("");
+        txt_customerAccumulatedPoints.setText("");
+        tabViewCustomer.getSelectionModel().clearSelection();
     }
 
     public void enableInput() {
-//        txt_empName.setDisable(false);
-//        txt_empCitizenID.setDisable(false);
-//        txt_empEmail.setDisable(false);
-//        txt_empPhone.setDisable(false);
-//        radio_empMale.setDisable(false);
-//        radio_empFemale.setDisable(false);
-//        date_empBirthDate.setDisable(false);
-//        txt_empHourPay.setDisable(false);
-//        txt_empSalary.setDisable(false);
-//        txt_empAddress.setDisable(false);
-//        comboBox_empStatus.setDisable(false);
-//        comboBox_empPostion.setDisable(false);
-//        btn_imgChooser.setDisable(false);
+        txt_customerName.setDisable(false);
+        txt_customerEmail.setDisable(false);
+        txt_customerAddress.setDisable(false);
+        txt_customerPhone.setDisable(false);
+        date_customerBirthDate.setDisable(false);
     }
 
     public void disableInput() {
-//        txt_empName.setDisable(true);
-//        txt_empCitizenID.setDisable(true);
-//        txt_empPhone.setDisable(true);
-//        txt_empEmail.setDisable(true);
-//        radio_empMale.setDisable(true);
-//        radio_empFemale.setDisable(true);
-//        date_empBirthDate.setDisable(true);
-//        txt_empHourPay.setDisable(true);
-//        txt_empSalary.setDisable(true);
-//        txt_empAddress.setDisable(true);
-//        comboBox_empStatus.setDisable(true);
-//        comboBox_empPostion.setDisable(true);
-//        btn_imgChooser.setDisable(true);
+        txt_customerName.setDisable(true);
+        txt_customerEmail.setDisable(true);
+        txt_customerAddress.setDisable(true);
+        txt_customerPhone.setDisable(true);
+        date_customerBirthDate.setDisable(true);
+
     }
 
     public void utilsButton_1() {
-//        btn_empSub.setText("Thêm");
-//        btn_empMain.setText("Sửa");
-//        btn_empSub.setStyle("-fx-background-color:   #1D557E");
-//        btn_empMain.setStyle("-fx-background-color:  #761D7E");
+        btn_customerSub.setText("Thêm");
+        btn_customerMain.setText("Sửa");
+        btn_customerSub.setStyle("-fx-background-color:   #1D557E");
+        btn_customerMain.setStyle("-fx-background-color:  #761D7E");
     }
 
     public void utilsButton_2() {
-//        btn_empSub.setText("Sửa");
-//        btn_empMain.setText("Thêm");
-//        btn_empSub.setStyle("-fx-background-color:   #761D7E");
-//        btn_empMain.setStyle("-fx-background-color:  #1D557E");
+        btn_customerSub.setText("Sửa");
+        btn_customerMain.setText("Thêm");
+        btn_customerSub.setStyle("-fx-background-color:   #761D7E");
+        btn_customerMain.setStyle("-fx-background-color:  #1D557E");
+    }
+
+    public boolean checkData(){
+        if (txt_customerName.getText().trim().equals("")){
+            return false;
+        }
+        if (txt_customerPhone.getText().trim().equals("")){
+            return false;
+        }
+        if (date_customerBirthDate.getValue() == null){
+            return false;
+        }
+        if (genderGroup.getSelectedToggle() == null){
+            return false;
+        }
+        return true;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setCellValues();
-        setValueCombobox();
     }
 
     @FXML
-    void btn_clearSearchEmpName(MouseEvent event) {
-
+    void btn_clearSearchCusPhone(MouseEvent event) {
+        txt_searchCustomerPhone.setText("");
+        setCellValues();
     }
 
     @FXML
     void btn_customerClear(ActionEvent event) {
-
+        clear();
+        txt_customerName.requestFocus();
     }
 
     @FXML
     void btn_customerMain(ActionEvent event) {
-
+        if(btn_customerMain.getText() == "Thêm") {
+            enableInput();
+            Customer customer = null;
+            boolean gender = true;
+            if(checkData()) {
+                String name = txt_customerName.getText();
+                String phone = txt_customerPhone.getText();
+                String email = txt_customerEmail.getText();
+                String address = txt_customerAddress.getText();
+                LocalDate birthday = date_customerBirthDate.getValue();
+                if (radio_customerFemale.isSelected()) {
+                    gender = false;
+                }
+                customer = new Customer(name, address, gender, phone, email, birthday);
+                try {
+                    Connection connection = Database.getConnection();
+                    DAO_Customer dao_customer = new DAO_Customer(connection);
+                    if (dao_customer.add(customer)){
+                        setCellValues();
+                    }
+                    connection.close();
+                }
+                catch (SQLException e){
+                    throw new RuntimeException(e);
+                }
+            }
+            clear();
+        }
+        else if (btn_customerMain.getText().equals("Sửa")){
+            enableInput();
+            Customer customer = null;
+            boolean gender = true;
+            if (checkData()) {
+                String name = txt_customerName.getText();
+                String phone = txt_customerPhone.getText();
+                String email = txt_customerEmail.getText();
+                String address = txt_customerAddress.getText();
+                LocalDate birthday = date_customerBirthDate.getValue();
+                if (radio_customerFemale.isSelected()) {
+                    gender = false;
+                }
+                customer = new Customer(name, address, gender, phone, email, birthday);
+                try {
+                    Connection connection = Database.getConnection();
+                    DAO_Customer dao_customer = new DAO_Customer(connection);
+                    if (dao_customer.update(customer)) {
+                        setCellValues();
+                    }
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            clear();
+        }
     }
 
     @FXML
     void btn_customerSub(ActionEvent event) {
-
+        if (btn_customerMain.getText().equals("Thêm")) {
+            utilsButton_1();
+        }
+        else {
+            utilsButton_2();
+            clear();
+        }
     }
 
     @FXML
     void getCustomerInfo(MouseEvent event) {
+        utilsButton_1();
+        Customer selectedItem = tabViewCustomer.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
+            txt_customerName.setText(selectedItem.getName());
+            txt_customerPhone.setText(selectedItem.getPhoneNumber());
+            txt_customerAddress.setText(selectedItem.getAddress());
+            txt_customerEmail.setText(selectedItem.getEmail());
+            txt_customerAccumulatedPoints.setText(selectedItem.getAccumulatedPoints()+"");
+            txt_customerMembershipLevel.setText(utils.toStringMembershipLevel(selectedItem.getMembershipLevel()));
+            date_customerBirthDate.setValue(selectedItem.getBirthday());
+            date_registrationDate.setValue(selectedItem.getRegistrationDate());
+
+            if(selectedItem.isGender()){
+                genderGroup.selectToggle(radio_customerMale);
+            }
+            else {
+                genderGroup.selectToggle(radio_customerFemale);
+            }
+        }
 
     }
 
     @FXML
-    void txt_empHourPay_onKeyReleased(KeyEvent event) {
+    void txt_searchCustomerPhone(KeyEvent event) {
+        String phone = txt_searchCustomerPhone.getText();
+        try {
+            Connection connection = Database.getConnection();
+            DAO_Customer dao_customer = new DAO_Customer(connection);
+            List<Customer> customerList = dao_customer.searchCustomerPhone(phone);
+            ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
 
+            txt_customerAddress.setEditable(true);
+            txt_customerName.setEditable(true);
+
+            tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+            tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            tabCol_customerGender.setCellValueFactory(cellData -> {
+                boolean gender = cellData.getValue().isGender();
+                String genderText = gender ? "Nam" : "Nữ";
+                return new SimpleStringProperty(genderText);
+            });
+            tabCol_customerMemLevel.setCellValueFactory(cellData -> {
+                int memberShip = cellData.getValue().getMembershipLevel();
+                String memberShipLevel = utils.toStringMembershipLevel(memberShip);
+                return new SimpleStringProperty(memberShipLevel);
+            });
+            tabCol_customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+            tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
+            tabViewCustomer.setItems(listCustomer);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Database.closeConnection();
+        }
     }
+
 }

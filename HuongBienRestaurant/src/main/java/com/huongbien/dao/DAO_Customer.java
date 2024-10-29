@@ -21,7 +21,7 @@ public class DAO_Customer extends DAO_Base<Customer> {
             stmt.setString(1, customer.getCustomerId());
             stmt.setString(2, customer.getName());
             stmt.setString(3, customer.getAddress());
-            stmt.setBoolean(4, customer.getGender());
+            stmt.setBoolean(4, customer.isGender());
             stmt.setString(5, customer.getPhoneNumber());
             stmt.setString(6, customer.getEmail());
             stmt.setDate(7, Date.valueOf(customer.getBirthday()));
@@ -44,7 +44,7 @@ public class DAO_Customer extends DAO_Base<Customer> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, customer.getName());
             stmt.setString(2, customer.getAddress());
-            stmt.setBoolean(3, customer.getGender());
+            stmt.setBoolean(3, customer.isGender());
             stmt.setString(4, customer.getPhoneNumber());
             stmt.setString(5, customer.getEmail());
             stmt.setDate(6, Date.valueOf(customer.getBirthday()));
@@ -175,7 +175,33 @@ public class DAO_Customer extends DAO_Base<Customer> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return customers;
+    }
 
+    public List<Customer> searchCustomerPhone(String phone){
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT * FROM Customer WHERE phoneNumber LIKE N'%" + phone + "%'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getString("id"));
+                customer.setName(rs.getString("name"));
+                customer.setAddress(rs.getString("address"));
+                customer.setGender(rs.getBoolean("gender"));
+                customer.setPhoneNumber(rs.getString("phoneNumber"));
+                customer.setEmail(rs.getString("email"));
+                customer.setBirthday(rs.getDate("birthday").toLocalDate());
+                customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
+                customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
+                customer.setMembershipLevel(rs.getInt("membershipLevel"));
+                customers.add(customer);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return customers;
     }
 }

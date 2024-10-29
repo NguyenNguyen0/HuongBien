@@ -199,7 +199,7 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="txt_customerMembershipLevel" alignment="TOP_LEFT" disable="true" minHeight="50.0" onKeyReleased="#txt_empHourPay_onKeyReleased" prefHeight="52.0" prefWidth="135.0" styleClass="textField-line-bot">
+                                    <TextField fx:id="txt_customerMembershipLevel" alignment="TOP_LEFT" disable="true" minHeight="50.0" prefHeight="52.0" prefWidth="135.0" styleClass="textField-line-bot">
                                        <font>
                                           <Font size="25.0" />
                                        </font>
@@ -251,7 +251,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="93.0" prefWidth="512.0">
                            <children>
-                              <TextField fx:id="txt_searchCustomerPhone" prefHeight="60.0" prefWidth="517.0" promptText="Số điện thoại ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="txt_searchCustomerPhone" prefHeight="60.0" onKeyReleased="#txt_searchCustomerPhone"  prefWidth="517.0" promptText="Số điện thoại ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -259,7 +259,7 @@
                                     <Insets />
                                  </HBox.margin>
                               </TextField>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#btn_clearSearchEmpName" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#btn_clearSearchCusPhone" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icon/all/close-64px.png" />
                                  </image>
