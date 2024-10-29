@@ -272,6 +272,7 @@ public class GUI_ManageCustomerController implements Initializable {
                     customer.setAddress(address);
                     customer.setGender(gender);
                     if (dao_customer.update(customer)) {
+                        tabViewCustomer.getItems().clear();
                         setCellValues();
                     }
                     connection.close();
