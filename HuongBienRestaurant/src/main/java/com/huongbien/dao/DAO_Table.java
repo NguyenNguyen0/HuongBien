@@ -141,7 +141,7 @@ public class DAO_Table extends DAO_Base<Table> {
                 table.setName(resultSet.getString("name"));
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
-                table.setStatus(resultSet.getString("isAvailable"));
+                table.setStatus(resultSet.getString("status"));
                 table.setTableType(tableTypeDAO.get(resultSet.getString("tableTypeId")));
                 tables.add(table);
             }

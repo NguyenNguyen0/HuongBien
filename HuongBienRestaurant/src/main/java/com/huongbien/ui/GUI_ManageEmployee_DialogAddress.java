@@ -9,7 +9,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class GUI_PreOrder extends Application {
+public class GUI_ManageEmployee_DialogAddress extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -17,10 +17,10 @@ public class GUI_PreOrder extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_PreOrder.fxml"));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_ManageEmployee_DialogAddress.fxml"));
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
-        primaryStage.setTitle("PreOrder - Huong Bien Restaurant");
+        primaryStage.setTitle("Diage Address - Huong Bien Restaurant");
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

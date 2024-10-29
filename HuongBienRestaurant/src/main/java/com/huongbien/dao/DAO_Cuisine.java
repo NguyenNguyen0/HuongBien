@@ -17,6 +17,7 @@ public class DAO_Cuisine extends DAO_Base<Cuisine> {
         this.connection = connection;
         this.categoryDao = new DAO_Category(connection);
     }
+
     @Override
     public boolean add(Cuisine object) {
         String sql = "INSERT INTO cuisine (id, name, price, description, image, categoryID) VALUES (?, ?, ?, ?, ?, ?)";
@@ -108,11 +109,20 @@ public class DAO_Cuisine extends DAO_Base<Cuisine> {
 
     public List<Cuisine> getByName(String name) {
         List<Cuisine> cuisines = new ArrayList<>();
-        String sql = "SELECT id, name, price, description, image, categoryID FROM Cuisine WHERE name LIKE ?;";
+        StringBuilder sqlBuilder = new StringBuilder("SELECT id, name, price, description, image, categoryID FROM Cuisine");
+
+        if (name != null && !name.isEmpty()) {
+            sqlBuilder.append(" WHERE name LIKE ?");
+        }
+        String sql = sqlBuilder.toString();
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, "%" + name + "%");
+            if (name != null && !name.isEmpty()) {
+                stmt.setString(1, "%" + name + "%");
+            }
+
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 Cuisine cuisine = new Cuisine();
                 cuisine.setCuisineId(rs.getString("id"));
                 cuisine.setName(rs.getString("name"));
@@ -129,6 +139,7 @@ public class DAO_Cuisine extends DAO_Base<Cuisine> {
         return cuisines;
     }
 
+
     public boolean delete(String id) {
         String sql = "DELETE FROM cuisine WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -137,10 +148,8 @@ public class DAO_Cuisine extends DAO_Base<Cuisine> {
             int rowAffected = stmt.executeUpdate();
             return rowAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         }
     }
-
-
 }

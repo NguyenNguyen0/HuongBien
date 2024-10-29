@@ -165,21 +165,5 @@ public class GUI_OrderCuisineController implements Initializable {
     private List<OrderDetail> dataBill() throws FileNotFoundException {
         List<OrderDetail> ls = readFromJSON();
         return ls;
-
-//        List<OrderDetail> ls = new ArrayList<>();
-//        Cuisine cuisine;
-//        OrderDetail orderDetail;
-//        cuisine = new Cuisine();
-//        cuisine.setCuisineId("M001");
-//        cuisine.setName("Tôm xú");
-//        cuisine.setPrice(500000);
-//        orderDetail = new OrderDetail();
-//        orderDetail.setCuisine(cuisine);
-//        orderDetail.setNote("không ớt");
-//        orderDetail.setQuantity(2);
-//        orderDetail.setSalePrice(1000000);
-//        ls.add(orderDetail);
-//
-//        return ls;
     }
 }

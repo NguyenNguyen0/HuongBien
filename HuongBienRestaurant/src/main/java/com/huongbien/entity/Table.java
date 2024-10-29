@@ -107,7 +107,7 @@ public class Table {
                 ", name='" + name + '\'' +
                 ", floor=" + floor +
                 ", seats=" + seats +
-                ", status=" + status +
+                ", status='" + status + '\'' +
                 ", tableType=" + tableType +
                 '}';
     }

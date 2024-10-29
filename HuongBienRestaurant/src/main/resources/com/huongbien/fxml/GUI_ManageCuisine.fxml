@@ -22,15 +22,22 @@
          <children>
             <VBox alignment="CENTER" prefHeight="421.0" prefWidth="750.0">
                <children>
-                  <ImageView fitHeight="330.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgView_cuisine" fitHeight="300.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../img/cuisine/alaska.png" />
+                        <Image url="@../icon/all/gallery-512px.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" text="Choose">
+                  <Button fx:id="btn_imgChooser" disable="true" mnemonicParsing="false" onAction="#btn_imgChooser" styleClass="transperant">
                      <VBox.margin>
                         <Insets top="20.0" />
                      </VBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/all/add-image-64px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Button>
                </children>
             </VBox>
@@ -43,7 +50,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txt_cuisineName" minHeight="50.0" styleClass="textField-line-bot">
+                        <TextField fx:id="txt_cuisineName" disable="true" minHeight="50.0" styleClass="textField-line-bot">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -63,7 +70,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txt_cuisinePrice" minHeight="50.0" styleClass="textField-line-bot">
+                              <TextField fx:id="txt_cuisinePrice" disable="true" minHeight="50.0" onKeyReleased="#txt_cuisinePrice_keyReleased" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
@@ -86,8 +93,8 @@
                               </Label>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <ComboBox fx:id="comboBox_cuisineCategory" prefHeight="54.0" prefWidth="232.0" styleClass="textField-line-bot" />
-                                    <Button mnemonicParsing="false" onAction="#btn_cuisineEditCategory" prefHeight="54.0" prefWidth="57.0" text="Edit">
+                                    <ComboBox fx:id="comboBox_cuisineCategory" disable="true" prefHeight="54.0" prefWidth="232.0" styleClass="textField-line-bot" />
+                                    <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="57.0" text="Edit">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -106,16 +113,16 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+            <VBox prefHeight="288.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="220.0" prefWidth="670.0">
+                  <VBox prefHeight="185.0" prefWidth="670.0">
                      <children>
                         <Label text="Mô tả">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="txtArea_cuisineDescription" prefHeight="147.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="txtArea_cuisineDescription" disable="true" prefHeight="152.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -135,14 +142,14 @@
                               <Font name="System Bold" size="25.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btn_clearTextField" mnemonicParsing="false" onAction="#btn_clearTextField" prefHeight="58.0" prefWidth="100.0" visible="false">
+                        <Button fx:id="btn_cuisineClear" mnemonicParsing="false" onAction="#btn_cuisineClear" prefHeight="58.0" prefWidth="100.0" visible="false">
                            <HBox.margin>
                               <Insets left="20.0" top="30.0" />
                            </HBox.margin>
                            <graphic>
                               <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../icon/mg_cuisine/clear-64px.png" />
+                                    <Image url="@../icon/all/clear-64px.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -161,7 +168,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
                      <children>
-                        <TextField fx:id="txt_cuisineSearch" prefHeight="60.0" prefWidth="344.0" promptText="Tìm kiếm món nhanh ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txt_cuisineSearch" onKeyReleased="#txt_cuisineSearch_onKeyReleased" onMouseClicked="#txt_cuisineSearch_clicked" prefHeight="60.0" prefWidth="344.0" promptText="Tìm kiếm món nhanh ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -171,7 +178,7 @@
                         </TextField>
                         <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#btn_clearSearch" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icon/mg_cuisine/close-64px.png" />
+                              <Image url="@../icon/all/close-64px.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="-40.0" />

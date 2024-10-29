@@ -33,17 +33,15 @@ public class Cuisine {
     public Cuisine() {}
 
     public void setCuisineId(String cuisineId) {
-//        if (cuisineId == null) {
-//            this.cuisineId = String.format("M%03d", Utils.randomNumber(1, 999));
-//            return;
-//        }
-//
-//        if (cuisineId.matches("^M\\d{3}$")) {
-//            this.cuisineId = cuisineId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid cuisine ID format");
-        this.cuisineId = cuisineId;
+        if (cuisineId == null) {
+            this.cuisineId = String.format("M%03d", Utils.randomNumber(1, 999));
+            return;
+        }
+        if (cuisineId.matches("^M\\d{3}$")) {
+            this.cuisineId = cuisineId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid cuisine ID format");
     }
 
     public void setName(String name) {
