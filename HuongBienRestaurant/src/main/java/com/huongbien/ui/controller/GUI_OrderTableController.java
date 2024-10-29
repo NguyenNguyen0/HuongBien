@@ -27,7 +27,7 @@ public class GUI_OrderTableController implements Initializable {
     private List<Table> tables;
 
     //DAO
-    private DAO_Table table_DAO;
+    private DAO_Table dao_table;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -62,9 +62,9 @@ public class GUI_OrderTableController implements Initializable {
     private List<Table> data() {
         try {
             Connection connection = Database.getConnection();
-            table_DAO = new DAO_Table(connection);
+            dao_table = new DAO_Table(connection);
 
-            List<Table> ls = table_DAO.get();
+            List<Table> ls = dao_table.get();
             return ls;
         } catch (SQLException e) {
             throw new RuntimeException(e);
