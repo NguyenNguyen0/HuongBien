@@ -129,11 +129,12 @@ public class GUI_ManageEmployeeController implements Initializable {
     @FXML
     private Button btn_empSub;
 
-//    @FXML
-//    private Button btn_imgChooser;
-//    @FXML
-//    private ImageView imgView_emp;
-//    public byte[] imageEmpByte = null;
+    @FXML
+    private Button btn_imgChooser;
+
+    @FXML
+    private ImageView imgView_emp;
+    public byte[] imageEmpByte = null;
 
     private void setCellValues() {
         try {
@@ -306,11 +307,12 @@ public class GUI_ManageEmployeeController implements Initializable {
         txt_searchEmpPhone.requestFocus();
     }
 
-    //    public void clearChooserImage() {
-//        imageEmpByte = null;
-//        Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png"));
-//        imgView_emp.setImage(image);
-//    }
+    public void clearChooserImage() {
+        imageEmpByte = null;
+        Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png"));
+        imgView_emp.setImage(image);
+    }
+
     public void clear() {
         txt_empName.setText("");
         txt_empCitizenID.setText("");
@@ -326,7 +328,7 @@ public class GUI_ManageEmployeeController implements Initializable {
         comboBox_empPostion.getSelectionModel().clearSelection();
         tabViewEmp.getSelectionModel().clearSelection();
         btn_empFired.setVisible(false);
-//        clearChooserImage();
+        clearChooserImage();
     }
 
     public void enableInput() {
@@ -342,7 +344,7 @@ public class GUI_ManageEmployeeController implements Initializable {
         txt_empAddress.setDisable(false);
         comboBox_empStatus.setDisable(false);
         comboBox_empPostion.setDisable(false);
-        //img
+        btn_imgChooser.setDisable(false);
     }
 
     public void disableInput() {
@@ -358,7 +360,7 @@ public class GUI_ManageEmployeeController implements Initializable {
         txt_empAddress.setDisable(true);
         comboBox_empStatus.setDisable(true);
         comboBox_empPostion.setDisable(true);
-        //img
+        btn_imgChooser.setDisable(true);
     }
 
     public void utilsButton_1() {
@@ -378,7 +380,7 @@ public class GUI_ManageEmployeeController implements Initializable {
     @FXML
     void btn_empSub(ActionEvent event) {
         if (btn_empSub.getText().equals("Sửa")) {
-//            clearChooserImage();
+            clearChooserImage();
             utilsButton_1();
         } else if (btn_empSub.getText().equals("Thêm")) {
             btn_empClear.setVisible(true);
@@ -609,5 +611,10 @@ public class GUI_ManageEmployeeController implements Initializable {
             txt_empSalary.setText(validInput.toString());
             txt_empSalary.positionCaret(validInput.length());
         }
+    }
+
+    @FXML
+    void btn_imgChooser(ActionEvent event) {
+
     }
 }

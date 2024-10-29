@@ -49,22 +49,21 @@ public class Customer {
     }
 
     public void setCustomerId(String customerId) {
-//        if (customerId == null) {
-//            LocalDate currentDate = LocalDate.now();
-//            this.customerId = String.format("KH%02d%02d%02d%03d",
-//                    currentDate.getYear() % 100,
-//                    currentDate.getMonthValue(),
-//                    currentDate.getDayOfMonth(),
-//                    Utils.randomNumber(1, 999)
-//            );
-//            return;
-//        }
-//        if (customerId.matches("^KH\\d{9}$")) {
-//            this.customerId = customerId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid customer ID");
-        this.customerId = customerId;
+        if (customerId == null) {
+            LocalDate currentDate = LocalDate.now();
+            this.customerId = String.format("KH%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
+        }
+        if (customerId.matches("^KH\\d{9}$")) {
+            this.customerId = customerId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid customer ID");
     }
 
     public void setName(String name) {

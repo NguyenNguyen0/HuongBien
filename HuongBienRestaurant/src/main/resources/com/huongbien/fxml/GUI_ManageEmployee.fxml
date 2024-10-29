@@ -23,12 +23,12 @@
          <children>
             <VBox alignment="CENTER" prefHeight="236.0" prefWidth="750.0">
                <children>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgView_emp" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/mg_employee/user-256px.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" styleClass="transperant">
+                  <Button fx:id="btn_imgChooser" disable="true" mnemonicParsing="false" onAction="#btn_imgChooser" styleClass="transperant">
                      <VBox.margin>
                         <Insets top="20.0" />
                      </VBox.margin>
