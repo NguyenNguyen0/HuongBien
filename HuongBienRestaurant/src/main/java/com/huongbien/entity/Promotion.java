@@ -14,10 +14,13 @@ public class Promotion {
     private String description;
     private double minimumOrderAmount;
     private int membershipLevel;
+    private String status;
 
     public Promotion() {}
 
-    public Promotion(String promotionId, String name, LocalDate startDate, LocalDate endDate, double discount, String description, double minimumOrderAmount, int membershipLevel) {
+    public Promotion(String promotionId, String name, LocalDate startDate,
+                     LocalDate endDate, double discount, String description,
+                     double minimumOrderAmount, int membershipLevel, String status) {
         setPromotionId(promotionId);
         setName(name);
         setStartDate(startDate);
@@ -92,6 +95,10 @@ public class Promotion {
         this.membershipLevel = membershipLevel;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getPromotionId() {
         return promotionId;
     }
@@ -124,6 +131,10 @@ public class Promotion {
         return membershipLevel;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     @Override
     public String toString() {
         return "Promotion{" +
@@ -133,7 +144,9 @@ public class Promotion {
                 ", endDate=" + endDate +
                 ", discount=" + discount +
                 ", description='" + description + '\'' +
-                ", minimumOrderAmount=" + Utils.toStringMembershipLevel(membershipLevel) +
+                ", minimumOrderAmount=" + minimumOrderAmount +
+                ", membershipLevel=" + membershipLevel +
+                ", status='" + status + '\'' +
                 '}';
     }
 

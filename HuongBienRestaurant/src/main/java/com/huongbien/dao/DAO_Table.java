@@ -17,13 +17,13 @@ public class DAO_Table extends DAO_Base<Table> {
 
     @Override
     public boolean add(Table object) {
-        String sql = "INSERT INTO [Table] (id, name, floor, seats, isAvailable, tableTypeId) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [Table] (id, name, floor, seats, status, tableTypeId) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, object.getId());
             statement.setString(2, object.getName());
             statement.setInt(3, object.getFloor());
             statement.setInt(4, object.getSeats());
-            statement.setBoolean(5, object.getIsAvailable());
+            statement.setString(5, object.getStatus());
             statement.setString(6, object.getTableType() != null ? object.getTableType().getTableId() : null);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -34,12 +34,12 @@ public class DAO_Table extends DAO_Base<Table> {
 
     @Override
     public boolean update(Table object) {
-        String sql = "UPDATE [Table] SET name = ?, floor = ?, seats = ?, isAvailable = ?, tableTypeId = ? WHERE id = ?";
+        String sql = "UPDATE [Table] SET name = ?, floor = ?, seats = ?, status = ?, tableTypeId = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, object.getName());
             statement.setInt(2, object.getFloor());
             statement.setInt(3, object.getSeats());
-            statement.setBoolean(4, object.getIsAvailable());
+            statement.setString(4, object.getStatus());
             statement.setString(5, object.getTableType() != null ? object.getTableType().getTableId() : null);
             statement.setString(6, object.getId());
             return statement.executeUpdate() > 0;
@@ -60,7 +60,7 @@ public class DAO_Table extends DAO_Base<Table> {
                 table.setName(resultSet.getString("name"));
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
-                table.setIsAvailable(resultSet.getBoolean("isAvailable"));
+                table.setStatus(resultSet.getString("status"));
                 table.setTableType(tableTypeDAO.get(resultSet.getString("tableTypeId")));
                 tables.add(table);
             }
@@ -82,7 +82,7 @@ public class DAO_Table extends DAO_Base<Table> {
                 table.setName(resultSet.getString("name"));
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
-                table.setIsAvailable(resultSet.getBoolean("isAvailable"));
+                table.setStatus(resultSet.getString("status"));
                 table.setTableType(tableTypeDAO.get(resultSet.getString("tableTypeId")));
                 return table;
             }
@@ -104,7 +104,7 @@ public class DAO_Table extends DAO_Base<Table> {
                 table.setName(resultSet.getString("name"));
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
-                table.setIsAvailable(resultSet.getBoolean("isAvailable"));
+                table.setStatus(resultSet.getString("status"));
                 table.setTableType(tableTypeDAO.get(resultSet.getString("tableTypeId")));
                 tables.add(table);
             }
@@ -141,7 +141,7 @@ public class DAO_Table extends DAO_Base<Table> {
                 table.setName(resultSet.getString("name"));
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
-                table.setIsAvailable(resultSet.getBoolean("isAvailable"));
+                table.setStatus(resultSet.getString("isAvailable"));
                 table.setTableType(tableTypeDAO.get(resultSet.getString("tableTypeId")));
                 tables.add(table);
             }
@@ -163,7 +163,7 @@ public class DAO_Table extends DAO_Base<Table> {
                 table.setName(resultSet.getString("name"));
                 table.setFloor(resultSet.getInt("floor"));
                 table.setSeats(resultSet.getInt("seats"));
-                table.setIsAvailable(resultSet.getBoolean("isAvailable"));
+                table.setStatus(resultSet.getString("status"));
                 table.setTableType(tableTypeDAO.get(resultSet.getString("tableTypeId")));
                 tables.add(table);
             }

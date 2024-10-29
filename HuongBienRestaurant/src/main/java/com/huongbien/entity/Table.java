@@ -9,26 +9,26 @@ public class Table {
     private String name;
     private int floor;
     private int seats;
-    private boolean isAvailable;
+    private String status;
     private TableType tableType;
 
     public Table() {}
 
-    public Table(String id, String name, int floor, int seats, boolean isAvailable, TableType tableType) {
+    public Table(String id, String name, int floor, int seats, String status, TableType tableType) {
         setId(id);
         setName(name);
         setFloor(floor);
         setSeats(seats);
-        setIsAvailable(isAvailable);
+        setStatus(status);
         setTableType(tableType);
     }
 
-    public Table(String name, int floor, int seats, boolean isAvailable, TableType tableType) {
+    public Table(String name, int floor, int seats, String status, TableType tableType) {
         setId(null);
         setName(name);
         setFloor(floor);
         setSeats(seats);
-        setIsAvailable(isAvailable);
+        setStatus(status);
         setTableType(tableType);
     }
 
@@ -68,8 +68,8 @@ public class Table {
         this.seats = seats;
     }
 
-    public void setIsAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setTableType(TableType tableType) {
@@ -92,8 +92,8 @@ public class Table {
         return seats;
     }
 
-    public boolean getIsAvailable() {
-        return isAvailable;
+    public String getStatus() {
+        return status;
     }
 
     public TableType getTableType() {
@@ -107,7 +107,7 @@ public class Table {
                 ", name='" + name + '\'' +
                 ", floor=" + floor +
                 ", seats=" + seats +
-                ", isAvailable=" + isAvailable +
+                ", status=" + status +
                 ", tableType=" + tableType +
                 '}';
     }
