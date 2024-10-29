@@ -101,18 +101,9 @@ public class GUI_MainController implements Initializable {
         lookup.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openPreOrder() throws IOException {
-        label_title.setText("Đặt trước");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_PreOrder.fxml"));
-        BorderPane preOrder = loader.load();
-        compoent_main.setCenter(preOrder);
-        preOrder.prefWidthProperty().bind(compoent_main.widthProperty());
-        preOrder.prefHeightProperty().bind(compoent_main.heightProperty());
-    }
-
     private void openOrder() throws IOException {
-        label_title.setText("Đặt món");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderCuisine.fxml"));
+        label_title.setText("Đặt bàn");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderTable.fxml"));
         BorderPane order = loader.load();
         compoent_main.setCenter(order);
         order.prefWidthProperty().bind(compoent_main.widthProperty());
