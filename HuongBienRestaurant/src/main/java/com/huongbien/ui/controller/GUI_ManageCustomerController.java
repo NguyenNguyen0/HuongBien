@@ -108,7 +108,6 @@ public class GUI_ManageCustomerController implements Initializable {
 
     private Utils utils;
 
-
     private void setCellValues() {
         try {
             Connection connection = Database.getConnection();
@@ -221,7 +220,7 @@ public class GUI_ManageCustomerController implements Initializable {
 
     @FXML
     void btn_customerMain(ActionEvent event) {
-        if(btn_customerMain.getText() == "Thêm") {
+        if(btn_customerMain.getText().equals("Thêm")) {
             enableInput();
             Customer customer = null;
             boolean gender = true;
@@ -262,10 +261,16 @@ public class GUI_ManageCustomerController implements Initializable {
                 if (radio_customerFemale.isSelected()) {
                     gender = false;
                 }
-                customer = new Customer(name, address, gender, phone, email, birthday);
+                String id = tabViewCustomer.getSelectionModel().getSelectedItem().getCustomerId();
                 try {
                     Connection connection = Database.getConnection();
                     DAO_Customer dao_customer = new DAO_Customer(connection);
+                    customer = dao_customer.get(id);
+                    customer.setName(name);
+                    customer.setEmail(email);
+                    customer.setPhoneNumber(phone);
+                    customer.setAddress(address);
+                    customer.setGender(gender);
                     if (dao_customer.update(customer)) {
                         setCellValues();
                     }
@@ -282,16 +287,19 @@ public class GUI_ManageCustomerController implements Initializable {
     void btn_customerSub(ActionEvent event) {
         if (btn_customerMain.getText().equals("Thêm")) {
             utilsButton_1();
+            disableInput();
         }
         else {
             utilsButton_2();
             clear();
+            enableInput();
         }
     }
 
     @FXML
     void getCustomerInfo(MouseEvent event) {
         utilsButton_1();
+        enableInput();
         Customer selectedItem = tabViewCustomer.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
             txt_customerName.setText(selectedItem.getName());
@@ -321,9 +329,6 @@ public class GUI_ManageCustomerController implements Initializable {
             DAO_Customer dao_customer = new DAO_Customer(connection);
             List<Customer> customerList = dao_customer.searchCustomerPhone(phone);
             ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
-
-            txt_customerAddress.setEditable(true);
-            txt_customerName.setEditable(true);
 
             tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
             tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
