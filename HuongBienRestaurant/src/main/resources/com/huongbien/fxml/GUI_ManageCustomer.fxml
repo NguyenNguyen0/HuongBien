@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -16,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_ManageCustomerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_ManageCustomerController">
    <right>
       <VBox alignment="CENTER" prefHeight="659.0" prefWidth="750.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -213,8 +219,13 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <HBox alignment="CENTER" prefHeight="96.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
+                  <HBox alignment="CENTER" prefHeight="96.0" prefWidth="750.0" spacing="10.0" VBox.vgrow="ALWAYS">
                      <children>
+                        <Button fx:id="btn_customerQR" mnemonicParsing="false" onAction="#btn_customerQR" prefHeight="62.0" prefWidth="557.0" style="-fx-background-color: #1D557E;" text="Tạo QRCode" textAlignment="JUSTIFY" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Button>
                         <Button fx:id="btn_customerMain" mnemonicParsing="false" onAction="#btn_customerMain" prefHeight="60.0" prefWidth="563.0" style="-fx-background-color: #761D7E;" text="Sửa" textFill="WHITE">
                            <HBox.margin>
                               <Insets />
@@ -251,7 +262,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="93.0" prefWidth="512.0">
                            <children>
-                              <TextField fx:id="txt_searchCustomerPhone" prefHeight="60.0" onKeyReleased="#txt_searchCustomerPhone"  prefWidth="517.0" promptText="Số điện thoại ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="txt_searchCustomerPhone" onKeyReleased="#txt_searchCustomerPhone" prefHeight="60.0" prefWidth="517.0" promptText="Số điện thoại ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
