@@ -1,11 +1,13 @@
 package com.huongbien.ui.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.huongbien.dao.DAO_Category;
 import com.huongbien.dao.DAO_Table;
 import com.huongbien.database.Database;
-import com.huongbien.entity.Category;
-import com.huongbien.entity.Table;
-import com.huongbien.entity.TableType;
+import com.huongbien.entity.*;
+import com.huongbien.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -27,6 +30,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class GUI_OrderTableController implements Initializable {
+    private final static String path = "src/main/resources/com/huongbien/temp/table.json";
+
     @FXML
     private ScrollPane compoent_scrollPane;
 
@@ -53,9 +58,11 @@ public class GUI_OrderTableController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setGridPane();
         setValueCombobox();
-        setTableTab();
-        setTableTab();
-        setTableTab();
+        try {
+            readFromJSON();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void setGridPane() {
@@ -168,6 +175,7 @@ public class GUI_OrderTableController implements Initializable {
                 }
             });
             comboBox_tabStatus.getSelectionModel().selectFirst();
+
             // Xử lý ComboBox cho TableType
             Set<TableType> uniqueTableTypes = new HashSet<>();
             List<Table> uniqueTypeTables = new ArrayList<>();
@@ -195,6 +203,7 @@ public class GUI_OrderTableController implements Initializable {
                             .findFirst()
                             .orElse(null);
                 }
+
             });
             comboBox_tabType.getSelectionModel().selectFirst();
         } catch (SQLException e) {
@@ -204,59 +213,74 @@ public class GUI_OrderTableController implements Initializable {
         }
     }
 
-    public void setTableTab() {
-        String tableName = "01";
-        String tableType = "STANDARD";
-        int seatCount = 5;
-        String floorName = "Tầng trệt";
+    public void setTableTab(String name, int floor, int seats, String typeName) {
+        String floorString;
+        if (floor == 0) {
+            floorString = "Tầng trệt";
+        } else {
+            floorString = "Tầng " + floor;
+        }
 
         Tab newTab = new Tab();
-        newTab.setText(floorName);
+        newTab.setText(floorString);
 
         HBox tabContentHBox = new HBox(10);
         tabContentHBox.setPadding(new Insets(20, 0, 0, 20));
         tabContentHBox.setAlignment(Pos.CENTER_LEFT);
+        tabContentHBox.setStyle("-fx-background-color: white");
 
-        // Table name
         HBox tableNameHBox = new HBox(10);
-        Label tableNameLabel = new Label("Tên bàn:");
-        tableNameLabel.setFont(new Font("System Bold", 20));
-        Label tableNameValue = new Label(tableName);
+        Label tableNameValue = new Label(name);
         tableNameValue.setFont(new Font("System Bold", 20));
-        tableNameHBox.getChildren().addAll(tableNameLabel, tableNameValue);
+        tableNameHBox.getChildren().addAll(tableNameValue);
 
-        // Separator
         HBox tableseparator1 = new HBox(10);
         Label separator1 = new Label("|");
         separator1.setFont(new Font("System Bold", 20));
         tableseparator1.getChildren().addAll(separator1);
 
-        // Seat count
         HBox seatCountHBox = new HBox(10);
         Label seatCountLabel = new Label("Số chỗ:");
         seatCountLabel.setFont(new Font("System Bold", 20));
-        Label seatCountValue = new Label(String.valueOf(seatCount));
+        Label seatCountValue = new Label(String.valueOf(seats));
         seatCountValue.setFont(new Font("System Bold", 20));
         seatCountHBox.getChildren().addAll(seatCountLabel, seatCountValue);
 
-        // Separator
         HBox tableseparator2 = new HBox(10);
         Label separator2 = new Label("|");
         separator2.setFont(new Font("System Bold", 20));
         tableseparator2.getChildren().addAll(separator2);
 
-        // Table type
         HBox tableTypeHBox = new HBox(10);
         Label tableTypeLabel = new Label("Loại bàn:");
         tableTypeLabel.setFont(new Font("System Bold", 20));
-        Label tableTypeValue = new Label(tableType);
+        Label tableTypeValue = new Label(typeName);
         tableTypeValue.setFont(new Font("System Bold", 20));
         tableTypeHBox.getChildren().addAll(tableTypeLabel, tableTypeValue);
 
-        // Add all elements to the main HBox
         tabContentHBox.getChildren().addAll(tableNameHBox, tableseparator1, seatCountHBox, tableseparator2, tableTypeHBox);
         newTab.setContent(tabContentHBox);
         tabPane_infoTable.getTabs().add(newTab);
         tabPane_infoTable.getSelectionModel().select(newTab);
     }
+
+    public void readFromJSON() throws FileNotFoundException {
+        JsonArray jsonArray = Utils.readJsonFromFile(path);
+
+        for (JsonElement element : jsonArray) {
+            JsonObject jsonObject = element.getAsJsonObject();
+
+            String id = jsonObject.get("Table ID").getAsString();
+            String name = jsonObject.get("Table Name").getAsString();
+            int floor = jsonObject.get("Table Floor").getAsInt();
+            int seats = jsonObject.get("Table Seats").getAsInt();
+            String status = jsonObject.get("Table Status").getAsString();
+
+            JsonObject tableTypeObject = jsonObject.getAsJsonObject("Table Type");
+            String typeName = tableTypeObject.get("Table Type Name").getAsString();
+
+            setTableTab(name, floor, seats, typeName);
+        }
+    }
+
 }
