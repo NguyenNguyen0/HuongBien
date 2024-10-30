@@ -111,7 +111,6 @@ public class GUI_OrderBillItemController implements Initializable {
                 double newMoney = price * newQuantity;
                 jsonObject.addProperty("Cuisine Money", newMoney);
 
-                System.out.println("Increased quantity for Cuisine ID: " + cuisineID + ". New Quantity: " + newQuantity);
                 break;
             }
         }

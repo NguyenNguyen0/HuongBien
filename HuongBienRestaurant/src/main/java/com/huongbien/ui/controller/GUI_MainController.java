@@ -110,15 +110,6 @@ public class GUI_MainController implements Initializable {
         order.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openListOrder() throws IOException {
-        label_title.setText("Đơn đặt");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ListOrder.fxml"));
-        BorderPane listOrder = loader.load();
-        compoent_main.setCenter(listOrder);
-        listOrder.prefWidthProperty().bind(compoent_main.widthProperty());
-        listOrder.prefHeightProperty().bind(compoent_main.heightProperty());
-    }
-
     private void openStatistics() throws IOException {
         label_title.setText("Thống kê");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Statistics.fxml"));
@@ -126,6 +117,15 @@ public class GUI_MainController implements Initializable {
         compoent_main.setCenter(statistics);
         statistics.prefWidthProperty().bind(compoent_main.widthProperty());
         statistics.prefHeightProperty().bind(compoent_main.heightProperty());
+    }
+
+    private void openListOrder() throws IOException {
+        label_title.setText("Quản lý đơn đặt");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageListOrder.fxml"));
+        BorderPane listOrder = loader.load();
+        compoent_main.setCenter(listOrder);
+        listOrder.prefWidthProperty().bind(compoent_main.widthProperty());
+        listOrder.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
     private void openManageBill() throws IOException {

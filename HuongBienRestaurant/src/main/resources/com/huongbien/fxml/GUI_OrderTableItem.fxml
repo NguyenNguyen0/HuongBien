@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="370.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderTableItemController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#getInfoTable" prefHeight="300.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderTableItemController">
    <children>
       <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="imgView_table" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imgView_check" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefWidth="350.0">
@@ -45,6 +45,11 @@
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER">
+         <children>
+            <Label fx:id="lbl_tableID" text="ID" />
          </children>
       </HBox>
    </children>
