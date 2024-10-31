@@ -1,6 +1,7 @@
 package com.huongbien.dao;
 
 import com.huongbien.database.Database;
+import com.huongbien.entity.Employee;
 import com.huongbien.entity.Table;
 
 import java.sql.*;
@@ -211,11 +212,71 @@ public class DAO_Table extends DAO_Base<Table> {
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                statuses.add(resultSet.getString("status"));
+                String status = resultSet.getString("status");
+                if (!"Bàn đóng".equals(status)) {
+                    statuses.add(status);
+                }
             }
         }
-
         return statuses;
+    }
+
+
+    public List<String> getDistinctFloor() throws SQLException {
+        List<String> floors = new ArrayList<>();
+        String sql = "SELECT DISTINCT floor FROM [Table]";
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                floors.add(resultSet.getString("floor"));
+            }
+        }
+        return floors;
+    }
+
+    public List<Table> getByCriteria(String floor, String status, String typeID) {
+        List<Table> tables = new ArrayList<>();
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM [Table] WHERE status != N'Bàn đóng'");
+        List<String> parameters = new ArrayList<>();
+
+        if (floor != null && !floor.isEmpty()) {
+            sqlBuilder.append(" AND floor = ?");
+            parameters.add(floor);
+        }
+
+        if (status != null && !status.equals("Tất cả trạng thái") && !status.isEmpty()) {
+            sqlBuilder.append(" AND status = ?");
+            parameters.add(status);
+        }
+
+        if (typeID != null && !typeID.equals("Tất cả loại bàn") && !typeID.isEmpty()) {
+            sqlBuilder.append(" AND tableTypeId = ?");
+            parameters.add(typeID);
+        }
+
+        String sql = sqlBuilder.toString();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            for (int i = 0; i < parameters.size(); i++) {
+                stmt.setString(i + 1, parameters.get(i));
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Table table = new Table();
+                table.setId(rs.getString("id"));
+                table.setName(rs.getString("name"));
+                table.setSeats(rs.getInt("seats"));
+                table.setFloor(rs.getInt("floor"));
+                table.setStatus(rs.getString("status"));
+                table.setTableType(tableTypeDAO.get(rs.getString("tableTypeId")));
+                tables.add(table);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error querying tables by criteria", e);
+        }
+        return tables;
     }
 
 }

@@ -5,11 +5,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.dao.DAO_Category;
 import com.huongbien.dao.DAO_Table;
+import com.huongbien.dao.DAO_TableType;
 import com.huongbien.database.Database;
 import com.huongbien.entity.*;
 import com.huongbien.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -40,23 +42,26 @@ public class GUI_OrderTableController implements Initializable {
     private List<Table> tables;
 
     @FXML
-    public ComboBox<Table> comboBox_tabFloor;
+    public ComboBox<String> comboBox_tabFloor;
 
     @FXML
-    public ComboBox<Table> comboBox_tabStatus;
+    public ComboBox<String> comboBox_tabStatus;
 
     @FXML
-    public ComboBox<Table> comboBox_tabType;
-
-    //DAO
-    private DAO_Table dao_table;
+    public ComboBox<String> comboBox_tabType;
 
     @FXML
     public TabPane tabPane_infoTable;
 
+    public GUI_MainController gui_mainController;
+
+    public void setGUI_MainController(GUI_MainController gui_mainController) {
+        this.gui_mainController = gui_mainController;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setGridPane();
+        setGridPane("0", "Tất cả trạng thái", "Tất cả loại bàn");
         setValueCombobox();
         try {
             readFromJSON();
@@ -65,8 +70,8 @@ public class GUI_OrderTableController implements Initializable {
         }
     }
 
-    private void setGridPane() {
-        tables = new ArrayList<>(data());
+    private void setGridPane(String floor, String status, String type) {
+        tables = new ArrayList<>(data(floor, status, type));
         int columns = 0;
         int rows = 1;
         try {
@@ -93,12 +98,10 @@ public class GUI_OrderTableController implements Initializable {
         compoent_gridTable.prefWidthProperty().bind(compoent_scrollPane.widthProperty());
     }
 
-    private List<Table> data() {
+    private List<Table> data(String floor, String status, String type) {
         try {
-            Connection connection = Database.getConnection();
-            dao_table = new DAO_Table(connection);
-
-            List<Table> ls = dao_table.get();
+            DAO_Table dao_table = new DAO_Table(Database.getConnection());
+            List<Table> ls = dao_table.getByCriteria(floor, status, type);
             return ls;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -110,102 +113,55 @@ public class GUI_OrderTableController implements Initializable {
     private void setValueCombobox() {
         try {
             DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            List<Table> tableList = dao_table.get();
-
-            // Xử lý ComboBox cho Floor
-            Set<Integer> uniqueFloors = new HashSet<>();
-            List<Table> uniqueFloorTables = new ArrayList<>();
-            for (Table table : tableList) {
-                if (uniqueFloors.add(table.getFloor())) {
-                    uniqueFloorTables.add(table);
-                }
-            }
-            uniqueFloorTables.sort(Comparator.comparingInt(Table::getFloor));
-            ObservableList<Table> floorTables = FXCollections.observableArrayList(uniqueFloorTables);
-            comboBox_tabFloor.setItems(floorTables);
-            comboBox_tabFloor.setConverter(new StringConverter<Table>() {
+            DAO_TableType dao_tableType = new DAO_TableType(Database.getConnection());
+            //floor
+            List<String> floors = dao_table.getDistinctFloor();
+            ObservableList<String> floorOptions = FXCollections.observableArrayList(floors);
+            comboBox_tabFloor.setItems(floorOptions);
+            comboBox_tabFloor.setConverter(new StringConverter<String>() {
                 @Override
-                public String toString(Table table) {
-                    if (table == null) {
-                        return "";
-                    }
-                    int floor = table.getFloor();
-                    switch (floor) {
-                        case 0:
-                            return "Tầng trệt";
-                        default:
-                            return "Tầng " + floor;
-                    }
+                public String toString(String floor) {
+                    return floor.equals("0") ? "Tầng trệt" : "Tầng " + floor;
                 }
                 @Override
-                public Table fromString(String string) {
-                    int floorValue = Integer.parseInt(string.replace("Tầng ", "").trim());
-                    return comboBox_tabFloor.getItems().stream()
-                            .filter(item -> item.getFloor() == floorValue)
-                            .findFirst()
-                            .orElse(null);
+                public String fromString(String string) {
+                    return string.replace("Tầng ", "").trim();
                 }
             });
             comboBox_tabFloor.getSelectionModel().selectFirst();
-            // Xử lý ComboBox cho Status
-            Set<String> uniqueStatuses = new HashSet<>();
-            List<Table> uniqueStatusTables = new ArrayList<>();
-            Table allStatusOption = new Table();
-            allStatusOption.setStatus("Tất cả trạng thái");
-            uniqueStatusTables.add(allStatusOption);
-            for (Table table : tableList) {
-                if (uniqueStatuses.add(table.getStatus())) {
-                    uniqueStatusTables.add(table);
-                }
-            }
-            ObservableList<Table> statusTables = FXCollections.observableArrayList(uniqueStatusTables);
-            comboBox_tabStatus.setItems(statusTables);
-            comboBox_tabStatus.setConverter(new StringConverter<Table>() {
+            //Status
+            List<String> statuses = dao_table.getDistinctStatuses();
+            ObservableList<String> statusOptions = FXCollections.observableArrayList("Tất cả trạng thái");
+            statusOptions.addAll(statuses);
+            comboBox_tabStatus.setItems(statusOptions);
+            comboBox_tabStatus.setConverter(new StringConverter<String>() {
                 @Override
-                public String toString(Table table) {
-                    return table != null ? table.getStatus() : "";
+                public String toString(String status) {
+                    return status != null ? status : "";
                 }
-
                 @Override
-                public Table fromString(String string) {
-                    return comboBox_tabStatus.getItems().stream()
-                            .filter(item -> item.getStatus().equals(string))
-                            .findFirst()
-                            .orElse(null);
+                public String fromString(String string) {
+                    return string;
                 }
             });
             comboBox_tabStatus.getSelectionModel().selectFirst();
-
-            // Xử lý ComboBox cho TableType
-            Set<TableType> uniqueTableTypes = new HashSet<>();
-            List<Table> uniqueTypeTables = new ArrayList<>();
-            Table allTypeOption = new Table();
-            TableType allType = new TableType();
-            allType.setName("Tất cả loại bàn");
-            allTypeOption.setTableType(allType);
-            uniqueTypeTables.add(allTypeOption);
-            for (Table table : tableList) {
-                if (uniqueTableTypes.add(table.getTableType())) {
-                    uniqueTypeTables.add(table);
-                }
-            }
-            ObservableList<Table> typeTables = FXCollections.observableArrayList(uniqueTypeTables);
-            comboBox_tabType.setItems(typeTables);
-            comboBox_tabType.setConverter(new StringConverter<Table>() {
+            //Type
+            List<String> tableTypes = dao_tableType.getDistinctTableType();
+            ObservableList<String> typeOptions = FXCollections.observableArrayList("Tất cả loại bàn");
+            typeOptions.addAll(tableTypes);
+            comboBox_tabType.setItems(typeOptions);
+            comboBox_tabType.setConverter(new StringConverter<String>() {
                 @Override
-                public String toString(Table table) {
-                    return table != null ? table.getTableType().getName() : "";
+                public String toString(String tableType) {
+                    return tableType != null ? tableType : "";
                 }
                 @Override
-                public Table fromString(String string) {
-                    return comboBox_tabType.getItems().stream()
-                            .filter(item -> item.getTableType().getName().equals(string))
-                            .findFirst()
-                            .orElse(null);
+                public String fromString(String string) {
+                    return string;
                 }
-
             });
             comboBox_tabType.getSelectionModel().selectFirst();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -281,6 +237,50 @@ public class GUI_OrderTableController implements Initializable {
 
             setTableTab(name, floor, seats, typeName);
         }
+    }
+
+    public void handleComboBox() throws SQLException {
+        String floor = comboBox_tabFloor.getValue();
+        String status = comboBox_tabStatus.getValue();
+        String tableTypeName = comboBox_tabType.getValue();
+        DAO_TableType dao_tableType = new DAO_TableType(Database.getConnection());
+        TableType tableType = dao_tableType.getByName(tableTypeName);
+        String tableTypeId = (tableType != null) ? tableType.getTableId() : "";
+        compoent_gridTable.getChildren().clear();
+        setGridPane(floor, status, tableTypeId);
+    }
+
+    //comboBox
+    @FXML
+    void comboBox_tabFloor(ActionEvent event) throws SQLException {
+        handleComboBox();
+    }
+
+    @FXML
+    void comboBox_tabStatus(ActionEvent event) throws SQLException {
+        handleComboBox();
+    }
+
+    @FXML
+    void comboBox_tabType(ActionEvent event) throws SQLException {
+        handleComboBox();
+    }
+
+    @FXML
+    void btn_chooseCuisine(ActionEvent event) throws IOException {
+        JsonArray jsonArray;
+        try {
+            jsonArray = Utils.readJsonFromFile(path);
+        } catch (FileNotFoundException e) {
+            System.out.println("File không tồn tại.");
+            return;
+        }
+        if (jsonArray.isEmpty()) {
+            System.out.println("Vui lòng chọn bàn");
+            return;
+        }
+
+        gui_mainController.openCuisine();
     }
 
 }

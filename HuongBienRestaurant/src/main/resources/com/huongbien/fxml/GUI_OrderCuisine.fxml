@@ -2,8 +2,6 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,17 +11,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1386.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderCuisineController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1386.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderCuisineController">
    <right>
-      <StackPane prefWidth="700.0" BorderPane.alignment="CENTER">
+      <StackPane prefWidth="700.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" style="-fx-background-color: brown;" visible="false">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icon/order/table-vip-open-64px.png" />
-                     </image>
-                  </ImageView>
                   <Label text="Vui lòng chọn món" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
@@ -70,4 +63,7 @@
          </children>
       </VBox>
    </center>
+   <top>
+      <HBox prefHeight="100.0" prefWidth="1386.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER" />
+   </top>
 </BorderPane>

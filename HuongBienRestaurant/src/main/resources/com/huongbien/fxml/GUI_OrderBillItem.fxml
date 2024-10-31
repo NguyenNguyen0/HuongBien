@@ -19,7 +19,7 @@
                </font></Label>
          </children>
          <HBox.margin>
-            <Insets />
+            <Insets right="15.0" />
          </HBox.margin>
       </VBox>
       <VBox alignment="CENTER_LEFT" prefHeight="70.0" HBox.hgrow="ALWAYS">
@@ -95,6 +95,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <VBox.margin>
+                  <Insets right="10.0" />
+               </VBox.margin>
             </Button>
          </children>
          <HBox.margin>

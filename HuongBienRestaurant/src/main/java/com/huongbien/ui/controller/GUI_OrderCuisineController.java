@@ -50,9 +50,6 @@ public class GUI_OrderCuisineController implements Initializable {
     @FXML
     public GridPane compoent_gridBill;
 
-    //DAO
-    private DAO_Cuisine cuisine_DAO;
-
     private void loadingCuisine() {
         cuisines = new ArrayList<>(dataCuisine());
         int columns = 0;
@@ -142,9 +139,7 @@ public class GUI_OrderCuisineController implements Initializable {
 
     private List<Cuisine> dataCuisine() {
         try {
-            Connection connection = Database.getConnection();
-            cuisine_DAO = new DAO_Cuisine(connection);
-
+            DAO_Cuisine cuisine_DAO = new DAO_Cuisine(Database.getConnection());
             List<Cuisine> ls = cuisine_DAO.get();
             return ls;
         } catch (SQLException e) {

@@ -24,17 +24,17 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="89.0" prefWidth="658.0">
                      <children>
-                        <ComboBox fx:id="comboBox_tabFloor" prefHeight="70.0" prefWidth="280.0">
+                        <ComboBox fx:id="comboBox_tabFloor" onAction="#comboBox_tabFloor" prefHeight="70.0" prefWidth="280.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <ComboBox fx:id="comboBox_tabType" prefHeight="70.0" prefWidth="280.0">
+                        <ComboBox fx:id="comboBox_tabStatus" onAction="#comboBox_tabStatus" prefHeight="70.0" prefWidth="280.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <ComboBox fx:id="comboBox_tabStatus" prefHeight="70.0" prefWidth="280.0">
+                        <ComboBox fx:id="comboBox_tabType" onAction="#comboBox_tabType" prefHeight="70.0" prefWidth="280.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -170,9 +170,9 @@
                   <TabPane fx:id="tabPane_infoTable" prefHeight="200.0" prefWidth="1692.0" tabClosingPolicy="UNAVAILABLE" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="120.0" prefWidth="219.0">
+            <VBox alignment="CENTER" prefHeight="120.0" prefWidth="250.0">
                <children>
-                  <Button mnemonicParsing="false" style="-fx-background-color: white;" text="Chọn món">
+                  <Button mnemonicParsing="false" onAction="#btn_chooseCuisine" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt món">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>

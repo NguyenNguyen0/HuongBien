@@ -83,7 +83,7 @@ public class GUI_MainController implements Initializable {
     }
 
     //eventNav
-    private void openHome() throws IOException {
+    public void openHome() throws IOException {
         label_title.setText("Trang chủ");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Home.fxml"));
         BorderPane home = loader.load();
@@ -92,7 +92,7 @@ public class GUI_MainController implements Initializable {
         home.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openLookup() throws IOException {
+    public void openLookup() throws IOException {
         label_title.setText("Tra cứu");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Lookup.fxml"));
         BorderPane lookup = loader.load();
@@ -101,16 +101,28 @@ public class GUI_MainController implements Initializable {
         lookup.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openOrder() throws IOException {
+    public void openOrder() throws IOException {
         label_title.setText("Đặt bàn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderTable.fxml"));
         BorderPane order = loader.load();
         compoent_main.setCenter(order);
         order.prefWidthProperty().bind(compoent_main.widthProperty());
         order.prefHeightProperty().bind(compoent_main.heightProperty());
+        //
+        GUI_OrderTableController gui_orderTableController = loader.getController();
+        gui_orderTableController.setGUI_MainController(this);
     }
 
-    private void openStatistics() throws IOException {
+    public void openCuisine() throws IOException {
+        label_title.setText("Đặt bàn  >>  Đặt món");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderCuisine.fxml"));
+        BorderPane cuisine = loader.load();
+        compoent_main.setCenter(cuisine);
+        cuisine.prefWidthProperty().bind(compoent_main.widthProperty());
+        cuisine.prefHeightProperty().bind(compoent_main.heightProperty());
+    }
+
+    public void openStatistics() throws IOException {
         label_title.setText("Thống kê");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Statistics.fxml"));
         BorderPane statistics = loader.load();
@@ -119,7 +131,7 @@ public class GUI_MainController implements Initializable {
         statistics.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openListOrder() throws IOException {
+    public void openListOrder() throws IOException {
         label_title.setText("Quản lý đơn đặt");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageListOrder.fxml"));
         BorderPane listOrder = loader.load();
@@ -128,7 +140,7 @@ public class GUI_MainController implements Initializable {
         listOrder.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageBill() throws IOException {
+    public void openManageBill() throws IOException {
         label_title.setText("Quản lý hoá đơn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageInvoice.fxml"));
         BorderPane manageBill = loader.load();
@@ -137,7 +149,7 @@ public class GUI_MainController implements Initializable {
         manageBill.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageCuisine() throws IOException {
+    public void openManageCuisine() throws IOException {
         label_title.setText("Quản lý món ăn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageCuisine.fxml"));
         BorderPane manageCuisine = loader.load();
@@ -146,7 +158,7 @@ public class GUI_MainController implements Initializable {
         manageCuisine.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageTable() throws IOException {
+    public void openManageTable() throws IOException {
         label_title.setText("Quản lý bàn ăn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageTable.fxml"));
         BorderPane manageTable = loader.load();
@@ -155,7 +167,7 @@ public class GUI_MainController implements Initializable {
         manageTable.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageCustomer() throws IOException {
+    public void openManageCustomer() throws IOException {
         label_title.setText("Quản lý khách hàng");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageCustomer.fxml"));
         BorderPane manageCustomer = loader.load();
@@ -164,7 +176,7 @@ public class GUI_MainController implements Initializable {
         manageCustomer.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManageEmployee() throws IOException {
+    public void openManageEmployee() throws IOException {
         label_title.setText("Quản lý nhân viên");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManageEmployee.fxml"));
         BorderPane manageEmployee = loader.load();
@@ -173,7 +185,7 @@ public class GUI_MainController implements Initializable {
         manageEmployee.prefHeightProperty().bind(compoent_main.heightProperty());
     }
 
-    private void openManagePromotion() throws IOException {
+    public void openManagePromotion() throws IOException {
         label_title.setText("Quản lý khuyến mãi");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_ManagePromotion.fxml"));
         BorderPane managePromotion = loader.load();

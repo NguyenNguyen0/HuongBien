@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.huongbien.entity.Cuisine;
+import com.huongbien.utils.Converter;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,24 +11,27 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class GUI_OrderCuisineItemController implements Initializable {
     private final static String path = "src/main/resources/com/huongbien/temp/bill.json";
-
-
     @FXML
-    private ImageView imgCuisine;
+    private Circle circle_imgCuisine;
 
     @FXML
     private Label lbl_cuisineID;
@@ -48,13 +52,19 @@ public class GUI_OrderCuisineItemController implements Initializable {
         lbl_cuisineID.setText(cuisine.getCuisineId());
         lbl_cuisineName.setText(cuisine.getName());
         lbl_cuisinePrice.setText(cuisine.getPrice()+"");
+        //image
+        byte[] imageBytes = cuisine.getImage();
+        Image image = Converter.bytesToImage(imageBytes);
+        circle_imgCuisine.setFill(new ImagePattern(image));
+        circle_imgCuisine.setStroke(Color.BLUE);
+        circle_imgCuisine.setEffect(new DropShadow(+25d, 0d, +2d, Color.DARKSEAGREEN));
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Circle clip = new Circle(imgCuisine.getFitWidth() / 2, imgCuisine.getFitHeight() / 2, Math.min(imgCuisine.getFitWidth(), imgCuisine.getFitHeight()) / 2);
-        imgCuisine.setClip(clip);
+
     }
+
 
     private void writeDataJSONtoFile(String cuisineID, String cuisineName, double cuisinePrice, String cuisineNote, int cuisineQuantity) {
         JsonArray jsonArray;

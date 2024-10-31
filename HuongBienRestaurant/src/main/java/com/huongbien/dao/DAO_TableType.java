@@ -1,5 +1,6 @@
 package com.huongbien.dao;
 
+import com.huongbien.database.Database;
 import com.huongbien.entity.TableType;
 
 import java.sql.Connection;
@@ -116,6 +117,41 @@ public class DAO_TableType extends DAO_Base<TableType> {
         return null;
     }
 
+    public TableType getByName(String name) {
+        if (name == null || name.isEmpty() || name.isBlank()) {
+            throw new NullPointerException("Name is null");
+        }
 
+        String query = "SELECT id, name, description FROM TableType WHERE name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String tableId = resultSet.getString("id");
+                String tableName = resultSet.getString("name");
+                String description = resultSet.getString("description");
+
+                return new TableType(tableId, tableName, description);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<String> getDistinctTableType() throws SQLException {
+        List<String> typeList = new ArrayList<>();
+        String sql = "SELECT DISTINCT * FROM [TableType]";
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                typeList.add(resultSet.getString("name"));
+            }
+        }
+        return typeList;
+    }
 
 }

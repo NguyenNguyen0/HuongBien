@@ -2,38 +2,39 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="compoent_VB_cuisineItem" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#ml_getInfoCuisine" prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: brown;" styleClass="transperant-60" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderCuisineItemController">
+
+<VBox alignment="BOTTOM_CENTER" prefHeight="368.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderCuisineItemController">
    <children>
-      <ImageView fx:id="imgCuisine" fitHeight="200.0" fitWidth="280.0" pickOnBounds="true" preserveRatio="true">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <image>
-            <Image url="@../img/cuisine/alaska.png" />
-         </image>
-      </ImageView>
-      <VBox alignment="TOP_CENTER" prefHeight="70.0" prefWidth="300.0">
+      <VBox fx:id="compoent_VB_cuisineItem" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#ml_getInfoCuisine" prefHeight="218.0" prefWidth="330.0" style="-fx-background-color: white;">
          <children>
-            <Label fx:id="lbl_cuisineID" opacity="0.0" text="ID: M001" />
-            <Label fx:id="lbl_cuisineName" text="TÔM HÙM HẤP BIA">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="lbl_cuisinePrice" text="1.200.000đ">
-               <font>
-                  <Font name="System Italic" size="18.0" />
-               </font>
-            </Label>
+            <Circle fx:id="circle_imgCuisine" fill="WHITE" radius="139.0" stroke="BLACK" strokeType="INSIDE">
+               <VBox.margin>
+                  <Insets top="-250.0" />
+               </VBox.margin>
+            </Circle>
+            <VBox alignment="CENTER" prefHeight="70.0" prefWidth="300.0">
+               <children>
+                  <Label fx:id="lbl_cuisineName" text="TÔM HÙM HẤP BIA">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbl_cuisinePrice" text="1.200.000 VNĐ">
+                     <font>
+                        <Font name="System Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbl_cuisineID" opacity="0.0" text="ID: M001" />
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </VBox>
          </children>
-         <VBox.margin>
-            <Insets top="10.0" />
-         </VBox.margin>
       </VBox>
    </children>
 </VBox>
