@@ -44,47 +44,54 @@ public class Order {
         setEmployee(employee);
     }
 
-    public Order(String notes, double paymentAmount, double dispensedAmount,
-                 double totalAmount, ArrayList<OrderDetail> orderDetails,
-                 Promotion promotion, Payment payment, ArrayList<Table> tables,
-                 Customer customer, Employee employee) {
+    public Order(Employee employee, Customer customer,
+                 ArrayList<OrderDetail> orderDetails, ArrayList<Table> tables,
+                 Payment payment, Promotion promotion, String notes) {
         setOrderDate(LocalDate.now());
         setOrderId(null);
-        setNotes(notes);
-        setPaymentAmount(paymentAmount);
-        setDispensedAmount(dispensedAmount);
-        setTotalAmount(totalAmount);
-        setDiscount(promotion.getDiscount());
-        setOrderDetails(orderDetails);
-        setPromotion(promotion);
-        setPayment(payment);
-        setTables(tables);
+        setTotalAmount(getTotalAmount(orderDetails, promotion));
+        setPaymentAmount(payment.getAmount());
+        setDiscount(promotion == null ? 0 : promotion.getDiscount());
+        setDispensedAmount(getTotalAmount() - getPaymentAmount());
+
         setCustomer(customer);
         setEmployee(employee);
+        setTables(tables);
+        setOrderDetails(orderDetails);
+        setPayment(payment);
+        setPromotion(promotion);
+        setNotes(notes);
+    }
+
+    public double getTotalAmount(ArrayList<OrderDetail> orderDetails, Promotion promotion) {
+        return (promotion == null ? 1 : (1 + promotion.getDiscount())) * orderDetails
+                .stream()
+                .map((orderDetail -> orderDetail.getSalePrice() * orderDetail.getQuantity()))
+                .reduce(0.0, Double::sum);
     }
 
     public void setOrderId(String orderId) {
-//        if (orderId == null) {
-//            LocalDate currentDate = LocalDate.now();
-//            LocalTime currentTime = LocalTime.now();
-//            this.orderId = String.format("HD%02d%02d%02d%02d%02d%02d%03d",
-//                    currentDate.getYear() % 100,
-//                    currentDate.getMonthValue(),
-//                    currentDate.getDayOfMonth(),
-//                    currentTime.getHour(),
-//                    currentTime.getMinute(),
-//                    currentTime.getSecond(),
-//                    Utils.randomNumber(1, 999)
-//            );
-//            return;
-//        }
-//        if (orderId.matches("^HD\\d{15}$")) {
-//            this.orderId = orderId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid order ID format");
+        if (orderId == null) {
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            this.orderId = String.format("HD%02d%02d%02d%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    currentTime.getHour(),
+                    currentTime.getMinute(),
+                    currentTime.getSecond(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
+        }
+        if (orderId.matches("^HD\\d{15}$")) {
+            this.orderId = orderId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid order ID format");
 
-        this.orderId = orderId;
+//        this.orderId = orderId;
     }
 
     public void setOrderDate(LocalDate orderDate) {

@@ -4,6 +4,7 @@ import com.huongbien.database.Database;
 import com.huongbien.entity.Table;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -200,7 +201,30 @@ public class DAO_Table extends DAO_Base<Table> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public List<Table> getReservedTables(LocalDate receiveDate) {
+        List<Table> tables = new ArrayList<>();
+
+        try {
+            CallableStatement callStatement = connection.prepareCall("{call GetReservedTable(?)}");
+            callStatement.setDate(1, Date.valueOf(receiveDate));
+            ResultSet rs = callStatement.executeQuery();
+            while (rs.next()) {
+                Table table = new Table();
+                table.setId(rs.getString("id"));
+                table.setName(rs.getString("name"));
+                table.setSeats(rs.getInt("seats"));
+                table.setFloor(rs.getInt("floor"));
+                table.setStatus(rs.getString("status"));
+                table.setTableType(tableTypeDAO.get(rs.getString("tableTypeId")));
+                tables.add(table);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tables;
     }
 
     public List<String> getDistinctStatuses() throws SQLException {

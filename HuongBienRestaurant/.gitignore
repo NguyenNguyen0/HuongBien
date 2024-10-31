@@ -41,3 +41,4 @@ build/
 # ignore all files in temp package
 temp/**
 temp/
+/src/main/resources/com/huongbien/img/qr/

@@ -23,7 +23,6 @@ public class Reservation {
     private Customer customer;
     private ArrayList<FoodOrder> foodOrders;
 
-
     public Reservation() {}
 
     public Reservation(String reservationId, String partyType, int partySize, LocalDate reservationDate,
@@ -46,24 +45,29 @@ public class Reservation {
         setFoodOrders(foodOrders);
     }
 
-    public Reservation(String partyType, int partySize, LocalDate reservationDate,
-                       LocalTime reservationTime, LocalDate receiveDate, String status, double deposit,
-                       double refundDeposit, Payment payment, Employee employee, ArrayList<Table> tables,
+//    constructor tạo mới 1 đơn đạt bàn
+    public Reservation(String partyType, int partySize, LocalDate receiveDate,
+                       Payment payment, Employee employee, ArrayList<Table> tables,
                        Customer customer, ArrayList<FoodOrder> foodOrders) {
         setPartyType(partyType);
         setPartySize(partySize);
-        setReservationDate(LocalDate.now());
-        setReservationTime(LocalTime.now());
         setReceiveDate(receiveDate);
-        setStatus(status);
-        setDeposit(deposit);
-        setRefundDeposit(refundDeposit);
         setPayment(payment);
         setEmployee(employee);
         setTables(tables);
         setCustomer(customer);
         setFoodOrders(foodOrders);
+
+        setReservationDate(LocalDate.now());
+        setReservationTime(LocalTime.now());
+        setStatus("Chưa xác nhận");
+        setRefundDeposit(0);
         setReservationId(null);
+
+//        TODO: cập nhận lại phí bàn
+        setDeposit(100_000 * tables.stream()
+                .filter(table -> table.getTableType().getTableId().equals("LB002"))
+                .count());
     }
 
     public void setReservationId(String reservationId) {

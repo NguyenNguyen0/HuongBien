@@ -32,20 +32,20 @@ public class Promotion {
     }
 
     public void setPromotionId(String promotionId) {
-//        if (promotionId == null) {
-//            LocalDate currentDate = LocalDate.now();
-//            String dateStr = String.format("%02d%02d%02d", currentDate.getYear() % 100,
-//                    currentDate.getMonthValue(), currentDate.getDayOfMonth());
-//            this.promotionId = String.format("KM%s%03d", dateStr, Utils.randomNumber(1, 999));
-//            return;
-//        }
-//
-//        if (promotionId.matches("^KM\\d{9}$")) {
-//            this.promotionId = promotionId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid promotionId format");
-        this.promotionId = promotionId;
+        if (promotionId == null) {
+            LocalDate currentDate = LocalDate.now();
+            String dateStr = String.format("%02d%02d%02d", currentDate.getYear() % 100,
+                    currentDate.getMonthValue(), currentDate.getDayOfMonth());
+            this.promotionId = String.format("KM%s%03d", dateStr, Utils.randomNumber(1, 999));
+            return;
+        }
+
+        if (promotionId.matches("^KM\\d{9}$")) {
+            this.promotionId = promotionId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid promotionId format");
+//        this.promotionId = promotionId;
     }
 
     public void setName(String name) {

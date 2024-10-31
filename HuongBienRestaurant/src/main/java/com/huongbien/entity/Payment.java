@@ -34,26 +34,26 @@ public class Payment {
     }
 
     public void setPaymentId(String paymentId) {
-//        if (paymentId == null) {
-//            LocalDate currentDate = LocalDate.now();
-//            LocalTime currentTime = LocalTime.now();
-//            this.paymentId = String.format("TT%02d%02d%02d%02d%02d%02d%03d",
-//                    currentDate.getYear() % 100,
-//                    currentDate.getMonthValue(),
-//                    currentDate.getDayOfMonth(),
-//                    currentTime.getHour(),
-//                    currentTime.getMinute(),
-//                    currentTime.getSecond(),
-//                    Utils.randomNumber(1, 999)
-//            );
-//            return;
-//        }
-//        if (paymentId.matches("^TT\\d{15}$")) {
-//            this.paymentId = paymentId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid paymentId format. Expected format: TT-yy-mm-dd-hh-MM-ss-xxx");
-        this.paymentId = paymentId;
+        if (paymentId == null) {
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            this.paymentId = String.format("TT%02d%02d%02d%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    currentTime.getHour(),
+                    currentTime.getMinute(),
+                    currentTime.getSecond(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
+        }
+        if (paymentId.matches("^TT\\d{15}$")) {
+            this.paymentId = paymentId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid paymentId format. Expected format: TT-yy-mm-dd-hh-MM-ss-xxx");
+//        this.paymentId = paymentId;
     }
 
     public void setAmount(double amount) {

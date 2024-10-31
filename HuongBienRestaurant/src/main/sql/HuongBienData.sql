@@ -8,12 +8,81 @@ USE HuongBien;
 --      NAME = 'Full Backup of HuongBien';
 --GO
 
-select * from Category;
-select * from Cuisine;
-select * from TableType;
-select * from [Table];
-select * from employee;
-select * from account;
+--select * from Category;
+--select * from Cuisine;
+--select * from TableType;
+--select * from [Table];
+--select * from employee;
+--select * from account;
+
+--select * from Cuisine
+--order by id
+--offset 5 rows
+--fetch next 5 rows only;
+
+
+INSERT INTO TableType (id, name, description)
+VALUES
+('LB001', N'Bàn thường', N'Dành cho thực khách phổ thông.'),
+('LB002', N'Bàn VIP', N'Dành cho thực khách muốn không gian riêng tư.');
+
+-- Insert tables for the ground floor (Tầng Trệt)
+INSERT INTO [Table] (id, name, seats, [floor], tableTypeId, [status])
+VALUES 
+('T0B001', N'Bàn 01', 4, 0, 'LB001', N'Bàn trống'),
+('T0B002', N'Bàn 02', 4, 0, 'LB001', N'Bàn trống'),
+('T0B003', N'Bàn 03', 4, 0, 'LB001', N'Bàn trống'),
+('T0B004', N'Bàn 04', 4, 0, 'LB001', N'Bàn trống'),
+('T0B005', N'Bàn 05', 4, 0, 'LB001', N'Bàn trống'),
+('T0B006', N'Bàn 06', 4, 0, 'LB001', N'Bàn trống'),
+('T0B007', N'Bàn 07', 4, 0, 'LB001', N'Bàn trống'),
+('T0B008', N'Bàn 08', 4, 0, 'LB001', N'Bàn trống'),
+('T0B009', N'Bàn 09', 4, 0, 'LB001', N'Bàn trống'),
+('T0B010', N'Bàn 10', 4, 0, 'LB001', N'Bàn trống'),
+('T0B011', N'Bàn 11', 6, 0, 'LB002', N'Bàn trống'),
+('T0B012', N'Bàn 12', 6, 0, 'LB002', N'Bàn trống'),
+('T0B013', N'Bàn 13', 6, 0, 'LB002', N'Bàn trống'),
+('T0B014', N'Bàn 14', 6, 0, 'LB002', N'Bàn trống'),
+('T0B015', N'Bàn 15', 6, 0, 'LB002', N'Bàn trống');
+
+-- Insert tables for floor "Tầng 1"
+INSERT INTO [Table] (id, name, seats, [floor], tableTypeId, [status])
+VALUES 
+('T1B001', N'Bàn 01', 4, 1, 'LB001', N'Bàn trống'),
+('T1B002', N'Bàn 02', 4, 1, 'LB001', N'Bàn trống'),
+('T1B003', N'Bàn 03', 4, 1, 'LB001', N'Bàn trống'),
+('T1B004', N'Bàn 04', 4, 1, 'LB001', N'Bàn trống'),
+('T1B005', N'Bàn 05', 4, 1, 'LB001', N'Bàn trống'),
+('T1B006', N'Bàn 06', 4, 1, 'LB001', N'Bàn trống'),
+('T1B007', N'Bàn 07', 4, 1, 'LB001', N'Bàn trống'),
+('T1B008', N'Bàn 08', 4, 1, 'LB001', N'Bàn trống'),
+('T1B009', N'Bàn 09', 4, 1, 'LB001', N'Bàn trống'),
+('T1B010', N'Bàn 10', 4, 1, 'LB001', N'Bàn trống'),
+('T1B011', N'Bàn 11', 6, 1, 'LB002', N'Bàn trống'),
+('T1B012', N'Bàn 12', 6, 1, 'LB002', N'Bàn trống'),
+('T1B013', N'Bàn 13', 6, 1, 'LB002', N'Bàn trống');
+
+-- Insert tables for floor "Tầng 2"
+INSERT INTO [Table] (id, name, seats, [floor], tableTypeId, [status])
+VALUES 
+('T2B001', N'Bàn 01', 4, 2, 'LB001', N'Bàn trống'),
+('T2B002', N'Bàn 02', 4, 2, 'LB001', N'Bàn trống'),
+('T2B003', N'Bàn 03', 4, 2, 'LB001', N'Bàn trống'),
+('T2B004', N'Bàn 04', 4, 2, 'LB001', N'Bàn trống'),
+('T2B005', N'Bàn 05', 4, 2, 'LB001', N'Bàn trống'),
+('T2B006', N'Bàn 06', 4, 2, 'LB001', N'Bàn trống'),
+('T2B007', N'Bàn 07', 4, 2, 'LB001', N'Bàn trống'),
+('T2B008', N'Bàn 08', 4, 2, 'LB001', N'Bàn trống'),
+('T2B009', N'Bàn 09', 4, 2, 'LB001', N'Bàn trống'),
+('T2B010', N'Bàn 10', 4, 2, 'LB001', N'Bàn trống'),
+('T2B011', N'Bàn 11', 6, 2, 'LB002', N'Bàn trống');
+
+-- Insert 5 rows into the Promotion table
+INSERT INTO Promotion (id, name, startDate, endDate, discount, [description], minimumOrderAmount, membershipLevel, [status])
+VALUES
+('KM231023001', N'Ưu đãi cho thành viên bạc', '2023-10-23', '2025-10-23', 0.10, N'Giảm 10% cho hóa đơn trên 500.000đ cho thành viên bạc', 500000.0, 1, N'Còn hiệu lực'),
+('KM231023002', N'Ưu đãi cho thành viên vàng', '2023-10-23', '2025-10-23', 0.20, N'Giảm 20% cho hóa đơn trên 500.000đ cho thành viên vàng', 500000.0, 2, N'Còn hiệu lực'),
+('KM231023003', N'Ưu đãi cho thành viên kim cương', '2023-10-23', '2025-10-23', 0.30, N'Giảm 30% cho hóa đơn trên 500.000đ cho thành viên kim cương', 500000.0, 3, N'Còn hiệu lực');
 
 
 INSERT INTO Category (id, name, description)
@@ -110,13 +179,13 @@ VALUES
 
 --	WHILE @i <= 50
 --	BEGIN
---		-- Tạo mã món ăn (M001, M002, ..., M050)
+--		--	Tạo mã món ăn (M001, M002, ..., M050)
 --		SET @id = 'M' + RIGHT('000' + CAST(@i AS NVARCHAR(3)), 3);
 
---		-- Tạo đường dẫn ảnh dựa trên mã món ăn
+--		--	Tạo đường dẫn ảnh dựa trên mã món ăn
 --		SET @filePath = 'D:\HuongBien\Cuisine\' + @id + '.jpg';
 
---		-- Tạo câu lệnh động để chèn ảnh từ đường dẫn
+--		--	Tạo câu lệnh động để chèn ảnh từ đường dẫn
 --		SET @sql = N'
 --		BEGIN TRY
 --			BEGIN TRANSACTION
@@ -126,78 +195,23 @@ VALUES
 --			COMMIT;
 --		END TRY
 --		BEGIN CATCH
---			-- Nếu có lỗi, in ra đường dẫn bị lỗi
+--		--		Nếu có lỗi, in ra đường dẫn bị lỗi
 --			PRINT ''Error loading file: ' + @filePath + ''';
 --			ROLLBACK;
 --		END CATCH;';
 
---		-- Thực thi câu lệnh SQL động
+--		--	Thực thi câu lệnh SQL động
 --		EXEC sp_executesql @sql;
 
---		-- Tăng biến đếm
+--		--	Tăng biến đếm
 --		SET @i = @i + 1;
 --	END;
 --COMMIT;
 --GO
 
-INSERT INTO TableType (id, name, description)
-VALUES
-('LB001', N'Bàn thường', N'Dành cho thực khách phổ thông.'),
-('LB002', N'Bàn VIP', N'Dành cho thực khách muốn không gian riêng tư.');
 
--- Insert tables for the ground floor (Tầng Trệt)
-INSERT INTO [Table] (id, name, seats, [floor], tableTypeId)
-VALUES 
-('T0B001', N'Bàn 01', 4, 0, 'LB001'),
-('T0B002', N'Bàn 02', 4, 0, 'LB001'),
-('T0B003', N'Bàn 03', 4, 0, 'LB001'),
-('T0B004', N'Bàn 04', 4, 0, 'LB001'),
-('T0B005', N'Bàn 05', 4, 0, 'LB001'),
-('T0B006', N'Bàn 06', 4, 0, 'LB001'),
-('T0B007', N'Bàn 07', 4, 0, 'LB001'),
-('T0B008', N'Bàn 08', 4, 0, 'LB001'),
-('T0B009', N'Bàn 09', 4, 0, 'LB001'),
-('T0B010', N'Bàn 10', 4, 0, 'LB001'),
-('T0B011', N'Bàn 11', 6, 0, 'LB002'),
-('T0B012', N'Bàn 12', 6, 0, 'LB002'),
-('T0B013', N'Bàn 13', 6, 0, 'LB002'),
-('T0B014', N'Bàn 14', 6, 0, 'LB002'),
-('T0B015', N'Bàn 15', 6, 0, 'LB002');
-
--- Insert tables for floor "Tầng 1"
-INSERT INTO [Table] (id, name, seats, [floor], tableTypeId)
-VALUES 
-('T1B001', N'Bàn 01', 4, 1, 'LB001'),
-('T1B002', N'Bàn 02', 4, 1, 'LB001'),
-('T1B003', N'Bàn 03', 4, 1, 'LB001'),
-('T1B004', N'Bàn 04', 4, 1, 'LB001'),
-('T1B005', N'Bàn 05', 4, 1, 'LB001'),
-('T1B006', N'Bàn 06', 4, 1, 'LB001'),
-('T1B007', N'Bàn 07', 4, 1, 'LB001'),
-('T1B008', N'Bàn 08', 4, 1, 'LB001'),
-('T1B009', N'Bàn 09', 4, 1, 'LB001'),
-('T1B010', N'Bàn 10', 4, 1, 'LB001'),
-('T1B011', N'Bàn 11', 6, 1, 'LB002'),
-('T1B012', N'Bàn 12', 6, 1, 'LB002'),
-('T1B013', N'Bàn 13', 6, 1, 'LB002');
-
--- Insert tables for floor "Tầng 2"
-INSERT INTO [Table] (id, name, seats, [floor], tableTypeId)
-VALUES 
-('T2B001', N'Bàn 01', 4, 2, 'LB001'),
-('T2B002', N'Bàn 02', 4, 2, 'LB001'),
-('T2B003', N'Bàn 03', 4, 2, 'LB001'),
-('T2B004', N'Bàn 04', 4, 2, 'LB001'),
-('T2B005', N'Bàn 05', 4, 2, 'LB001'),
-('T2B006', N'Bàn 06', 4, 2, 'LB001'),
-('T2B007', N'Bàn 07', 4, 2, 'LB001'),
-('T2B008', N'Bàn 08', 4, 2, 'LB001'),
-('T2B009', N'Bàn 09', 4, 2, 'LB001'),
-('T2B010', N'Bàn 10', 4, 2, 'LB001'),
-('T2B011', N'Bàn 11', 6, 2, 'LB002');
-
--- Insert 5 rows into the Customer table
-INSERT INTO Customer (id, name, [address], gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershiplevel)
+-- Insert 5 rows into the Customer
+INSERT INTO Customer (id, name, [address], gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel)
 VALUES
 ('KH241020101', N'Trần Văn An', N'123 Lê Lợi, Quận 1, TP. Hồ Chí Minh, Việt Nam', 1, '0901123456', N'vanan@example.com', '1990-05-20', '2024-10-24', 100, 1),
 ('KH241020102', N'Nguyễn Thị Bích', N'45 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh, Việt Nam', 0, '0902234567', N'bichnguyen@example.com', '1985-08-15', '2024-10-24', 200, 2),
@@ -208,27 +222,27 @@ VALUES
 -- Insert the manager
 INSERT INTO Employee (id, name, address, gender, birthday, citizenIDNumber, status, phoneNumber, email, hireDate, position, workHours, hourlyPay, salary, managerId)
 VALUES 
-('NV001122001', N'Nguyễn Trung Nguyên', N'12 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh, Viêt Nam', 0, '1980-01-01', '0123456789012', N'Đang làm', '0901234567', N'trungnguyen@example.com', '2020-01-01', N'Quản lý', 40.0, 20000.0, 8000.0, NULL);
+('NV001122001', N'Nguyễn Trung Nguyên', N'12 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh, Viêt Nam', 0, '1980-01-01', '0123456789012', N'Đang làm', '0901234567', N'trungnguyen@example.com', '2020-01-01', N'Quản lý', 40.0, 20000.0, 800000.0, NULL);
 
 -- Insert the Employee
 INSERT INTO Employee (id, name, address, gender, birthday, citizenIDNumber, status, phoneNumber, email, hireDate, position, workHours, hourlyPay, salary, managerId)
 VALUES 
 ('NV001122002', N'Đào Quốc Tuấn', N'120 Lý Tự Trọng, Quận 1, TP. Hồ Chí Minh, Viêt Nam', 0, '1990-02-01', '0123456789013', N'Đang làm', '0901234568', N'quoctuan@example.com', '2021-02-01', N'Tiếp tân', 40.0, 20000.0, 2400.0, 'NV001122001'),
-('NV001122003', N'Lê Văn Đạt', N'45 Võ Văn Tần, Quận 3, TP. Hồ Chí Minh, Viêt Nam', 0, '1992-03-01', '0123456789014', N'Đang làm', '0901234569', N'ledat@example.com', '2021-03-01', N'Tiếp tân', 40.0, 20000.0, 2400.0, 'NV001122001'),
 ('NV001122004', N'Nguyễn Trần Gia Sĩ', N'50 Đinh Tiên Hoàng, Quận Bình Thạnh, TP. Hồ Chí Minh, Viêt Nam', 0, '1991-04-01', '0123456789015', N'Đang làm', '0901234570', N'nguyensi@example.com', '2021-04-01', N'Tiếp tân', 40.0, 20000.0, 2400.0, 'NV001122001'),
 ('NV001122005', N'Nguyễn Văn Minh', N'25 Phan Đăng Lưu, Quận Phú Nhuận, TP. Hồ Chí Minh, Viêt Nam', 1, '1985-05-01', '0123456789016', N'Đang làm', '0901234571', N'nguyenminh@example.com', '2021-05-01', N'Tiếp tân', 40.0, 20000.0, 2400.0, 'NV001122001'),
-('NV000000006', N'Ngô Thị Bình', N'38 Nguyễn Thị Minh Khai, Quận 3, TP. Hồ Chí Minh, Viêt Nam', 0, '1993-06-01', '0123456789017', N'Đã nghỉ', '0901234572', NULL, '2021-06-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
-('NV000000007', N'Vũ Văn Cường', N'22 Lê Văn Sỹ, Quận Tân Bình, TP. Hồ Chí Minh, Viêt Nam', 1, '1994-07-01', '0123456789018', N'Đang làm', '0901234573', NULL, '2021-07-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
-('NV000000008', N'Bùi Thị Hải', N'150 Trần Hưng Đạo, Quận 5, TP. Hồ Chí Minh, Viêt Nam', 0, '1995-08-01', '0123456789019', N'Đang làm', '0901234574', NULL, '2021-08-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
-('NV000000009', N'Doãn Văn Đường', N'120 Âu Cơ, Quận Tân Phú, TP. Hồ Chí Minh, Viêt Nam', 1, '1996-09-01', '0123456789020', N'Đang làm', '0901234575', NULL, '2021-09-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
-('NV000000010', N'Tạ Thị Kim Ngân', N'200 Xô Viết Nghệ Tĩnh, Quận Bình Thạnh, TP. Hồ Chí Minh, Viêt Nam', 0, '1997-10-01', '0123456789021', N'Đang làm', '0901234576', NULL, '2021-10-01', N'Đầu bếp', 40.0, 20000.0, 2400.0, 'NV001122001');
+('NV001122003', N'Lê Văn Đạt', N'45 Võ Văn Tần, Quận 3, TP. Hồ Chí Minh, Viêt Nam', 0, '1992-03-01', '0123456789014', N'Đã nghỉ', '0901234569', N'ledat@example.com', '2021-03-01', N'Tiếp tân', 40.0, 20000.0, 2400.0, 'NV001122001'),
+('NV210701006', N'Ngô Thị Bình', N'38 Nguyễn Thị Minh Khai, Quận 3, TP. Hồ Chí Minh, Viêt Nam', 0, '1993-06-01', '0123456789017', N'Đã nghỉ', '0901234572', NULL, '2021-06-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
+('NV210702007', N'Vũ Văn Cường', N'22 Lê Văn Sỹ, Quận Tân Bình, TP. Hồ Chí Minh, Viêt Nam', 1, '1994-07-01', '0123456789018', N'Đang làm', '0901234573', NULL, '2021-07-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
+('NV210703008', N'Bùi Thị Hải', N'150 Trần Hưng Đạo, Quận 5, TP. Hồ Chí Minh, Viêt Nam', 0, '1995-08-01', '0123456789019', N'Đang làm', '0901234574', NULL, '2021-08-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
+('NV210704009', N'Doãn Văn Đường', N'120 Âu Cơ, Quận Tân Phú, TP. Hồ Chí Minh, Viêt Nam', 1, '1996-09-01', '0123456789020', N'Đang làm', '0901234575', NULL, '2021-09-01', N'Bồi bàn', 40.0, 20000.0, 2400.0, 'NV001122001'),
+('NV210705010', N'Tạ Thị Kim Ngân', N'200 Xô Viết Nghệ Tĩnh, Quận Bình Thạnh, TP. Hồ Chí Minh, Viêt Nam', 0, '1997-10-01', '0123456789021', N'Đang làm', '0901234576', NULL, '2021-10-01', N'Đầu bếp', 40.0, 20000.0, 2400.0, 'NV001122001');
 
 -- Insert accounts for the first 5 Employee
 INSERT INTO Account (username, hashcode, role, email, isActive, avatar)
 VALUES
 ('NV001122001', '02d03b4538505309655c15780962858fa410fd85d8bbeffae8514fb345d01656', N'Quản lý', N'trungnguyen@example.com', 1, NULL),
 ('NV001122002', '52872b962111f3b6f9f8d882750471b32b0e4da893011d79425d6e0e9c5cf77e', N'Tiếp tân', N'quoctuan@example.com', 1, NULL),
-('NV001122003', '6a11bb748f97e023ce442e4d9b21002690ee75485e0f1d33a5cf5797da843c7a', N'Tiếp tân', N'ledat@example.com', 1, NULL),
+('NV001122003', '6a11bb748f97e023ce442e4d9b21002690ee75485e0f1d33a5cf5797da843c7a', N'Tiếp tân', N'ledat@example.com', 0, NULL),
 ('NV001122004', '533400a5b1efdba4056c13b605451ac4c3f834589f6ea84ae14aea77b5996998', N'Tiếp tân', N'nguyensi@example.com', 1, NULL),
 ('NV001122005', 'd27cbb487826f9528d44011bcdef1566e48a842b99df60858424260de7c6f6d5', N'Tiếp tân', N'nguyenminh@example.com', 1, NULL);
 
@@ -263,15 +277,6 @@ VALUES
 ('HD000000000000003', '2024-10-20', N'Order includes vegetarian dishes', 0.1, 800000.0, 880000.0, 880000.0, 40000.0, 'KH241020101', 'NV001122004', NULL, 'TT000000000000009'),
 ('HD000000000000004', '2024-10-21', N'Order includes desserts and coffee', 0.1, 500000.0, 550000.0, 550000.0, 25000.0, 'KH241020101', 'NV001122004', NULL, 'TT000000000000008'),
 ('HD000000000000005', '2024-10-22', N'Order includes family dinner package', 0.1, 2000000.0, 2200000.0, 2200000.0, 100000.0, 'KH241020101', 'NV001122004', NULL, 'TT000000000000007');
-
--- Insert 5 rows into the Promotion table
-INSERT INTO Promotion (id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel)
-VALUES
-('KM000000001', N'Giảm giá mùa hè', '2024-06-01', '2024-08-31', 0.10, N'Giảm 10% cho tất cả các đơn hàng trên 500.000đ', 500000.0, 1),
-('KM000000002', N'Khuyến mãi cuối năm', '2024-12-01', '2024-12-31', 0.15, N'Giảm 15% cho tất cả các đơn hàng trên 1.000.000đ', 1000000.0, 1),
-('KM000000003', N'Ưu đãi khách hàng mới', '2024-01-01', '2024-03-31', 0.20, N'Giảm 20% cho khách hàng mới lần đầu đặt hàng', 300000.0, 1),
-('KM000000004', N'Combo gia đình', '2024-05-01', '2024-05-31', 0.05, N'Giảm 5% cho đơn hàng gia đình trên 1.500.000đ', 1500000.0, 1),
-('KM000000005', N'Ưu đãi sinh nhật', '2024-10-01', '2024-10-31', 0.25, N'Giảm 25% cho khách hàng đặt tiệc sinh nhật', 2000000.0, 1);
 
 INSERT INTO Order_Table (orderId, tableId)
 VALUES
