@@ -139,7 +139,22 @@ public class GUI_ManagePromotionController implements Initializable {
             txt_minimumOrder.setEditable(true);
 
             tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+
             tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+            tabCol_discount.setCellFactory(col -> new TableCell<Promotion, Double>() {
+                @Override
+                public void updateItem(Double item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        System.out.println(item);
+                        // Chuyển đổi và định dạng giá trị thành phần trăm
+                        setText(String.format("%.0f%%", item * 100));
+                    }
+                }
+            });
+
             tabCol_memberShipLevel.setCellValueFactory(cellData -> {
                 int memberShip = cellData.getValue().getMembershipLevel();
                 String memberShipLevel = utils.toStringMembershipLevel(memberShip);
@@ -167,7 +182,22 @@ public class GUI_ManagePromotionController implements Initializable {
             txt_minimumOrder.setEditable(true);
 
             tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+
             tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+            tabCol_discount.setCellFactory(col -> new TableCell<Promotion, Double>() {
+                @Override
+                public void updateItem(Double item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        System.out.println(item);
+                        // Chuyển đổi và định dạng giá trị thành phần trăm
+                        setText(String.format("%.0f%%", item * 100));
+                    }
+                }
+            });
+
             tabCol_memberShipLevel.setCellValueFactory(cellData -> {
                 int memberShip = cellData.getValue().getMembershipLevel();
                 String memberShipLevel = utils.toStringMembershipLevel(memberShip);
