@@ -24,6 +24,7 @@ import javafx.util.StringConverter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -253,7 +254,11 @@ public class GUI_ManagePromotionController implements Initializable {
             txt_status.setText(selectedItem.getStatus());
             double dis = selectedItem.getDiscount();
             int discount = (int) (dis * 100);
-            txt_minimumOrder.setText(selectedItem.getMinimumOrderAmount()+"");
+
+            DecimalFormat priceFormat = new DecimalFormat("#,###");
+            String formattedPrice = priceFormat.format(selectedItem.getMinimumOrderAmount());
+            txt_minimumOrder.setText(formattedPrice);
+
             txtArea_promotionDescription.setText(selectedItem.getDescription());
             txt_discount.setText(discount+"%");
             date_ended.setValue(selectedItem.getEndDate());
@@ -319,10 +324,11 @@ public class GUI_ManagePromotionController implements Initializable {
                 String name = txt_promotionName.getText();
                 String status = txt_status.getText();
 
-                double minimumOrder = Double.parseDouble(txt_minimumOrder.getText());
+                String minimum = txt_minimumOrder.getText();
+                double minimumOrder = Double.parseDouble(minimum.replace(",",""));
+
                 String dis = txt_discount.getText();
-                int i = dis.indexOf("%");
-                dis = dis.substring(0,i);
+                dis = dis.replace("%","");
                 Double discount = Double.parseDouble(dis) / 100;
 
                 String memberShip = comboBox_memberShipLevel.getSelectionModel().getSelectedItem();
@@ -369,7 +375,7 @@ public class GUI_ManagePromotionController implements Initializable {
                 Double discount = Double.parseDouble(dis) / 100;
 
                 String memberShip = comboBox_memberShipLevel.getSelectionModel().getSelectedItem();
-                System.out.println(memberShip);
+
                 int memberShipLevel = utils.toIntMembershipLevel(memberShip);
 
                 LocalDate start = date_started.getValue();
