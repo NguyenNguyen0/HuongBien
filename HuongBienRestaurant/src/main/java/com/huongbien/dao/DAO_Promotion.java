@@ -63,7 +63,7 @@ public class DAO_Promotion extends DAO_Base<Promotion> {
     @Override
     public List<Promotion> get() {
         List<Promotion> promotions = new ArrayList<>();
-        String sql = "SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion";
+        String sql = "SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE 'Còn hi?u l?c'";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -89,6 +89,61 @@ public class DAO_Promotion extends DAO_Base<Promotion> {
         return promotions;
     }
 
+    public List<Promotion> search(String id) {
+        List<Promotion> promotions = new ArrayList<>();
+        String sql = "SELECT * FROM Promotion WHERE id LIKE N'%"+id+"%'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Promotion promotion = new Promotion();
+                String promotionId = rs.getString("id");
+                promotion.setPromotionId(promotionId);
+                promotion.setName(rs.getString("name"));
+                promotion.setStartDate(rs.getDate("startDate").toLocalDate());
+                promotion.setEndDate(rs.getDate("endDate").toLocalDate());
+                promotion.setDiscount(rs.getDouble("discount"));
+                promotion.setDescription(rs.getString("description"));
+                promotion.setMembershipLevel(rs.getInt("membershipLevel"));
+                promotion.setMinimumOrderAmount(rs.getDouble("minimumOrderAmount"));
+                promotion.setStatus(rs.getString("status"));
+                promotions.add(promotion);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return promotions;
+    }
+
+    public List<Promotion> getExpired() {
+        List<Promotion> promotions = new ArrayList<>();
+        String sql = "SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE 'Hết hi?u l?c'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Promotion promotion = new Promotion();
+                String promotionId = rs.getString("id");
+                promotion.setPromotionId(promotionId);
+                promotion.setName(rs.getString("name"));
+                promotion.setStartDate(rs.getDate("startDate").toLocalDate());
+                promotion.setEndDate(rs.getDate("endDate").toLocalDate());
+                promotion.setDiscount(rs.getDouble("discount"));
+                promotion.setDescription(rs.getString("description"));
+                promotion.setMembershipLevel(rs.getInt("membershipLevel"));
+                promotion.setMinimumOrderAmount(rs.getDouble("minimumOrderAmount"));
+                promotion.setStatus(rs.getString("status"));
+                promotions.add(promotion);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return promotions;
+    }
 
     @Override
     public Promotion get(String id) {

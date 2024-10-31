@@ -47,6 +47,16 @@ public class Utils {
         };
     }
 
+    //    Hàm chuyển membershipLevel từ String sang int
+    public static int toIntMembershipLevel (String membershipLevel) {
+        return switch (membershipLevel) {
+            case "Đồng" -> 0;
+            case "Bạc" -> 1;
+            case "Vàng" -> 2;
+            case "Kim cương" -> 3;
+            default -> throw new IllegalArgumentException("Membership must in [0, 1, 2, 3]");
+        };
+    }
     //  Hàm ghi dữ liệu Binary xuống file text
     public boolean WriteToFile(Object obj, String filePath) throws Exception {
         ObjectOutputStream oos = null;

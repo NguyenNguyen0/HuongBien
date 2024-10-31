@@ -272,7 +272,7 @@ public class GUI_ManageCustomerController implements Initializable {
                     customer.setAddress(address);
                     customer.setGender(gender);
                     if (dao_customer.update(customer)) {
-                        tabViewCustomer.getItems().clear();
+                        tabViewCustomer.getItems().clear(); 
                         setCellValues();
                     }
                     connection.close();
@@ -300,9 +300,9 @@ public class GUI_ManageCustomerController implements Initializable {
     @FXML
     void getCustomerInfo(MouseEvent event) {
         utilsButton_1();
-        enableInput();
         Customer selectedItem = tabViewCustomer.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
+            enableInput();
             txt_customerName.setText(selectedItem.getName());
             txt_customerPhone.setText(selectedItem.getPhoneNumber());
             txt_customerAddress.setText(selectedItem.getAddress());
