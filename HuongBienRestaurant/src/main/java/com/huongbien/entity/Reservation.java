@@ -71,118 +71,108 @@ public class Reservation {
     }
 
     public void setReservationId(String reservationId) {
-//        if (reservationId == null) {
-//            LocalDate currentDate = getReservationDate();
-//            LocalTime currentTime = getReservationTime();
-//            this.reservationId = String.format("DB%02d%02d%02d%02d%02d%02d%03d",
-//                    currentDate.getYear() % 100,
-//                    currentDate.getMonthValue(),
-//                    currentDate.getDayOfMonth(),
-//                    currentTime.getHour(),
-//                    currentTime.getMinute(),
-//                    currentTime.getSecond(),
-//                    Utils.randomNumber(1, 999)
-//            );
-//            return;
-//        }
-//        if (reservationId.matches("^DB\\d{15}$")) {
-//            this.reservationId = reservationId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid reservation ID format. Expected format: DB-yy-mm-dd-hh-MM-ss-xxx");
-        this.reservationId = reservationId;
+        if (reservationId == null) {
+            LocalDate currentDate = getReservationDate();
+            LocalTime currentTime = getReservationTime();
+            this.reservationId = String.format("DB%02d%02d%02d%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    currentTime.getHour(),
+                    currentTime.getMinute(),
+                    currentTime.getSecond(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
+        }
+        if (reservationId.matches("^DB\\d{15}$")) {
+            this.reservationId = reservationId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid reservation ID format. Expected format: DB-yy-mm-dd-hh-MM-ss-xxx");
     }
 
     public void setPartyType(String partyType) {
-//        if (partyType == null || partyType.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Party type cannot be empty");
-//        }
+        if (partyType == null || partyType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Party type cannot be empty");
+        }
         this.partyType = partyType;
     }
 
     public void setPartySize(int partySize) {
-//        if (partySize <= 1) {
-//            throw new IllegalArgumentException("Party size must be greater than 1");
-//        }
+        if (partySize <= 1) {
+            throw new IllegalArgumentException("Party size must be greater than 1");
+        }
         this.partySize = partySize;
     }
 
     public void setReservationDate(LocalDate reservationDate) {
-//        if (reservationDate == null || reservationDate.isAfter(LocalDate.now())) {
-//            throw new IllegalArgumentException("Reservation date must be today or earlier");
-//        }
-//        if (reservationDate == null) {
-//            throw new IllegalArgumentException("Reservation date cannot be null");
-//        }
+        if (reservationDate == null || reservationDate.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Reservation date must be today or earlier");
+        }
         this.reservationDate = reservationDate;
     }
 
     public void setReservationTime(LocalTime reservationTime) {
-//        if (reservationTime == null || (reservationDate.equals(LocalDate.now()) && reservationTime.isAfter(LocalTime.now()))) {
-//            throw new IllegalArgumentException("Reservation time must be before the current time if the reservation is for today");
-//        }
-//        if (reservationTime == null) {
-//            throw new IllegalArgumentException("Reservation time cannot be null");
-//        }
+        if (reservationTime == null || (reservationDate.equals(LocalDate.now()) && reservationTime.isAfter(LocalTime.now()))) {
+            throw new IllegalArgumentException("Reservation time must be before the current time if the reservation is for today");
+        }
         this.reservationTime = reservationTime;
     }
 
     public void setReceiveDate(LocalDate receiveDate) {
-//        if (receiveDate == null || receiveDate.isBefore(LocalDate.now())) {
-//            throw new IllegalArgumentException("Receive date must be today or later");
-//        }
-//        if (receiveDate == null) {
-//            throw new IllegalArgumentException("Receive date cannot be null");
-//        }
+        if (receiveDate == null || receiveDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Receive date must be today or later");
+        }
         this.receiveDate = receiveDate;
     }
 
     public void setStatus(String status) {
-//        if (status == null || status.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Status cannot be empty");
-//        }
+        if (status == null || status.trim().isEmpty()) {
+            throw new IllegalArgumentException("Status cannot be empty");
+        }
         this.status = status;
     }
 
     public void setDeposit(double deposit) {
-//        if (deposit < 0) {
-//            throw new IllegalArgumentException("Deposit must be greater than or equal to 0");
-//        }
+        if (deposit < 0) {
+            throw new IllegalArgumentException("Deposit must be greater than or equal to 0");
+        }
         this.deposit = deposit;
     }
 
     public void setRefundDeposit(double refundDeposit) {
-//        if (refundDeposit < 0) {
-//            throw new IllegalArgumentException("Refund deposit must be greater than or equal to 0");
-//        }
+        if (refundDeposit < 0) {
+            throw new IllegalArgumentException("Refund deposit must be greater than or equal to 0");
+        }
         this.refundDeposit = refundDeposit;
     }
 
     public void setPayment(Payment payment) {
-//        if (payment == null) {
-//            throw new IllegalArgumentException("Payment cannot be null");
-//        }
+        if (payment == null) {
+            throw new IllegalArgumentException("Payment cannot be null");
+        }
         this.payment = payment;
     }
 
     public void setEmployee(Employee employee) {
-//        if (employee == null) {
-//            throw new IllegalArgumentException("Employee cannot be null");
-//        }
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee cannot be null");
+        }
         this.employee = employee;
     }
 
     public void setTables(ArrayList<Table> tables) {
-//        if (tables == null) {
-//            throw new IllegalArgumentException("Table cannot be null");
-//        }
+        if (tables == null) {
+            throw new IllegalArgumentException("Table cannot be null");
+        }
         this.tables = tables;
     }
 
     public void setCustomer(Customer customer) {
-//        if (customer == null) {
-//            throw new IllegalArgumentException("Customer cannot be null");
-//        }
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
         this.customer = customer;
     }
 

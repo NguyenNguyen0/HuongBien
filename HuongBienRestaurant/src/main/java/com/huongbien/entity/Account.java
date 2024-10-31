@@ -36,38 +36,37 @@ public class Account {
     public Account() {}
 
     public void setUsername(String employeeId) {
-//        if (employeeId == null || employeeId.trim().isEmpty()) {
-//            throw new IllegalArgumentException("User name cannot be empty");
-//        }
+        if (employeeId == null || employeeId.trim().isEmpty()) {
+            throw new IllegalArgumentException("User name cannot be empty");
+        }
         this.username = employeeId;
     }
 
     public void setHashcode(String hashcode) {
-//        if (hashcode == null || hashcode.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Hashcode cannot be empty");
-//        }
+        if (hashcode == null || hashcode.trim().isEmpty()) {
+            throw new IllegalArgumentException("Hashcode cannot be empty");
+        }
         this.hashcode = hashcode;
     }
 
     public void setRole(String role) {
-//        if (role == null || role.isBlank()) {
-//            throw new IllegalArgumentException("Role cannot be empty");
-//        }
+        if (role == null || role.isBlank()) {
+            throw new IllegalArgumentException("Role cannot be empty");
+        }
         this.role = role;
     }
 
     public void setEmail(String email) {
-//        if (email == null || email.isEmpty()) {
-//            this.email = null;
-//            return;
-//        }
-//
-//        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
-//            this.email = email;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid email");
-        this.email = email;
+        if (email == null || email.isEmpty()) {
+            this.email = null;
+            return;
+        }
+
+        if (email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            this.email = email;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid email");
     }
 
     public void setIsActive(boolean isActive) {

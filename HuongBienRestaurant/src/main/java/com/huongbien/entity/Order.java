@@ -90,14 +90,12 @@ public class Order {
             return;
         }
         throw new IllegalArgumentException("Invalid order ID format");
-
-//        this.orderId = orderId;
     }
 
     public void setOrderDate(LocalDate orderDate) {
-//        if (orderDate == null) {
-//            throw new IllegalArgumentException("Order date cannot be null");
-//        }
+        if (orderDate == null) {
+            throw new IllegalArgumentException("Order date cannot be null");
+        }
         this.orderDate = orderDate;
     }
 
@@ -106,37 +104,37 @@ public class Order {
     }
 
     public void setPaymentAmount(double paymentAmount) {
-//        if (paymentAmount <= 0) {
-//            throw new IllegalArgumentException("Payment amount must be greater than 0");
-//        }
+        if (paymentAmount <= 0) {
+            throw new IllegalArgumentException("Payment amount must be greater than 0");
+        }
         this.paymentAmount = paymentAmount;
     }
 
     public void setDispensedAmount(double dispensedAmount) {
-//        if (dispensedAmount <= 0) {
-//            throw new IllegalArgumentException("Dispensed amount must be greater than 0");
-//        }
+        if (dispensedAmount <= 0) {
+            throw new IllegalArgumentException("Dispensed amount must be greater than 0");
+        }
         this.dispensedAmount = dispensedAmount;
     }
 
     public void setTotalAmount(double totalAmount) {
-//        if (totalAmount <= 0) {
-//            throw new IllegalArgumentException("Total amount must be greater than 0");
-//        }
+        if (totalAmount <= 0) {
+            throw new IllegalArgumentException("Total amount must be greater than 0");
+        }
         this.totalAmount = totalAmount;
     }
 
     public void setDiscount(double discount) {
-//        if (discount < 0) {
-//            throw new IllegalArgumentException("Discount cannot be negative");
-//        }
+        if (discount < 0) {
+            throw new IllegalArgumentException("Discount cannot be negative");
+        }
         this.discount = discount;
     }
 
     public void setOrderDetails(ArrayList<OrderDetail> orderDetails) {
-//        if (orderDetails == null) {
-//            throw new IllegalArgumentException("Order details cannot be null");
-//        }
+        if (orderDetails == null) {
+            throw new IllegalArgumentException("Order details cannot be null");
+        }
         this.orderDetails = orderDetails;
     }
 
@@ -145,30 +143,30 @@ public class Order {
     }
 
     public void setPayment(Payment payment) {
-//        if (payment == null) {
-//            throw new IllegalArgumentException("Payment cannot be null");
-//        }
+        if (payment == null) {
+            throw new IllegalArgumentException("Payment cannot be null");
+        }
         this.payment = payment;
     }
 
     public void setTables(ArrayList<Table> tables) {
-//        if (tables == null) {
-//            throw new IllegalArgumentException("Tables cannot be null");
-//        }
+        if (tables == null) {
+            throw new IllegalArgumentException("Tables cannot be null");
+        }
         this.tables = tables;
     }
 
     public void setCustomer(Customer customer) {
-//        if (customer == null) {
-//            throw new IllegalArgumentException("Customer cannot be null");
-//        }
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
         this.customer = customer;
     }
 
     public void setEmployee(Employee employee) {
-//        if (employee == null) {
-//            throw new IllegalArgumentException("Employee cannot be null");
-//        }
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee cannot be null");
+        }
         this.employee = employee;
     }
 

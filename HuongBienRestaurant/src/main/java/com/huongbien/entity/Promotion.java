@@ -45,34 +45,33 @@ public class Promotion {
             return;
         }
         throw new IllegalArgumentException("Invalid promotionId format");
-//        this.promotionId = promotionId;
     }
 
     public void setName(String name) {
-//        if (name == null || name.trim().isEmpty()) {
-//            throw new IllegalArgumentException("name cannot be empty");
-//        }
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("name cannot be empty");
+        }
         this.name = name;
     }
 
     public void setStartDate(LocalDate startDate) {
-//        if (startDate == null) {
-//            throw new IllegalArgumentException("startDate cannot be empty");
-//        }
+        if (startDate == null) {
+            throw new IllegalArgumentException("startDate cannot be empty");
+        }
         this.startDate = startDate;
     }
 
     public void setEndDate(LocalDate endDate) {
-//        if (endDate == null) {
-//            throw new IllegalArgumentException("endDate cannot be empty");
-//        }
+        if (endDate == null) {
+            throw new IllegalArgumentException("endDate cannot be empty");
+        }
         this.endDate = endDate;
     }
 
     public void setDiscount(double discount) {
-//        if (discount <= 0) {
-//            throw new IllegalArgumentException("discount cannot be less than 0");
-//        }
+        if (discount <= 0) {
+            throw new IllegalArgumentException("discount cannot be less than 0");
+        }
         this.discount = discount;
     }
 
@@ -81,16 +80,16 @@ public class Promotion {
     }
 
     public void setMinimumOrderAmount(double minimumOrderAmount) {
-//        if (minimumOrderAmount <= 0) {
-//            throw new IllegalArgumentException("MinimumOrderAmount must greater than 0");
-//        }
+        if (minimumOrderAmount <= 0) {
+            throw new IllegalArgumentException("MinimumOrderAmount must greater than 0");
+        }
         this.minimumOrderAmount = minimumOrderAmount;
     }
 
     public void setMembershipLevel(int membershipLevel) {
-//        if (membershipLevel < 0 || membershipLevel > 4) {
-//            throw new IllegalArgumentException("Invalid membershipLevel");
-//        }
+        if (membershipLevel < 0 || membershipLevel > 4) {
+            throw new IllegalArgumentException("Invalid membershipLevel");
+        }
 
         this.membershipLevel = membershipLevel;
     }

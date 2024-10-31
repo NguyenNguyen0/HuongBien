@@ -45,23 +45,23 @@ public class Cuisine {
     }
 
     public void setName(String name) {
-//        if (name == null || name.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Name cannot be empty");
-//        }
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
         this.name = name;
     }
 
     public void setPrice(double price) {
-//        if (price <= 0) {
-//            throw new IllegalArgumentException("Price must be greater than 0");
-//        }
+        if (price <= 0) {
+            throw new IllegalArgumentException("Price must be greater than 0");
+        }
         this.price = price;
     }
 
     public void setDescription(String description) {
-//        if (description == null || description.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Description cannot be empty");
-//        }
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be empty");
+        }
         this.description = description;
     }
 
