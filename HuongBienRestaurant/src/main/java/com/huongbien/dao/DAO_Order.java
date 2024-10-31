@@ -119,6 +119,45 @@ public class DAO_Order extends DAO_Base<Order> {
         return orders;
     }
 
+    public List<Order> getSearch(String id) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM [Order] WHERE id LIKE N'%"+id+"%' OR customerId LIKE N'%"+id+"%'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            DAO_Customer customerDao = new DAO_Customer(connection);
+            DAO_Employee employeeDao = new DAO_Employee(connection);
+            DAO_Promotion promotionDao = new DAO_Promotion(connection);
+            DAO_Payment paymentDao = new DAO_Payment(connection);
+            DAO_OrderDetail orderDetailDao = new DAO_OrderDetail(connection);
+            DAO_Table tableDao = new DAO_Table(connection);
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getString("id"));
+                order.setOrderDate(rs.getDate("orderDate").toLocalDate());
+                order.setNotes(rs.getString("notes"));
+                order.setPaymentAmount(rs.getDouble("paymentAmount"));
+                order.setDispensedAmount(rs.getDouble("dispensedAmount"));
+                order.setTotalAmount(rs.getDouble("totalAmount"));
+                order.setDiscount(rs.getDouble("discount"));
+                order.setCustomer(customerDao.get(rs.getString("customerId")));
+                order.setEmployee(employeeDao.get(rs.getString("employeeId")));
+                order.setPromotion(promotionDao.get(rs.getString("promotionId")));
+                order.setPayment(paymentDao.get(rs.getString("paymentId")));
+
+                order.setOrderDetails((ArrayList<OrderDetail>) orderDetailDao.getAllByOrderId(order.getOrderId()));
+                order.setTables((ArrayList<Table>) tableDao.getAllByOrderId(order.getOrderId()));
+
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+    }
+
     @Override
     public Order get(String id) {
         Order order = null;
