@@ -1,43 +1,39 @@
 package com.huongbien.ui.controller;
 
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.huongbien.dao.DAO_Customer;
-import com.huongbien.dao.DAO_Employee;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Customer;
-import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.StringConverter;
 
-import javax.crypto.Cipher;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class GUI_ManageCustomerController implements Initializable {
     @FXML
@@ -352,5 +348,52 @@ public class GUI_ManageCustomerController implements Initializable {
             Database.closeConnection();
         }
     }
+    @FXML
+    public void btn_customerQR(ActionEvent actionEvent) {
+        Customer selectedCustomer = tabViewCustomer.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer != null) {
+            String qrContent = selectedCustomer.getPhoneNumber() + ","
+                    + selectedCustomer.getName() + ","
+                    + selectedCustomer.getAddress();
+
+            createQRCode(selectedCustomer, qrContent);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Vui lòng chọn một khách hàng để tạo mã QR!");
+            alert.showAndWait();
+        }
+    }
+
+    private void createQRCode(Customer selectedCustomer, String qrContent) {
+        try {
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+
+            Map<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+
+            BitMatrix matrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 400, 400, hints);
+
+            String customerId = selectedCustomer.getCustomerId();
+            String outputFile = "src/main/resources/com/huongbien/img/qr/QrCode_MaKH" + customerId + ".png";
+            Path path = Paths.get(outputFile);
+
+            Files.createDirectories(path.getParent());
+
+            MatrixToImageWriter.writeToPath(matrix, "PNG", path);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "QR code được tạo thành công tại: " + outputFile);
+            alert.showAndWait();
+        } catch (WriterException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi viết mã QR: " + e.getMessage());
+            alert.showAndWait();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi ghi tệp: " + e.getMessage());
+            alert.showAndWait();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi không xác định: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
 
 }

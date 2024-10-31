@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -164,9 +165,18 @@
    <bottom>
       <HBox prefHeight="120.0" prefWidth="1692.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="200.0" prefWidth="1692.0" style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
+            <VBox prefHeight="120.0" prefWidth="1266.0" HBox.hgrow="ALWAYS">
                <children>
                   <TabPane fx:id="tabPane_infoTable" prefHeight="200.0" prefWidth="1692.0" tabClosingPolicy="UNAVAILABLE" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="120.0" prefWidth="219.0">
+               <children>
+                  <Button mnemonicParsing="false" style="-fx-background-color: white;" text="Chọn món">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                  </Button>
                </children>
             </VBox>
          </children>

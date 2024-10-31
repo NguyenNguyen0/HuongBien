@@ -58,7 +58,31 @@ public class GUI_OrderTableItemController implements Initializable {
             case "Phục vụ" -> imgView_table.setImage(new Image("/com/huongbien/icon/order/tab-ordered-512px.png"));
             case "Bàn đóng" -> imgView_table.setImage(new Image("/com/huongbien/icon/order/tab-stop-512px.png"));
         }
+        setCheckTableFromJSON();
     }
+
+    public void setCheckTableFromJSON() {
+        JsonArray jsonArray;
+        try {
+            jsonArray = Utils.readJsonFromFile(path);
+        } catch (FileNotFoundException e) {
+            jsonArray = new JsonArray();
+        }
+        boolean tableExists = false;
+        for (JsonElement element : jsonArray) {
+            JsonObject existingTable = element.getAsJsonObject();
+            if (existingTable.has("Table ID") && existingTable.get("Table ID").getAsString().equals(lbl_tableID.getText())) {
+                tableExists = true;
+                break;
+            }
+        }
+        if (tableExists) {
+            imgView_check.setImage(new Image("/com/huongbien/icon/order/check-mark-128px.png"));
+            isCheck = true;
+        }
+    }
+
+
 
     public GUI_OrderTableController gui_orderTableController;
     public void setGui_orderTableController(GUI_OrderTableController gui_orderTableController) {
@@ -81,7 +105,7 @@ public class GUI_OrderTableItemController implements Initializable {
         }
     }
 
-    private void writeDataJSONtoFile(String tabID, String tabName, int tabFloor, int tabSeats, String tabStatus, String tabType) {
+    private void writeDataJSONtoFile(String tabID, String tabName, int tabFloor, int tabSeats, String tabStatus, String tabTypeID, String tabTypeName, String tabTypeDescription) {
         JsonArray jsonArray;
         try {
             jsonArray = Utils.readJsonFromFile(path);
@@ -106,19 +130,30 @@ public class GUI_OrderTableItemController implements Initializable {
             jsonObject.addProperty("Table Floor", tabFloor);
             jsonObject.addProperty("Table Seats", tabSeats);
             jsonObject.addProperty("Table Status", tabStatus);
-            jsonObject.addProperty("Table Type", tabType);
+
+            // Thêm sub-document cho Table Type
+            JsonObject tableTypeObject = new JsonObject();
+            tableTypeObject.addProperty("Table Type ID", tabTypeID);
+            tableTypeObject.addProperty("Table Type Name", tabTypeName);
+            tableTypeObject.addProperty("Table Type Description", tabTypeDescription);
+
+            jsonObject.add("Table Type", tableTypeObject);
 
             jsonArray.add(jsonObject);
         }
         Utils.writeJsonToFile(jsonArray, path);
     }
 
+
     private void handleWriteJS() {
         String tabID = lbl_tableID.getText();
         try {
             DAO_Table dao_table = new DAO_Table(Database.getConnection());
             Table table = dao_table.get(tabID);
-            writeDataJSONtoFile(table.getId(),table.getName(), table.getFloor(), table.getSeats(), table.getStatus(), table.getTableType().getTableId());
+            writeDataJSONtoFile(
+                    table.getId(),table.getName(), table.getFloor(), table.getSeats(), table.getStatus(),
+                    table.getTableType().getTableId(), table.getTableType().getName(), table.getTableType().getDescription()
+            );
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -127,9 +162,10 @@ public class GUI_OrderTableItemController implements Initializable {
     }
 
     @FXML
-    void getInfoTable(MouseEvent event) {
+    void getInfoTable(MouseEvent event) throws FileNotFoundException {
         handleCheck();
         handleWriteJS();
-
+        gui_orderTableController.tabPane_infoTable.getTabs().clear();
+        gui_orderTableController.readFromJSON();
     }
 }
