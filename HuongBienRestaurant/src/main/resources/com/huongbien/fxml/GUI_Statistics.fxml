@@ -29,7 +29,7 @@
                   </AnchorPane>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="485.0" prefWidth="820.0">
                      <children>
-                        <LineChart fx:id="lineChartofOrders" layoutX="14.0" layoutY="23.0" prefHeight="433.0" prefWidth="768.0" title="BIỂU ĐỒ SỐ LƯỢNG ĐƠN ĐẶT BÀN" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="23.0">
+                        <LineChart fx:id="lineChartOfOrders" layoutX="14.0" layoutY="23.0" prefHeight="433.0" prefWidth="768.0" title="BIỂU ĐỒ SỐ LƯỢNG ĐƠN ĐẶT BÀN" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="23.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -59,7 +59,7 @@
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-            <Button layoutX="1460.0" layoutY="9.0" mnemonicParsing="false" prefHeight="153.0" prefWidth="217.0" style="-fx-background-color: #074409; -fx-background-radius: 20px;" textFill="#fcf8f8">
+            <Button layoutX="1457.0" layoutY="8.0" mnemonicParsing="false" prefHeight="158.0" prefWidth="237.0" style="-fx-background-color: #074409; -fx-background-radius: 20px;" textFill="#fcf8f8" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="1457.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="8.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
@@ -94,7 +94,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="txtx_TotalRevenues" layoutX="333.0" layoutY="42.0" prefHeight="27.0" prefWidth="157.0" text="100.000.000 VND">
+            <Label fx:id="txt_TotalRevenues" layoutX="333.0" layoutY="42.0" prefHeight="27.0" prefWidth="157.0" text="100.000.000 VND">
                <font>
                   <Font size="18.0" />
                </font>
@@ -114,17 +114,17 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="txt_NumberCustomers" layoutX="837.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label fx:id="txt_TotalCustomers" layoutX="837.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txt_TotalTimes" layoutX="1076.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label fx:id="txt_Reservations" layoutX="1076.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txtx_TotalOfRevenues" layoutX="1552.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label fx:id="txt_TotalOfRevenues" layoutX="1552.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="1552.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="99.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -139,7 +139,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="1017.0" layoutY="60.0" text="THỜI GIAN (GIỜ)" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label layoutX="1017.0" layoutY="60.0" text="TỔNG ĐƠN ĐẶT" textAlignment="CENTER" textFill="#fcfcfc">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -149,9 +149,15 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="1483.0" layoutY="55.0" text="TỔNG DOANH THU" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label layoutX="1495.0" layoutY="39.0" prefHeight="74.0" prefWidth="236.0" text="TỔNG DOANH THU" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="1495.0" AnchorPane.rightAnchor="-31.0" AnchorPane.topAnchor="39.0">
                <font>
                   <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="comboBox_Years" layoutX="527.0" layoutY="128.0" prefHeight="29.0" prefWidth="178.0" />
+            <Label fx:id="labelSelectYear" layoutX="527.0" layoutY="98.0" prefHeight="30.0" prefWidth="120.0" text="CHỌN NĂM">
+               <font>
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Label>
          </children>
