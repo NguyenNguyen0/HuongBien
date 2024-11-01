@@ -162,8 +162,8 @@ public class DAO_Promotion extends DAO_Base<Promotion> {
                     promotion.setDiscount(rs.getDouble("discount"));
                     promotion.setDescription(rs.getString("description"));
                     promotion.setMinimumOrderAmount(rs.getDouble("minimumOrderAmount"));
-                    promotion.setMinimumOrderAmount(rs.getInt("membershipLevel"));
-                    promotion.setMinimumOrderAmount(rs.getInt("status"));
+                    promotion.setMembershipLevel(rs.getInt("membershipLevel"));
+                    promotion.setStatus(rs.getString("status"));
                 }
             }
         } catch (SQLException e) {
