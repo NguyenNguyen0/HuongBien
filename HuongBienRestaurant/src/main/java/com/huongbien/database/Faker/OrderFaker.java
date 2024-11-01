@@ -119,7 +119,7 @@ public class OrderFaker {
         ArrayList<Order> orders = new ArrayList<>();
         Set<Order> orderSet = new HashSet<>();
 
-        for (int year = 2021; year < 2024; year++) {
+        for (int year = 2021; year <= 2024; year++) {
             for (int month = 1; month <= 12; month++) {
                 int dayOfMonth = getDaysOfAMonth(month, year);
                 for (int day = 1; day <= dayOfMonth; day++) {
@@ -136,26 +136,26 @@ public class OrderFaker {
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
 
-//        int successCount = 0;
-//        int failCount = 0;
-//        for (Order order : orderSet) {
-//            try {
-//                if (!daoOrder.add(order)) {
-//                    System.out.println("Add fail object: " + order);
-//                    failCount++;
-//                    break;
-//                } else {
-//                    successCount++;
-//                    System.out.println("Add success object: " + order);
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Add fail object: " + order);
-//                failCount++;
-//            }
-//        }
+        int successCount = 0;
+        int failCount = 0;
+        for (Order order : orderSet) {
+            try {
+                if (!daoOrder.add(order)) {
+                    System.out.println("Add fail object: " + order);
+                    failCount++;
+                    break;
+                } else {
+                    successCount++;
+                    System.out.println("Add success object: " + order);
+                }
+            } catch (Exception e) {
+                System.out.println("Add fail object: " + order);
+                failCount++;
+            }
+        }
 
-//        System.out.println("Total order inserted successfully: " + successCount);
-//        System.out.println("Total order inserted fail: " + failCount);
+        System.out.println("Total order inserted successfully: " + successCount);
+        System.out.println("Total order inserted fail: " + failCount);
     }
 
     public int getDaysOfAMonth(int month, int year) {

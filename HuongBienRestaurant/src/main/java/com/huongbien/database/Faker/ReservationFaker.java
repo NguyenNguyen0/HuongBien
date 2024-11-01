@@ -84,14 +84,15 @@ public class ReservationFaker {
 //        PrettyPrint.objectPrint(fakeReservation(LocalDate.now()));
 
         Set<Reservation> reservationSet = new HashSet<>();
-        int year = 2023;
-        for (int month = 1; month <= 12; month++) {
-            int dayOfMonth = orderFaker.getDaysOfAMonth(month, year);
-            for (int day = 1; day <= dayOfMonth; day++) {
-                int orderQuantity = Utils.randomNumber(0, 13);
-                for (int i = 0; i < orderQuantity; i++) {
-                    reservationSet.add(fakeReservation(LocalDate.of(year, month, day)));
-                    System.out.println("Order added!");
+        for (int year = 2021; year <= 2024; year++) {
+            for (int month = 1; month <= 12; month++) {
+                int dayOfMonth = orderFaker.getDaysOfAMonth(month, year);
+                for (int day = 1; day <= dayOfMonth; day++) {
+                    int orderQuantity = Utils.randomNumber(0, 3);
+                    for (int i = 0; i < orderQuantity; i++) {
+                        reservationSet.add(fakeReservation(LocalDate.of(year, month, day)));
+                        System.out.println("Reservation added!");
+                    }
                 }
             }
         }
@@ -100,28 +101,28 @@ public class ReservationFaker {
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
 
-//        Connection instance = Database.getConnection();
-//        DAO_Reservation daoReservation = new DAO_Reservation(instance);
-//        int successCount = 0;
-//        int failCount = 0;
-//        for (Reservation reservation : reservationSet) {
-//            try {
-//                if (!daoReservation.add(reservation)) {
-//                    System.out.println("Add fail object: " + reservation);
-//                    failCount++;
-//                    break;
-//                } else {
-//                    successCount++;
-//                    System.out.println("Add success object: " + reservation);
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Add fail object: " + reservation);
-//                failCount++;
-//            }
-//        }
-//
-//        System.out.println("Total reservation inserted successfully: " + successCount);
-//        System.out.println("Total reservation inserted fail: " + failCount);
+        Connection instance = Database.getConnection();
+        DAO_Reservation daoReservation = new DAO_Reservation(instance);
+        int successCount = 0;
+        int failCount = 0;
+        for (Reservation reservation : reservationSet) {
+            try {
+                if (!daoReservation.add(reservation)) {
+                    System.out.println("Add fail object: " + reservation);
+                    failCount++;
+                    break;
+                } else {
+                    successCount++;
+                    System.out.println("Add success object: " + reservation);
+                }
+            } catch (Exception e) {
+                System.out.println("Add fail object: " + reservation);
+                failCount++;
+            }
+        }
+
+        System.out.println("Total reservation inserted successfully: " + successCount);
+        System.out.println("Total reservation inserted fail: " + failCount);
     }
 
 }
