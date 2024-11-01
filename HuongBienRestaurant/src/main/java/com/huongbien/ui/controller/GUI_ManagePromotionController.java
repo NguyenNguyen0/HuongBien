@@ -261,7 +261,7 @@ public class GUI_ManagePromotionController implements Initializable {
         if(date_ended.getValue().isBefore(date_started.getValue())){
             return false;
         }
-        if(txt_status.getText().equals("Còn hi?u l?c")){
+        if(txt_status.getText().equals("Còn hiệu lực")){
 
         }
         return true;
