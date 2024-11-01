@@ -414,7 +414,7 @@ public class GUI_ManagePromotionController implements Initializable {
                 try {
                     Connection connection = Database.getConnection();
                     DAO_Promotion dao_promotion = new DAO_Promotion(connection);
-                    promotion = new Promotion(name, start, end, discount, description, minimumOrder, memberShipLevel, "Còn hi?u l?c");
+                    promotion = new Promotion(name, start, end, discount, description, minimumOrder, memberShipLevel, "Còn hiệu lực");
                     if (dao_promotion.add(promotion)) {
                         tabViewPromotion.getItems().clear();
                         setCellValues();

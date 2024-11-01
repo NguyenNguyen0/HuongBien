@@ -63,7 +63,7 @@ public class DAO_Promotion extends DAO_Base<Promotion> {
     @Override
     public List<Promotion> get() {
         List<Promotion> promotions = new ArrayList<>();
-        String sql = "SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE 'Còn hi?u l?c'";
+        String sql = "SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE N'Còn hiệu lực'";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -119,7 +119,7 @@ public class DAO_Promotion extends DAO_Base<Promotion> {
 
     public List<Promotion> getExpired() {
         List<Promotion> promotions = new ArrayList<>();
-        String sql = "SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE 'Hết hi?u l?c'";
+        String sql = "SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE N'Hết hiệu lực'";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
