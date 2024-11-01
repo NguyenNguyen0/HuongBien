@@ -107,9 +107,6 @@ public class Reservation {
     }
 
     public void setReservationDate(LocalDate reservationDate) {
-        if (reservationDate == null || reservationDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Reservation date must be today or earlier");
-        }
         this.reservationDate = reservationDate;
     }
 
