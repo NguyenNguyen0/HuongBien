@@ -135,6 +135,7 @@ public class DAO_OrderDetail extends DAO_Base<OrderDetail> {
     }
 
     public boolean add(List<OrderDetail> orderDetails) {
+        if (orderDetails.isEmpty()) return false;
         for (OrderDetail orderDetail : orderDetails) {
             if (!add(orderDetail)) {
                 return false;

@@ -22,6 +22,7 @@ public class DAO_Reservation extends DAO_Base<Reservation> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             DAO_Payment paymentDao = new DAO_Payment(connection);
             DAO_FoodOrder foodOrderDao = new DAO_FoodOrder(connection);
+            DAO_Table tableDao = new DAO_Table(connection);
 
             stmt.setString(1, object.getReservationId());
             stmt.setString(2, object.getPartyType());
@@ -34,12 +35,14 @@ public class DAO_Reservation extends DAO_Base<Reservation> {
             stmt.setDouble(9, object.getRefundDeposit());
             stmt.setString(10, object.getEmployee().getEmployeeId());
             stmt.setString(11, object.getCustomer().getCustomerId());
-            stmt.setString(12, object.getPayment().getPaymentId());
-            paymentDao.add(object.getPayment());
+            stmt.setString(12, object.getPayment() == null ? null : object.getPayment().getPaymentId());
+
+            paymentDao.add( object.getPayment() == null ? null : object.getPayment());
 
             int rowAffected = stmt.executeUpdate();
 
             foodOrderDao.add(object.getFoodOrders());
+            tableDao.addTablesToReservation(object.getReservationId(), object.getTables());
 
             return rowAffected > 0;
         } catch (SQLException e) {

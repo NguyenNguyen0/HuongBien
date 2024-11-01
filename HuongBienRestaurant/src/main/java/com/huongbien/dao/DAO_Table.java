@@ -177,6 +177,7 @@ public class DAO_Table extends DAO_Base<Table> {
     }
 
     public boolean add(List<Table> tables) {
+        if (tables.isEmpty()) return false;
         for (Table table : tables) {
             if (!add(table)) {
                 return false;
@@ -242,4 +243,20 @@ public class DAO_Table extends DAO_Base<Table> {
         return statuses;
     }
 
+    public void addTablesToReservation(String reservationId, ArrayList<Table> tables) {
+        String sql = "INSERT INTO Reservation_Table (reservationId, tableId) VALUES (?, ?)";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, reservationId);
+
+            for (Table table : tables) {
+                statement.setString(2, table.getId());
+                if (statement.executeUpdate() <= 0) {
+                    return;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

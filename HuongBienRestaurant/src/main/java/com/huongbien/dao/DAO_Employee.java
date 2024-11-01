@@ -169,6 +169,38 @@ public class DAO_Employee extends DAO_Base<Employee> {
         return employees;
     }
 
+    public List<Employee> getByPosition(String position) {
+        List<Employee> employees = new ArrayList<>();
+        String sql = "SELECT * FROM Employee WHERE position = ?;";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, position);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Employee employee = new Employee();
+                employee.setEmployeeId(rs.getString("id"));
+                employee.setName(rs.getString("name"));
+                employee.setPhoneNumber(rs.getString("phoneNumber"));
+                employee.setCitizenIDNumber(rs.getString("citizenIDNumber"));
+                employee.setGender(rs.getBoolean("gender"));
+                employee.setAddress(rs.getString("address"));
+                employee.setBirthday(rs.getDate("birthday").toLocalDate());
+                employee.setEmail(rs.getString("email"));
+                employee.setStatus(rs.getString("status"));
+                employee.setHireDate(rs.getDate("hireDate").toLocalDate());
+                employee.setPosition(rs.getString("position"));
+                employee.setWorkHours(rs.getDouble("workHours"));
+                employee.setHourlyPay(rs.getDouble("hourlyPay"));
+                employee.setSalary(rs.getDouble("salary"));
+                employee.setManager(this.get(rs.getString("managerId")));
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return employees;
+    }
+
     public List<Employee> getByName(String name) {
         List<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM Employee WHERE name LIKE ?;";

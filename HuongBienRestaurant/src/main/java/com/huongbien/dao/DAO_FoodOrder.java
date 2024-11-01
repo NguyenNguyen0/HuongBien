@@ -121,6 +121,8 @@ public class DAO_FoodOrder extends DAO_Base<FoodOrder> {
     }
 
     public boolean add(List<FoodOrder> foodOrders) {
+        if (foodOrders.isEmpty()) return false;
+
         for (FoodOrder foodOrder : foodOrders) {
             if (!add(foodOrder)) {
                 return false;
