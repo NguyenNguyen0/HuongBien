@@ -114,14 +114,11 @@ public class Reservation {
     }
 
     public void setReservationTime(LocalTime reservationTime) {
-        if (reservationTime == null || (reservationDate.equals(LocalDate.now()) && reservationTime.isAfter(LocalTime.now()))) {
-            throw new IllegalArgumentException("Reservation time must be before the current time if the reservation is for today");
-        }
         this.reservationTime = reservationTime;
     }
 
     public void setReceiveDate(LocalDate receiveDate) {
-        if (receiveDate == null || receiveDate.isBefore(LocalDate.now())) {
+        if (receiveDate == null || receiveDate.isBefore(getReservationDate())) {
             throw new IllegalArgumentException("Receive date must be today or later");
         }
         this.receiveDate = receiveDate;
@@ -149,16 +146,10 @@ public class Reservation {
     }
 
     public void setPayment(Payment payment) {
-        if (payment == null) {
-            throw new IllegalArgumentException("Payment cannot be null");
-        }
         this.payment = payment;
     }
 
     public void setEmployee(Employee employee) {
-        if (employee == null) {
-            throw new IllegalArgumentException("Employee cannot be null");
-        }
         this.employee = employee;
     }
 
@@ -170,9 +161,6 @@ public class Reservation {
     }
 
     public void setCustomer(Customer customer) {
-        if (customer == null) {
-            throw new IllegalArgumentException("Customer cannot be null");
-        }
         this.customer = customer;
     }
 

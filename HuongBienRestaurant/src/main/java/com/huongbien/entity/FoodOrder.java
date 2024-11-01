@@ -12,7 +12,7 @@ public class FoodOrder {
     private Cuisine cuisine;
 
 //  truyền mã FoodOrder hoặc truyền mã Reservation để tự động tạo mã mới nếu tạo FoodOrder mới
-    public FoodOrder( String foodOrderId, double salePrice, String note, int quantity, Cuisine cuisine) {
+    public FoodOrder( String foodOrderId, int quantity, double salePrice, Cuisine cuisine, String note) {
         setFoodOrderId(foodOrderId);
         setSalePrice(salePrice);
         setNote(note);

@@ -22,21 +22,21 @@ public class Payment {
         setAmount(amount);
         setPaymentDate(paymentDate);
         setPaymentMethod(paymentMethod);
-        setPaymentTime(paymentDate, paymentTime);
+        setPaymentTime(paymentTime);
     }
 
-    public Payment(double amount, LocalDate paymentDate, String paymentMethod, LocalTime paymentTime) {
-        setPaymentId(null);
-        setAmount(amount);
+    public Payment(double amount, LocalDate paymentDate, LocalTime paymentTime, String paymentMethod) {
         setPaymentDate(paymentDate);
+        setPaymentTime(paymentTime);
         setPaymentMethod(paymentMethod);
-        setPaymentTime(paymentDate, paymentTime);
+        setAmount(amount);
+        setPaymentId(null);
     }
 
     public void setPaymentId(String paymentId) {
         if (paymentId == null) {
-            LocalDate currentDate = LocalDate.now();
-            LocalTime currentTime = LocalTime.now();
+            LocalDate currentDate = getPaymentDate() == null ? LocalDate.now() : getPaymentDate();
+            LocalTime currentTime = getPaymentTime() == null ? LocalTime.now() : getPaymentTime();
             this.paymentId = String.format("TT%02d%02d%02d%02d%02d%02d%03d",
                     currentDate.getYear() % 100,
                     currentDate.getMonthValue(),
@@ -79,10 +79,7 @@ public class Payment {
         throw new IllegalArgumentException("Payment method must be either 'Chuyển khoản' or 'Tiền mặt'.");
     }
 
-    public void setPaymentTime(LocalDate paymentDate, LocalTime paymentTime) {
-        if (paymentDate == null) {
-            throw new IllegalArgumentException("Payment date cannot be null.");
-        }
+    public void setPaymentTime(LocalTime paymentTime) {
         if (paymentTime == null) {
             throw new IllegalArgumentException("Payment time cannot be null.");
         }

@@ -23,7 +23,8 @@ public class Order {
     private Customer customer;
     private Employee employee;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Order(String orderId, LocalDate orderDate, String notes, double paymentAmount,
                  double dispensedAmount, double totalAmount, double discount,
@@ -64,15 +65,15 @@ public class Order {
     }
 
     public double getTotalAmount(ArrayList<OrderDetail> orderDetails, Promotion promotion) {
-        return (promotion == null ? 1 : (1 + promotion.getDiscount())) * orderDetails
+        return Math.round((promotion == null ? 1 : (1 + promotion.getDiscount())) * orderDetails
                 .stream()
                 .map((orderDetail -> orderDetail.getSalePrice() * orderDetail.getQuantity()))
-                .reduce(0.0, Double::sum);
+                .reduce(0.0, Double::sum));
     }
 
     public void setOrderId(String orderId) {
         if (orderId == null) {
-            LocalDate currentDate = LocalDate.now();
+            LocalDate currentDate = getOrderDate() == null ? LocalDate.now() : getOrderDate();
             LocalTime currentTime = LocalTime.now();
             this.orderId = String.format("HD%02d%02d%02d%02d%02d%02d%03d",
                     currentDate.getYear() % 100,
@@ -112,7 +113,7 @@ public class Order {
 
     public void setDispensedAmount(double dispensedAmount) {
         if (dispensedAmount <= 0) {
-            throw new IllegalArgumentException("Dispensed amount must be greater than 0");
+            dispensedAmount = 0;
         }
         this.dispensedAmount = dispensedAmount;
     }
