@@ -20,12 +20,12 @@
    <right>
       <VBox prefHeight="659.0" prefWidth="750.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="166.0" prefWidth="750.0" />
-            <HBox prefHeight="249.0" prefWidth="750.0">
+            <VBox prefHeight="259.0" prefWidth="750.0">
                <children>
-                  <VBox prefHeight="249.0" prefWidth="287.0">
+                  <HBox prefHeight="143.0" prefWidth="750.0" />
+                  <HBox prefHeight="102.0" prefWidth="750.0">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox prefHeight="133.0" prefWidth="772.0">
                            <children>
                               <Label text="Mã hóa đơn">
                                  <font>
@@ -35,75 +35,77 @@
                               <TextField fx:id="txt_invoiceId" editable="false" minHeight="50.0" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="20.0" />
-                                 </font></TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" right="10.0" />
-                           </padding>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="Giảm giá">
-                                 <font>
-                                    <Font size="18.0" />
                                  </font>
-                              </Label>
-                              <TextField fx:id="txt_discount" editable="false" minHeight="50.0" styleClass="textField-line-bot">
-                                 <font>
-                                    <Font size="22.0" />
-                                 </font></TextField>
+                              </TextField>
                            </children>
-                           <VBox.margin>
-                              <Insets right="10.0" />
-                           </VBox.margin>
                            <padding>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets left="40.0" right="40.0" />
                            </padding>
                         </VBox>
                      </children>
-                     <padding>
-                        <Insets left="30.0" />
-                     </padding>
-                  </VBox>
-                  <VBox prefHeight="249.0" prefWidth="268.0">
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="228.0" prefWidth="750.0">
+               <children>
+                  <HBox prefHeight="128.0" prefWidth="690.0">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="377.0">
+                        <VBox prefHeight="100.0" prefWidth="416.0">
                            <children>
                               <Label text="Ngày lập hóa đơn">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <DatePicker fx:id="date_orderDate" editable="false" prefHeight="52.0" prefWidth="248.0" />
+                              <DatePicker fx:id="date_orderDate" editable="false" prefHeight="52.0" prefWidth="298.0">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </DatePicker>
                            </children>
-                           <VBox.margin>
-                              <Insets left="10.0" right="10.0" />
-                           </VBox.margin>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="405.0">
+                        <VBox prefHeight="100.0" prefWidth="453.0">
+                           <children>
+                              <Label text="Giảm giá">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txt_discount" editable="false" minHeight="50.0" prefHeight="50.0" prefWidth="288.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="20.0" right="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox prefHeight="125.0" prefWidth="690.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="263.0">
                            <children>
                               <Label text="Tiền đặt cọc">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txt_dispensedAmount" editable="false" minHeight="50.0" styleClass="textField-line-bot">
+                              <TextField fx:id="txt_dispensedAmount" editable="false" minHeight="50.0" prefHeight="50.0" prefWidth="261.0" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="22.0" />
-                                 </font></TextField>
+                                 </font>
+                              </TextField>
                            </children>
                            <padding>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets left="10.0" right="20.0" />
                            </padding>
                         </VBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="249.0" prefWidth="212.0">
-                     <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox prefHeight="100.0" prefWidth="155.0">
                            <children>
                               <Label text="Thuế">
                                  <font>
@@ -113,7 +115,8 @@
                               <TextField fx:id="txt_VAT" editable="false" minHeight="50.0" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="22.0" />
-                                 </font></TextField>
+                                 </font>
+                              </TextField>
                            </children>
                            <padding>
                               <Insets left="10.0" right="10.0" />
@@ -129,19 +132,20 @@
                               <TextField fx:id="txt_totalAmount" editable="false" minHeight="50.0" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="22.0" />
-                                 </font></TextField>
+                                 </font>
+                              </TextField>
                            </children>
                            <padding>
                               <Insets left="10.0" right="10.0" />
                            </padding>
                         </VBox>
                      </children>
-                     <padding>
-                        <Insets right="30.0" />
-                     </padding>
-                  </VBox>
+                  </HBox>
                </children>
-            </HBox>
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <VBox prefHeight="100.0" prefWidth="350.0">
@@ -153,7 +157,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txt_customer" editable="false" minHeight="50.0" prefHeight="54.0" prefWidth="253.0" styleClass="textField-line-bot">
+                              <TextField fx:id="txt_customer" editable="false" minHeight="50.0" prefHeight="54.0" prefWidth="271.0" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="22.0" />
                                  </font>
@@ -198,7 +202,7 @@
                <children>
                   <VBox prefHeight="211.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
+                        <VBox prefHeight="110.0" prefWidth="322.0">
                            <children>
                               <Label text="Mã giảm giá">
                                  <font>
@@ -239,7 +243,7 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox prefHeight="193.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
+            <VBox prefHeight="259.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox prefHeight="185.0" prefWidth="670.0">
                      <children>
