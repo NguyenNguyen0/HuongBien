@@ -42,7 +42,7 @@
       </VBox>
       <VBox alignment="CENTER">
          <children>
-            <Button fx:id="btn_cuisineNote" mnemonicParsing="false" onAction="#btn_cuisineNote">
+            <Button fx:id="btn_cuisineNote" mnemonicParsing="false" onAction="#btn_cuisineNote" styleClass="transperant">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -58,16 +58,22 @@
       </VBox>
       <HBox alignment="CENTER" prefHeight="70.0">
          <children>
-            <Button fx:id="btn_cuisineDecrease" mnemonicParsing="false" onAction="#btn_cuisineDecrease" text="-" />
+            <Button fx:id="btn_cuisineDecrease" mnemonicParsing="false" onAction="#btn_cuisineDecrease" prefHeight="30.0" prefWidth="30.0" text="-">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
             <Label fx:id="lbl_cuisineQuantity" alignment="CENTER" prefWidth="30.0" text="2">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin>
                <font>
-                  <Font size="20.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btn_cuisineIncrease" mnemonicParsing="false" onAction="#btn_cuisineIncrease" text="+" />
+            <Button fx:id="btn_cuisineIncrease" mnemonicParsing="false" onAction="#btn_cuisineIncrease" prefHeight="30.0" prefWidth="30.0" text="+">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
          </children>
          <HBox.margin>
             <Insets left="5.0" right="5.0" />
@@ -87,7 +93,7 @@
       </VBox>
       <VBox alignment="CENTER">
          <children>
-            <Button fx:id="btn_cuisineDelete" mnemonicParsing="false" onAction="#btn_cuisineDelete">
+            <Button fx:id="btn_cuisineDelete" mnemonicParsing="false" onAction="#btn_cuisineDelete" styleClass="transperant">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>

@@ -29,7 +29,7 @@
          <children>
             <Label fx:id="lbl_tableType" text="Bàn VIP">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font name="System Bold Italic" size="18.0" />
                </font>
             </Label>
             <Label text="-">
@@ -37,12 +37,12 @@
                   <Insets left="10.0" right="10.0" />
                </HBox.margin>
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font name="System Bold Italic" size="18.0" />
                </font>
             </Label>
             <Label fx:id="lbl_tableSeats" text="5 Người">
                <font>
-                  <Font name="System Bold" size="20.0" />
+                  <Font name="System Bold Italic" size="18.0" />
                </font>
             </Label>
          </children>
