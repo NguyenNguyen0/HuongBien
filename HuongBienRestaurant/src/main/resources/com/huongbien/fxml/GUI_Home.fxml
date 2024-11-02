@@ -1,10 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="718.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_HomeController">
+<BorderPane prefHeight="956.0" prefWidth="1614.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_HomeController">
+   <top>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane prefHeight="100.0" prefWidth="1658.0">
+               <children>
+                  <Button layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="120.0" prefWidth="1645.0" style="-fx-background-color: #5E17EB; -fx-background-radius: 20;" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="14.0" />
+                  <Label layoutX="56.0" layoutY="51.0" text="Xin Chào:" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="56.0" layoutY="110.0" text="Chức Vụ:" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1046.0" layoutY="51.0" prefHeight="35.0" prefWidth="459.0" text="Thời Gian Đã Làm Việc Trong Hôm Nay:" textFill="#fcf9f9" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="1046.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="51.0">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1046.0" layoutY="114.0" prefHeight="35.0" prefWidth="210.0" text="Thời Gian Vào Ca:" textFill="#fcf9f9" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="1046.0" AnchorPane.rightAnchor="418.0" AnchorPane.topAnchor="114.0">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_EmployeeName" layoutX="181.0" layoutY="51.0" text="JASI" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_EmployeePosition" layoutX="181.0" layoutY="110.0" text="Quản Lý" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_TimeWorks" layoutX="1498.0" layoutY="51.0" prefHeight="35.0" prefWidth="100.0" text="1:00:11" textFill="#fcf9f9" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="1498.0" AnchorPane.rightAnchor="77.0" AnchorPane.topAnchor="51.0">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_StartTime" layoutX="1261.0" layoutY="114.0" prefHeight="35.0" prefWidth="376.0" text="14:00 | Saturday 02/11/2024" textFill="#fcf9f9" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="1261.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="114.0">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </top>
    <center>
-      <Button mnemonicParsing="false" text="This's Home Page" BorderPane.alignment="CENTER" />
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane prefHeight="756.0" prefWidth="1674.0">
+               <children>
+                  <Button layoutX="231.0" layoutY="14.0" mnemonicParsing="false" prefHeight="149.0" prefWidth="223.0" style="-fx-background-color: #074409; -fx-background-radius: 20px;" textFill="#fcf8f8">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="1187.0" layoutY="14.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="223.0" style="-fx-background-color: #1D557E; -fx-background-radius: 20px;" textFill="#fcf8f8">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="854.0" layoutY="14.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="223.0" style="-fx-background-color: #FCB859; -fx-background-radius: 20px;" textFill="#fcf8f8">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="539.0" layoutY="14.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="224.0" style="-fx-background-color: #3E00C2; -fx-background-radius: 20px;" textAlignment="CENTER" textFill="#fcf8f8">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="254.0" layoutY="62.0" text="TỔNG KHÁCH HÀNG" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1226.0" layoutY="62.0" text="TỔNG HOÁ ĐƠN" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="899.0" layoutY="62.0" text="TỔNG ĐƠN ĐẶT" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="573.0" layoutY="62.0" text="TỔNG DOANH THU" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_TotalCustomers" layoutX="331.0" layoutY="101.0" prefHeight="27.0" prefWidth="66.0" text="0" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_TotalOfInvoice" layoutX="1269.0" layoutY="95.0" prefHeight="27.0" prefWidth="81.0" text="0" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_Reservations" layoutX="937.0" layoutY="95.0" prefHeight="27.0" prefWidth="108.0" text="0" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txt_TotalOfRevenues" layoutX="597.0" layoutY="95.0" prefHeight="27.0" prefWidth="130.0" text="0" textFill="#fcf9f9">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane layoutX="31.0" layoutY="196.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="513.0" prefWidth="1675.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="196.0">
+                     <children>
+                        <MediaView fx:id="mediaView" fitHeight="513.0" fitWidth="1614.0" layoutX="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="54.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
    </center>
 </BorderPane>
