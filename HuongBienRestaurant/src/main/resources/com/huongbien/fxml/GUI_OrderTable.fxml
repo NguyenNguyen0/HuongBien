@@ -172,7 +172,7 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="120.0" prefWidth="250.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#btn_chooseCuisine" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt món">
+                  <Button mnemonicParsing="false" onAction="#btn_chooseCuisine" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tiếp tục">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>

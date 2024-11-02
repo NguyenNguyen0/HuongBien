@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="725.0" prefWidth="1386.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderCuisineController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1445.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderCuisineController">
    <right>
       <StackPane prefWidth="700.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -33,7 +33,7 @@
             </VBox>
             <BorderPane fx:id="compoent_orderBill">
                <center>
-                  <ScrollPane fx:id="compoent_scrollBill" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 1px; -fx-border-color: black;" BorderPane.alignment="CENTER">
+                  <ScrollPane fx:id="compoent_scrollBill" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="textField-line-bot" BorderPane.alignment="CENTER">
                      <content>
                         <GridPane fx:id="compoent_gridBill">
                            <columnConstraints>
@@ -44,118 +44,91 @@
                   </ScrollPane>
                </center>
                <bottom>
-                  <VBox prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+                  <VBox prefHeight="160.0" prefWidth="700.0" BorderPane.alignment="BOTTOM_CENTER">
                      <children>
-                        <VBox prefHeight="120.0" prefWidth="700.0">
+                        <HBox prefHeight="70.0" prefWidth="700.0">
                            <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #CCC;">
+                              <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="247.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
-                                       <children>
-                                          <Label text="Tạm tính" />
-                                          <Label text="(0 món)">
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                          <Label text="0" />
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
-                                       <children>
-                                          <Label text="Thuế GTGT" />
-                                          <Label text="(10%)">
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                          <Label text="0" />
-                                       </children>
-                                    </HBox>
+                                    <Button mnemonicParsing="false">
+                                       <graphic>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../icon/all/printing-128px.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Label text="In tạm tính (F7)">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
                                  </children>
-                                 <padding>
-                                    <Insets left="20.0" right="20.0" />
-                                 </padding>
-                              </VBox>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <HBox prefHeight="59.0" prefWidth="700.0">
+                              </HBox>
+                              <Pane prefHeight="70.0" prefWidth="19.0" HBox.hgrow="ALWAYS" />
+                              <VBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="202.0">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="247.0">
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="178.0">
                                        <children>
-                                          <Button mnemonicParsing="false">
-                                             <graphic>
-                                                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../icon/all/printing-128px.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
+                                          <Label text="Tạm tính">
+                                             <font>
+                                                <Font name="System Bold" size="20.0" />
+                                             </font>
                                              <HBox.margin>
                                                 <Insets right="10.0" />
                                              </HBox.margin>
-                                          </Button>
-                                          <Label text="In tạm tính (F7)">
+                                          </Label>
+                                          <Label text="(0 món)">
                                              <font>
                                                 <Font name="System Bold" size="20.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <Pane prefHeight="70.0" prefWidth="19.0" HBox.hgrow="ALWAYS" />
-                                    <VBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="150.0">
-                                       <children>
-                                          <Label text="Thành tiền">
-                                             <VBox.margin>
-                                                <Insets bottom="5.0" top="5.0" />
-                                             </VBox.margin>
-                                             <font>
-                                                <Font name="System Bold" size="20.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="0" textFill="#1a9030">
-                                             <font>
-                                                <Font name="System Bold" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </VBox>
+                                    <Label text="0" textFill="#1a9030">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
                                  </children>
-                                 <padding>
-                                    <Insets left="20.0" right="20.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets left="20.0" right="20.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="79.0" prefWidth="700.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="339.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black;" text="Lưu (F8)">
-                                             <font>
-                                                <Font name="System Bold" size="20.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="340.0" style="-fx-background-color: #1D557E;" text="Thanh toán (F9)" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="20.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </HBox>
+                                    <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="339.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black;" text="Huỷ (F8)">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#btn_payment" prefHeight="60.0" prefWidth="340.0" style="-fx-background-color: #1D557E;" text="Thanh toán (F9)" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Button>
                                  </children>
                               </HBox>
                            </children>
-                        </VBox>
+                        </HBox>
                      </children>
                   </VBox>
                </bottom>
@@ -187,20 +160,25 @@
       </VBox>
    </center>
    <top>
-      <HBox prefHeight="100.0" prefWidth="1386.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="1386.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="624.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#btn_back" prefHeight="80.0" prefWidth="80.0" styleClass="transperant">
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/all/back-128px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="668.0" HBox.hgrow="ALWAYS">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="411.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black; -fx-border-radius: 50;" text="&lt;">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="System Bold" size="28.0" />
-                           </font>
-                        </Button>
                         <TextField prefHeight="70.0" prefWidth="303.0" promptText="Tìm kiếm món nhanh ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="20.0" />
@@ -220,7 +198,7 @@
                         </Button>
                      </children>
                      <HBox.margin>
-                        <Insets left="20.0" right="10.0" />
+                        <Insets right="10.0" />
                      </HBox.margin>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="288.0">
@@ -230,9 +208,9 @@
                   </HBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0" styleClass="textField-line-bot">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="98.0" prefWidth="627.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="98.0" prefWidth="627.0">
                      <children>
                         <Label text="Tầng trệt">
                            <font>
@@ -270,18 +248,6 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </HBox>
-                  <Button mnemonicParsing="false" styleClass="transperant">
-                     <HBox.margin>
-                        <Insets right="20.0" />
-                     </HBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icon/all/cancel-order-128px.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
                </children>
             </HBox>
          </children></HBox>

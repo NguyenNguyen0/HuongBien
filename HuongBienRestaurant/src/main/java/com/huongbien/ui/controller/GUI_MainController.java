@@ -114,12 +114,27 @@ public class GUI_MainController implements Initializable {
     }
 
     public void openCuisine() throws IOException {
-        label_title.setText("Đặt bàn  >>  Đặt món");
+        label_title.setText("Đặt bàn  -  Đặt món");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderCuisine.fxml"));
         BorderPane cuisine = loader.load();
         compoent_main.setCenter(cuisine);
         cuisine.prefWidthProperty().bind(compoent_main.widthProperty());
         cuisine.prefHeightProperty().bind(compoent_main.heightProperty());
+        //
+        GUI_OrderCuisineController gui_OrderCuisineController = loader.getController();
+        gui_OrderCuisineController.setGUI_MainController(this);
+    }
+
+    public void openPayment() throws IOException {
+        label_title.setText("Đặt bàn  -  Đặt món  -  Thanh toán");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_OrderPayment.fxml"));
+        BorderPane payment = loader.load();
+        compoent_main.setCenter(payment);
+        payment.prefWidthProperty().bind(compoent_main.widthProperty());
+        payment.prefHeightProperty().bind(compoent_main.heightProperty());
+        //
+        GUI_OrderPaymentController gui_OrderPaymentController = loader.getController();
+        gui_OrderPaymentController.setGUI_MainController(this);
     }
 
     public void openStatistics() throws IOException {

@@ -22,19 +22,13 @@ import javafx.scene.layout.VBox;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class GUI_OrderCuisineController implements Initializable {
+public class GUI_OrderPaymentController implements Initializable {
     private final static String path = "src/main/resources/com/huongbien/temp/bill.json";
-
-    //cuisine
-    @FXML
-    private BorderPane compoent_borderCuisine;
-
     @FXML
     private ScrollPane compoent_scrollCuisine;
 
@@ -42,7 +36,6 @@ public class GUI_OrderCuisineController implements Initializable {
     private GridPane compoent_gridCuisine;
 
     private List<Cuisine> cuisines;
-    private List<OrderDetail> orderDetails;
 
     @FXML
     private ScrollPane compoent_scrollBill;
@@ -56,51 +49,24 @@ public class GUI_OrderCuisineController implements Initializable {
         this.gui_mainController = gui_mainController;
     }
 
-    private void loadingCuisine() {
-        cuisines = new ArrayList<>(dataCuisine());
-        int columns = 0;
-        int rows = 1;
-        try {
-            for (int i = 0; i < cuisines.size(); i++) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/GUI_OrderCuisineItem.fxml"));
-                VBox cuisineBox = fxmlLoader.load();
-                GUI_OrderCuisineItemController gui_orderCuisineItemController = fxmlLoader.getController();
-                gui_orderCuisineItemController.setDataCuisine(cuisines.get(i));
-                gui_orderCuisineItemController.setOrderCuisineController(this);
-
-                if (columns == 3) {
-                    columns = 0;
-                    ++rows;
-                }
-                compoent_gridCuisine.add(cuisineBox, columns++, rows);
-                GridPane.setMargin(cuisineBox, new Insets(10));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        compoent_scrollCuisine.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        compoent_gridCuisine.prefWidthProperty().bind(compoent_scrollCuisine.widthProperty());
-    }
-
     public void loadingBill() throws FileNotFoundException {
-        orderDetails = new ArrayList<>(dataBill());
+        List<OrderDetail> orderDetails = new ArrayList<>(dataBill());
         int columns = 0;
         int rows = 1;
         try {
             for (int i = 0; i < orderDetails.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/GUI_OrderBillItem.fxml"));
-                HBox billBox = fxmlLoader.load();
-                GUI_OrderBillItemController gui_orderBillItemController = fxmlLoader.getController();
-                gui_orderBillItemController.setDataBill(orderDetails.get(i));
-                gui_orderBillItemController.setOrderBillController(this);
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/GUI_OrderPaymentBillItem.fxml"));
+                HBox paymentBillBox = fxmlLoader.load();
+                GUI_OrderPaymentBillItemController gui_OrderPaymentBillItemController = fxmlLoader.getController();
+                gui_OrderPaymentBillItemController.setDataBill(orderDetails.get(i));
+                gui_OrderPaymentBillItemController.setOrderPaymnetBillController(this);
 
                 if (columns == 1) {
                     columns = 0;
                     ++rows;
                 }
-                compoent_gridBill.add(billBox, columns++, rows);
+                compoent_gridBill.add(paymentBillBox, columns++, rows);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -133,26 +99,6 @@ public class GUI_OrderCuisineController implements Initializable {
         return orderDetailsList;
     }
 
-    private List<Cuisine> dataCuisine() {
-        try {
-            DAO_Cuisine cuisine_DAO = new DAO_Cuisine(Database.getConnection());
-            List<Cuisine> ls = cuisine_DAO.get();
-            return ls;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
-
-//        List<Cuisine> ls = new ArrayList<>();
-//        Cuisine cuisine = new Cuisine();
-//        cuisine.setCuisineId("M001");
-//        cuisine.setName("Tôm hùm");
-//        cuisine.setPrice(120030);
-//        ls.add(cuisine);
-//        return ls;
-    }
-
     private List<OrderDetail> dataBill() throws FileNotFoundException {
         List<OrderDetail> ls = readFromJSON();
         return ls;
@@ -160,7 +106,6 @@ public class GUI_OrderCuisineController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadingCuisine();
         try {
             loadingBill();
         } catch (FileNotFoundException e) {
@@ -169,12 +114,7 @@ public class GUI_OrderCuisineController implements Initializable {
     }
 
     @FXML
-    void btn_payment(ActionEvent event) throws IOException {
-        gui_mainController.openPayment();
-    }
-
-    @FXML
     void btn_back(ActionEvent event) throws IOException {
-        gui_mainController.openOrder();
+        gui_mainController.openCuisine();
     }
 }

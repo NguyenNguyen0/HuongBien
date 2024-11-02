@@ -116,13 +116,14 @@ public class GUI_OrderTableItemController implements Initializable {
     }
 
     private void writeDataJSONtoFile(String tabID, String tabName, int tabFloor, int tabSeats, String tabStatus, String tabTypeID, String tabTypeName, String tabTypeDescription) {
-        if(tabStatus.equals("Bàn trống")) {
+        if (tabStatus.equals("Bàn trống")) {
             JsonArray jsonArray;
             try {
                 jsonArray = Utils.readJsonFromFile(path);
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
+
             boolean tableExists = false;
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonObject existingTable = jsonArray.get(i).getAsJsonObject();
@@ -132,30 +133,39 @@ public class GUI_OrderTableItemController implements Initializable {
                     break;
                 }
             }
-            if (!tableExists && "Bàn trống".equals(tabStatus)) {
+
+            if (jsonArray.isEmpty() && !tableExists) {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("Table ID", tabID);
                 jsonObject.addProperty("Table Name", tabName);
                 jsonObject.addProperty("Table Floor", tabFloor);
                 jsonObject.addProperty("Table Seats", tabSeats);
                 jsonObject.addProperty("Table Status", tabStatus);
-                //
+
                 JsonObject tableTypeObject = new JsonObject();
                 tableTypeObject.addProperty("Table Type ID", tabTypeID);
                 tableTypeObject.addProperty("Table Type Name", tabTypeName);
                 tableTypeObject.addProperty("Table Type Description", tabTypeDescription);
-                //
+
                 jsonObject.add("Table Type", tableTypeObject);
                 jsonArray.add(jsonObject);
+
+                Utils.writeJsonToFile(jsonArray, path);
+            } else if (!jsonArray.isEmpty()) {
+                System.out.println("Không thể thêm phần tử mới vì chỉ cho phép tối đa 1 phần tử trong file.");
+            } else {
+                Utils.writeJsonToFile(jsonArray, path);
             }
-            Utils.writeJsonToFile(jsonArray, path);
-            updateCheckIcon(tabID);
-        }else if(tabStatus.equals("Đặt trước")) {
+        } else if (tabStatus.equals("Đặt trước")) {
             System.out.println("Bàn đã đặt trước, bạn có muốn nhận bàn không?");
-        }else if(tabStatus.equals("Phục vụ")) {
+        } else if (tabStatus.equals("Phục vụ")) {
             System.out.println("Bàn đang phục vụ, Vui lòng chọn bàn khác!!!");
         }
+        updateCheckIcon(tabID);
     }
+
+
+
 
     private void handleWriteJSON() throws FileNotFoundException {
         String tabID = lbl_tableID.getText();
