@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 public class GUI_ManagePromotionController implements Initializable {
 
+
     @FXML
     private ImageView btnDeleteSearch;
     @FXML
@@ -47,7 +48,7 @@ public class GUI_ManagePromotionController implements Initializable {
     @FXML
     private TextField txt_discount;
     @FXML
-    private TextField txt_status;
+    private ComboBox<String> comboBox_statusPromotion;
     @FXML
     private TextField txt_minimumOrder;
     @FXML
@@ -118,7 +119,23 @@ public class GUI_ManagePromotionController implements Initializable {
 
             @Override
             public String fromString(String string) {
-                return comboBox_memberShipLevel.getItems().stream()
+                return comboBox_status.getItems().stream()
+                        .filter(item -> item.equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+
+        comboBox_statusPromotion.setItems(statusList);
+        comboBox_statusPromotion.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String status) {
+                return status != null ? status : "";
+            }
+
+            @Override
+            public String fromString(String string) {
+                return comboBox_statusPromotion.getItems().stream()
                         .filter(item -> item.equals(string))
                         .findFirst()
                         .orElse(null);
@@ -135,7 +152,6 @@ public class GUI_ManagePromotionController implements Initializable {
 
             txt_promotionName.setEditable(true);
             txtArea_promotionDescription.setEditable(true);
-            txt_status.setEditable(true);
             txt_minimumOrder.setEditable(true);
 
             tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
@@ -148,7 +164,6 @@ public class GUI_ManagePromotionController implements Initializable {
                     if (empty || item == null) {
                         setText(null);
                     } else {
-                        System.out.println(item);
                         // Chuyển đổi và định dạng giá trị thành phần trăm
                         setText(String.format("%.0f%%", item * 100));
                     }
@@ -191,7 +206,6 @@ public class GUI_ManagePromotionController implements Initializable {
                     if (empty || item == null) {
                         setText(null);
                     } else {
-                        System.out.println(item);
                         // Chuyển đổi và định dạng giá trị thành phần trăm
                         setText(String.format("%.0f%%", item * 100));
                     }
@@ -213,7 +227,7 @@ public class GUI_ManagePromotionController implements Initializable {
         }
     }
     public void enableInput() {
-        txt_status.setDisable(true);
+        comboBox_statusPromotion.setDisable(false);
         txt_minimumOrder.setDisable(false);
         txt_promotionName.setDisable(false);
         txt_discount.setDisable(false);
@@ -224,7 +238,7 @@ public class GUI_ManagePromotionController implements Initializable {
     }
 
     public void disableInput() {
-        txt_status.setDisable(true);
+        comboBox_statusPromotion.setDisable(true);
         txt_minimumOrder.setDisable(true);
         txt_promotionName.setDisable(true);
         txt_discount.setDisable(true);
@@ -235,7 +249,7 @@ public class GUI_ManagePromotionController implements Initializable {
     }
 
     public void clear(){
-        txt_status.clear();
+        comboBox_statusPromotion.getSelectionModel().clearSelection();
         txt_minimumOrder.clear();
         txt_promotionName.clear();
         txt_discount.clear();
@@ -246,10 +260,10 @@ public class GUI_ManagePromotionController implements Initializable {
         tabViewPromotion.getSelectionModel().clearSelection();
     }
     public boolean checkData(){
-        if (txt_promotionName.getText().trim().equals("")){
+        if (txt_promotionName.getText().trim().isEmpty()){
             return false;
         }
-        if (txt_discount.getText().trim().equals("")){
+        if (txt_discount.getText().trim().isEmpty()){
             return false;
         }
         if (date_ended.getValue() == null){
@@ -258,11 +272,8 @@ public class GUI_ManagePromotionController implements Initializable {
         if (date_started.getValue() == null){
             return false;
         }
-        if(date_ended.getValue().isBefore(date_started.getValue())){
+        if (date_ended.getValue().isBefore(date_started.getValue())){
             return false;
-        }
-        if(txt_status.getText().equals("Còn hiệu lực")){
-
         }
         return true;
     }
@@ -281,7 +292,7 @@ public class GUI_ManagePromotionController implements Initializable {
         if (selectedItem != null){
             enableInput();
             txt_promotionName.setText(selectedItem.getName());
-            txt_status.setText(selectedItem.getStatus());
+            comboBox_statusPromotion.getSelectionModel().select(selectedItem.getStatus());
             double dis = selectedItem.getDiscount();
             int discount = (int) (dis * 100);
 
@@ -338,6 +349,8 @@ public class GUI_ManagePromotionController implements Initializable {
             utilsButton_2();
             clear();
             enableInput();
+            comboBox_statusPromotion.getSelectionModel().select(0);
+            comboBox_statusPromotion.setDisable(true);
         }
         else{
             disableInput();
@@ -352,17 +365,16 @@ public class GUI_ManagePromotionController implements Initializable {
             Promotion promotion = null;
             if (checkData()) {
                 String name = txt_promotionName.getText();
-                String status = txt_status.getText();
+                String status = comboBox_statusPromotion.getSelectionModel().getSelectedItem();
 
                 String minimum = txt_minimumOrder.getText();
                 double minimumOrder = Double.parseDouble(minimum.replace(",",""));
 
                 String dis = txt_discount.getText();
                 dis = dis.replace("%","");
-                Double discount = Double.parseDouble(dis) / 100;
+                double discount = Double.parseDouble(dis) / 100;
 
                 String memberShip = comboBox_memberShipLevel.getSelectionModel().getSelectedItem();
-                System.out.println(memberShip);
                 int memberShipLevel = utils.toIntMembershipLevel(memberShip);
 
                 LocalDate start = date_started.getValue();
@@ -381,6 +393,7 @@ public class GUI_ManagePromotionController implements Initializable {
                     promotion.setStatus(status);
                     promotion.setMinimumOrderAmount(minimumOrder);
                     promotion.setMembershipLevel(memberShipLevel);
+                    System.out.println(promotion.getStatus());
                     if (dao_promotion.update(promotion)) {
                         tabViewPromotion.getItems().clear();
                         setCellValues();
@@ -396,7 +409,7 @@ public class GUI_ManagePromotionController implements Initializable {
             Promotion promotion = null;
             if (checkData()) {
                 String name = txt_promotionName.getText();
-                String status = txt_status.getText();
+                String status = comboBox_statusPromotion.getSelectionModel().getSelectedItem();
 
                 double minimumOrder = Double.parseDouble(txt_minimumOrder.getText());
                 String dis = txt_discount.getText();
@@ -445,4 +458,5 @@ public class GUI_ManagePromotionController implements Initializable {
             clear();
         }
     }
+
 }
