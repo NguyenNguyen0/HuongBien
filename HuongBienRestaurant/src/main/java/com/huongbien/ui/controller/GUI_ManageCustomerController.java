@@ -23,6 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.net.StandardSocketOptions;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -182,10 +183,28 @@ public class GUI_ManageCustomerController implements Initializable {
     }
 
     public boolean checkData(){
-        if (txt_customerName.getText().trim().equals("")){
+        if (txt_customerName.getText().trim().isEmpty()){
             return false;
         }
-        if (txt_customerPhone.getText().trim().equals("")){
+        if (!txt_customerPhone.getText().trim().isEmpty()){
+            try {
+                Connection connection = Database.getConnection();
+                DAO_Customer dao_customer = new DAO_Customer(connection);
+                List<String> customerList = dao_customer.getPhoneNumber();
+                for (String phone : customerList) {
+                    if (txt_customerPhone.getText().equals(phone)){
+                        System.out.println("Số điện thoại đã được đăng kí thành viên");
+                        return false;
+                    }
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Database.closeConnection();
+            }
+        }
+        else {
             return false;
         }
         if (date_customerBirthDate.getValue() == null){
