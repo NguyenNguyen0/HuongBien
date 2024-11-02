@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.chart.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_StatisticsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_StatisticsController">
    <bottom>
       <BorderPane prefHeight="463.0" prefWidth="1145.0" BorderPane.alignment="CENTER">
          <center>
-            <SplitPane dividerPositions="0.5159010600706714" prefHeight="502.0" prefWidth="1700.0" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.516489988221437" prefHeight="502.0" prefWidth="1700.0" BorderPane.alignment="CENTER">
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="501.0" prefWidth="876.0">
                      <children>
-                        <BarChart fx:id="barChartOfRevenue" layoutX="14.0" layoutY="16.0" prefHeight="424.0" prefWidth="800.0" title="BIỂU ĐỒ DOANH THU" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="16.0">
+                        <BarChart fx:id="barChartOfRevenue" layoutX="14.0" layoutY="-2.0" prefHeight="422.0" prefWidth="861.0" title="BIỂU ĐỒ DOANH THU" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="17.0">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -29,7 +35,7 @@
                   </AnchorPane>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="485.0" prefWidth="820.0">
                      <children>
-                        <LineChart fx:id="lineChartOfOrders" layoutX="14.0" layoutY="23.0" prefHeight="433.0" prefWidth="768.0" title="BIỂU ĐỒ SỐ LƯỢNG ĐƠN ĐẶT BÀN" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="23.0">
+                        <LineChart fx:id="lineChartOfOrders" layoutX="14.0" layoutY="23.0" prefHeight="433.0" prefWidth="768.0" title="BIỂU ĐỒ SỐ LƯỢNG ĐƠN ĐẶT BÀN" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="17.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
@@ -45,156 +51,165 @@
       </BorderPane>
    </bottom>
    <top>
-      <AnchorPane prefHeight="182.0" prefWidth="1675.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="182.0" prefWidth="1699.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="761.0" layoutY="13.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="213.0" style="-fx-background-color: #3E00C2; -fx-background-radius: 20px;" textAlignment="CENTER" textFill="#fcf8f8">
+            <Button layoutX="769.0" layoutY="13.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="220.0" style="-fx-background-color: #3E00C2; -fx-background-radius: 20px;" textAlignment="CENTER" textFill="#fcf8f8" AnchorPane.bottomAnchor="19.0" AnchorPane.topAnchor="13.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-            <Button layoutX="1001.0" layoutY="14.0" mnemonicParsing="false" prefHeight="152.0" prefWidth="194.0" style="-fx-background-color: #FCB859; -fx-background-radius: 20px;" textFill="#fcf8f8">
+            <Button layoutX="1001.0" layoutY="14.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="220.0" style="-fx-background-color: #FCB859; -fx-background-radius: 20px;" textFill="#fcf8f8" AnchorPane.bottomAnchor="16.0" AnchorPane.topAnchor="14.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-            <Button layoutX="1229.0" layoutY="10.0" mnemonicParsing="false" prefHeight="153.0" prefWidth="191.0" style="-fx-background-color: #1D557E; -fx-background-radius: 20px;" textFill="#fcf8f8">
+            <Button layoutX="1230.0" layoutY="15.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="220.0" style="-fx-background-color: #1D557E; -fx-background-radius: 20px;" textFill="#fcf8f8" AnchorPane.bottomAnchor="16.0" AnchorPane.topAnchor="14.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-            <Button layoutX="1457.0" layoutY="8.0" mnemonicParsing="false" prefHeight="158.0" prefWidth="237.0" style="-fx-background-color: #074409; -fx-background-radius: 20px;" textFill="#fcf8f8" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="1457.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="8.0">
+            <Button layoutX="1457.0" layoutY="12.0" mnemonicParsing="false" prefHeight="154.0" prefWidth="220.0" style="-fx-background-color: #074409; -fx-background-radius: 20px;" textFill="#fcf8f8" AnchorPane.bottomAnchor="16.0" AnchorPane.topAnchor="14.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-            <Label layoutX="125.0" layoutY="16.0" prefHeight="26.0" prefWidth="200.0" text="TÌNH HÌNH KINH DOANH">
+            <Label layoutX="131.0" layoutY="13.0" prefHeight="26.0" prefWidth="200.0" text="TÌNH HÌNH KINH DOANH" AnchorPane.topAnchor="13.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <Label layoutX="527.0" layoutY="16.0" prefHeight="30.0" prefWidth="120.0" text="THỐNG KÊ THEO">
+            <Label layoutX="527.0" layoutY="12.0" prefHeight="20.0" prefWidth="126.0" text="THỐNG KÊ THEO" AnchorPane.topAnchor="12.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="comboBox_Statistical" layoutX="527.0" layoutY="46.0" prefHeight="29.0" prefWidth="178.0" />
-            <Label layoutX="19.0" layoutY="42.0" prefHeight="27.0" prefWidth="155.0" text="Tổng doanh thu: ">
+            <ComboBox fx:id="comboBox_Statistical" layoutX="528.0" layoutY="33.0" prefHeight="29.0" prefWidth="178.0" AnchorPane.bottomAnchor="124.0" AnchorPane.topAnchor="33.0" />
+            <Label layoutX="19.0" layoutY="49.0" prefHeight="27.0" prefWidth="155.0" text="Tổng doanh thu: " AnchorPane.leftAnchor="18.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="-1.0" />
+               </padding>
+            </Label>
+            <Label layoutX="18.0" layoutY="79.0" prefHeight="27.0" prefWidth="156.0" text="Tổng số hoá đơn:" AnchorPane.leftAnchor="18.0">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="19.0" layoutY="70.0" prefHeight="27.0" prefWidth="156.0" text="Tổng số hoá đơn:">
+            <Label layoutX="19.0" layoutY="110.0" prefHeight="27.0" prefWidth="190.0" text="Tổng số đơn đặt bàn:" AnchorPane.leftAnchor="18.0">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="19.0" layoutY="100.0" prefHeight="27.0" prefWidth="190.0" text="Tổng số đơn đặt bàn:">
+            <Label layoutX="18.0" layoutY="138.0" prefHeight="30.0" prefWidth="311.0" text="Doanh thu trung bình mỗi hoá đơn:" AnchorPane.leftAnchor="18.0">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="20.0" layoutY="131.0" prefHeight="30.0" prefWidth="311.0" text="Doanh thu trung bình mỗi hoá đơn:">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="txt_TotalRevenues" layoutX="333.0" layoutY="42.0" prefHeight="27.0" prefWidth="157.0" text="100.000.000 VND">
+            <Label fx:id="txt_TotalRevenues" layoutX="333.0" layoutY="49.0" prefHeight="27.0" prefWidth="157.0" text="0 VND" AnchorPane.leftAnchor="333.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="txt_TotalInvoices" layoutX="333.0" layoutY="71.0" prefHeight="21.0" prefWidth="132.0" text="500">
+            <Label fx:id="txt_TotalInvoices" layoutX="333.0" layoutY="77.0" prefHeight="27.0" prefWidth="148.0" text="0 Đơn" AnchorPane.leftAnchor="333.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="txt_TotalOrders" layoutX="333.0" layoutY="100.0" prefHeight="21.0" prefWidth="132.0" text="500">
+            <Label fx:id="txt_TotalOrders" layoutX="333.0" layoutY="110.0" prefHeight="27.0" prefWidth="146.0" text="0 Đơn" AnchorPane.leftAnchor="333.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="txt_AverageRevenue" layoutX="331.0" layoutY="133.0" prefHeight="21.0" prefWidth="132.0" text="500.000 VND">
+            <Label fx:id="txt_AverageRevenue" layoutX="333.0" layoutY="140.0" prefHeight="27.0" prefWidth="145.0" text="0 VND" AnchorPane.leftAnchor="333.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="txt_TotalCustomers" layoutX="837.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label fx:id="txt_TotalCustomers" alignment="CENTER" contentDisplay="CENTER" layoutX="790.0" layoutY="95.0" prefHeight="36.0" prefWidth="180.0" text="0" textAlignment="CENTER" textFill="#fcfcfc" textOverrun="CENTER_ELLIPSIS" wrapText="true" AnchorPane.bottomAnchor="55.0" AnchorPane.topAnchor="95.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txt_Reservations" layoutX="1076.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label fx:id="txt_Reservations" alignment="CENTER" layoutX="1037.0" layoutY="93.0" prefHeight="36.0" prefWidth="148.0" text="0" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="60.0" AnchorPane.topAnchor="90.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txt_TotalOfRevenues" layoutX="1552.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="1552.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="99.0">
+            <Label fx:id="txt_TotalOfRevenues" alignment="CENTER" layoutX="1477.0" layoutY="93.0" prefHeight="36.0" prefWidth="179.0" text="0 VND" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="60.0" AnchorPane.topAnchor="90.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txt_TotalOfInvoice" layoutX="1301.0" layoutY="99.0" text="1000" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label fx:id="txt_TotalOfInvoice" alignment="CENTER" layoutX="1263.0" layoutY="94.0" prefHeight="36.0" prefWidth="155.0" text="0" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="60.0" AnchorPane.topAnchor="90.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="778.0" layoutY="60.0" text="SỐ LƯỢNG KHÁCH" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label layoutX="792.0" layoutY="59.0" text="SỐ LƯỢNG KHÁCH" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="90.0" AnchorPane.topAnchor="60.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="1017.0" layoutY="60.0" text="TỔNG ĐƠN ĐẶT" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label layoutX="1034.0" layoutY="60.0" text="TỔNG ĐƠN ĐẶT" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="90.0" AnchorPane.topAnchor="60.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="1245.0" layoutY="60.0" text="TỔNG HOÁ ĐƠN" textAlignment="CENTER" textFill="#fcfcfc">
+            <Label layoutX="1261.0" layoutY="56.0" text="TỔNG HOÁ ĐƠN" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="90.0" AnchorPane.topAnchor="60.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="1495.0" layoutY="39.0" prefHeight="74.0" prefWidth="236.0" text="TỔNG DOANH THU" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="1495.0" AnchorPane.rightAnchor="-31.0" AnchorPane.topAnchor="39.0">
+            <Label layoutX="1474.0" layoutY="57.0" prefHeight="40.0" prefWidth="194.0" text="TỔNG DOANH THU" textAlignment="CENTER" textFill="#fcfcfc" AnchorPane.bottomAnchor="90.0" AnchorPane.topAnchor="60.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="comboBox_Years" layoutX="527.0" layoutY="128.0" prefHeight="29.0" prefWidth="178.0" />
-            <Label fx:id="labelSelectYear" layoutX="527.0" layoutY="98.0" prefHeight="30.0" prefWidth="120.0" text="CHỌN NĂM">
+            <Label fx:id="labelSelectYear" layoutX="528.0" layoutY="102.0" prefHeight="20.0" prefWidth="119.0" text="CHỌN NĂM" AnchorPane.bottomAnchor="63.0" AnchorPane.topAnchor="102.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
+            <ComboBox fx:id="comboBox_Years" layoutX="526.0" layoutY="131.0" prefHeight="29.0" prefWidth="178.0" AnchorPane.bottomAnchor="22.0" AnchorPane.topAnchor="135.0" />
          </children>
       </AnchorPane>
    </top>
    <center>
       <SplitPane dividerPositions="0.516489988221437" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="155.0" prefWidth="866.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="155.0" prefWidth="866.0" style="-fx-background-color: #fff;">
                <children>
-                  <TableView fx:id="table_NewCustomers" layoutX="23.0" layoutY="37.0" prefHeight="193.0" prefWidth="847.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="37.0">
+                  <TableView fx:id="table_NewCustomers" layoutX="23.0" layoutY="37.0" prefHeight="193.0" prefWidth="833.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="37.0">
                     <columns>
-                      <TableColumn fx:id="tabCol_customerID" prefWidth="181.0" text="Mã khách hàng" />
-                      <TableColumn fx:id="tabCol_customerName" prefWidth="180.0" text="Họ và Tên" />
-                        <TableColumn fx:id="tabCol_customerGender" prefWidth="198.0" text="Giới tính" />
-                        <TableColumn fx:id="tabCol_customerAccumulatedPoint" prefWidth="160.0" text="Điểm" />
-                        <TableColumn fx:id="tabCol_customerMemLevel" prefWidth="154.0" text="Hạng" />
+                      <TableColumn fx:id="tabCol_customerID" prefWidth="200.0" text="Mã khách hàng" />
+                      <TableColumn fx:id="tabCol_customerName" prefWidth="205.33334350585938" text="Họ và Tên" />
+                        <TableColumn fx:id="tabCol_customerPhoneNumber" maxWidth="5001.0" prefWidth="207.66665649414062" text="Số điện thoại" />
+                        <TableColumn fx:id="tabCol_customerAccumulatedPoint" prefWidth="108.33331298828125" resizable="false" text="Điểm" />
+                        <TableColumn fx:id="tabCol_customerMemLevel" prefWidth="115.0" text="Hạng" />
                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                   </TableView>
-                  <Label layoutX="23.0" layoutY="7.0" text="KHÁCH HÀNG MỚI TRONG HÔM NAY">
+                  <Label layoutX="23.0" layoutY="14.0" text="KHÁCH HÀNG MỚI TRONG HÔM NAY" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="14.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="253.0" prefWidth="807.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="253.0" prefWidth="807.0" style="-fx-background-color: #fff;">
                <children>
-                  <TableView fx:id="table_NewInvoices" layoutX="17.0" layoutY="36.0" prefHeight="193.0" prefWidth="786.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="36.0">
+                  <TableView fx:id="table_NewInvoices" layoutX="17.0" layoutY="36.0" prefHeight="193.0" prefWidth="786.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="37.0">
                     <columns>
-                      <TableColumn fx:id="tabCol_InvoiceID" prefWidth="170.0" text="Mã hoá đơn" />
-                      <TableColumn fx:id="tabCol_Tables" prefWidth="136.0" text="Bàn" />
-                        <TableColumn fx:id="tabCol_TotalAmount" prefWidth="231.0" text="Thành tiền" />
-                        <TableColumn fx:id="tabCol_Status" prefWidth="256.0" text="Trạng Thái" />
+                      <TableColumn fx:id="tabCol_InvoiceID" prefWidth="250.0" text="Mã hoá đơn" />
+                      <TableColumn fx:id="tabCol_Tables" prefWidth="250.0" text="Bàn" />
+                        <TableColumn fx:id="tabCol_TotalAmount" prefWidth="250.0" text="Thành tiền" />
+                        <TableColumn fx:id="tabCol_Note" prefWidth="200.0" text="Ghi chú" />
                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                   </TableView>
-                  <Label layoutX="12.0" layoutY="7.0" text="HOÁ ĐƠN MỚI TRONG HÔM NAY">
+                  <Label layoutX="17.0" layoutY="14.0" text="HOÁ ĐƠN MỚI TRONG HÔM NAY" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="14.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>

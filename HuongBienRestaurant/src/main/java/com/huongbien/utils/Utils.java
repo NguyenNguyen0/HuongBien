@@ -2,11 +2,16 @@ package com.huongbien.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.huongbien.entity.Table;
+import javafx.scene.control.Tab;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.stream.Collectors;
 
 // class Utils là để những hàm chức năng (hỗ trợ) sài chung cho nhiều nơi cho dự án
 public class Utils {
@@ -87,6 +92,27 @@ public class Utils {
     //Read JSON
     public static JsonArray readJsonFromFile(String filePath) throws FileNotFoundException {
         return JsonParser.parseReader(new FileReader(filePath)).getAsJsonArray();
+    }
+
+    // Chuyển danh sách Table về định dạng -> "Bàn 01, Bàn 02" Sài cho phần render
+    // Dùng cái này để render mảng bảng trên giao diện
+    public static String toStringTables(List<Table> tables) {
+        return tables.stream()
+                .map(Table::getName)
+                .collect(Collectors.joining(", "));
+    }
+
+    // Format tiền cho thêm đơn vị dấu ',' và làm tròn lên triệu
+    public static String formatMoney(double money) {
+        DecimalFormat df = new DecimalFormat("#,###.##"); // Định dạng số, giữ tối đa hai chữ số thập phân
+
+        if (money >= 1_000_000_000) {
+            return df.format(money / 1_000_000_000) + " Tỷ VND";
+        }else if (money >= 1_000_000) {
+            return df.format(money / 1_000_000) + " Triệu VND";
+        } else {
+            return df.format(money) + " đ";
+        }
     }
 }
 

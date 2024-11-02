@@ -1,20 +1,22 @@
 package com.huongbien.ui.controller;
 
 import com.huongbien.dao.DAO_Statistics;
+import com.huongbien.entity.Customer;
+import com.huongbien.entity.Order;
+import com.huongbien.utils.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.text.NumberFormat;
 import java.time.Year;
-import java.util.Currency;
 import java.util.stream.IntStream;
 
 public class GUI_StatisticsController {
-
     @FXML
     private BarChart<String, Number> barChartOfRevenue;
     @FXML
@@ -41,6 +43,28 @@ public class GUI_StatisticsController {
     private Label txt_TotalOfRevenues;
     @FXML
     private Label labelSelectYear;
+    @FXML
+    private TableView<Order> table_NewInvoices;
+    @FXML
+    private TableColumn<?, ?> tabCol_InvoiceID;
+    @FXML
+    private TableColumn<?, ?> tabCol_Note;
+    @FXML
+    private TableColumn<?, ?> tabCol_Tables;
+    @FXML
+    private TableColumn<?, ?> tabCol_TotalAmount;
+    @FXML
+    private TableView<Customer> table_NewCustomers;
+    @FXML
+    private TableColumn<?, ?> tabCol_customerAccumulatedPoint;
+    @FXML
+    private TableColumn<?, ?> tabCol_customerPhoneNumber;
+    @FXML
+    private TableColumn<?, ?> tabCol_customerID;
+    @FXML
+    private TableColumn<?, ?> tabCol_customerMemLevel;
+    @FXML
+    private TableColumn<?, ?> tabCol_customerName;
 
     @FXML
     public void initialize() {
@@ -59,6 +83,8 @@ public class GUI_StatisticsController {
 
         updateVisibilityBasedOnStatisticalType();
         loadStatistics();
+        setBusinessSummary();
+        setUpTableView();
     }
 
     private void updateVisibilityBasedOnStatisticalType() {
@@ -72,6 +98,14 @@ public class GUI_StatisticsController {
         String criteria = comboBox_Statistical.getSelectionModel().getSelectedItem();
         Integer selectedYear = comboBox_Years.getSelectionModel().getSelectedItem();
 
+        if (selectedYear == null && "Năm".equals(criteria)) {
+            loadYearlyStatistics();
+        } else {
+            setBusinessSituation(0, 0, 0);
+            barChartOfRevenue.getData().clear();
+            lineChartOfOrders.getData().clear();
+        }
+
         if (selectedYear == null || criteria == null) {
             System.out.println("Vui lòng chọn năm và loại thống kê.");
             return;
@@ -79,8 +113,7 @@ public class GUI_StatisticsController {
 
         switch (criteria) {
             case "Tháng":
-                int month = comboBox_Years.getSelectionModel().getSelectedItem();
-                loadMonthlyStatistics(selectedYear, month);
+                loadMonthlyStatistics(selectedYear);
                 break;
             case "Quý":
                 loadQuarterlyStatistics(selectedYear);
@@ -94,51 +127,39 @@ public class GUI_StatisticsController {
         }
     }
 
-    private void loadMonthlyStatistics(int year, int month) {
-        double totalRevenue = DAO_Statistics.getTotalRevenue("Tháng", month, year);
-        int totalInvoices = DAO_Statistics.getTotalInvoices("Tháng", month, year);
-        int totalItems = DAO_Statistics.getTotalItemsOrdered("Tháng", month, year);
-
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
-        currencyFormat.setCurrency(Currency.getInstance("VND"));
-
-        txt_TotalRevenues.setText(currencyFormat.format(totalRevenue));
-        txt_TotalInvoices.setText(String.valueOf(totalInvoices));
-        txt_TotalOrders.setText(String.valueOf(totalItems));
-
-        double averageRevenue = totalInvoices > 0 ? totalRevenue / totalInvoices : 0;
-        txt_AverageRevenue.setText(currencyFormat.format(averageRevenue));
-
+    private void setBusinessSummary() {
         txt_TotalCustomers.setText(String.valueOf(DAO_Statistics.getTotalCustomers()));
         txt_Reservations.setText(String.valueOf(DAO_Statistics.getTotalReservations()));
         txt_TotalOfInvoice.setText(String.valueOf(DAO_Statistics.getTotalInvoices()));
-        txt_TotalOfRevenues.setText(String.valueOf(DAO_Statistics.getTotalRevenues()));
+        txt_TotalOfRevenues.setText(Utils.formatMoney(DAO_Statistics.getTotalRevenues()));
+    }
+
+    private void setBusinessSituation(double totalRevenue, int totalInvoices, int totalItems) {
+        txt_TotalRevenues.setText(Utils.formatMoney(totalRevenue));
+        txt_TotalInvoices.setText(totalInvoices + " Đơn");
+        txt_TotalOrders.setText(totalItems + " Đơn");
+
+        double averageRevenue = totalInvoices > 0 ? totalRevenue / totalInvoices : 0;
+        txt_AverageRevenue.setText(Utils.formatMoney(averageRevenue));
+    }
+
+    private void loadMonthlyStatistics(int year) {
+        double totalRevenue = DAO_Statistics.getTotalRevenue("Năm", 0, year);
+        int totalInvoices = DAO_Statistics.getTotalInvoices("Năm", 0, year);
+        int totalItems = DAO_Statistics.getTotalItemsOrdered("Năm", 0, year);
+
+        setBusinessSituation(totalRevenue, totalInvoices, totalItems);
 
         updateBarChart(12, year, "Tháng");
         updateLineChart(12, year, "Tháng");
     }
 
-
     private void loadQuarterlyStatistics(int year) {
-        double totalRevenue = 0;
-        int totalInvoices = 0;
-        int totalItems = 0;
-        for (int quarter = 1; quarter <= 4; quarter++) {
-            totalRevenue += DAO_Statistics.getTotalRevenue("Quý", quarter, year);
-            totalInvoices += DAO_Statistics.getTotalInvoices("Quý", quarter, year);
-            totalItems += DAO_Statistics.getTotalItemsOrdered("Quý", quarter, year);
-        }
-        txt_TotalRevenues.setText(String.format("%.0f VNĐ", totalRevenue));
-        txt_TotalInvoices.setText(String.valueOf(totalInvoices));
-        txt_TotalOrders.setText(String.valueOf(totalItems));
+        double totalRevenue = DAO_Statistics.getTotalRevenue("Năm", 0, year);
+        int totalInvoices = DAO_Statistics.getTotalInvoices("Năm", 0, year);
+        int totalItems = DAO_Statistics.getTotalItemsOrdered("Năm", 0, year);
 
-        double averageRevenue = totalInvoices > 0 ? totalRevenue / totalInvoices : 0;
-        txt_AverageRevenue.setText(String.format("%.0f VNĐ", averageRevenue));
-
-        txt_TotalCustomers.setText(String.valueOf(DAO_Statistics.getTotalCustomers()));
-        txt_Reservations.setText(String.valueOf(DAO_Statistics.getTotalReservations()));
-        txt_TotalOfInvoice.setText(String.valueOf(DAO_Statistics.getTotalInvoices()));
-        txt_TotalOfRevenues.setText(String.valueOf(DAO_Statistics.getTotalRevenues()));
+        setBusinessSituation(totalRevenue, totalInvoices, totalItems);
 
         updateBarChart(4, year, "Quý");
         updateLineChart(4, year, "Quý");
@@ -153,17 +174,8 @@ public class GUI_StatisticsController {
             totalInvoices += DAO_Statistics.getTotalInvoices("Năm", 0, year);
             totalItems += DAO_Statistics.getTotalItemsOrdered("Năm", 0, year);
         }
-        txt_TotalRevenues.setText(String.format("%.0f VNĐ", totalRevenue));
-        txt_TotalInvoices.setText(String.valueOf(totalInvoices));
-        txt_TotalOrders.setText(String.valueOf(totalItems));
 
-        double averageRevenue = totalInvoices > 0 ? totalRevenue / totalInvoices : 0;
-        txt_AverageRevenue.setText(String.format("%.0f VNĐ", averageRevenue));
-        txt_TotalCustomers.setText(String.valueOf(DAO_Statistics.getTotalCustomers()));
-        txt_Reservations.setText(String.valueOf(DAO_Statistics.getTotalReservations()));
-        txt_TotalOfInvoice.setText(String.valueOf(DAO_Statistics.getTotalInvoices()));
-        txt_TotalOfRevenues.setText(String.valueOf(DAO_Statistics.getTotalRevenues()));
-
+        setBusinessSituation(totalRevenue, totalInvoices, totalItems);
 
         updateBarChart(comboBox_Years.getItems().size(), 0, "Năm");
         updateLineChart(comboBox_Years.getItems().size(), 0, "Năm");
@@ -171,8 +183,12 @@ public class GUI_StatisticsController {
 
     private void updateBarChart(int periods, int year, String criteria) {
         barChartOfRevenue.getData().clear();
+        barChartOfRevenue.getYAxis().setLabel("Đồng");
+        barChartOfRevenue.getXAxis().setLabel(criteria);
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Doanh thu theo " + criteria);
+
         if ("Tháng".equals(criteria)) {
             for (int month = 1; month <= periods; month++) {
                 double revenue = DAO_Statistics.getTotalRevenue("Tháng", month, year);
@@ -195,8 +211,12 @@ public class GUI_StatisticsController {
 
     private void updateLineChart(int periods, int year, String criteria) {
         lineChartOfOrders.getData().clear();
+        lineChartOfOrders.getXAxis().setLabel(criteria);
+        lineChartOfOrders.getYAxis().setLabel("Đồng");
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Số lượng hóa đơn theo " + criteria);
+
         if ("Tháng".equals(criteria)) {
             for (int month = 1; month <= periods; month++) {
                 int count = DAO_Statistics.getTotalInvoices("Tháng", month, year);
@@ -215,5 +235,61 @@ public class GUI_StatisticsController {
             }
         }
         lineChartOfOrders.getData().add(series);
+    }
+
+    public void setUpTableView() {
+        Label customersTablePlaceholder = new Label("Không có khách hàng mới nào trong hôm nay");
+        Label invoicesTablePlaceholder = new Label("Không có hóa đơn nào mới trong hôm này ");
+
+        customersTablePlaceholder.setStyle("-fx-font-size: 20px; -fx-font-style: italic; -fx-text-fill: lightgray;");
+        invoicesTablePlaceholder.setStyle("-fx-font-size: 20px; -fx-font-style: italic; -fx-text-fill: lightgray;");
+
+        table_NewCustomers.setPlaceholder(customersTablePlaceholder);
+        table_NewInvoices.setPlaceholder(invoicesTablePlaceholder);
+//      TODO: css lại bảng cho các ô nhỏ lại
+//        table_NewCustomers.getStylesheets().add("com/huongbien/css/statistic-table.css");
+//        table_NewInvoices.getStylesheets().add("com/huongbien/css/statistic-table.css");
+
+        fillDataToCustomerTable();
+        fillDataToInvoiceTable();
+    }
+
+    public void fillDataToCustomerTable() {
+        tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabCol_customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
+        tabCol_customerMemLevel.setCellValueFactory(new PropertyValueFactory<>("membershipLevel"));
+
+        ObservableList<Customer> customers = FXCollections.observableArrayList(DAO_Statistics.getNewCusomterInDay());
+
+        table_NewCustomers.setItems(customers);
+    }
+
+    public void fillDataToInvoiceTable() {
+        tabCol_InvoiceID.setCellValueFactory(new PropertyValueFactory<>("orderId"));
+        tabCol_TotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
+        tabCol_Note.setCellValueFactory(new PropertyValueFactory<>("notes"));
+//      TODO: tìm cách render lại mảng table cho đẹp [Quan trọng]
+        tabCol_Tables.setCellValueFactory(new PropertyValueFactory<>("tables"));
+//        tabCol_Tables.setCellFactory(column -> new TableCell<>() {
+//            @Override
+//            protected void updateItem(Object item, boolean empty) {
+//                super.updateItem(item, empty);
+//
+//                if (empty || item == null) {
+//                    setText(null);
+//                } else {
+//                    Order currentItem = (Order) getTableRow().getItem();
+//                    if (currentItem != null) {
+//                        setText(currentItem.getTables().toString());
+//                    }
+//                }
+//            }
+//        });
+
+        ObservableList<Order> orders = FXCollections.observableArrayList(DAO_Statistics.getNewOrderInDay());
+
+        table_NewInvoices.setItems(orders);
     }
 }
