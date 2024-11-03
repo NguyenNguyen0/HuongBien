@@ -191,7 +191,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
                      <children>
-                        <TextField fx:id="txt_tabSearch" prefHeight="60.0" prefWidth="344.0" promptText="Tìm kiếm món nhanh ..." styleClass="textField-line-bot" text="Tìm kiếm để tao làm lại bằng combobox" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txt_tabSearch" prefHeight="60.0" prefWidth="344.0" promptText="Tìm kiếm món nhanh ..." styleClass="textField-line-bot" text="Tìm kiếm (No Action)" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="18.0" />
                            </font>

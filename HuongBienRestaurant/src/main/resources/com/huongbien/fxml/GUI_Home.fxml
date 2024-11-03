@@ -9,7 +9,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="956.0" prefWidth="1614.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_HomeController">
+<BorderPane prefHeight="956.0" prefWidth="1614.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_HomeController">
    <top>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -26,7 +26,7 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="1046.0" layoutY="51.0" prefHeight="35.0" prefWidth="459.0" text="Thời Gian Đã Làm Việc Trong Hôm Nay:" textFill="#fcf9f9" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="1046.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="51.0">
+                  <Label layoutX="1046.0" layoutY="51.0" prefHeight="35.0" prefWidth="453.0" text="Thời Gian Đã Làm Việc Trong Hôm Nay:" textFill="#fcf9f9" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="1046.0" AnchorPane.rightAnchor="207.0" AnchorPane.topAnchor="51.0">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -36,12 +36,12 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txt_EmployeeName" layoutX="181.0" layoutY="51.0" text="JASI" textFill="#fcf9f9">
+                  <Label fx:id="txt_EmployeeName" layoutX="181.0" layoutY="51.0" text="xxxxx" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txt_EmployeePosition" layoutX="181.0" layoutY="110.0" text="Quản Lý" textFill="#fcf9f9">
+                  <Label fx:id="txt_EmployeePosition" layoutX="181.0" layoutY="110.0" text="xxxxxx" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -106,22 +106,22 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txt_TotalCustomers" layoutX="331.0" layoutY="101.0" prefHeight="27.0" prefWidth="66.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="txt_TotalCustomers" alignment="CENTER" layoutX="231.0" layoutY="101.0" prefHeight="27.0" prefWidth="223.0" text="0" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txt_TotalOfInvoice" layoutX="1269.0" layoutY="95.0" prefHeight="27.0" prefWidth="81.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="txt_TotalOfInvoice" alignment="CENTER" layoutX="1186.0" layoutY="95.0" prefHeight="27.0" prefWidth="224.0" text="0" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txt_Reservations" layoutX="937.0" layoutY="95.0" prefHeight="27.0" prefWidth="108.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="txt_Reservations" alignment="CENTER" layoutX="854.0" layoutY="95.0" prefHeight="27.0" prefWidth="224.0" text="0" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txt_TotalOfRevenues" layoutX="597.0" layoutY="95.0" prefHeight="27.0" prefWidth="130.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="txt_TotalOfRevenues" alignment="CENTER" layoutX="538.0" layoutY="95.0" prefHeight="27.0" prefWidth="226.0" text="0" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

@@ -78,7 +78,7 @@ public class GUI_HomeController implements Initializable {
     }
 
     private void displayStartTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss");
         txt_StartTime.setText(startTime.format(formatter));
     }
 

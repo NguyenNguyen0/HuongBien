@@ -8,11 +8,15 @@ import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
+import javafx.stage.StageStyle;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GUI_OrderBillItemController implements Initializable {
@@ -62,10 +66,10 @@ public class GUI_OrderBillItemController implements Initializable {
     public void setDataBill(OrderDetail orderDetail) {
         lbl_cuisineID.setText(orderDetail.getCuisine().getCuisineId());
         lbl_cuisineName.setText(orderDetail.getCuisine().getName());
-        lbl_cuisineSalePrice.setText(orderDetail.getCuisine().getPrice()+"");
+        lbl_cuisineSalePrice.setText(Utils.formatPrice(orderDetail.getCuisine().getPrice()));
         lbl_cuisineNote.setText(orderDetail.getNote());
         lbl_cuisineQuantity.setText(orderDetail.getQuantity()+"");
-        lbl_salePrice.setText(orderDetail.getSalePrice()+"");
+        lbl_salePrice.setText(Utils.formatPrice(orderDetail.getSalePrice()));
     }
 
     private void removeFromJson(String cuisineID) {
@@ -182,6 +186,8 @@ public class GUI_OrderBillItemController implements Initializable {
         decreaseQuantityInJSON(cuisineID);
         gui_orderCuisineController.compoent_gridBill.getChildren().clear();
         gui_orderCuisineController.loadingBill();
+        //update lbl
+        gui_orderCuisineController.readFromJSON_setInfo();
     }
 
     @FXML
@@ -190,6 +196,8 @@ public class GUI_OrderBillItemController implements Initializable {
         removeFromJson(cuisineID);
         gui_orderCuisineController.compoent_gridBill.getChildren().clear();
         gui_orderCuisineController.loadingBill();
+        //update lbl
+        gui_orderCuisineController.readFromJSON_setInfo();
     }
 
     @FXML
@@ -198,14 +206,34 @@ public class GUI_OrderBillItemController implements Initializable {
         increaseQuantityInJSON(cuisineID);
         gui_orderCuisineController.compoent_gridBill.getChildren().clear();
         gui_orderCuisineController.loadingBill();
+        //update lbl
+        gui_orderCuisineController.readFromJSON_setInfo();
     }
 
     @FXML
     void btn_cuisineNote(ActionEvent event) throws FileNotFoundException {
-        String cuisineID = lbl_cuisineID.getText();
-        String newNote = "Không ớt";
-        updateNoteInJSON(cuisineID, newNote);
-        gui_orderCuisineController.compoent_gridBill.getChildren().clear();
-        gui_orderCuisineController.loadingBill();
+        // Hiển thị dialog để người dùng nhập ghi chú mới
+        TextInputDialog inputDialog = new TextInputDialog();
+        inputDialog.setHeaderText("Nhập ghi chú cho món ăn:");
+        inputDialog.setContentText("Ghi chú:");
+        inputDialog.initStyle(StageStyle.UNDECORATED);
+        // Lấy giá trị ghi chú từ dialog nếu người dùng nhấn OK
+        Optional<String> result = inputDialog.showAndWait();
+        result.ifPresent(newNote -> {
+            String cuisineID = lbl_cuisineID.getText();
+            try {
+                updateNoteInJSON(cuisineID, newNote);
+                gui_orderCuisineController.compoent_gridBill.getChildren().clear();
+                gui_orderCuisineController.loadingBill();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                // Bạn có thể thêm Alert báo lỗi nếu cần
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText("Không thể cập nhật ghi chú.");
+                alert.setContentText("Đã xảy ra lỗi khi cập nhật ghi chú vào JSON.");
+                alert.showAndWait();
+            }
+        });
     }
 }

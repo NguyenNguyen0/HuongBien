@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,6 +114,15 @@ public class Utils {
         } else {
             return df.format(money) + " đ";
         }
+    }
+
+    //Format đơn vị nhỏ
+    public static String formatPrice(double price) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+        return formatter.format(price);
     }
 }
 

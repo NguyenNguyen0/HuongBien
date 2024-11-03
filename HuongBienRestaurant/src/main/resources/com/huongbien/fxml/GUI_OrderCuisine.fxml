@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -74,22 +73,14 @@
                                  <children>
                                     <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="178.0">
                                        <children>
-                                          <Label text="Tạm tính">
-                                             <font>
-                                                <Font name="System Bold" size="20.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets right="10.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label text="(0 món)">
+                                          <Label fx:id="lbl_billQuantityCuisine" text="0 món">
                                              <font>
                                                 <Font name="System Bold" size="20.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <Label text="0" textFill="#1a9030">
+                                    <Label fx:id="lbl_billAmountTotal" text="0" textFill="#1a9030">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -111,7 +102,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="339.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black;" text="Huỷ (F8)">
+                                    <Button mnemonicParsing="false" onAction="#btn_cancel" prefHeight="60.0" prefWidth="339.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black;" text="Huỷ (F8)">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -201,18 +192,13 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="288.0">
-                     <children>
-                        <ComboBox prefHeight="60.0" prefWidth="258.0" promptText="Tất cả loại món" />
-                     </children>
-                  </HBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0" styleClass="textField-line-bot">
                <children>
                   <HBox alignment="CENTER_RIGHT" prefHeight="98.0" prefWidth="627.0">
                      <children>
-                        <Label text="Tầng trệt">
+                        <Label fx:id="lbl_tabFloor" text="Tầng trệt">
                            <font>
                               <Font name="System Bold" size="25.0" />
                            </font>
@@ -225,7 +211,7 @@
                               <Insets left="20.0" right="20.0" />
                            </HBox.margin>
                         </Label>
-                        <Label text="Bàn 01">
+                        <Label fx:id="lbl_tabName" text="Bàn 01">
                            <font>
                               <Font name="System Bold" size="25.0" />
                            </font>
@@ -238,7 +224,7 @@
                               <Insets left="20.0" right="20.0" />
                            </HBox.margin>
                         </Label>
-                        <Label text="VIP">
+                        <Label fx:id="lbl_tabTypeName" text="VIP">
                            <font>
                               <Font name="System Bold" size="25.0" />
                            </font>

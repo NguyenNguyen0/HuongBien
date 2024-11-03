@@ -436,6 +436,11 @@ public class GUI_MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         compoent_menu.setTranslateX(-250);
         setTime();
+        try {
+            openHome();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

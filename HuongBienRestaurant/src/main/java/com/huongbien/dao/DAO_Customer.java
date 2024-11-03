@@ -121,6 +121,34 @@ public class DAO_Customer extends DAO_Base<Customer> {
         return customer;
     }
 
+    public Customer getByPhone(String phone) {
+        Customer customer = null;
+        String sql = "SELECT id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel "
+                + "FROM Customer WHERE phoneNumber = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, phone);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    customer = new Customer();
+                    customer.setCustomerId(rs.getString("id"));
+                    customer.setName(rs.getString("name"));
+                    customer.setAddress(rs.getString("address"));
+                    customer.setGender(rs.getBoolean("gender"));
+                    customer.setPhoneNumber(rs.getString("phoneNumber"));
+                    customer.setEmail(rs.getString("email"));
+                    customer.setBirthday(rs.getDate("birthday").toLocalDate());
+                    customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
+                    customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
+                    customer.setMembershipLevel(rs.getInt("membershipLevel"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customer;
+    }
+
     public List<String> getPhoneNumber() {
         List<String> customersPhone = new ArrayList<>();
         String sql = "SELECT phoneNumber FROM Customer";
