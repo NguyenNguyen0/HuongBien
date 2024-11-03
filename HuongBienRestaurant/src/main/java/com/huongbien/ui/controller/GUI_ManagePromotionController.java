@@ -25,6 +25,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -458,5 +459,26 @@ public class GUI_ManagePromotionController implements Initializable {
             clear();
         }
     }
-
+    @FXML
+    void txt_minimumOrderKeyReleased(KeyEvent keyEvent) {
+        String input = txt_minimumOrder.getText().replace(".", "").replace(",", "");
+        if (input.isEmpty()) {
+            return;
+        }
+        if (input.matches("\\d*")) {
+            NumberFormat format = DecimalFormat.getInstance();
+            String formattedText = format.format(Long.parseLong(input));
+            txt_minimumOrder.setText(formattedText);
+            txt_minimumOrder.positionCaret(formattedText.length());
+        } else {
+            StringBuilder validInput = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                if (Character.isDigit(ch)) {
+                    validInput.append(ch);
+                }
+            }
+            txt_minimumOrder.setText(validInput.toString());
+            txt_minimumOrder.positionCaret(validInput.length());
+        }
+    }
 }
