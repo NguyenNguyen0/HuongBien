@@ -372,9 +372,10 @@ public class GUI_ManageCustomerController implements Initializable {
         Customer selectedCustomer = tabViewCustomer.getSelectionModel().getSelectedItem();
 
         if (selectedCustomer != null) {
-            String qrContent = selectedCustomer.getPhoneNumber() + ","
+            String qrContent = selectedCustomer.getCustomerId() + ","
                     + selectedCustomer.getName() + ","
-                    + selectedCustomer.getAddress();
+                    + selectedCustomer.getMembershipLevel() + ","
+                    + selectedCustomer.getPhoneNumber();
 
             createQRCode(selectedCustomer, qrContent);
         } else {
@@ -382,6 +383,7 @@ public class GUI_ManageCustomerController implements Initializable {
             alert.showAndWait();
         }
     }
+
 
     private void createQRCode(Customer selectedCustomer, String qrContent) {
         try {

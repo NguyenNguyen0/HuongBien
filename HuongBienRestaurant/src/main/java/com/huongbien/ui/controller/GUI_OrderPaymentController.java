@@ -3,7 +3,10 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Cuisine;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 import com.huongbien.dao.DAO_Customer;
 import com.huongbien.dao.DAO_Promotion;
 import com.huongbien.database.Database;
@@ -12,35 +15,43 @@ import com.huongbien.entity.Customer;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.entity.Promotion;
 import com.huongbien.utils.Utils;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class GUI_OrderPaymentController implements Initializable {
     private final static String path_bill = "src/main/resources/com/huongbien/temp/bill.json";
     private final static String path_table = "src/main/resources/com/huongbien/temp/table.json";
+    public Button btn_qrCustomer;
+    public ImageView qrCodeView;
     @FXML
     private TableView<Promotion> tabView_promotion;
 
@@ -101,10 +112,15 @@ public class GUI_OrderPaymentController implements Initializable {
     @FXML
     private Button btn_addCustomer;
 
-    @FXML
-    private Button btn_qrCustomer;
+
+    private VideoCapture capture;
+    private Timer timer;
 
     public GUI_MainController gui_mainController;
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     public void setGUI_MainController(GUI_MainController gui_mainController) {
         this.gui_mainController = gui_mainController;
@@ -277,6 +293,106 @@ public class GUI_OrderPaymentController implements Initializable {
 
     @FXML
     void btn_qrCustomer(ActionEvent event) {
-
+        openSwingWindow();
     }
+
+    private void openSwingWindow() {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Cửa sổ quét mã QR");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(640, 480);
+            frame.setLayout(new BorderLayout());
+
+            JLabel cameraLabel = new JLabel();
+            frame.add(cameraLabel, BorderLayout.CENTER);
+
+            JButton closeButton = new JButton("Đóng");
+            closeButton.addActionListener(e -> {
+                if (capture != null) {
+                    capture.release();
+                }
+                frame.dispose();
+            });
+            frame.add(closeButton, BorderLayout.SOUTH);
+
+            frame.setVisible(true);
+            readQRCode(cameraLabel, frame);
+        });
+    }
+
+    private void readQRCode(JLabel cameraLabel, JFrame frame) {
+        capture = new VideoCapture(0);
+        if (!capture.isOpened()) {
+            showAlert("Không thể mở camera!", "Lỗi");
+            return;
+        }
+
+        timer = new Timer(100, e -> {
+            Mat frameMat = new Mat();
+            if (capture != null && capture.read(frameMat)) {
+                if (!frameMat.empty()) {
+                    BufferedImage bufferedImage = matToBufferedImage(frameMat);
+                    String qrCodeContent = decodeQRCode(bufferedImage);
+                    if (qrCodeContent != null) {
+                        updateCustomerFields(qrCodeContent);
+                        timer.stop();
+                        capture.release();
+                        cameraLabel.setIcon(null);
+                        frame.dispose();
+                    } else {
+                        ImageIcon icon = new ImageIcon(bufferedImage);
+                        cameraLabel.setIcon(icon);
+                    }
+                }
+            } else {
+                System.err.println("Không thể đọc frame từ camera.");
+            }
+        });
+
+        timer.start();
+    }
+
+
+    private BufferedImage matToBufferedImage(Mat matrix) {
+        int cols = matrix.cols();
+        int rows = matrix.rows();
+        int channels = matrix.channels();
+        byte[] data = new byte[cols * rows * channels];
+        matrix.get(0, 0, data);
+        BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_3BYTE_BGR);
+        image.getRaster().setDataElements(0, 0, cols, rows, data);
+        return image;
+    }
+
+    private String decodeQRCode(BufferedImage bufferedImage) {
+        BufferedImageLuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        try {
+            QRCodeReader reader = new QRCodeReader();
+            Result result = reader.decode(bitmap);
+            return result.getText();
+        } catch (NotFoundException | ChecksumException | FormatException e) {
+            return null;
+        }
+    }
+
+    private void updateCustomerFields(String qrCodeContent) {
+        String[] parts = qrCodeContent.split(",");
+        if (parts.length >= 4) {
+            Platform.runLater(() -> {
+                txt_idCustomer.setText(parts[0]);
+                txt_nameCustomer.setText(parts[1]);
+                txt_rankCustomer.setText(parts[2]);
+                txt_searchCustomer.setText(parts[3]);
+            });
+        }
+    }
+
+    private void showAlert(String message, String title) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
