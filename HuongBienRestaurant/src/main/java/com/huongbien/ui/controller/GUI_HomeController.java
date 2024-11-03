@@ -2,7 +2,7 @@ package com.huongbien.ui.controller;
 
 import com.huongbien.dao.DAO_Statistics;
 import com.huongbien.utils.Utils;
-import javafx.application.Platform; // Make sure to import this
+import javafx.application.Platform; 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -11,9 +11,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
 
 import java.net.URL;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -59,17 +59,23 @@ public class GUI_HomeController implements Initializable {
         mediaPlayer.setAutoPlay(true);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 
-        mediaView.fitWidthProperty().bind(((AnchorPane) mediaView.getParent()).widthProperty());
-        mediaView.fitHeightProperty().bind(((AnchorPane) mediaView.getParent()).heightProperty());
+        mediaView.setFitWidth(1680.0);
+        mediaView.setFitHeight(513.0);
 
-        ((AnchorPane) mediaView.getParent()).setPadding(new Insets(0, 0, 0, 0));
+        ((AnchorPane) mediaView.getParent()).setPadding(new Insets(0, 0, 0, 50));
         mediaView.setPreserveRatio(false);
 
         startTime = LocalDateTime.now();
         displayStartTime();
         updateTimeWorks();
         setStatistics();
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) mediaView.getScene().getWindow();
+            stage.setOnCloseRequest(event -> stopScheduler());
+        });
     }
+
     private void displayStartTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd | HH:mm:ss");
         txt_StartTime.setText(startTime.format(formatter));
@@ -88,11 +94,10 @@ public class GUI_HomeController implements Initializable {
 
         if (scheduler == null) {
             scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.scheduleAtFixedRate(() -> {
-                updateTimeWorks();
-            }, 0, 1, TimeUnit.SECONDS);
+            scheduler.scheduleAtFixedRate(this::updateTimeWorks, 0, 1, TimeUnit.SECONDS);
         }
     }
+
     private void setStatistics() {
         try {
             txt_TotalCustomers.setText(String.valueOf(DAO_Statistics.getTotalCustomers()));
@@ -101,6 +106,13 @@ public class GUI_HomeController implements Initializable {
             txt_TotalOfInvoice.setText(String.valueOf(DAO_Statistics.getTotalInvoices()));
         } catch (Exception e) {
             System.err.println("Error fetching statistics: " + e.getMessage());
+        }
+    }
+
+    private void stopScheduler() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+            System.out.println("Scheduler stopped.");
         }
     }
 
