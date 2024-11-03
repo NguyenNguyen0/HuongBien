@@ -343,7 +343,7 @@
                                     <Font name="Calibri Bold" size="17.0" />
                                  </font>
                               </Label>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <image>
                                     <Image url="@../icon/dashboard/down-arrow-16px.png" />
                                  </image>

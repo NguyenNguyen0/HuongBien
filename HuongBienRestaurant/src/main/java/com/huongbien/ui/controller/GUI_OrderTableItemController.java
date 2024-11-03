@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class GUI_OrderTableItemController implements Initializable {
-    private final static String path = "src/main/resources/com/huongbien/temp/table.json";
+    private final static String path_table = "src/main/resources/com/huongbien/temp/table.json";
 
     @FXML
     private ImageView imgView_table;
@@ -70,7 +70,7 @@ public class GUI_OrderTableItemController implements Initializable {
     private void setCheckTableFromJSON() {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(path);
+            jsonArray = Utils.readJsonFromFile(path_table);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -94,7 +94,7 @@ public class GUI_OrderTableItemController implements Initializable {
     public void updateCheckIcon(String tabID) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(path);
+            jsonArray = Utils.readJsonFromFile(path_table);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -119,7 +119,7 @@ public class GUI_OrderTableItemController implements Initializable {
         if (tabStatus.equals("Bàn trống")) {
             JsonArray jsonArray;
             try {
-                jsonArray = Utils.readJsonFromFile(path);
+                jsonArray = Utils.readJsonFromFile(path_table);
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
@@ -150,11 +150,11 @@ public class GUI_OrderTableItemController implements Initializable {
                 jsonObject.add("Table Type", tableTypeObject);
                 jsonArray.add(jsonObject);
 
-                Utils.writeJsonToFile(jsonArray, path);
+                Utils.writeJsonToFile(jsonArray, path_table);
             } else if (!jsonArray.isEmpty()) {
                 System.out.println("Không thể thêm phần tử mới vì chỉ cho phép tối đa 1 phần tử trong file.");
             } else {
-                Utils.writeJsonToFile(jsonArray, path);
+                Utils.writeJsonToFile(jsonArray, path_table);
             }
         } else if (tabStatus.equals("Đặt trước")) {
             System.out.println("Bàn đã đặt trước, bạn có muốn nhận bàn không?");

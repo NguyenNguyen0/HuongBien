@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="876.0" prefWidth="1247.0" style="-fx-background-color: rgba(0,0,0,0.5);" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.GUI_OrderPaymentInvoiceController">
+   <center>
+      <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="771.0" prefWidth="1066.0" BorderPane.alignment="CENTER">
+         <children>
+            <ScrollPane fx:id="compoent_scrollBill" hbarPolicy="NEVER" prefHeight="687.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+               <content>
+                  <GridPane fx:id="compoent_gridBill">
+                     <columnConstraints>
+                        <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </FlowPane>
+   </center>
+</BorderPane>

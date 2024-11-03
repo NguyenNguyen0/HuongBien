@@ -1,5 +1,7 @@
 package com.huongbien.ui.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.huongbien.dao.DAO_Account;
 import com.huongbien.dao.DAO_Employee;
 import com.huongbien.database.Database;
@@ -24,6 +26,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -32,6 +35,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GUI_LoginController implements Initializable {
+    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
+
     @FXML
     private TextField txt_empID;
 
@@ -87,6 +92,8 @@ public class GUI_LoginController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == btn_ok) {
+            JsonArray jsonArray = new JsonArray();
+            Utils.writeJsonToFile(jsonArray, path_user);
             System.exit(0);
         } else if (result.isPresent() && result.get() == btn_cancel) {
             txt_empID.requestFocus();
@@ -171,12 +178,38 @@ public class GUI_LoginController implements Initializable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //set user to main
+                //write JSON user current
                 String id = txt_empID.getText();
                 DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
                 Employee employee = dao_employee.get(id);
-                System.out.println("U are login name: "+ employee.getName());
-//                gui_mainController.lbl_empName.setText(employee.getName());
+                JsonArray jsonArray;
+                try {
+                    jsonArray = Utils.readJsonFromFile(path_user);
+                } catch (FileNotFoundException e) {
+                    jsonArray = new JsonArray();
+                }
+                if (jsonArray.size() > 0) {
+                    jsonArray.remove(0);
+                }
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("employeeId", id);
+                jsonObject.addProperty("name", employee.getName());
+                jsonObject.addProperty("phoneNumber", employee.getPhoneNumber());
+                jsonObject.addProperty("citizenIDNumber", employee.getCitizenIDNumber());
+                jsonObject.addProperty("gender", employee.isGender());
+                jsonObject.addProperty("address", employee.getAddress());
+                jsonObject.addProperty("birthday", employee.getBirthday().toString());
+                jsonObject.addProperty("email", employee.getEmail());
+                jsonObject.addProperty("status", employee.getStatus());
+                jsonObject.addProperty("hireDate", employee.getHireDate().toString());
+                jsonObject.addProperty("position", employee.getPosition());
+                jsonObject.addProperty("workHours", employee.getWorkHours());
+                jsonObject.addProperty("hourlyPay", employee.getHourlyPay());
+                jsonObject.addProperty("salary", employee.getSalary());
+//                jsonObject.addProperty("manager", employee.getManager().getEmployeeId());
+                jsonArray.add(jsonObject);
+                Utils.writeJsonToFile(jsonArray, path_user);
+                System.out.println("Ghi thông tin người dùng vào tệp thành công.");
             } else {
                 text_message.setText("Sai mã nhân viên và mật khẩu đăng nhập");
                 text_message.setStyle("-fx-text-fill: red;");

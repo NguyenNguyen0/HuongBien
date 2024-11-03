@@ -32,8 +32,14 @@ public class GUI_OrderPaymentBillItemController implements Initializable {
 
     private GUI_OrderPaymentController gui_OrderPaymentController;
 
-    public void setOrderPaymnetBillController(GUI_OrderPaymentController gui_OrderPaymentController) {
+    public void setOrderPaymentBillController(GUI_OrderPaymentController gui_OrderPaymentController) {
         this.gui_OrderPaymentController = gui_OrderPaymentController;
+    }
+
+    private GUI_OrderPaymentInvoiceController gui_OrderPaymentInvoiceController;
+
+    public void setOrderPaymentInvoiceController(GUI_OrderPaymentInvoiceController gui_OrderPaymentInvoiceController) {
+        this.gui_OrderPaymentInvoiceController = gui_OrderPaymentInvoiceController;
     }
 
     @Override

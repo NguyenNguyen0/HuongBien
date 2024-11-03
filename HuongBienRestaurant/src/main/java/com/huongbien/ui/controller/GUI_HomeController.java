@@ -1,5 +1,8 @@
 package com.huongbien.ui.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.huongbien.dao.DAO_Statistics;
 import com.huongbien.utils.Utils;
 import javafx.application.Platform; 
@@ -13,6 +16,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +26,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class GUI_HomeController implements Initializable {
+    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
+    @FXML
+    private Label txt_EmployeeName;
+
+    @FXML
+    private Label txt_EmployeePosition;
 
     @FXML
     private MediaView mediaView;
@@ -74,6 +84,13 @@ public class GUI_HomeController implements Initializable {
             Stage stage = (Stage) mediaView.getScene().getWindow();
             stage.setOnCloseRequest(event -> stopScheduler());
         });
+
+        //set emp
+        try {
+            readJSON_Employee();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void displayStartTime() {
@@ -113,6 +130,17 @@ public class GUI_HomeController implements Initializable {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
             System.out.println("Scheduler stopped.");
+        }
+    }
+
+    private void readJSON_Employee() throws FileNotFoundException {
+        JsonArray jsonArray = Utils.readJsonFromFile(path_user);
+        for (JsonElement element : jsonArray) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String name = jsonObject.get("name").getAsString();
+            String position = jsonObject.get("position").getAsString();
+            txt_EmployeeName.setText(name);
+            txt_EmployeePosition.setText(position);
         }
     }
 

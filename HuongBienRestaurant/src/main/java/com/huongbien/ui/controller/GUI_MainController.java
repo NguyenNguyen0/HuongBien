@@ -1,5 +1,9 @@
 package com.huongbien.ui.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.huongbien.utils.Utils;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -21,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -29,6 +34,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GUI_MainController implements Initializable {
+    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
+
     @FXML
     public Label lbl_empName;
 
@@ -410,6 +417,8 @@ public class GUI_MainController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            JsonArray jsonArray = new JsonArray();
+            Utils.writeJsonToFile(jsonArray, path_user);
         }
     }
 
@@ -435,6 +444,15 @@ public class GUI_MainController implements Initializable {
         pause.play();
     }
 
+    private void readJSON_Employee() throws FileNotFoundException {
+        JsonArray jsonArray = Utils.readJsonFromFile(path_user);
+        for (JsonElement element : jsonArray) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String name = jsonObject.get("name").getAsString();
+            lbl_empName.setText(name);
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         compoent_menu.setTranslateX(-250);
@@ -444,6 +462,10 @@ public class GUI_MainController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        try {
+            readJSON_Employee();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }

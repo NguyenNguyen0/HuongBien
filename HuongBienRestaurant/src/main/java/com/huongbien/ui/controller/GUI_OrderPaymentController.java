@@ -62,6 +62,7 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 public class GUI_OrderPaymentController implements Initializable {
+    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
     private final static String path_bill = "src/main/resources/com/huongbien/temp/bill.json";
     private final static String path_table = "src/main/resources/com/huongbien/temp/table.json";
     @FXML
@@ -151,7 +152,7 @@ public class GUI_OrderPaymentController implements Initializable {
                 HBox paymentBillBox = fxmlLoader.load();
                 GUI_OrderPaymentBillItemController gui_OrderPaymentBillItemController = fxmlLoader.getController();
                 gui_OrderPaymentBillItemController.setDataBill(orderDetails.get(i));
-                gui_OrderPaymentBillItemController.setOrderPaymnetBillController(this);
+                gui_OrderPaymentBillItemController.setOrderPaymentBillController(this);
                 if (columns == 1) {
                     columns = 0;
                     ++rows;
@@ -206,7 +207,7 @@ public class GUI_OrderPaymentController implements Initializable {
             JsonObject tableTypeObject = jsonObject.getAsJsonObject("Table Type");
             String typeName = tableTypeObject.get("Table Type Name").getAsString();
             //
-            String floorStr = (floor == 0 ? "Tầng trệt" : "Tầng "+floor);
+            String floorStr = (floor == 0 ? "Tầng trệt" : "Tầng " + floor);
             lbl_payTabFloor.setText(floorStr);
             lbl_payTabName.setText(name);
             lbl_payTabTypeName.setText(typeName);
@@ -223,15 +224,15 @@ public class GUI_OrderPaymentController implements Initializable {
         //set discount
         double discount = 0.0;
         double discountMoney = totalAmount * discount;
-        lbl_payDiscount.setText(Utils.formatPrice(discountMoney)+" VNĐ");
+        lbl_payDiscount.setText(Utils.formatPrice(discountMoney) + " VNĐ");
         //set VAT
         double vat = totalAmount * 0.1;
-        lbl_payCuisineQuantity.setText(totalQuantityCuisine+ " món");
-        lbl_payTotalAmount.setText(Utils.formatPrice(totalAmount)+ " VNĐ");
-        lbl_payVAT.setText("- "+ Utils.formatPrice(vat)+ " VNĐ");
+        lbl_payCuisineQuantity.setText(totalQuantityCuisine + " món");
+        lbl_payTotalAmount.setText(Utils.formatPrice(totalAmount) + " VNĐ");
+        lbl_payVAT.setText("- " + Utils.formatPrice(vat) + " VNĐ");
         //FinalAmount
         double finalAmount = totalAmount - discountMoney - vat;
-        lbl_payFinalAmount.setText(Utils.formatPrice(finalAmount)+ " VNĐ");
+        lbl_payFinalAmount.setText(Utils.formatPrice(finalAmount) + " VNĐ");
     }
 
     public void setCellValues() {
@@ -271,6 +272,7 @@ public class GUI_OrderPaymentController implements Initializable {
             loadingBill();
             setInfoPayment();
             setCellValues();
+            readJSON_Employee();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
@@ -293,7 +295,7 @@ public class GUI_OrderPaymentController implements Initializable {
         String inputPhone = txt_searchCustomer.getText().trim();
         DAO_Customer dao_customer = new DAO_Customer(Database.getConnection());
         Customer customer = dao_customer.getByPhone(inputPhone);
-        if(customer != null) {
+        if (customer != null) {
             txt_idCustomer.setText(customer.getCustomerId());
             txt_nameCustomer.setText(customer.getName());
             txt_rankCustomer.setText(Utils.toStringMembershipLevel(customer.getMembershipLevel()));
@@ -322,14 +324,14 @@ public class GUI_OrderPaymentController implements Initializable {
                 System.out.println("No promotions available.");
             }
             double discountMoney = totalAmount * discount;
-            lbl_payDiscount.setText(" - "+ Utils.formatPrice(discountMoney)+" VNĐ");
+            lbl_payDiscount.setText(" - " + Utils.formatPrice(discountMoney) + " VNĐ");
             //set VAT
             double vat = totalAmount * 0.1;
-            lbl_payTotalAmount.setText(Utils.formatPrice(totalAmount)+ " VNĐ");
-            lbl_payVAT.setText("- "+ Utils.formatPrice(vat)+ " VNĐ");
+            lbl_payTotalAmount.setText(Utils.formatPrice(totalAmount) + " VNĐ");
+            lbl_payVAT.setText("- " + Utils.formatPrice(vat) + " VNĐ");
             //FinalAmount
             double finalAmount = totalAmount - discountMoney - vat;
-            lbl_payFinalAmount.setText(Utils.formatPrice(finalAmount)+ " VNĐ");
+            lbl_payFinalAmount.setText(Utils.formatPrice(finalAmount) + " VNĐ");
         } else {
             System.out.println("Không tìm thấy khách hàng, vui lòng đăng ký thành viên");
             txt_idCustomer.setText("");
@@ -359,14 +361,14 @@ public class GUI_OrderPaymentController implements Initializable {
 
             double discount = promotion.getDiscount();
             double discountMoney = totalAmount * discount;
-            lbl_payDiscount.setText(" - "+ Utils.formatPrice(discountMoney)+" VNĐ");
+            lbl_payDiscount.setText(" - " + Utils.formatPrice(discountMoney) + " VNĐ");
             //set VAT
             double vat = totalAmount * 0.1;
-            lbl_payTotalAmount.setText(Utils.formatPrice(totalAmount)+ " VNĐ");
-            lbl_payVAT.setText("- "+ Utils.formatPrice(vat)+ " VNĐ");
+            lbl_payTotalAmount.setText(Utils.formatPrice(totalAmount) + " VNĐ");
+            lbl_payVAT.setText("- " + Utils.formatPrice(vat) + " VNĐ");
             //FinalAmount
             double finalAmount = totalAmount - discountMoney - vat;
-            lbl_payFinalAmount.setText(Utils.formatPrice(finalAmount)+ " VNĐ");
+            lbl_payFinalAmount.setText(Utils.formatPrice(finalAmount) + " VNĐ");
         }
     }
 
@@ -413,7 +415,13 @@ public class GUI_OrderPaymentController implements Initializable {
                     BufferedImage bufferedImage = matToBufferedImage(frameMat);
                     String qrCodeContent = decodeQRCode(bufferedImage);
                     if (qrCodeContent != null) {
-                        updateCustomerFields(qrCodeContent);
+                        try {
+                            updateCustomerFields(qrCodeContent);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (FileNotFoundException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         timer.stop();
                         capture.release();
                         cameraLabel.setIcon(null);
@@ -455,16 +463,61 @@ public class GUI_OrderPaymentController implements Initializable {
         }
     }
 
-    private void updateCustomerFields(String qrCodeContent) {
+    private void updateCustomerFields(String qrCodeContent) throws SQLException, FileNotFoundException {
         String[] parts = qrCodeContent.split(",");
         if (parts.length >= 4) {
             Platform.runLater(() -> {
                 txt_idCustomer.setText(parts[0]);
                 txt_nameCustomer.setText(parts[1]);
-                txt_rankCustomer.setText(parts[2]);
+                txt_rankCustomer.setText(Utils.toStringMembershipLevel(Integer.parseInt(parts[2])));
                 txt_searchCustomer.setText(parts[3]);
             });
         }
+        Platform.runLater(() -> {
+            tabView_promotion.setDisable(false);
+            // Set discount
+            double totalAmount = 0;
+            JsonArray jsonArrayBill = null;
+            try {
+                jsonArrayBill = Utils.readJsonFromFile(path_bill);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            for (JsonElement element : jsonArrayBill) {
+                JsonObject jsonObject = element.getAsJsonObject();
+                double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
+                totalAmount += cuisineMoney;
+            }
+            double discount = 0.0;
+            DAO_Promotion dao_promotion = null;
+            try {
+                dao_promotion = new DAO_Promotion(Database.getConnection());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            List<Promotion> promotionList = dao_promotion.get();
+            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+            if (!listPromotion.isEmpty()) {
+                Promotion maxDiscountPromotion = listPromotion.stream()
+                        .max(Comparator.comparingDouble(Promotion::getDiscount))
+                        .orElse(null);
+
+                tabView_promotion.getSelectionModel().select(maxDiscountPromotion);
+                discount = maxDiscountPromotion.getDiscount();
+            } else {
+                discount = 0.0;
+                System.out.println("No promotions available.");
+            }
+            double discountMoney = totalAmount * discount;
+            lbl_payDiscount.setText(" - " + Utils.formatPrice(discountMoney) + " VNĐ");
+            //set VAT
+            double vat = totalAmount * 0.1;
+            lbl_payTotalAmount.setText(Utils.formatPrice(totalAmount) + " VNĐ");
+            lbl_payVAT.setText("- " + Utils.formatPrice(vat) + " VNĐ");
+            //FinalAmount
+            double finalAmount = totalAmount - discountMoney - vat;
+            lbl_payFinalAmount.setText(Utils.formatPrice(finalAmount) + " VNĐ");
+        });
     }
 
     private void showAlert(String message, String title) {
@@ -472,5 +525,15 @@ public class GUI_OrderPaymentController implements Initializable {
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    //set emp
+    private void readJSON_Employee() throws FileNotFoundException {
+        JsonArray jsonArray = Utils.readJsonFromFile(path_user);
+        for (JsonElement element : jsonArray) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String name = jsonObject.get("name").getAsString();
+            lbl_payEmp.setText(name);
+        }
     }
 }
