@@ -55,7 +55,6 @@ public class Paginator<T> {
     }
 
     public List<T> getCurrentPage() {
-        System.out.println(startIndex + ":" + endIndex);
         if (getPage != null) {
             return getPage.apply(startIndex, itemsPerPage);
         }
