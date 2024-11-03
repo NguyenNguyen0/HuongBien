@@ -2,7 +2,7 @@ package com.huongbien.ui.controller;
 
 import com.huongbien.dao.DAO_Statistics;
 import com.huongbien.utils.Utils;
-import javafx.application.Platform; // Make sure to import this
+import javafx.application.Platform; 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -14,7 +14,6 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;

@@ -277,6 +277,6 @@ public class GUI_OrderPaymentController implements Initializable {
 
     @FXML
     void btn_qrCustomer(ActionEvent event) {
-        
+
     }
 }

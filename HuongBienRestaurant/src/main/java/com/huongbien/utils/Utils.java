@@ -98,6 +98,7 @@ public class Utils {
     // Chuyển danh sách Table về định dạng -> "Bàn 01, Bàn 02" Sài cho phần render
     // Dùng cái này để render mảng bảng trên giao diện
     public static String toStringTables(List<Table> tables) {
+        if (tables == null) return "";
         return tables.stream()
                 .map(Table::getName)
                 .collect(Collectors.joining(", "));

@@ -151,6 +151,60 @@ public class DAO_Reservation extends DAO_Base<Reservation> {
         return reservation;
     }
 
+//    TODO: code lại
+    public List<Reservation> getWithPaginator(int offset, int limit) {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT * FROM [Reservation]  ORDER BY reservationDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, offset);
+            stmt.setInt(2, limit);
+            DAO_Customer customerDao = new DAO_Customer(connection);
+            DAO_Employee employeeDao = new DAO_Employee(connection);
+            DAO_Payment paymentDao = new DAO_Payment(connection);
+            DAO_Table tableDao = new DAO_Table(connection);
+            DAO_FoodOrder foodOrderDao = new DAO_FoodOrder(connection);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Reservation reservation = new Reservation();
+                reservation.setReservationId(rs.getString("id"));
+                reservation.setPartyType(rs.getString("partyType"));
+                reservation.setPartySize(rs.getInt("partySize"));
+                reservation.setReservationDate(rs.getDate("reservationDate").toLocalDate());
+                reservation.setReservationTime(rs.getTime("reservationTime").toLocalTime());
+                reservation.setReceiveDate(rs.getDate("receiveDate").toLocalDate());
+                reservation.setStatus(rs.getString("status"));
+                reservation.setDeposit(rs.getDouble("deposit"));
+                reservation.setRefundDeposit(rs.getDouble("refundDeposit"));
+
+                reservation.setCustomer(customerDao.get(rs.getString("customerId")));
+                reservation.setEmployee(employeeDao.get(rs.getString("employeeId")));
+                reservation.setPayment(paymentDao.get(rs.getString("paymentId")));
+                reservation.setTables(tableDao.getAllByReservationId(reservation.getReservationId()));
+                reservation.setFoodOrders(foodOrderDao.getAllByReservationId(reservation.getReservationId()));
+
+                reservations.add(reservation);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return reservations;
+    }
+
+    public int getTotalReservationCount() {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("SELECT COUNT(*) AS totalReservation FROM [Reservation]");
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() ? rs.getInt("totalReservation") : 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 //    public boolean delete(String id) {
 //        String sql = "DELETE FROM reservation WHERE id = ?";
 //        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
