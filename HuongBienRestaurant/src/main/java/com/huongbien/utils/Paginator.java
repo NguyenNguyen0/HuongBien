@@ -1,18 +1,24 @@
 package com.huongbien.utils;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class Paginator<T> {
     private final boolean isRollBack;
+
     private final int itemsPerPage;
     private int totalPages;
-    private int currentPageIndex;
-    private List<T> data;
+    private int totalItems;
 
+    private List<T> data = null;
+
+    private int currentPageIndex;
     private int startIndex;
     private int endIndex;
 
-    public Paginator(int itemsPerPage, List<T> data, boolean isRollBack) {
+    private BiFunction<Integer, Integer, List<T>> getPage = null;
+
+    public Paginator(List<T> data, int itemsPerPage, boolean isRollBack) {
         this.isRollBack = isRollBack;
         this.data = data;
         this.itemsPerPage = itemsPerPage;
@@ -34,32 +40,50 @@ public class Paginator<T> {
         this.endIndex = Math.min(startIndex + itemsPerPage, getData().size());
     }
 
+    public Paginator(BiFunction<Integer, Integer, List<T>> getPage, int totalItems, int itemsPerPage, boolean isRollBack) {
+        this.isRollBack = isRollBack;
+
+        this.getPage = getPage;
+
+        this.totalItems = totalItems;
+        this.itemsPerPage = itemsPerPage;
+        this.totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+        this.currentPageIndex = 1;
+        this.startIndex = 0;
+        this.endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+    }
+
     public List<T> getCurrentPage() {
+        if (data == null || data.isEmpty()) {
+            return getPage.apply(startIndex, endIndex);
+        }
+
         return data.subList(startIndex, endIndex);
     }
 
     public void goToFirstPage() {
         setCurrentPageIndex(1);
         startIndex = (getCurrentPageIndex() - 1) * itemsPerPage;
-        endIndex = Math.min(startIndex + itemsPerPage, getData().size());
+        endIndex = Math.min(startIndex + itemsPerPage, totalItems);
     }
 
     public void goToPreviousPage() {
         setCurrentPageIndex(getCurrentPageIndex() - 1);
         startIndex = (getCurrentPageIndex() - 1) * itemsPerPage;
-        endIndex = Math.min(startIndex + itemsPerPage, getData().size());
+        endIndex = Math.min(startIndex + itemsPerPage, totalItems);
     }
 
     public void goToNextPage() {
         setCurrentPageIndex(getCurrentPageIndex() + 1);
         startIndex = (getCurrentPageIndex() - 1) * itemsPerPage;
-        endIndex = Math.min(startIndex + itemsPerPage, getData().size());
+        endIndex = Math.min(startIndex + itemsPerPage, totalItems);
     }
 
     public void goToLastPage() {
         setCurrentPageIndex(getTotalPages());
         startIndex = (getCurrentPageIndex() - 1) * itemsPerPage;
-        endIndex = Math.min(startIndex + getCurrentPageIndex(), getData().size());
+        endIndex = Math.min(startIndex + getCurrentPageIndex(), totalItems);
     }
 
     private void setTotalPage(int dataSize, int itemsPerPage) {
