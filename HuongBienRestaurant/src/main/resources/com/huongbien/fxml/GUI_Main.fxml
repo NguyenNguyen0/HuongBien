@@ -338,7 +338,7 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <Label text="xxxxxxx" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="lbl_empName" text="xxxxxxx" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="Calibri Bold" size="17.0" />
                                  </font>

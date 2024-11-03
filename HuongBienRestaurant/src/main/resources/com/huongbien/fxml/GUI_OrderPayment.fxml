@@ -199,11 +199,11 @@
                         <Insets />
                      </VBox.margin>
                   </HBox>
-                  <TableView fx:id="tabView_promotion" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tabView_promotion" onMouseClicked="#tabView_promotion" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="col_proID" prefWidth="155.0" text="Mã" />
                       <TableColumn fx:id="col_proName" prefWidth="331.0" text="Tên" />
-                        <TableColumn fx:id="col_proDiscount" prefWidth="143.0" text="Giảm giá %" />
+                        <TableColumn fx:id="col_proDiscount" prefWidth="143.0" sortType="DESCENDING" text="Giảm giá %" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -374,7 +374,7 @@
                         </VBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="In tạm tính (F7)">
+                              <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="In tạm tính (F7)">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
@@ -382,7 +382,7 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Lưu tạm (F8)">
+                              <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Lưu tạm (F8)">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>

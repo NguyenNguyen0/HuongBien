@@ -54,13 +54,21 @@ public class GUI_OrderCuisineItemController implements Initializable {
         lbl_cuisineID.setText(cuisine.getCuisineId());
         lbl_cuisineName.setText(cuisine.getName());
         lbl_cuisinePrice.setText(Utils.formatPrice(cuisine.getPrice()));
-        //image
+
         byte[] imageBytes = cuisine.getImage();
-        Image image = Converter.bytesToImage(imageBytes);
+        Image image;
+
+        if (imageBytes != null) {
+            image = Converter.bytesToImage(imageBytes);
+        } else {
+            image = new Image("/com/huongbien/icon/mg_cuisine/empty-256px.png");
+        }
+
         circle_imgCuisine.setFill(new ImagePattern(image));
         circle_imgCuisine.setStroke(Color.BLUE);
         circle_imgCuisine.setEffect(new DropShadow(+25d, 0d, +2d, Color.DARKSEAGREEN));
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

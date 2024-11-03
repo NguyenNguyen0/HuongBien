@@ -18,7 +18,7 @@ public class GUI_Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/GUI_Main.fxml"));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
         primaryStage.setTitle("Dashboard - Huong Bien Restaurant");
         primaryStage.setMaximized(true);

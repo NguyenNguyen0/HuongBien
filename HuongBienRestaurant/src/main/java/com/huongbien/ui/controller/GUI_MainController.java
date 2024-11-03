@@ -30,6 +30,9 @@ import java.util.ResourceBundle;
 
 public class GUI_MainController implements Initializable {
     @FXML
+    public Label lbl_empName;
+
+    @FXML
     private Button btn_menu_hide;
 
     @FXML

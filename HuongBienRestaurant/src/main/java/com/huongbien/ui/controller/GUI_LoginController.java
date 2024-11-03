@@ -1,8 +1,10 @@
 package com.huongbien.ui.controller;
 
 import com.huongbien.dao.DAO_Account;
+import com.huongbien.dao.DAO_Employee;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Account;
+import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,8 +59,11 @@ public class GUI_LoginController implements Initializable {
     @FXML
     private Button handleLogin;
 
-    //DAO
-    private DAO_Account accountDao;
+    public GUI_MainController gui_mainController;
+
+    public void setGUI_MainController(GUI_MainController gui_mainController) {
+        this.gui_mainController = gui_mainController;
+    }
 
     private void loadCarousel() {
         try {
@@ -132,8 +137,7 @@ public class GUI_LoginController implements Initializable {
     @FXML
     void handleLogin(ActionEvent event) {
         try {
-            Connection connection = Database.getConnection();
-            accountDao = new DAO_Account(connection);
+            DAO_Account accountDao = new DAO_Account(Database.getConnection());
 
             String username = txt_empID.getText();
             String password = getCurrentPwd();
@@ -167,6 +171,12 @@ public class GUI_LoginController implements Initializable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                //set user to main
+                String id = txt_empID.getText();
+                DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
+                Employee employee = dao_employee.get(id);
+                System.out.println("U are login name: "+ employee.getName());
+//                gui_mainController.lbl_empName.setText(employee.getName());
             } else {
                 text_message.setText("Sai mã nhân viên và mật khẩu đăng nhập");
                 text_message.setStyle("-fx-text-fill: red;");
