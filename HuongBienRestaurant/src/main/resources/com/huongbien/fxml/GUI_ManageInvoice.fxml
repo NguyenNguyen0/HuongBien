@@ -275,9 +275,9 @@
          <children>
             <HBox alignment="CENTER" prefHeight="150.0" prefWidth="925.0" style="-fx-background-color: white;">
                <children>
-                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="1031.0">
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="1001.0">
                      <children>
-                        <TextField fx:id="txt_invoiceSearch" onKeyReleased="#txt_invoiceSearchKeyReleased" prefHeight="60.0" prefWidth="475.0" promptText="Tìm kiếm hóa đơn nhanh bàng mã HD hoặc mã KH" styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="txt_invoiceSearch" prefHeight="67.0" prefWidth="616.0" promptText="Tìm kiếm hóa đơn nhanh bàng mã HD hoặc mã KH" styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -298,7 +298,14 @@
                         <Insets left="50.0" />
                      </HBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0" />
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
+                     <children>
+                        <Button fx:id="searchOrderButton" mnemonicParsing="false" onMouseClicked="#searchButtonOnClick" prefHeight="61.0" prefWidth="158.0" style="-fx-background-color: #000;" text="Tìm kiếm" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Button>
+                     </children></HBox>
                </children>
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
@@ -334,11 +341,11 @@
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
                <children>
-                  <Button mnemonicParsing="false" text="&lt;&lt;">
+                  <Button fx:id="firstPageButton" mnemonicParsing="false" onMouseClicked="#firstPageButtonOnClick" text="&lt;&lt;">
                      <font>
                         <Font size="20.0" />
                      </font></Button>
-                  <Button mnemonicParsing="false" text="&lt;">
+                  <Button fx:id="prevPageButton" mnemonicParsing="false" onMouseClicked="#prevPageButtonOnClick" text="&lt;">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -346,7 +353,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Label text="1/10">
+                  <Label fx:id="pageIndexLabel" text="1/10">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -354,7 +361,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" text="&gt;">
+                  <Button fx:id="nextPageButton" mnemonicParsing="false" onMouseClicked="#nextPageButtonOnClick" text="&gt;">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -362,7 +369,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" text="&gt;&gt;">
+                  <Button fx:id="lastPageButton" mnemonicParsing="false" onMouseClicked="#lastPageButtonOnClick" text="&gt;&gt;">
                      <font>
                         <Font size="20.0" />
                      </font></Button>

@@ -5,9 +5,11 @@ import com.huongbien.dao.DAO_Promotion;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Order;
 import com.huongbien.entity.Promotion;
+import com.huongbien.utils.Paginator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
+import javax.xml.crypto.Data;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,6 +28,8 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static com.huongbien.database.Database.connection;
 
 public class GUI_ManageInvoiceController implements Initializable {
     @FXML
@@ -49,6 +54,8 @@ public class GUI_ManageInvoiceController implements Initializable {
     @FXML
     public TextField txt_invoiceSearch;
     @FXML
+    public Button searchOrderButton;
+    @FXML
     public ImageView btn_clearSearch;
     @FXML
     public TableView<Order> tabViewInvoice;
@@ -63,14 +70,35 @@ public class GUI_ManageInvoiceController implements Initializable {
     public TableColumn<Order, String> tabCol_customer;
     @FXML
     public DatePicker date_orderDate;
-
     @FXML
+    private Label pageIndexLabel;
 
-    public void setCellValues(){
+    //    TODO: viết lại logic cho code đỡ bẩn
+    private static final DAO_Order dao_order;
+
+    static {
         try {
-            Connection connection = Database.getConnection();
-            DAO_Order dao_order = new DAO_Order(connection);
-            List<Order> orders = dao_order.get();
+            dao_order = new DAO_Order(Database.getConnection());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final Paginator<Order> orderPaginator = new Paginator<>((offset, limit) -> {
+        DAO_Order daoOrder = null;
+        try {
+            daoOrder = new DAO_Order(Database.getConnection());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return daoOrder.getWithPaginator(offset, limit);
+    }, dao_order.getTotalOrderCount(), 10, false);
+
+    public void setCellValues() {
+        tabViewInvoice.getItems().clear();
+        try {
+            List<Order> orders = orderPaginator.getCurrentPage();
+            setPageIndexLabel(orderPaginator.getCurrentPageIndex(), orderPaginator.getTotalPages());
             ObservableList<Order> listOrder = FXCollections.observableArrayList(orders);
 
             tabCol_invoiceID.setCellValueFactory(new PropertyValueFactory<>("orderId"));
@@ -78,23 +106,21 @@ public class GUI_ManageInvoiceController implements Initializable {
 
             DecimalFormat priceFormat = new DecimalFormat("#,###");
             tabCol_totalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-            tabCol_totalAmount.setCellFactory(column -> {
-                return new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double price) {
-                        return price != null ? priceFormat.format(price) : "";
-                    }
+            tabCol_totalAmount.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+                @Override
+                public String toString(Double price) {
+                    return price != null ? priceFormat.format(price) : "";
+                }
 
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return priceFormat.parse(string).doubleValue();
-                        } catch (Exception e) {
-                            return 0.0;
-                        }
+                @Override
+                public Double fromString(String string) {
+                    try {
+                        return priceFormat.parse(string).doubleValue();
+                    } catch (Exception e) {
+                        return 0.0;
                     }
-                });
-            });
+                }
+            }));
 
             tabCol_customer.setCellValueFactory(cellData ->
                     new SimpleStringProperty(cellData.getValue().getCustomer() != null ?
@@ -103,9 +129,10 @@ public class GUI_ManageInvoiceController implements Initializable {
             tabCol_employeeId.setCellValueFactory(cellData ->
                     new SimpleStringProperty(cellData.getValue().getEmployee() != null ?
                             cellData.getValue().getEmployee().getEmployeeId() : ""));
+
             tabViewInvoice.setItems(listOrder);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             Database.closeConnection();
         }
@@ -115,13 +142,22 @@ public class GUI_ManageInvoiceController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setCellValues();
     }
+
+//    TODO: xử lý lại phần pagination khi search
     @FXML
-    void txt_invoiceSearchKeyReleased(KeyEvent keyEvent) {
+    void searchButtonOnClick(MouseEvent event) {
         String id = txt_invoiceSearch.getText();
         try {
-            Connection connection = Database.getConnection();
-            DAO_Order dao_order = new DAO_Order(connection);
-            List<Order> orders = dao_order.getSearch(id);
+            List<Order> orders = null;
+
+            if (id.isEmpty() || id.isBlank()) {
+                orders = orderPaginator.getCurrentPage();
+            } else {
+                Connection connection = Database.getConnection();
+                DAO_Order dao_order = new DAO_Order(connection);
+                orders = dao_order.getSearch(id);
+            }
+
             ObservableList<Order> listOrder = FXCollections.observableArrayList(orders);
 
             tabCol_invoiceID.setCellValueFactory(new PropertyValueFactory<>("orderId"));
@@ -129,23 +165,21 @@ public class GUI_ManageInvoiceController implements Initializable {
 
             DecimalFormat priceFormat = new DecimalFormat("#,###");
             tabCol_totalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-            tabCol_totalAmount.setCellFactory(column -> {
-                return new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double price) {
-                        return price != null ? priceFormat.format(price) : "";
-                    }
+            tabCol_totalAmount.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+                @Override
+                public String toString(Double price) {
+                    return price != null ? priceFormat.format(price) : "";
+                }
 
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return priceFormat.parse(string).doubleValue();
-                        } catch (Exception e) {
-                            return 0.0;
-                        }
+                @Override
+                public Double fromString(String string) {
+                    try {
+                        return priceFormat.parse(string).doubleValue();
+                    } catch (Exception e) {
+                        return 0.0;
                     }
-                });
-            });
+                }
+            }));
 
             tabCol_customer.setCellValueFactory(cellData ->
                     new SimpleStringProperty(cellData.getValue().getCustomer() != null ?
@@ -161,21 +195,23 @@ public class GUI_ManageInvoiceController implements Initializable {
             Database.closeConnection();
         }
     }
+
     @FXML
     void btn_clearSearchClicked(MouseEvent mouseEvent) {
         txt_invoiceSearch.clear();
         setCellValues();
     }
+
     @FXML
     void getInvoiceInfo(MouseEvent mouseEvent) {
         Order selectedItem = tabViewInvoice.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
+        if (selectedItem != null) {
             txt_invoiceId.setText(selectedItem.getOrderId());
             date_orderDate.setValue(selectedItem.getOrderDate());
 
             double vat = selectedItem.getVatTax();
             int vatTax = (int) (vat * 100);
-            txt_VAT.setText(vatTax+"%");
+            txt_VAT.setText(vatTax + "%");
 
             DecimalFormat priceFormat = new DecimalFormat("#,###");
             String formattedDiscount = priceFormat.format(selectedItem.getDiscount());
@@ -185,19 +221,17 @@ public class GUI_ManageInvoiceController implements Initializable {
             String formattedTotalAmount = priceFormat.format(selectedItem.getTotalAmount());
             txt_totalAmount.setText(formattedTotalAmount);
 
-            if (selectedItem.getCustomer() == null){
+            if (selectedItem.getCustomer() == null) {
                 txt_customer.setText("Vãng lai");
-            }
-            else {
+            } else {
                 txt_customer.setText(selectedItem.getCustomer().getCustomerId());
             }
 
             txt_employeeId.setText(selectedItem.getEmployee().getEmployeeId());
 
-            if (selectedItem.getPromotion() == null){
+            if (selectedItem.getPromotion() == null) {
                 txt_promotionId.setText("Không");
-            }
-            else{
+            } else {
                 txt_promotionId.setText(selectedItem.getPromotion().getPromotionId());
             }
 
@@ -205,5 +239,33 @@ public class GUI_ManageInvoiceController implements Initializable {
             txtArea_notes.setText(selectedItem.getNotes());
 
         }
+    }
+
+    public void setPageIndexLabel(int currentPage, int totalPage) {
+        pageIndexLabel.setText(currentPage + "/" + totalPage);
+    }
+
+    @FXML
+    void lastPageButtonOnClick(MouseEvent event) {
+        orderPaginator.goToLastPage();
+        setCellValues();
+    }
+
+    @FXML
+    void nextPageButtonOnClick(MouseEvent event) {
+        orderPaginator.goToNextPage();
+        setCellValues();
+    }
+
+    @FXML
+    void prevPageButtonOnClick(MouseEvent event) {
+        orderPaginator.goToPreviousPage();
+        setCellValues();
+    }
+
+    @FXML
+    void firstPageButtonOnClick(MouseEvent event) {
+        orderPaginator.goToFirstPage();
+        setCellValues();
     }
 }
