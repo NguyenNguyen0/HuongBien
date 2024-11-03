@@ -4,6 +4,7 @@ import com.huongbien.dao.DAO_Statistics;
 import com.huongbien.entity.Customer;
 import com.huongbien.entity.Order;
 import com.huongbien.utils.Utils;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -50,7 +51,7 @@ public class GUI_StatisticsController {
     @FXML
     private TableColumn<?, ?> tabCol_Note;
     @FXML
-    private TableColumn<?, ?> tabCol_Tables;
+    private TableColumn<Order, String> tabCol_Tables;
     @FXML
     private TableColumn<?, ?> tabCol_TotalAmount;
     @FXML
@@ -270,23 +271,9 @@ public class GUI_StatisticsController {
         tabCol_InvoiceID.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         tabCol_TotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         tabCol_Note.setCellValueFactory(new PropertyValueFactory<>("notes"));
-//      TODO: tìm cách render lại mảng table cho đẹp [Quan trọng]
-        tabCol_Tables.setCellValueFactory(new PropertyValueFactory<>("tables"));
-//        tabCol_Tables.setCellFactory(column -> new TableCell<>() {
-//            @Override
-//            protected void updateItem(Object item, boolean empty) {
-//                super.updateItem(item, empty);
-//
-//                if (empty || item == null) {
-//                    setText(null);
-//                } else {
-//                    Order currentItem = (Order) getTableRow().getItem();
-//                    if (currentItem != null) {
-//                        setText(currentItem.getTables().toString());
-//                    }
-//                }
-//            }
-//        });
+        tabCol_Tables.setCellValueFactory(cellDataFeatures ->
+                new SimpleStringProperty(Utils.toStringTables(cellDataFeatures.getValue().getTables()))
+        );
 
         ObservableList<Order> orders = FXCollections.observableArrayList(DAO_Statistics.getNewOrderInDay());
 
