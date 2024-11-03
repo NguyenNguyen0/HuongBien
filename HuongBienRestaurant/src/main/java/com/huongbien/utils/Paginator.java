@@ -55,8 +55,9 @@ public class Paginator<T> {
     }
 
     public List<T> getCurrentPage() {
-        if (data == null || data.isEmpty()) {
-            return getPage.apply(startIndex, endIndex);
+        System.out.println(startIndex + ":" + endIndex);
+        if (getPage != null) {
+            return getPage.apply(startIndex, itemsPerPage);
         }
 
         return data.subList(startIndex, endIndex);
@@ -98,7 +99,6 @@ public class Paginator<T> {
         } else if (nextPageIndex <= 0 || nextPageIndex > totalPages) {
             return;
         }
-
         this.currentPageIndex = nextPageIndex;
     }
 
