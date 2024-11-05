@@ -39,7 +39,6 @@ public class GUI_OrderTableController implements Initializable {
 
     @FXML
     private GridPane compoent_gridTable;
-    private List<Table> tables;
 
     @FXML
     public ComboBox<String> comboBox_tabFloor;
@@ -71,7 +70,7 @@ public class GUI_OrderTableController implements Initializable {
     }
 
     private void setGridPane(String floor, String status, String type) {
-        tables = new ArrayList<>(data(floor, status, type));
+        List<Table> tables = new ArrayList<>(data(floor, status, type));
         int columns = 0;
         int rows = 1;
         try {
@@ -86,11 +85,9 @@ public class GUI_OrderTableController implements Initializable {
                     columns = 0;
                     ++rows;
                 }
-
                 compoent_gridTable.add(tableBox, columns++, rows);
                 GridPane.setMargin(tableBox, new Insets(10));
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

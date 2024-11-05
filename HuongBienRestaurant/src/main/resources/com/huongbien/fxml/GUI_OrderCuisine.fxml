@@ -111,7 +111,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#btn_payment" prefHeight="60.0" prefWidth="340.0" style="-fx-background-color: #1D557E;" text="Thanh toán (F9)" textFill="WHITE">
+                                    <Button mnemonicParsing="false" onAction="#btn_payment" prefHeight="60.0" prefWidth="340.0" style="-fx-background-color: #1D557E;" text="Tính tiền (F9)" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -198,33 +198,7 @@
                <children>
                   <HBox alignment="CENTER_RIGHT" prefHeight="98.0" prefWidth="627.0">
                      <children>
-                        <Label fx:id="lbl_tabFloor" text="Tầng trệt">
-                           <font>
-                              <Font name="System Bold" size="25.0" />
-                           </font>
-                        </Label>
-                        <Label text="|">
-                           <font>
-                              <Font name="System Bold" size="25.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="20.0" right="20.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Label fx:id="lbl_tabName" text="Bàn 01">
-                           <font>
-                              <Font name="System Bold" size="25.0" />
-                           </font>
-                        </Label>
-                        <Label text="|">
-                           <font>
-                              <Font name="System Bold" size="25.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="20.0" right="20.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Label fx:id="lbl_tabTypeName" text="VIP">
+                        <Label fx:id="lbl_tabInfo" text="xxxx">
                            <font>
                               <Font name="System Bold" size="25.0" />
                            </font>

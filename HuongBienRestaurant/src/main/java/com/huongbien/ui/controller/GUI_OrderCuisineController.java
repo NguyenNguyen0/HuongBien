@@ -50,11 +50,7 @@ public class GUI_OrderCuisineController implements Initializable {
     @FXML
     public GridPane compoent_gridBill;
     @FXML
-    private Label lbl_tabFloor;
-    @FXML
-    private Label lbl_tabName;
-    @FXML
-    private Label lbl_tabTypeName;
+    private Label lbl_tabInfo;
     @FXML
     private Label lbl_billAmountTotal;
     @FXML
@@ -173,21 +169,25 @@ public class GUI_OrderCuisineController implements Initializable {
         }
 
         lbl_billQuantityCuisine.setText(totalQuantityCuisine + " món");
-        lbl_billAmountTotal.setText(Utils.formatPrice(totalAmount)+ " VNĐ");
+        lbl_billAmountTotal.setText(Utils.formatPrice(totalAmount) + " VNĐ");
+
+        StringBuilder tabInfoBuilder = new StringBuilder();
 
         for (JsonElement element : jsonArrayTab) {
             JsonObject jsonObject = element.getAsJsonObject();
 
-            String name = jsonObject.get("Table Name").getAsString();
             int floor = jsonObject.get("Table Floor").getAsInt();
-            JsonObject tableTypeObject = jsonObject.getAsJsonObject("Table Type");
-            String typeName = tableTypeObject.get("Table Type Name").getAsString();
+            String floorStr = (floor == 0 ? "Tầng trệt" : "Tầng " + floor);
+            String name = jsonObject.get("Table Name").getAsString();
 
-            String floorStr = (floor == 0 ? "Tầng trệt" : "Tầng "+floor);
-            lbl_tabFloor.setText(floorStr);
-            lbl_tabName.setText(name);
-            lbl_tabTypeName.setText(typeName);
+            tabInfoBuilder.append(floorStr).append(" - ").append(name).append(", ");
         }
+
+        if (!tabInfoBuilder.isEmpty()) {
+            tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
+        }
+
+        lbl_tabInfo.setText(tabInfoBuilder.toString());
     }
 
     @Override
@@ -206,7 +206,7 @@ public class GUI_OrderCuisineController implements Initializable {
     @FXML
     void btn_payment(ActionEvent event) throws IOException {
         JsonArray jsonArray = Utils.readJsonFromFile(path_bill);
-        if(!jsonArray.isEmpty()) {
+        if (!jsonArray.isEmpty()) {
             gui_mainController.openPayment();
         } else {
             System.out.println("Vui lòng chọn món ăn");

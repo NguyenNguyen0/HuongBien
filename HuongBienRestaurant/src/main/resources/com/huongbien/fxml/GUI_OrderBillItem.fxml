@@ -34,7 +34,7 @@
                   <Font name="System Italic" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lbl_cuisineNote" text="Cho nhiều bia">
+            <Label fx:id="lbl_cuisineNote" prefHeight="21.0" prefWidth="270.0" text="Cho nhiều bia">
                <font>
                   <Font size="15.0" />
                </font></Label>

@@ -10,7 +10,6 @@ public class OrderDetail {
     private String note;
     private double salePrice;
     private Cuisine cuisine;
-
     public OrderDetail() {}
 
 //  truyền mã OrderDetail hoặc truyền mã Order để tự động tạo mã mới nếu tạo OrderDetail mới

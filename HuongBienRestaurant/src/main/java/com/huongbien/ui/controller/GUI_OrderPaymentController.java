@@ -96,13 +96,7 @@ public class GUI_OrderPaymentController implements Initializable {
     private Label lbl_payFinalAmount;
 
     @FXML
-    private Label lbl_payTabFloor;
-
-    @FXML
-    private Label lbl_payTabName;
-
-    @FXML
-    private Label lbl_payTabTypeName;
+    private Label lbl_tabInfo;
 
     @FXML
     private ScrollPane compoent_scrollBill;
@@ -199,19 +193,23 @@ public class GUI_OrderPaymentController implements Initializable {
         JsonArray jsonArrayBill = Utils.readJsonFromFile(path_bill);
         JsonArray jsonArrayTab = Utils.readJsonFromFile(path_table);
         //get Employee
+        StringBuilder tabInfoBuilder = new StringBuilder();
+
         for (JsonElement element : jsonArrayTab) {
             JsonObject jsonObject = element.getAsJsonObject();
-            //
-            String name = jsonObject.get("Table Name").getAsString();
+
             int floor = jsonObject.get("Table Floor").getAsInt();
-            JsonObject tableTypeObject = jsonObject.getAsJsonObject("Table Type");
-            String typeName = tableTypeObject.get("Table Type Name").getAsString();
-            //
             String floorStr = (floor == 0 ? "Tầng trệt" : "Tầng " + floor);
-            lbl_payTabFloor.setText(floorStr);
-            lbl_payTabName.setText(name);
-            lbl_payTabTypeName.setText(typeName);
+            String name = jsonObject.get("Table Name").getAsString();
+
+            tabInfoBuilder.append(floorStr).append(" - ").append(name).append(", ");
         }
+
+        if (!tabInfoBuilder.isEmpty()) {
+            tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
+        }
+
+        lbl_tabInfo.setText(tabInfoBuilder.toString());
 
         int totalQuantityCuisine = 0;
         double totalAmount = 0.0;

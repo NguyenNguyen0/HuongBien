@@ -123,18 +123,17 @@ public class GUI_OrderTableItemController implements Initializable {
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
-
             boolean tableExists = false;
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonObject existingTable = jsonArray.get(i).getAsJsonObject();
                 if (existingTable.has("Table ID") && existingTable.get("Table ID").getAsString().equals(tabID)) {
+                    // Nếu ID đã tồn tại, xóa bàn đó và đánh dấu là tồn tại
                     jsonArray.remove(i);
                     tableExists = true;
                     break;
                 }
             }
-
-            if (jsonArray.isEmpty() && !tableExists) {
+            if (!tableExists) {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("Table ID", tabID);
                 jsonObject.addProperty("Table Name", tabName);
@@ -149,20 +148,17 @@ public class GUI_OrderTableItemController implements Initializable {
 
                 jsonObject.add("Table Type", tableTypeObject);
                 jsonArray.add(jsonObject);
-
-                Utils.writeJsonToFile(jsonArray, path_table);
-            } else if (!jsonArray.isEmpty()) {
-                System.out.println("Không thể thêm phần tử mới vì chỉ cho phép tối đa 1 phần tử trong file.");
-            } else {
-                Utils.writeJsonToFile(jsonArray, path_table);
             }
+            Utils.writeJsonToFile(jsonArray, path_table);
         } else if (tabStatus.equals("Đặt trước")) {
             System.out.println("Bàn đã đặt trước, bạn có muốn nhận bàn không?");
         } else if (tabStatus.equals("Phục vụ")) {
-            System.out.println("Bàn đang phục vụ, Vui lòng chọn bàn khác!!!");
+            System.out.println("Bàn đang phục vụ, vui lòng chọn bàn khác!!!");
         }
         updateCheckIcon(tabID);
     }
+
+
 
 
 
