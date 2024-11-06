@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class GUI_OrderCuisineItemController implements Initializable {
-    private final static String path = "src/main/resources/com/huongbien/temp/bill.json";
+    private final static String path = "src/main/resources/com/huongbien/temp/temporaryBill.json";
     @FXML
     private Circle circle_imgCuisine;
 

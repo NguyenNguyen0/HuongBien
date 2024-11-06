@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class GUI_OrderTableItemController implements Initializable {
-    private final static String path_table = "src/main/resources/com/huongbien/temp/table.json";
+    private final static String path_table = "src/main/resources/com/huongbien/temp/temporaryTable.json";
 
     @FXML
     private ImageView imgView_table;
@@ -115,69 +115,39 @@ public class GUI_OrderTableItemController implements Initializable {
         }
     }
 
-    private void writeDataJSONtoFile(String tabID, String tabName, int tabFloor, int tabSeats, String tabStatus, String tabTypeID, String tabTypeName, String tabTypeDescription) {
-        if (tabStatus.equals("Bàn trống")) {
+    private void writeDataJSONtoFile(String tabID) throws SQLException {
+        DAO_Table dao_table = new DAO_Table(Database.getConnection());
+        Table table = dao_table.get(tabID);
+
+        if (table != null) {
             JsonArray jsonArray;
             try {
                 jsonArray = Utils.readJsonFromFile(path_table);
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
+
             boolean tableExists = false;
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonObject existingTable = jsonArray.get(i).getAsJsonObject();
                 if (existingTable.has("Table ID") && existingTable.get("Table ID").getAsString().equals(tabID)) {
-                    // Nếu ID đã tồn tại, xóa bàn đó và đánh dấu là tồn tại
                     jsonArray.remove(i);
                     tableExists = true;
                     break;
                 }
             }
+
             if (!tableExists) {
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("Table ID", tabID);
-                jsonObject.addProperty("Table Name", tabName);
-                jsonObject.addProperty("Table Floor", tabFloor);
-                jsonObject.addProperty("Table Seats", tabSeats);
-                jsonObject.addProperty("Table Status", tabStatus);
-
-                JsonObject tableTypeObject = new JsonObject();
-                tableTypeObject.addProperty("Table Type ID", tabTypeID);
-                tableTypeObject.addProperty("Table Type Name", tabTypeName);
-                tableTypeObject.addProperty("Table Type Description", tabTypeDescription);
-
-                jsonObject.add("Table Type", tableTypeObject);
+                jsonObject.addProperty("Table ID", table.getId());
                 jsonArray.add(jsonObject);
             }
+
             Utils.writeJsonToFile(jsonArray, path_table);
-        } else if (tabStatus.equals("Đặt trước")) {
-            System.out.println("Bàn đã đặt trước, bạn có muốn nhận bàn không?");
-        } else if (tabStatus.equals("Phục vụ")) {
-            System.out.println("Bàn đang phục vụ, vui lòng chọn bàn khác!!!");
-        }
-        updateCheckIcon(tabID);
-    }
 
-
-
-
-
-
-    private void handleWriteJSON() throws FileNotFoundException {
-        String tabID = lbl_tableID.getText();
-        try {
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            Table table = dao_table.get(tabID);
-            writeDataJSONtoFile(
-                    table.getId(), table.getName(), table.getFloor(), table.getSeats(), table.getStatus(),
-                    table.getTableType().getTableId(), table.getTableType().getName(), table.getTableType().getDescription()
-            );
-            gui_orderTableController.tabPane_infoTable.getTabs().clear();
-            gui_orderTableController.readFromJSON();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
+            updateCheckIcon(tabID);
+        } else {
+            System.out.println("Table with ID " + tabID + " not found in the database.");
         }
     }
 
@@ -187,7 +157,10 @@ public class GUI_OrderTableItemController implements Initializable {
     }
 
     @FXML
-    void getInfoTable(MouseEvent event) throws FileNotFoundException {
-        handleWriteJSON();
+    void getInfoTable(MouseEvent event) throws FileNotFoundException, SQLException {
+        String tabID = lbl_tableID.getText();
+        writeDataJSONtoFile(tabID);
+        gui_orderTableController.tabPane_infoTable.getTabs().clear();
+        gui_orderTableController.readFromJSON();
     }
 }

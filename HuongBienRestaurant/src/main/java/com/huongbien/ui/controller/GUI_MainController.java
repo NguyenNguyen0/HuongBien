@@ -3,6 +3,9 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.dao.DAO_Employee;
+import com.huongbien.database.Database;
+import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -28,13 +31,14 @@ import javafx.util.Duration;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GUI_MainController implements Initializable {
-    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
+    private final static String path_user = "src/main/resources/com/huongbien/temp/loginSession.json";
 
     @FXML
     public Label lbl_empName;
@@ -444,12 +448,14 @@ public class GUI_MainController implements Initializable {
         pause.play();
     }
 
-    private void readJSON_Employee() throws FileNotFoundException {
+    private void readJSON_Employee() throws FileNotFoundException, SQLException {
         JsonArray jsonArray = Utils.readJsonFromFile(path_user);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
-            String name = jsonObject.get("name").getAsString();
-            lbl_empName.setText(name);
+            String id = jsonObject.get("Employee ID").getAsString();
+            DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
+            Employee employee = dao_employee.get(id);
+            lbl_empName.setText(employee.getName());
         }
     }
 
@@ -459,12 +465,8 @@ public class GUI_MainController implements Initializable {
         setTime();
         try {
             openHome();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
             readJSON_Employee();
-        } catch (FileNotFoundException e) {
+        } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
     }

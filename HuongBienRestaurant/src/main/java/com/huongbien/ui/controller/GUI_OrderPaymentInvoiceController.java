@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class GUI_OrderPaymentInvoiceController implements Initializable {
-    private final static String path_bill = "src/main/resources/com/huongbien/temp/bill.json";
+    private final static String path_bill = "src/main/resources/com/huongbien/temp/temporaryBill.json";
     @FXML
     private ScrollPane compoent_scrollBill;
 

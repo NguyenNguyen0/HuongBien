@@ -3,7 +3,10 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.dao.DAO_Employee;
 import com.huongbien.dao.DAO_Statistics;
+import com.huongbien.database.Database;
+import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
 import javafx.application.Platform; 
 import javafx.fxml.FXML;
@@ -18,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -26,7 +30,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class GUI_HomeController implements Initializable {
-    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
+    private final static String path_user = "src/main/resources/com/huongbien/temp/loginSession.json";
     @FXML
     private Label txt_EmployeeName;
 
@@ -90,6 +94,8 @@ public class GUI_HomeController implements Initializable {
             readJSON_Employee();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -133,14 +139,15 @@ public class GUI_HomeController implements Initializable {
         }
     }
 
-    private void readJSON_Employee() throws FileNotFoundException {
+    private void readJSON_Employee() throws FileNotFoundException, SQLException {
         JsonArray jsonArray = Utils.readJsonFromFile(path_user);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
-            String name = jsonObject.get("name").getAsString();
-            String position = jsonObject.get("position").getAsString();
-            txt_EmployeeName.setText(name);
-            txt_EmployeePosition.setText(position);
+            String id = jsonObject.get("Employee ID").getAsString();
+            DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
+            Employee employee = dao_employee.get(id);
+            txt_EmployeeName.setText(employee.getName());
+            txt_EmployeePosition.setText(employee.getPosition());
         }
     }
 

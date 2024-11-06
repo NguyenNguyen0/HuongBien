@@ -4,9 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.dao.DAO_Cuisine;
+import com.huongbien.dao.DAO_Table;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.OrderDetail;
+import com.huongbien.entity.Table;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -32,8 +35,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class GUI_OrderCuisineController implements Initializable {
-    private final static String path_bill = "src/main/resources/com/huongbien/temp/bill.json";
-    private final static String path_table = "src/main/resources/com/huongbien/temp/table.json";
+    private final static String path_bill = "src/main/resources/com/huongbien/temp/temporaryBill.json";
+    private final static String path_table = "src/main/resources/com/huongbien/temp/temporaryTable.json";
     //cuisine
     @FXML
     private BorderPane compoent_borderCuisine;
@@ -154,39 +157,35 @@ public class GUI_OrderCuisineController implements Initializable {
         return ls;
     }
 
-    public void readFromJSON_setInfo() throws FileNotFoundException {
+    public void readFromJSON_setInfo() throws FileNotFoundException, SQLException {
         JsonArray jsonArrayBill = Utils.readJsonFromFile(path_bill);
         JsonArray jsonArrayTab = Utils.readJsonFromFile(path_table);
 
         int totalQuantityCuisine = 0;
         double totalAmount = 0.0;
-
         for (JsonElement element : jsonArrayBill) {
             JsonObject jsonObject = element.getAsJsonObject();
             totalQuantityCuisine++;
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
             totalAmount += cuisineMoney;
         }
-
         lbl_billQuantityCuisine.setText(totalQuantityCuisine + " món");
         lbl_billAmountTotal.setText(Utils.formatPrice(totalAmount) + " VNĐ");
 
+        //table
         StringBuilder tabInfoBuilder = new StringBuilder();
-
         for (JsonElement element : jsonArrayTab) {
             JsonObject jsonObject = element.getAsJsonObject();
+            String id = jsonObject.get("Table ID").getAsString();
+            DAO_Table dao_table = new DAO_Table(Database.getConnection());
+            Table table = dao_table.get(id);
+            String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
 
-            int floor = jsonObject.get("Table Floor").getAsInt();
-            String floorStr = (floor == 0 ? "Tầng trệt" : "Tầng " + floor);
-            String name = jsonObject.get("Table Name").getAsString();
-
-            tabInfoBuilder.append(floorStr).append(" - ").append(name).append(", ");
+            tabInfoBuilder.append(floorStr).append(" - ").append(table.getName()).append(", ");
         }
-
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
         }
-
         lbl_tabInfo.setText(tabInfoBuilder.toString());
     }
 
@@ -198,7 +197,7 @@ public class GUI_OrderCuisineController implements Initializable {
             loadingBill();
             //lbl
             readFromJSON_setInfo();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -219,7 +218,7 @@ public class GUI_OrderCuisineController implements Initializable {
     }
 
     @FXML
-    void btn_cancel(ActionEvent event) throws FileNotFoundException {
+    void btn_cancel(ActionEvent event) throws FileNotFoundException, SQLException {
         Utils.writeJsonToFile(new JsonArray(), path_bill);
         compoent_gridBill.getChildren().clear();
         loadingBill();

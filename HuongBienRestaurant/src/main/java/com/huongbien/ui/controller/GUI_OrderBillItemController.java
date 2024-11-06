@@ -16,11 +16,12 @@ import javafx.stage.StageStyle;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GUI_OrderBillItemController implements Initializable {
-    private final static String path = "src/main/resources/com/huongbien/temp/bill.json";
+    private final static String path = "src/main/resources/com/huongbien/temp/temporaryBill.json";
 
     @FXML
     private Label lbl_cuisineID;
@@ -181,7 +182,7 @@ public class GUI_OrderBillItemController implements Initializable {
 
 
     @FXML
-    void btn_cuisineDecrease(ActionEvent event) throws FileNotFoundException {
+    void btn_cuisineDecrease(ActionEvent event) throws FileNotFoundException, SQLException {
         String cuisineID = lbl_cuisineID.getText();
         decreaseQuantityInJSON(cuisineID);
         gui_orderCuisineController.compoent_gridBill.getChildren().clear();
@@ -191,7 +192,7 @@ public class GUI_OrderBillItemController implements Initializable {
     }
 
     @FXML
-    void btn_cuisineDelete(ActionEvent event) throws FileNotFoundException {
+    void btn_cuisineDelete(ActionEvent event) throws FileNotFoundException, SQLException {
         String cuisineID = lbl_cuisineID.getText();
         removeFromJson(cuisineID);
         gui_orderCuisineController.compoent_gridBill.getChildren().clear();
@@ -201,7 +202,7 @@ public class GUI_OrderBillItemController implements Initializable {
     }
 
     @FXML
-    void btn_cuisineIncrease(ActionEvent event) throws FileNotFoundException {
+    void btn_cuisineIncrease(ActionEvent event) throws FileNotFoundException, SQLException {
         String cuisineID = lbl_cuisineID.getText();
         increaseQuantityInJSON(cuisineID);
         gui_orderCuisineController.compoent_gridBill.getChildren().clear();
@@ -227,7 +228,6 @@ public class GUI_OrderBillItemController implements Initializable {
                 gui_orderCuisineController.loadingBill();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                // Bạn có thể thêm Alert báo lỗi nếu cần
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Lỗi");
                 alert.setHeaderText("Không thể cập nhật ghi chú.");

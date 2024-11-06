@@ -7,14 +7,9 @@ import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
-import com.huongbien.dao.DAO_Cuisine;
-import com.huongbien.dao.DAO_Customer;
-import com.huongbien.dao.DAO_Promotion;
+import com.huongbien.dao.*;
 import com.huongbien.database.Database;
-import com.huongbien.entity.Cuisine;
-import com.huongbien.entity.Customer;
-import com.huongbien.entity.OrderDetail;
-import com.huongbien.entity.Promotion;
+import com.huongbien.entity.*;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Utils;
 import javafx.application.Platform;
@@ -62,9 +57,9 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 public class GUI_OrderPaymentController implements Initializable {
-    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
-    private final static String path_bill = "src/main/resources/com/huongbien/temp/bill.json";
-    private final static String path_table = "src/main/resources/com/huongbien/temp/table.json";
+    private final static String path_user = "src/main/resources/com/huongbien/temp/loginSession.json";
+    private final static String path_bill = "src/main/resources/com/huongbien/temp/temporaryBill.json";
+    private final static String path_table = "src/main/resources/com/huongbien/temp/temporaryTable.json";
     @FXML
     private TableView<Promotion> tabView_promotion;
 
@@ -192,25 +187,30 @@ public class GUI_OrderPaymentController implements Initializable {
     public void setInfoPayment() throws FileNotFoundException, SQLException {
         JsonArray jsonArrayBill = Utils.readJsonFromFile(path_bill);
         JsonArray jsonArrayTab = Utils.readJsonFromFile(path_table);
-        //get Employee
+        JsonArray jsonArrayEmp = Utils.readJsonFromFile(path_user);
+        //Emp Session
+        for (JsonElement element : jsonArrayEmp) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String id = jsonObject.get("Employee ID").getAsString();
+            DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
+            Employee employee = dao_employee.get(id);
+            lbl_payEmp.setText(employee.getName());
+        }
+        //table
         StringBuilder tabInfoBuilder = new StringBuilder();
-
         for (JsonElement element : jsonArrayTab) {
             JsonObject jsonObject = element.getAsJsonObject();
-
-            int floor = jsonObject.get("Table Floor").getAsInt();
-            String floorStr = (floor == 0 ? "Tầng trệt" : "Tầng " + floor);
-            String name = jsonObject.get("Table Name").getAsString();
-
-            tabInfoBuilder.append(floorStr).append(" - ").append(name).append(", ");
+            String id = jsonObject.get("Table ID").getAsString();
+            DAO_Table dao_table = new DAO_Table(Database.getConnection());
+            Table table = dao_table.get(id);
+            String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
+            tabInfoBuilder.append(floorStr).append(" - ").append(table.getName()).append(", ");
         }
-
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
         }
-
         lbl_tabInfo.setText(tabInfoBuilder.toString());
-
+        //
         int totalQuantityCuisine = 0;
         double totalAmount = 0.0;
         for (JsonElement element : jsonArrayBill) {
@@ -270,7 +270,6 @@ public class GUI_OrderPaymentController implements Initializable {
             loadingBill();
             setInfoPayment();
             setCellValues();
-            readJSON_Employee();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
@@ -523,15 +522,5 @@ public class GUI_OrderPaymentController implements Initializable {
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    //set emp
-    private void readJSON_Employee() throws FileNotFoundException {
-        JsonArray jsonArray = Utils.readJsonFromFile(path_user);
-        for (JsonElement element : jsonArray) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            String name = jsonObject.get("name").getAsString();
-            lbl_payEmp.setText(name);
-        }
     }
 }

@@ -32,7 +32,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class GUI_OrderTableController implements Initializable {
-    private final static String path = "src/main/resources/com/huongbien/temp/table.json";
+    private final static String path_table = "src/main/resources/com/huongbien/temp/temporaryTable.json";
 
     @FXML
     private ScrollPane compoent_scrollPane;
@@ -64,7 +64,7 @@ public class GUI_OrderTableController implements Initializable {
         setValueCombobox();
         try {
             readFromJSON();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -217,24 +217,17 @@ public class GUI_OrderTableController implements Initializable {
         tabPane_infoTable.getSelectionModel().select(newTab);
     }
 
-    public void readFromJSON() throws FileNotFoundException {
-        JsonArray jsonArray = Utils.readJsonFromFile(path);
-
+    public void readFromJSON() throws FileNotFoundException, SQLException {
+        JsonArray jsonArray = Utils.readJsonFromFile(path_table);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
-
             String id = jsonObject.get("Table ID").getAsString();
-            String name = jsonObject.get("Table Name").getAsString();
-            int floor = jsonObject.get("Table Floor").getAsInt();
-            int seats = jsonObject.get("Table Seats").getAsInt();
-            String status = jsonObject.get("Table Status").getAsString();
-
-            JsonObject tableTypeObject = jsonObject.getAsJsonObject("Table Type");
-            String typeName = tableTypeObject.get("Table Type Name").getAsString();
-
-            setTableTab(name, floor, seats, typeName);
+            DAO_Table dao_table = new DAO_Table(Database.getConnection());
+            Table table = dao_table.get(id);
+            setTableTab(table.getName(), table.getFloor(), table.getSeats(), table.getTableType().getName());
         }
     }
+
 
     public void handleComboBox() throws SQLException {
         String floor = comboBox_tabFloor.getValue();
@@ -267,7 +260,7 @@ public class GUI_OrderTableController implements Initializable {
     void btn_chooseCuisine(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(path);
+            jsonArray = Utils.readJsonFromFile(path_table);
         } catch (FileNotFoundException e) {
             System.out.println("File không tồn tại.");
             return;

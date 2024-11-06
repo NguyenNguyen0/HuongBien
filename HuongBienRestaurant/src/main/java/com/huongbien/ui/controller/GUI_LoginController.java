@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GUI_LoginController implements Initializable {
-    private final static String path_user = "src/main/resources/com/huongbien/temp/login.json";
+    private final static String path_user = "src/main/resources/com/huongbien/temp/loginSession.json";
 
     @FXML
     private TextField txt_empID;
@@ -179,37 +179,21 @@ public class GUI_LoginController implements Initializable {
                     e.printStackTrace();
                 }
                 //write JSON user current
-                String id = txt_empID.getText();
-                DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
-                Employee employee = dao_employee.get(id);
                 JsonArray jsonArray;
                 try {
                     jsonArray = Utils.readJsonFromFile(path_user);
                 } catch (FileNotFoundException e) {
                     jsonArray = new JsonArray();
                 }
-                if (jsonArray.size() > 0) {
+                if (!jsonArray.isEmpty()) {
                     jsonArray.remove(0);
                 }
+                //WRITE JSON
+                String id = txt_empID.getText();
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("employeeId", id);
-                jsonObject.addProperty("name", employee.getName());
-                jsonObject.addProperty("phoneNumber", employee.getPhoneNumber());
-                jsonObject.addProperty("citizenIDNumber", employee.getCitizenIDNumber());
-                jsonObject.addProperty("gender", employee.isGender());
-                jsonObject.addProperty("address", employee.getAddress());
-                jsonObject.addProperty("birthday", employee.getBirthday().toString());
-                jsonObject.addProperty("email", employee.getEmail());
-                jsonObject.addProperty("status", employee.getStatus());
-                jsonObject.addProperty("hireDate", employee.getHireDate().toString());
-                jsonObject.addProperty("position", employee.getPosition());
-                jsonObject.addProperty("workHours", employee.getWorkHours());
-                jsonObject.addProperty("hourlyPay", employee.getHourlyPay());
-                jsonObject.addProperty("salary", employee.getSalary());
-//                jsonObject.addProperty("manager", employee.getManager().getEmployeeId());
+                jsonObject.addProperty("Employee ID", id);
                 jsonArray.add(jsonObject);
                 Utils.writeJsonToFile(jsonArray, path_user);
-                System.out.println("Ghi thông tin người dùng vào tệp thành công.");
             } else {
                 text_message.setText("Sai mã nhân viên và mật khẩu đăng nhập");
                 text_message.setStyle("-fx-text-fill: red;");
