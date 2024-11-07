@@ -23,7 +23,8 @@ public class Order {
     private Customer customer;
     private Employee employee;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Order(String orderId, LocalDate orderDate, String notes, double paymentAmount,
                  double dispensedAmount, double totalAmount, double discount,
@@ -44,53 +45,58 @@ public class Order {
         setEmployee(employee);
     }
 
-    public Order(String notes, double paymentAmount, double dispensedAmount,
-                 double totalAmount, ArrayList<OrderDetail> orderDetails,
-                 Promotion promotion, Payment payment, ArrayList<Table> tables,
-                 Customer customer, Employee employee) {
+    public Order(Employee employee, Customer customer,
+                 ArrayList<OrderDetail> orderDetails, ArrayList<Table> tables,
+                 Payment payment, Promotion promotion, String notes) {
         setOrderDate(LocalDate.now());
         setOrderId(null);
-        setNotes(notes);
-        setPaymentAmount(paymentAmount);
-        setDispensedAmount(dispensedAmount);
-        setTotalAmount(totalAmount);
-        setDiscount(promotion.getDiscount());
-        setOrderDetails(orderDetails);
-        setPromotion(promotion);
-        setPayment(payment);
-        setTables(tables);
+        setTotalAmount(getTotalAmount(orderDetails, promotion));
+        setPaymentAmount(payment.getAmount());
+        setDiscount(promotion == null ? 0 : promotion.getDiscount());
+        setDispensedAmount(getTotalAmount() - getPaymentAmount());
+
         setCustomer(customer);
         setEmployee(employee);
+        setTables(tables);
+        setOrderDetails(orderDetails);
+        setPayment(payment);
+        setPromotion(promotion);
+        setNotes(notes);
+    }
+
+    public double getTotalAmount(ArrayList<OrderDetail> orderDetails, Promotion promotion) {
+        return Math.round((promotion == null ? 1 : (1 + promotion.getDiscount())) * orderDetails
+                .stream()
+                .map((orderDetail -> orderDetail.getSalePrice() * orderDetail.getQuantity()))
+                .reduce(0.0, Double::sum));
     }
 
     public void setOrderId(String orderId) {
-//        if (orderId == null) {
-//            LocalDate currentDate = LocalDate.now();
-//            LocalTime currentTime = LocalTime.now();
-//            this.orderId = String.format("HD%02d%02d%02d%02d%02d%02d%03d",
-//                    currentDate.getYear() % 100,
-//                    currentDate.getMonthValue(),
-//                    currentDate.getDayOfMonth(),
-//                    currentTime.getHour(),
-//                    currentTime.getMinute(),
-//                    currentTime.getSecond(),
-//                    Utils.randomNumber(1, 999)
-//            );
-//            return;
-//        }
-//        if (orderId.matches("^HD\\d{15}$")) {
-//            this.orderId = orderId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid order ID format");
-
-        this.orderId = orderId;
+        if (orderId == null) {
+            LocalDate currentDate = getOrderDate() == null ? LocalDate.now() : getOrderDate();
+            LocalTime currentTime = LocalTime.now();
+            this.orderId = String.format("HD%02d%02d%02d%02d%02d%02d%03d",
+                    currentDate.getYear() % 100,
+                    currentDate.getMonthValue(),
+                    currentDate.getDayOfMonth(),
+                    currentTime.getHour(),
+                    currentTime.getMinute(),
+                    currentTime.getSecond(),
+                    Utils.randomNumber(1, 999)
+            );
+            return;
+        }
+        if (orderId.matches("^HD\\d{15}$")) {
+            this.orderId = orderId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid order ID format");
     }
 
     public void setOrderDate(LocalDate orderDate) {
-//        if (orderDate == null) {
-//            throw new IllegalArgumentException("Order date cannot be null");
-//        }
+        if (orderDate == null) {
+            throw new IllegalArgumentException("Order date cannot be null");
+        }
         this.orderDate = orderDate;
     }
 
@@ -99,37 +105,37 @@ public class Order {
     }
 
     public void setPaymentAmount(double paymentAmount) {
-//        if (paymentAmount <= 0) {
-//            throw new IllegalArgumentException("Payment amount must be greater than 0");
-//        }
+        if (paymentAmount <= 0) {
+            throw new IllegalArgumentException("Payment amount must be greater than 0");
+        }
         this.paymentAmount = paymentAmount;
     }
 
     public void setDispensedAmount(double dispensedAmount) {
-//        if (dispensedAmount <= 0) {
-//            throw new IllegalArgumentException("Dispensed amount must be greater than 0");
-//        }
+        if (dispensedAmount <= 0) {
+            dispensedAmount = 0;
+        }
         this.dispensedAmount = dispensedAmount;
     }
 
     public void setTotalAmount(double totalAmount) {
-//        if (totalAmount <= 0) {
-//            throw new IllegalArgumentException("Total amount must be greater than 0");
-//        }
+        if (totalAmount <= 0) {
+            throw new IllegalArgumentException("Total amount must be greater than 0");
+        }
         this.totalAmount = totalAmount;
     }
 
     public void setDiscount(double discount) {
-//        if (discount < 0) {
-//            throw new IllegalArgumentException("Discount cannot be negative");
-//        }
+        if (discount < 0) {
+            throw new IllegalArgumentException("Discount cannot be negative");
+        }
         this.discount = discount;
     }
 
     public void setOrderDetails(ArrayList<OrderDetail> orderDetails) {
-//        if (orderDetails == null) {
-//            throw new IllegalArgumentException("Order details cannot be null");
-//        }
+        if (orderDetails == null) {
+            throw new IllegalArgumentException("Order details cannot be null");
+        }
         this.orderDetails = orderDetails;
     }
 
@@ -138,30 +144,30 @@ public class Order {
     }
 
     public void setPayment(Payment payment) {
-//        if (payment == null) {
-//            throw new IllegalArgumentException("Payment cannot be null");
-//        }
+        if (payment == null) {
+            throw new IllegalArgumentException("Payment cannot be null");
+        }
         this.payment = payment;
     }
 
     public void setTables(ArrayList<Table> tables) {
-//        if (tables == null) {
-//            throw new IllegalArgumentException("Tables cannot be null");
-//        }
+        if (tables == null) {
+            throw new IllegalArgumentException("Tables cannot be null");
+        }
         this.tables = tables;
     }
 
     public void setCustomer(Customer customer) {
-//        if (customer == null) {
-//            throw new IllegalArgumentException("Customer cannot be null");
-//        }
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
         this.customer = customer;
     }
 
     public void setEmployee(Employee employee) {
-//        if (employee == null) {
-//            throw new IllegalArgumentException("Employee cannot be null");
-//        }
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee cannot be null");
+        }
         this.employee = employee;
     }
 

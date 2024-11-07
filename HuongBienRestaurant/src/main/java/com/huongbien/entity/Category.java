@@ -24,34 +24,31 @@ public class Category {
     public Category() {}
 
     public void setCategoryId(String categoryId) {
-//        if (categoryId == null) {
-//            this.categoryId = String.format("CG%03d", Utils.randomNumber(1, 999));
-//            return;
-//        }
-//        if (categoryId.matches("^CG\\d{3}$")) {
-//            this.categoryId = categoryId;
-//            return;
-//        }
-//        throw new IllegalArgumentException("Invalid categoryId format. Expected format: CG-xxx.");
-        this.categoryId = categoryId;
+        if (categoryId == null) {
+            this.categoryId = String.format("CG%03d", Utils.randomNumber(1, 999));
+            return;
+        }
+        if (categoryId.matches("^CG\\d{3}$")) {
+            this.categoryId = categoryId;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid categoryId format. Expected format: CG-xxx.");
     }
 
     public void setName(String name) {
-//        if (name != null && !name.trim().isEmpty()) {
-//            this.name = name;
-//        } else {
-//            throw new IllegalArgumentException("Name cannot be empty.");
-//        }
-        this.name = name;
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name;
+        } else {
+            throw new IllegalArgumentException("Name cannot be empty.");
+        }
     }
 
     public void setDescription(String description) {
-//        if (description != null && !description.trim().isEmpty()) {
-//            this.description = description;
-//        } else {
-//            throw new IllegalArgumentException("Description cannot be empty.");
-//        }
-        this.description = description;
+        if (description != null && !description.trim().isEmpty()) {
+            this.description = description;
+        } else {
+            throw new IllegalArgumentException("Description cannot be empty.");
+        }
     }
 
     public String getCategoryId() {

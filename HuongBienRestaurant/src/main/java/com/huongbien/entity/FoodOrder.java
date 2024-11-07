@@ -12,7 +12,7 @@ public class FoodOrder {
     private Cuisine cuisine;
 
 //  truyền mã FoodOrder hoặc truyền mã Reservation để tự động tạo mã mới nếu tạo FoodOrder mới
-    public FoodOrder( String foodOrderId, double salePrice, String note, int quantity, Cuisine cuisine) {
+    public FoodOrder( String foodOrderId, int quantity, double salePrice, Cuisine cuisine, String note) {
         setFoodOrderId(foodOrderId);
         setSalePrice(salePrice);
         setNote(note);
@@ -23,20 +23,20 @@ public class FoodOrder {
     public FoodOrder() {}
 
     public void setFoodOrderId(String foodOrderId) {
-//        if (foodOrderId != null && foodOrderId.length() == 17) {
-//            this.foodOrderId = String.format("%sDM%03d", foodOrderId, Utils.randomNumber(1, 999));
-//            return;
-//        }
-//        if (foodOrderId == null || !foodOrderId.matches("^DB\\d{15}DM\\d{3}$")) {
-//            throw new IllegalArgumentException("Invalid food order ID format");
-//        }
+        if (foodOrderId != null && foodOrderId.length() == 17) {
+            this.foodOrderId = String.format("%sDM%03d", foodOrderId, Utils.randomNumber(1, 999));
+            return;
+        }
+        if (foodOrderId == null || !foodOrderId.matches("^DB\\d{15}DM\\d{3}$")) {
+            throw new IllegalArgumentException("Invalid food order ID format");
+        }
         this.foodOrderId = foodOrderId;
     }
 
     public void setQuantity(int quantity) {
-//        if (quantity <= 0) {
-//            throw new IllegalArgumentException("Quantity must be greater than 0");
-//        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
         this.quantity = quantity;
     }
 
@@ -45,9 +45,9 @@ public class FoodOrder {
     }
 
     public void setSalePrice(double salePrice) {
-//        if (salePrice <= 0) {
-//            throw new IllegalArgumentException("Sale price must be greater than 0");
-//        }
+        if (salePrice <= 0) {
+            throw new IllegalArgumentException("Sale price must be greater than 0");
+        }
         this.salePrice = salePrice;
     }
 

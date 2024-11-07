@@ -1,7 +1,7 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Table;
-import com.huongbien.dao.DAO_TableType;
+import com.huongbien.dao.TableDao;
+import com.huongbien.dao.TableTypeDao;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
@@ -75,37 +75,31 @@ public class GUI_ManageTableController implements Initializable {
     private TextField txt_tabSeats;
 
     private void setCellValues() {
-        try {
-            DAO_Table dao_Table = new DAO_Table(Database.getConnection());
-            List<Table> tableList = dao_Table.get();
+        TableDao tableDao = TableDao.getInstance();
+        List<Table> tableList = tableDao.getAll();
 
-            ObservableList<Table> listTable = FXCollections.observableArrayList(tableList);
-            tabCol_tabID.setCellValueFactory(new PropertyValueFactory<>("id"));
-            tabCol_tabName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            tabCol_tabType.setCellValueFactory(new PropertyValueFactory<>("tableTypeName"));
-            tabCol_tabSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
-            tabCol_tabStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-            tabCol_tabFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
+        ObservableList<Table> listTable = FXCollections.observableArrayList(tableList);
+        tabCol_tabID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tabCol_tabName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabCol_tabType.setCellValueFactory(new PropertyValueFactory<>("tableTypeName"));
+        tabCol_tabSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
+        tabCol_tabStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        tabCol_tabFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
 
-            tabViewTab.setItems(listTable);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabViewTab.setItems(listTable);
     }
 
     private void setValueCombobox() {
         try {
             Connection connection = Database.getConnection();
 
-            DAO_Table tableDAO = new DAO_Table(connection);
+            TableDao tableDAO = TableDao.getInstance();
             List<String> statusList = tableDAO.getDistinctStatuses();
             ObservableList<String> statuses = FXCollections.observableArrayList(statusList);
             comboBox_tabStatus.setItems(statuses);
 
-            DAO_TableType tableTypeDAO = new DAO_TableType(Database.getConnection());
-            List<TableType> tableTypeList = tableTypeDAO.get();
+            TableTypeDao tableTypeDAO = TableTypeDao.getInstance();
+            List<TableType> tableTypeList = tableTypeDAO.getAll();
             ObservableList<TableType> tableTypes = FXCollections.observableArrayList(tableTypeList);
             comboBox_tabType.setItems(tableTypes);
             comboBox_tabType.setConverter(new StringConverter<TableType>() {
@@ -127,8 +121,6 @@ public class GUI_ManageTableController implements Initializable {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
     }
 
@@ -226,20 +218,14 @@ public class GUI_ManageTableController implements Initializable {
             return;
         }
 
-        try {
-            DAO_Table dao_Table = new DAO_Table(Database.getConnection());
+        TableDao tableDao = TableDao.getInstance();
 
-            Table table = new Table(existingTableId, name, floor, seats, status, selectedTableType);
+        Table table = new Table(existingTableId, name, floor, seats, status, selectedTableType);
 
-            if (dao_Table.update(table)) {
-                System.out.println("Sửa bàn thành công");
-            } else {
-                System.out.println("Sửa bàn không thành công");
-            }
-        } catch (SQLException e) {
-            System.out.println("Lỗi khi kết nối cơ sở dữ liệu hoặc thực hiện sửa bàn: " + e.getMessage());
-        } finally {
-            Database.closeConnection();
+        if (tableDao.updateTableInfo(table)) {
+            System.out.println("Sửa bàn thành công");
+        } else {
+            System.out.println("Sửa bàn không thành công");
         }
 
         clear();
@@ -271,20 +257,14 @@ public class GUI_ManageTableController implements Initializable {
             return;
         }
 
-        try {
-            DAO_Table dao_Table = new DAO_Table(Database.getConnection());
+        TableDao tableDao = TableDao.getInstance();
 
-            Table table = new Table(name, floor, seats, status, selectedTableType);
+        Table table = new Table(name, floor, seats, status, selectedTableType);
 
-            if (dao_Table.add(table)) {
-                System.out.println("Thêm bàn thành công");
-            } else {
-                System.out.println("Thêm bàn không thành công");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi kết nối cơ sở dữ liệu hoặc thực hiện thêm bàn: " + e.getMessage(), e);
-        } finally {
-            Database.closeConnection();
+        if (tableDao.add(table)) {
+            System.out.println("Thêm bàn thành công");
+        } else {
+            System.out.println("Thêm bàn không thành công");
         }
 
         clear();
@@ -301,8 +281,8 @@ public class GUI_ManageTableController implements Initializable {
             String idSelect = selectedItem.getId();
             try {
                 Connection connection = Database.getConnection();
-                DAO_Table dao_Table = new DAO_Table(connection);
-                Table table = dao_Table.get(idSelect);
+                TableDao tableDao = TableDao.getInstance();
+                Table table = tableDao.getById(idSelect);
 
                 txt_tabName.setText(table.getName());
                 txt_tabSeats.setText(String.valueOf(table.getSeats()));
@@ -324,8 +304,6 @@ public class GUI_ManageTableController implements Initializable {
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
             }
 
             btn_tabMain.setVisible(true);

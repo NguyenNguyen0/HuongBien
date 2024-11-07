@@ -70,7 +70,7 @@ VALUES
 ('M026', N'Tôm chiên xù', 150000, N'Tôm chiên giòn, ăn kèm nước sốt.', NULL, 'CG006'),
 ('M027', N'Mực chiên giòn', 140000, N'Mực chiên giòn, vàng ươm.', NULL, 'CG006'),
 ('M028', N'Cá chiên sốt me', 160000, N'Cá chiên giòn sốt me chua ngọt.', NULL, 'CG006'),
-('M029', N'Tôm chiên tNV0ura', 170000, N'Tôm chiên tNV0ura kiểu Nhật.', NULL, 'CG006'),
+('M029', N'Tôm chiên tempura', 170000, N'Tôm chiên tNV0ura kiểu Nhật.', NULL, 'CG006'),
 ('M030', N'Cua chiên bơ tỏi', 210000, N'Cua chiên với bơ tỏi.', NULL, 'CG006'),
 
 -- Hải sản
