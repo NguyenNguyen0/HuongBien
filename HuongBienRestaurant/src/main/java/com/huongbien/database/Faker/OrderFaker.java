@@ -1,4 +1,4 @@
-package com.huongbien.database.Faker;
+package com.huongbien.database.faker;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.huongbien.dao.*;
@@ -22,12 +22,11 @@ public class OrderFaker {
     public ArrayList<Cuisine> cuisines;
 
     public OrderFaker() throws SQLException {
-        Connection instance = Database.getConnection();
-        TableDao daoTable = TableDao.getInstance();
-        EmployeeDao daoEmployee = EmployeeDao.getInstance();
-        CustomerDao daoCustomer = CustomerDao.getInstance();
-        PromotionDao daoPromotion = PromotionDao.getInstance();
-        CuisineDao daoCuisine = CuisineDao.getInstance();
+        TableDAO daoTable = TableDAO.getInstance();
+        EmployeeDAO daoEmployee = EmployeeDAO.getInstance();
+        CustomerDAO daoCustomer = CustomerDAO.getInstance();
+        PromotionDAO daoPromotion = PromotionDAO.getInstance();
+        CuisineDAO daoCuisine = CuisineDAO.getInstance();
 
         this.tables = (ArrayList<Table>) daoTable.getAll();
         this.promotions = (ArrayList<Promotion>) daoPromotion.getAll();
@@ -110,8 +109,8 @@ public class OrderFaker {
 
     public void fakingData() throws SQLException, JsonProcessingException {
         Connection instance = Database.getConnection();
-        OrderDao daoOrder = OrderDao.getInstance();
-        PromotionDao daoPromotion = PromotionDao.getInstance();
+        OrderDAO daoOrder = OrderDAO.getInstance();
+        PromotionDAO daoPromotion = PromotionDAO.getInstance();
 
 //        System.out.println(fakeOrder(LocalDate.of(2023, 12, 1)));
 //        PrettyPrint.objectPrint(fakeOrder(LocalDate.of(2023, 12, 1)));

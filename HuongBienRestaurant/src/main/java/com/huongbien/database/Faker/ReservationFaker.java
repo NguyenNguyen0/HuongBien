@@ -1,7 +1,7 @@
-package com.huongbien.database.Faker;
+package com.huongbien.database.faker;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.huongbien.dao.ReservationDao;
+import com.huongbien.dao.ReservationDAO;
 import com.huongbien.database.Database;
 import com.huongbien.entity.*;
 import com.huongbien.utils.Utils;
@@ -68,13 +68,13 @@ public class ReservationFaker {
         reservation.setDeposit(vipTables > 0 ? 100_000 * vipTables : 0);
         reservation.setRefundDeposit(
                 reservation.getStatus().equals("Đã hủy")
-                ? reservation.getDeposit() * 0.5
-                : 0
+                        ? reservation.getDeposit() * 0.5
+                        : 0
         );
         reservation.setPayment(
                 reservation.getDeposit() > 0
-                ? orderFaker.fakePayment(reservation.getDeposit(), reservationDate, reservationTime)
-                : null
+                        ? orderFaker.fakePayment(reservation.getDeposit(), reservationDate, reservationTime)
+                        : null
         );
 
         return reservation;
@@ -102,7 +102,7 @@ public class ReservationFaker {
         sc.nextLine();
 
         Connection instance = Database.getConnection();
-        ReservationDao daoReservation = ReservationDao.getInstance();
+        ReservationDAO daoReservation = ReservationDAO.getInstance();
         int successCount = 0;
         int failCount = 0;
         for (Reservation reservation : reservationSet) {
