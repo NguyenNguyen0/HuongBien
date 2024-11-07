@@ -3,22 +3,16 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Table;
+import com.huongbien.dao.TableDao;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Table;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -115,15 +109,9 @@ public class GUI_OrderTableItemController implements Initializable {
 
     private void handleWriteJS() {
         String tabID = lbl_tableID.getText();
-        try {
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            Table table = dao_table.get(tabID);
-            writeDataJSONtoFile(table.getId(),table.getName(), table.getFloor(), table.getSeats(), table.getStatus(), table.getTableType().getTableId());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        TableDao tableDao = TableDao.getInstance();
+        Table table = tableDao.getById(tabID);
+        writeDataJSONtoFile(table.getId(),table.getName(), table.getFloor(), table.getSeats(), table.getStatus(), table.getTableType().getTableId());
     }
 
     @FXML

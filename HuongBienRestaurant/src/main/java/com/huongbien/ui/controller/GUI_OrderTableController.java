@@ -1,9 +1,7 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Category;
-import com.huongbien.dao.DAO_Table;
+import com.huongbien.dao.TableDao;
 import com.huongbien.database.Database;
-import com.huongbien.entity.Category;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
 import javafx.collections.FXCollections;
@@ -44,7 +42,7 @@ public class GUI_OrderTableController implements Initializable {
     public ComboBox<Table> comboBox_tabType;
 
     //DAO
-    private DAO_Table dao_table;
+    private TableDao tableDao;
 
     @FXML
     public TabPane tabPane_infoTable;
@@ -89,119 +87,111 @@ public class GUI_OrderTableController implements Initializable {
     private List<Table> data() {
         try {
             Connection connection = Database.getConnection();
-            dao_table = new DAO_Table(connection);
+            tableDao = TableDao.getInstance();
 
-            List<Table> ls = dao_table.get();
+            List<Table> ls = tableDao.getAll();
             return ls;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
     }
 
     private void setValueCombobox() {
-        try {
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            List<Table> tableList = dao_table.get();
+        TableDao tableDao = TableDao.getInstance();
+        List<Table> tableList = tableDao.getAll();
 
-            // Xử lý ComboBox cho Floor
-            Set<Integer> uniqueFloors = new HashSet<>();
-            List<Table> uniqueFloorTables = new ArrayList<>();
-            for (Table table : tableList) {
-                if (uniqueFloors.add(table.getFloor())) {
-                    uniqueFloorTables.add(table);
-                }
+        // Xử lý ComboBox cho Floor
+        Set<Integer> uniqueFloors = new HashSet<>();
+        List<Table> uniqueFloorTables = new ArrayList<>();
+        for (Table table : tableList) {
+            if (uniqueFloors.add(table.getFloor())) {
+                uniqueFloorTables.add(table);
             }
-            uniqueFloorTables.sort(Comparator.comparingInt(Table::getFloor));
-            ObservableList<Table> floorTables = FXCollections.observableArrayList(uniqueFloorTables);
-            comboBox_tabFloor.setItems(floorTables);
-            comboBox_tabFloor.setConverter(new StringConverter<Table>() {
-                @Override
-                public String toString(Table table) {
-                    if (table == null) {
-                        return "";
-                    }
-                    int floor = table.getFloor();
-                    switch (floor) {
-                        case 0:
-                            return "Tầng trệt";
-                        default:
-                            return "Tầng " + floor;
-                    }
-                }
-                @Override
-                public Table fromString(String string) {
-                    int floorValue = Integer.parseInt(string.replace("Tầng ", "").trim());
-                    return comboBox_tabFloor.getItems().stream()
-                            .filter(item -> item.getFloor() == floorValue)
-                            .findFirst()
-                            .orElse(null);
-                }
-            });
-            comboBox_tabFloor.getSelectionModel().selectFirst();
-            // Xử lý ComboBox cho Status
-            Set<String> uniqueStatuses = new HashSet<>();
-            List<Table> uniqueStatusTables = new ArrayList<>();
-            Table allStatusOption = new Table();
-            allStatusOption.setStatus("Tất cả trạng thái");
-            uniqueStatusTables.add(allStatusOption);
-            for (Table table : tableList) {
-                if (uniqueStatuses.add(table.getStatus())) {
-                    uniqueStatusTables.add(table);
-                }
-            }
-            ObservableList<Table> statusTables = FXCollections.observableArrayList(uniqueStatusTables);
-            comboBox_tabStatus.setItems(statusTables);
-            comboBox_tabStatus.setConverter(new StringConverter<Table>() {
-                @Override
-                public String toString(Table table) {
-                    return table != null ? table.getStatus() : "";
-                }
-
-                @Override
-                public Table fromString(String string) {
-                    return comboBox_tabStatus.getItems().stream()
-                            .filter(item -> item.getStatus().equals(string))
-                            .findFirst()
-                            .orElse(null);
-                }
-            });
-            comboBox_tabStatus.getSelectionModel().selectFirst();
-            // Xử lý ComboBox cho TableType
-            Set<TableType> uniqueTableTypes = new HashSet<>();
-            List<Table> uniqueTypeTables = new ArrayList<>();
-            Table allTypeOption = new Table();
-            TableType allType = new TableType();
-            allType.setName("Tất cả loại bàn");
-            allTypeOption.setTableType(allType);
-            uniqueTypeTables.add(allTypeOption);
-            for (Table table : tableList) {
-                if (uniqueTableTypes.add(table.getTableType())) {
-                    uniqueTypeTables.add(table);
-                }
-            }
-            ObservableList<Table> typeTables = FXCollections.observableArrayList(uniqueTypeTables);
-            comboBox_tabType.setItems(typeTables);
-            comboBox_tabType.setConverter(new StringConverter<Table>() {
-                @Override
-                public String toString(Table table) {
-                    return table != null ? table.getTableType().getName() : "";
-                }
-                @Override
-                public Table fromString(String string) {
-                    return comboBox_tabType.getItems().stream()
-                            .filter(item -> item.getTableType().getName().equals(string))
-                            .findFirst()
-                            .orElse(null);
-                }
-            });
-            comboBox_tabType.getSelectionModel().selectFirst();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
+        uniqueFloorTables.sort(Comparator.comparingInt(Table::getFloor));
+        ObservableList<Table> floorTables = FXCollections.observableArrayList(uniqueFloorTables);
+        comboBox_tabFloor.setItems(floorTables);
+        comboBox_tabFloor.setConverter(new StringConverter<Table>() {
+            @Override
+            public String toString(Table table) {
+                if (table == null) {
+                    return "";
+                }
+                int floor = table.getFloor();
+                switch (floor) {
+                    case 0:
+                        return "Tầng trệt";
+                    default:
+                        return "Tầng " + floor;
+                }
+            }
+            @Override
+            public Table fromString(String string) {
+                int floorValue = Integer.parseInt(string.replace("Tầng ", "").trim());
+                return comboBox_tabFloor.getItems().stream()
+                        .filter(item -> item.getFloor() == floorValue)
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+        comboBox_tabFloor.getSelectionModel().selectFirst();
+        // Xử lý ComboBox cho Status
+        Set<String> uniqueStatuses = new HashSet<>();
+        List<Table> uniqueStatusTables = new ArrayList<>();
+        Table allStatusOption = new Table();
+        allStatusOption.setStatus("Tất cả trạng thái");
+        uniqueStatusTables.add(allStatusOption);
+        for (Table table : tableList) {
+            if (uniqueStatuses.add(table.getStatus())) {
+                uniqueStatusTables.add(table);
+            }
+        }
+        ObservableList<Table> statusTables = FXCollections.observableArrayList(uniqueStatusTables);
+        comboBox_tabStatus.setItems(statusTables);
+        comboBox_tabStatus.setConverter(new StringConverter<Table>() {
+            @Override
+            public String toString(Table table) {
+                return table != null ? table.getStatus() : "";
+            }
+
+            @Override
+            public Table fromString(String string) {
+                return comboBox_tabStatus.getItems().stream()
+                        .filter(item -> item.getStatus().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+        comboBox_tabStatus.getSelectionModel().selectFirst();
+        // Xử lý ComboBox cho TableType
+        Set<TableType> uniqueTableTypes = new HashSet<>();
+        List<Table> uniqueTypeTables = new ArrayList<>();
+        Table allTypeOption = new Table();
+        TableType allType = new TableType();
+        allType.setName("Tất cả loại bàn");
+        allTypeOption.setTableType(allType);
+        uniqueTypeTables.add(allTypeOption);
+        for (Table table : tableList) {
+            if (uniqueTableTypes.add(table.getTableType())) {
+                uniqueTypeTables.add(table);
+            }
+        }
+        ObservableList<Table> typeTables = FXCollections.observableArrayList(uniqueTypeTables);
+        comboBox_tabType.setItems(typeTables);
+        comboBox_tabType.setConverter(new StringConverter<Table>() {
+            @Override
+            public String toString(Table table) {
+                return table != null ? table.getTableType().getName() : "";
+            }
+            @Override
+            public Table fromString(String string) {
+                return comboBox_tabType.getItems().stream()
+                        .filter(item -> item.getTableType().getName().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+        comboBox_tabType.getSelectionModel().selectFirst();
     }
 
     public void setTableTab() {

@@ -1,6 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Account;
+import com.huongbien.dao.AccountDao;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Account;
 import com.huongbien.utils.Utils;
@@ -58,7 +58,7 @@ public class GUI_LoginController implements Initializable {
     private Button handleLogin;
 
     //DAO
-    private DAO_Account accountDao;
+    private AccountDao accountDao;
 
     private void loadCarousel() {
         try {
@@ -133,13 +133,13 @@ public class GUI_LoginController implements Initializable {
     void handleLogin(ActionEvent event) {
         try {
             Connection connection = Database.getConnection();
-            accountDao = new DAO_Account(connection);
+            accountDao = AccountDao.getInstance();
 
             String username = txt_empID.getText();
             String password = getCurrentPwd();
             String passwordHash = Utils.hashPassword(password);
 
-            Account account = accountDao.get(username);
+            Account account = accountDao.getByUsername(username);
 
             if (account == null) {
                 text_message.setText("Tài khoản không tồn tại.");
@@ -173,8 +173,6 @@ public class GUI_LoginController implements Initializable {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
     }
 

@@ -3,7 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Cuisine;
+import com.huongbien.dao.CuisineDao;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.OrderDetail;
@@ -51,7 +51,7 @@ public class GUI_OrderCuisineController implements Initializable {
     public GridPane compoent_gridBill;
 
     //DAO
-    private DAO_Cuisine cuisine_DAO;
+    private CuisineDao cuisine_DAO;
 
     private void loadingCuisine() {
         cuisines = new ArrayList<>(dataCuisine());
@@ -143,14 +143,12 @@ public class GUI_OrderCuisineController implements Initializable {
     private List<Cuisine> dataCuisine() {
         try {
             Connection connection = Database.getConnection();
-            cuisine_DAO = new DAO_Cuisine(connection);
+            cuisine_DAO = CuisineDao.getInstance();
 
-            List<Cuisine> ls = cuisine_DAO.get();
+            List<Cuisine> ls = cuisine_DAO.getAll();
             return ls;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
 
 //        List<Cuisine> ls = new ArrayList<>();

@@ -7,7 +7,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.huongbien.dao.DAO_Customer;
+import com.huongbien.dao.CustomerDao;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Customer;
 import com.huongbien.utils.Utils;
@@ -107,8 +107,8 @@ public class GUI_ManageCustomerController implements Initializable {
     private void setCellValues() {
         try {
             Connection connection = Database.getConnection();
-            DAO_Customer dao_customer = new DAO_Customer(connection);
-            List<Customer> customerList = dao_customer.get();
+            CustomerDao customerDao = CustomerDao.getInstance();
+            List<Customer> customerList = customerDao.getAll();
             ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
 
             txt_customerAddress.setEditable(true);
@@ -131,8 +131,6 @@ public class GUI_ManageCustomerController implements Initializable {
             tabViewCustomer.setItems(listCustomer);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
     }
 
@@ -232,8 +230,8 @@ public class GUI_ManageCustomerController implements Initializable {
                 customer = new Customer(name, address, gender, phone, email, birthday);
                 try {
                     Connection connection = Database.getConnection();
-                    DAO_Customer dao_customer = new DAO_Customer(connection);
-                    if (dao_customer.add(customer)){
+                    CustomerDao customerDao = CustomerDao.getInstance();
+                    if (customerDao.add(customer)){
                         setCellValues();
                     }
                     connection.close();
@@ -260,14 +258,14 @@ public class GUI_ManageCustomerController implements Initializable {
                 String id = tabViewCustomer.getSelectionModel().getSelectedItem().getCustomerId();
                 try {
                     Connection connection = Database.getConnection();
-                    DAO_Customer dao_customer = new DAO_Customer(connection);
-                    customer = dao_customer.get(id);
+                    CustomerDao customerDao = CustomerDao.getInstance();
+                    customer = customerDao.getById(id);
                     customer.setName(name);
                     customer.setEmail(email);
                     customer.setPhoneNumber(phone);
                     customer.setAddress(address);
                     customer.setGender(gender);
-                    if (dao_customer.update(customer)) {
+                    if (customerDao.updateCustomerInfo(customer)) {
                         tabViewCustomer.getItems().clear();
                         setCellValues();
                     }
@@ -323,8 +321,8 @@ public class GUI_ManageCustomerController implements Initializable {
         String phone = txt_searchCustomerPhone.getText();
         try {
             Connection connection = Database.getConnection();
-            DAO_Customer dao_customer = new DAO_Customer(connection);
-            List<Customer> customerList = dao_customer.searchCustomerPhone(phone);
+            CustomerDao customerDao = CustomerDao.getInstance();
+            List<Customer> customerList = customerDao.getByPhoneNumber(phone);
             ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
 
             tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -344,8 +342,6 @@ public class GUI_ManageCustomerController implements Initializable {
             tabViewCustomer.setItems(listCustomer);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
     }
     @FXML

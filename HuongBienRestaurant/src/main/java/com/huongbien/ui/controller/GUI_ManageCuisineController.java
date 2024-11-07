@@ -1,7 +1,7 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Category;
-import com.huongbien.dao.DAO_Cuisine;
+import com.huongbien.dao.CategoryDao;
+import com.huongbien.dao.CuisineDao;
 import com.huongbien.database.Database;
 import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
@@ -71,71 +71,59 @@ public class GUI_ManageCuisineController implements Initializable {
     public byte[] imageCuisineByte = null;
 
     private void setCellValues() {
-        try {
-            DAO_Cuisine dao_Cuisine = new DAO_Cuisine(Database.getConnection());
-            List<Cuisine> cuisineList = dao_Cuisine.get();
+        CuisineDao cuisineDao = CuisineDao.getInstance();
+        List<Cuisine> cuisineList = cuisineDao.getAll();
 
-            ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
-            tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
-            tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
+        tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
+        tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            tabCol_cuisinePrice.setCellFactory(column -> {
-                return new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double price) {
-                        return price != null ? priceFormat.format(price) : "";
+        DecimalFormat priceFormat = new DecimalFormat("#,###");
+        tabCol_cuisinePrice.setCellFactory(column -> {
+            return new TextFieldTableCell<>(new StringConverter<Double>() {
+                @Override
+                public String toString(Double price) {
+                    return price != null ? priceFormat.format(price) : "";
+                }
+
+                @Override
+                public Double fromString(String string) {
+                    try {
+                        return priceFormat.parse(string).doubleValue();
+                    } catch (Exception e) {
+                        return 0.0;
                     }
-
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return priceFormat.parse(string).doubleValue();
-                        } catch (Exception e) {
-                            return 0.0;
-                        }
-                    }
-                });
+                }
             });
-            tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        });
+        tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-            tabCol_cuisineCategory.setCellValueFactory(cellData ->
-                    new SimpleStringProperty(cellData.getValue().getCategory().getName())
-            );
+        tabCol_cuisineCategory.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCategory().getName())
+        );
 
-            tabViewCuisine.setItems(listCuisine);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabViewCuisine.setItems(listCuisine);
     }
 
     private void setValueCombobox() {
-        try {
-            DAO_Category categoryDAO = new DAO_Category(Database.getConnection());
-            List<Category> categoryList = categoryDAO.get();
-            ObservableList<Category> categories = FXCollections.observableArrayList(categoryList);
-            comboBox_cuisineCategory.setItems(categories);
-            comboBox_cuisineCategory.setConverter(new StringConverter<Category>() {
-                @Override
-                public String toString(Category category) {
-                    return category != null ? category.getName() : "";
-                }
+        CategoryDao categoryDAO = CategoryDao.getInstance();
+        List<Category> categoryList = categoryDAO.getAll();
+        ObservableList<Category> categories = FXCollections.observableArrayList(categoryList);
+        comboBox_cuisineCategory.setItems(categories);
+        comboBox_cuisineCategory.setConverter(new StringConverter<Category>() {
+            @Override
+            public String toString(Category category) {
+                return category != null ? category.getName() : "";
+            }
 
-                @Override
-                public Category fromString(String string) {
-                    return comboBox_cuisineCategory.getItems().stream()
-                            .filter(item -> item.getName().equals(string))
-                            .findFirst()
-                            .orElse(null);
-                }
-            });
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+            @Override
+            public Category fromString(String string) {
+                return comboBox_cuisineCategory.getItems().stream()
+                        .filter(item -> item.getName().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
     }
 
     public void clearChooserImage() {
@@ -196,8 +184,8 @@ public class GUI_ManageCuisineController implements Initializable {
             String idSelect = selectedItem.getCuisineId();
             try {
                 Connection connection = Database.getConnection();
-                DAO_Cuisine dao_Cuisine = new DAO_Cuisine(connection);
-                Cuisine cuisine = dao_Cuisine.get(idSelect);
+                CuisineDao cuisineDao = CuisineDao.getInstance();
+                Cuisine cuisine = cuisineDao.getById(idSelect);
                 //load img------
                 byte[] imageBytes = cuisine.getImage();
                 imageCuisineByte = imageBytes;
@@ -219,8 +207,6 @@ public class GUI_ManageCuisineController implements Initializable {
                 txtArea_cuisineDescription.setText(cuisine.getDescription());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
             }
             btn_cuisineDelete.setVisible(true);
             btn_cuisineClear.setVisible(true);
@@ -280,20 +266,14 @@ public class GUI_ManageCuisineController implements Initializable {
                 String categoryId = comboBox_cuisineCategory.getValue().getCategoryId();
                 String categoryName = comboBox_cuisineCategory.getValue().getName();
                 String categoryDescription = comboBox_cuisineCategory.getValue().getDescription();
-                try {
-                    DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
-                    Cuisine cuisine = new Cuisine(idSelect, name, price, description, imageCuisineByte,
-                            new Category(categoryId, categoryName, categoryDescription)
-                    );
-                    if (dao_cuisine.update(cuisine)) {
-                        System.out.println("Đã sửa món thành công");
-                    } else {
-                        System.out.println("Sửa món không thành công");
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    Database.closeConnection();
+                CuisineDao cuisineDao = CuisineDao.getInstance();
+                Cuisine cuisine = new Cuisine(idSelect, name, price, description, imageCuisineByte,
+                        new Category(categoryId, categoryName, categoryDescription)
+                );
+                if (cuisineDao.updateCuisineInfo(cuisine)) {
+                    System.out.println("Đã sửa món thành công");
+                } else {
+                    System.out.println("Sửa món không thành công");
                 }
             }
         } else if (btn_cuisineMain.getText().equals("Thêm món")) {
@@ -304,20 +284,14 @@ public class GUI_ManageCuisineController implements Initializable {
             String categoryName = comboBox_cuisineCategory.getValue().getName();
             String categoryDescription = comboBox_cuisineCategory.getValue().getDescription();
 
-            try {
-                DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
-                Cuisine cuisine = new Cuisine(name, price, description, imageCuisineByte,
-                        new Category(categoryId, categoryName, categoryDescription)
-                );
-                if (dao_cuisine.add(cuisine)) {
-                    System.out.println("Thêm món thành công");
-                } else {
-                    System.out.println("Thêm món không thành công");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
+            CuisineDao cuisineDao = CuisineDao.getInstance();
+            Cuisine cuisine = new Cuisine(name, price, description, imageCuisineByte,
+                    new Category(categoryId, categoryName, categoryDescription)
+            );
+            if (cuisineDao.add(cuisine)) {
+                System.out.println("Thêm món thành công");
+            } else {
+                System.out.println("Thêm món không thành công");
             }
             clear();
         }
@@ -336,8 +310,8 @@ public class GUI_ManageCuisineController implements Initializable {
         Cuisine selectedItem = tabViewCuisine.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getCuisineId();
-            DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
-            if (dao_cuisine.delete(idSelect)) {
+            CuisineDao cuisineDao = CuisineDao.getInstance();
+            if (cuisineDao.delete(idSelect)) {
                 System.out.println("Xoá món thành công");
             } else {
                 System.out.println("Xoá món không thành công");
@@ -377,42 +351,36 @@ public class GUI_ManageCuisineController implements Initializable {
     void txt_cuisineSearch_clicked(MouseEvent event) {
         tabViewCuisine.getItems().clear();
         String input = txt_cuisineSearch.getText();
-        try {
-            DAO_Cuisine dao_Cuisine = new DAO_Cuisine(Database.getConnection());
-            List<Cuisine> cuisineList = dao_Cuisine.getByName(input);
-            //
-            ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
-            tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
-            tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            //
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            tabCol_cuisinePrice.setCellFactory(column -> {
-                return new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double price) {
-                        return price != null ? priceFormat.format(price) : "";
-                    }
+        CuisineDao cuisineDao = CuisineDao.getInstance();
+        List<Cuisine> cuisineList = cuisineDao.getByName(input);
+        //
+        ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
+        tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
+        tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        //
+        DecimalFormat priceFormat = new DecimalFormat("#,###");
+        tabCol_cuisinePrice.setCellFactory(column -> {
+            return new TextFieldTableCell<>(new StringConverter<Double>() {
+                @Override
+                public String toString(Double price) {
+                    return price != null ? priceFormat.format(price) : "";
+                }
 
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return priceFormat.parse(string).doubleValue();
-                        } catch (Exception e) {
-                            return 0.0;
-                        }
+                @Override
+                public Double fromString(String string) {
+                    try {
+                        return priceFormat.parse(string).doubleValue();
+                    } catch (Exception e) {
+                        return 0.0;
                     }
-                });
+                }
             });
-            tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-            tabCol_cuisineCategory.setCellValueFactory(cellData ->
-                    new SimpleStringProperty(cellData.getValue().getCategory().getName())
-            );
-            tabViewCuisine.setItems(listCuisine);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        });
+        tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tabCol_cuisineCategory.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCategory().getName())
+        );
+        tabViewCuisine.setItems(listCuisine);
     }
 
     private Timeline searchDelay;
@@ -432,43 +400,37 @@ public class GUI_ManageCuisineController implements Initializable {
     private void searchCuisine() {
         tabViewCuisine.getItems().clear();
         String input = txt_cuisineSearch.getText();
-        try {
-            DAO_Cuisine dao_Cuisine = new DAO_Cuisine(Database.getConnection());
-            List<Cuisine> cuisineList = dao_Cuisine.getByName(input);
+        CuisineDao cuisineDao = CuisineDao.getInstance();
+        List<Cuisine> cuisineList = cuisineDao.getByName(input);
 
-            ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
-            tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
-            tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
+        tabCol_cuisineID.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
+        tabCol_cuisineName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            tabCol_cuisinePrice.setCellFactory(column -> {
-                return new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double price) {
-                        return price != null ? priceFormat.format(price) : "";
+        DecimalFormat priceFormat = new DecimalFormat("#,###");
+        tabCol_cuisinePrice.setCellFactory(column -> {
+            return new TextFieldTableCell<>(new StringConverter<Double>() {
+                @Override
+                public String toString(Double price) {
+                    return price != null ? priceFormat.format(price) : "";
+                }
+
+                @Override
+                public Double fromString(String string) {
+                    try {
+                        return priceFormat.parse(string).doubleValue();
+                    } catch (Exception e) {
+                        return 0.0;
                     }
-
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return priceFormat.parse(string).doubleValue();
-                        } catch (Exception e) {
-                            return 0.0;
-                        }
-                    }
-                });
+                }
             });
-            tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        });
+        tabCol_cuisinePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-            tabCol_cuisineCategory.setCellValueFactory(cellData ->
-                    new SimpleStringProperty(cellData.getValue().getCategory().getName())
-            );
-            tabViewCuisine.setItems(listCuisine);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabCol_cuisineCategory.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCategory().getName())
+        );
+        tabViewCuisine.setItems(listCuisine);
     }
 
     @FXML

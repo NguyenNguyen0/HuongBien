@@ -1,7 +1,7 @@
 package com.huongbien.database.Faker;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.huongbien.dao.DAO_Reservation;
+import com.huongbien.dao.ReservationDao;
 import com.huongbien.database.Database;
 import com.huongbien.entity.*;
 import com.huongbien.utils.Utils;
@@ -102,7 +102,7 @@ public class ReservationFaker {
         sc.nextLine();
 
         Connection instance = Database.getConnection();
-        DAO_Reservation daoReservation = new DAO_Reservation(instance);
+        ReservationDao daoReservation = ReservationDao.getInstance();
         int successCount = 0;
         int failCount = 0;
         for (Reservation reservation : reservationSet) {

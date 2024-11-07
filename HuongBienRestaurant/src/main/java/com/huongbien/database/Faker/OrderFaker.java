@@ -23,17 +23,17 @@ public class OrderFaker {
 
     public OrderFaker() throws SQLException {
         Connection instance = Database.getConnection();
-        DAO_Table daoTable = new DAO_Table(instance);
-        DAO_Employee daoEmployee = new DAO_Employee(instance);
-        DAO_Customer daoCustomer = new DAO_Customer(instance);
-        DAO_Promotion daoPromotion = new DAO_Promotion(instance);
-        DAO_Cuisine daoCuisine = new DAO_Cuisine(instance);
+        TableDao daoTable = TableDao.getInstance();
+        EmployeeDao daoEmployee = EmployeeDao.getInstance();
+        CustomerDao daoCustomer = CustomerDao.getInstance();
+        PromotionDao daoPromotion = PromotionDao.getInstance();
+        CuisineDao daoCuisine = CuisineDao.getInstance();
 
-        this.tables = (ArrayList<Table>) daoTable.get();
-        this.promotions = (ArrayList<Promotion>) daoPromotion.get();
-        this.customers = (ArrayList<Customer>) daoCustomer.get();
+        this.tables = (ArrayList<Table>) daoTable.getAll();
+        this.promotions = (ArrayList<Promotion>) daoPromotion.getAll();
+        this.customers = (ArrayList<Customer>) daoCustomer.getAll();
         this.receptionist = (ArrayList<Employee>) daoEmployee.getByPosition("Tiếp tân");
-        this.cuisines = (ArrayList<Cuisine>) daoCuisine.get();
+        this.cuisines = (ArrayList<Cuisine>) daoCuisine.getAll();
     }
 
     public ArrayList<Table> fakeOrderTables() {
@@ -110,8 +110,8 @@ public class OrderFaker {
 
     public void fakingData() throws SQLException, JsonProcessingException {
         Connection instance = Database.getConnection();
-        DAO_Order daoOrder = new DAO_Order(instance);
-        DAO_Promotion daoPromotion = new DAO_Promotion(instance);
+        OrderDao daoOrder = OrderDao.getInstance();
+        PromotionDao daoPromotion = PromotionDao.getInstance();
 
 //        System.out.println(fakeOrder(LocalDate.of(2023, 12, 1)));
 //        PrettyPrint.objectPrint(fakeOrder(LocalDate.of(2023, 12, 1)));

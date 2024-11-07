@@ -1,10 +1,7 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Cuisine;
-import com.huongbien.dao.DAO_Employee;
+import com.huongbien.dao.EmployeeDao;
 import com.huongbien.database.Database;
-import com.huongbien.entity.Category;
-import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.Employee;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -21,9 +18,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -139,8 +133,8 @@ public class GUI_ManageEmployeeController implements Initializable {
     private void setCellValues() {
         try {
             Connection connection = Database.getConnection();
-            DAO_Employee dao_Employee = new DAO_Employee(connection);
-            List<Employee> employeeList = dao_Employee.get();
+            EmployeeDao employeeDao = EmployeeDao.getInstance();
+            List<Employee> employeeList = employeeDao.getAll();
             ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
             tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
             tabCol_empName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -155,8 +149,6 @@ public class GUI_ManageEmployeeController implements Initializable {
             tabViewEmp.setItems(listEmployee);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
     }
 
@@ -197,8 +189,8 @@ public class GUI_ManageEmployeeController implements Initializable {
         //Position
         try {
             Connection connection = Database.getConnection();
-            DAO_Employee dao_employee = new DAO_Employee(connection);
-            List<Employee> employeeList = dao_employee.get();
+            EmployeeDao employeeDao = EmployeeDao.getInstance();
+            List<Employee> employeeList = employeeDao.getAll();
             List<Employee> distinctEmployees = new ArrayList<>(employeeList.stream()
                     .filter(e -> e.getPosition() != null && !"Quản lý".equals(e.getPosition()))
                     .collect(Collectors.toMap(Employee::getPosition, e -> e, (e1, e2) -> e1))
@@ -221,8 +213,6 @@ public class GUI_ManageEmployeeController implements Initializable {
             });
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
         }
     }
 
@@ -245,8 +235,8 @@ public class GUI_ManageEmployeeController implements Initializable {
             String idSelect = selectedItem.getEmployeeId();
             try {
                 Connection connection = Database.getConnection();
-                DAO_Employee dao_employee = new DAO_Employee(connection);
-                Employee employee = dao_employee.get(idSelect);
+                EmployeeDao employeeDao = EmployeeDao.getInstance();
+                Employee employee = employeeDao.getById(idSelect).getFirst();
                 txt_empName.setText(employee.getName());
                 txt_empCitizenID.setText(employee.getCitizenIDNumber());
                 txt_empPhone.setText(employee.getPhoneNumber());
@@ -277,8 +267,6 @@ public class GUI_ManageEmployeeController implements Initializable {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
             }
             btn_empFired.setVisible(true);
             btn_empClear.setVisible(true);
@@ -422,21 +410,15 @@ public class GUI_ManageEmployeeController implements Initializable {
                 String address = txt_empAddress.getText();
                 String status = comboBox_empStatus.getValue();
                 String position = comboBox_empPostion.getValue() != null ? comboBox_empPostion.getValue().getPosition() : null;
-                try {
-                    DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
-                    Employee employee = new Employee(
-                            idSelect, name, phone, citizenId, gender, address,
-                            birthDate, email, status, hireDate, position, workHours, hourPay, salary, null
-                    );
-                    if (dao_employee.update(employee)) {
-                        System.out.println("Đã câp nhạt thành công");
-                    } else {
-                        System.out.println("Cập nhật nhân viên không thành công");
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    Database.closeConnection();
+                EmployeeDao employeeDao = EmployeeDao.getInstance();
+                Employee employee = new Employee(
+                        idSelect, name, phone, citizenId, gender, address,
+                        birthDate, email, status, hireDate, position, workHours, hourPay, salary, null
+                );
+                if (employeeDao.updateEmployeeInfo(employee)) {
+                    System.out.println("Đã câp nhạt thành công");
+                } else {
+                    System.out.println("Cập nhật nhân viên không thành công");
                 }
             }
         } else if (btn_empMain.getText().equals("Thêm")) {
@@ -460,19 +442,13 @@ public class GUI_ManageEmployeeController implements Initializable {
                     ? comboBox_empPostion.getValue().getPosition()
                     : comboBox_empPostion.getEditor().getText();
             double workHours = 0;
-            try {
-                DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
-                Employee employee = new Employee(name, phone, citizenId,
-                        gender, address, birthDate, email, position, workHours, hourPay, salary, null);
-                if (dao_employee.add(employee)) {
-                    System.out.println("Thêm nhan vien thành công");
-                } else {
-                    System.out.println("Thêm nhan vien không thành công");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
+            EmployeeDao employeeDao = EmployeeDao.getInstance();
+            Employee employee = new Employee(name, phone, citizenId,
+                    gender, address, birthDate, email, position, workHours, hourPay, salary, null);
+            if (employeeDao.add(employee)) {
+                System.out.println("Thêm nhan vien thành công");
+            } else {
+                System.out.println("Thêm nhan vien không thành công");
             }
             clear();
         }
@@ -504,17 +480,11 @@ public class GUI_ManageEmployeeController implements Initializable {
         Employee selectedItem = tabViewEmp.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getEmployeeId();
-            try {
-                DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
-                if (dao_employee.updateStatus(idSelect, "Nghỉ việc")) {
-                    System.out.println("Sa thải nhan vien thanh cong");
-                } else {
-                    System.out.println("Sa thải nhan vien khong thanh cong");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
+            EmployeeDao employeeDao = EmployeeDao.getInstance();
+            if (employeeDao.updateStatus(idSelect, "Nghỉ việc")) {
+                System.out.println("Sa thải nhan vien thanh cong");
+            } else {
+                System.out.println("Sa thải nhan vien khong thanh cong");
             }
         }
         tabViewEmp.getItems().clear();
@@ -529,26 +499,20 @@ public class GUI_ManageEmployeeController implements Initializable {
         String name = txt_searchEmpName.getText();
         String phone = txt_searchEmpPhone.getText();
         String empID = txt_searchEmpID.getText();
-        try {
-            DAO_Employee dao_Employee = new DAO_Employee(Database.getConnection());
-            List<Employee> employeeList = dao_Employee.getByCriteria(phone, name, empID);
-            ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
-            tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
-            tabCol_empName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            tabCol_empGender.setCellValueFactory(cellData -> {
-                boolean gender = cellData.getValue().isGender();
-                String genderText = gender ? "Nam" : "Nữ";
-                return new SimpleStringProperty(genderText);
-            });
-            tabCol_empPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-            tabCol_empPosition.setCellValueFactory(new PropertyValueFactory<>("position"));
-            tabCol_empStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-            tabViewEmp.setItems(listEmployee);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        List<Employee> employeeList = employeeDao.getByCriteria(phone, name, empID);
+        ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
+        tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
+        tabCol_empName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabCol_empGender.setCellValueFactory(cellData -> {
+            boolean gender = cellData.getValue().isGender();
+            String genderText = gender ? "Nam" : "Nữ";
+            return new SimpleStringProperty(genderText);
+        });
+        tabCol_empPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        tabCol_empPosition.setCellValueFactory(new PropertyValueFactory<>("position"));
+        tabCol_empStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        tabViewEmp.setItems(listEmployee);
     }
 
     @FXML
