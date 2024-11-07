@@ -44,5 +44,5 @@ temp/
 src/main/resources/com/huongbien/img/qr
 
 # ignore all files in Faker package
-src/main/java/com/huongbien/database/Faker/
-src/main/java/com/huongbien/database/Faker/**
+src/main/java/com/huongbien/database/faker/
+src/main/java/com/huongbien/database/faker/**
