@@ -12,7 +12,7 @@ public class Converter {
     }
 
     //  chuyển mảng byte thành InputStream để load ảnh lên giao diên javafx
-    public static InputStream bytesToInputStream (byte[] bytes) {
+    public static InputStream bytesToInputStream(byte[] bytes) {
         return new ByteArrayInputStream(bytes);
     }
 

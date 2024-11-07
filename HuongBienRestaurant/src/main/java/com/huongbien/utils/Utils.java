@@ -3,7 +3,6 @@ package com.huongbien.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.huongbien.entity.Table;
-import javafx.scene.control.Tab;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 // class Utils là để những hàm chức năng (hỗ trợ) sài chung cho nhiều nơi cho dự án
 public class Utils {
 
-//  hàm băm mật khẩu bằng thuật toán sha256
+    //  hàm băm mật khẩu bằng thuật toán sha256
     public static String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -37,13 +36,13 @@ public class Utils {
         }
     }
 
-//   Hàm random số
+    //   Hàm random số
     public static int randomNumber(int min, int max) {
         return (int) (Math.random() * (max - min + 1)) + min;
     }
 
-//    Hàm chuyển membershipLevel từ int sang String
-    public static String toStringMembershipLevel (int membershipLevel) {
+    //    Hàm chuyển membershipLevel từ int sang String
+    public static String toStringMembershipLevel(int membershipLevel) {
         return switch (membershipLevel) {
             case 0 -> "Đồng";
             case 1 -> "Bạc";
@@ -54,7 +53,7 @@ public class Utils {
     }
 
     //    Hàm chuyển membershipLevel từ String sang int
-    public static int toIntMembershipLevel (String membershipLevel) {
+    public static int toIntMembershipLevel(String membershipLevel) {
         return switch (membershipLevel) {
             case "Đồng" -> 0;
             case "Bạc" -> 1;
@@ -63,6 +62,7 @@ public class Utils {
             default -> throw new IllegalArgumentException("Membership must in [0, 1, 2, 3]");
         };
     }
+
     //  Hàm ghi dữ liệu Binary xuống file text
     public boolean WriteToFile(Object obj, String filePath) throws Exception {
         ObjectOutputStream oos = null;
@@ -110,7 +110,7 @@ public class Utils {
 
         if (money >= 1_000_000_000) {
             return df.format(money / 1_000_000_000) + " Tỷ VND";
-        }else if (money >= 1_000_000) {
+        } else if (money >= 1_000_000) {
             return df.format(money / 1_000_000) + " Triệu VND";
         } else {
             return df.format(money) + " đ";
