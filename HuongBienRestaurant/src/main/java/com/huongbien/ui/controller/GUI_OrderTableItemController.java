@@ -3,8 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Table;
-import com.huongbien.database.Database;
+import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Table;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
@@ -116,8 +115,8 @@ public class GUI_OrderTableItemController implements Initializable {
     }
 
     private void writeDataJSONtoFile(String tabID) throws SQLException {
-        DAO_Table dao_table = new DAO_Table(Database.getConnection());
-        Table table = dao_table.get(tabID);
+        TableDAO dao_table = TableDAO.getInstance();
+        Table table = dao_table.getById(tabID);
 
         if (table != null) {
             JsonArray jsonArray;

@@ -1,8 +1,7 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.CategoryDao;
-import com.huongbien.dao.CuisineDao;
-import com.huongbien.database.Database;
+import com.huongbien.dao.CategoryDAO;
+import com.huongbien.dao.CuisineDAO;
 import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
@@ -27,7 +26,6 @@ import javafx.util.StringConverter;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -71,7 +69,7 @@ public class GUI_ManageCuisineController implements Initializable {
     public byte[] imageCuisineByte = null;
 
     private void setCellValues() {
-        CuisineDao cuisineDao = CuisineDao.getInstance();
+        CuisineDAO cuisineDao = CuisineDAO.getInstance();
         List<Cuisine> cuisineList = cuisineDao.getAll();
 
         ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
@@ -106,7 +104,7 @@ public class GUI_ManageCuisineController implements Initializable {
     }
 
     private void setValueCombobox() {
-        CategoryDao categoryDAO = CategoryDao.getInstance();
+        CategoryDAO categoryDAO = CategoryDAO.getInstance();
         List<Category> categoryList = categoryDAO.getAll();
         ObservableList<Category> categories = FXCollections.observableArrayList(categoryList);
         comboBox_cuisineCategory.setItems(categories);
@@ -131,6 +129,7 @@ public class GUI_ManageCuisineController implements Initializable {
         Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png"));
         imgView_cuisine.setImage(image);
     }
+
     public void clear() {
         txt_cuisineName.setText("");
         txt_cuisinePrice.setText("");
@@ -182,32 +181,27 @@ public class GUI_ManageCuisineController implements Initializable {
         Cuisine selectedItem = tabViewCuisine.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getCuisineId();
-            try {
-                Connection connection = Database.getConnection();
-                CuisineDao cuisineDao = CuisineDao.getInstance();
-                Cuisine cuisine = cuisineDao.getById(idSelect);
-                //load img------
-                byte[] imageBytes = cuisine.getImage();
-                imageCuisineByte = imageBytes;
-                Image image;
-                if (imageBytes != null) {
-                    image = Converter.bytesToImage(imageBytes);
-                } else {
-                    image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png"));
-                }
-                imgView_cuisine.setImage(image);
-                //---------------
-                txt_cuisineName.setText(cuisine.getName());
-                //--Format Price
-                DecimalFormat priceFormat = new DecimalFormat("#,###");
-                String formattedPrice = priceFormat.format(cuisine.getPrice());
-                txt_cuisinePrice.setText(formattedPrice);
-                //---------------
-                comboBox_cuisineCategory.getSelectionModel().select(cuisine.getCategory());
-                txtArea_cuisineDescription.setText(cuisine.getDescription());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            CuisineDAO cuisineDao = CuisineDAO.getInstance();
+            Cuisine cuisine = cuisineDao.getById(idSelect);
+            //load img------
+            byte[] imageBytes = cuisine.getImage();
+            imageCuisineByte = imageBytes;
+            Image image;
+            if (imageBytes != null) {
+                image = Converter.bytesToImage(imageBytes);
+            } else {
+                image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png"));
             }
+            imgView_cuisine.setImage(image);
+            //---------------
+            txt_cuisineName.setText(cuisine.getName());
+            //--Format Price
+            DecimalFormat priceFormat = new DecimalFormat("#,###");
+            String formattedPrice = priceFormat.format(cuisine.getPrice());
+            txt_cuisinePrice.setText(formattedPrice);
+            //---------------
+            comboBox_cuisineCategory.getSelectionModel().select(cuisine.getCategory());
+            txtArea_cuisineDescription.setText(cuisine.getDescription());
             btn_cuisineDelete.setVisible(true);
             btn_cuisineClear.setVisible(true);
             btn_cuisineSub.setVisible(true);
@@ -266,7 +260,7 @@ public class GUI_ManageCuisineController implements Initializable {
                 String categoryId = comboBox_cuisineCategory.getValue().getCategoryId();
                 String categoryName = comboBox_cuisineCategory.getValue().getName();
                 String categoryDescription = comboBox_cuisineCategory.getValue().getDescription();
-                CuisineDao cuisineDao = CuisineDao.getInstance();
+                CuisineDAO cuisineDao = CuisineDAO.getInstance();
                 Cuisine cuisine = new Cuisine(idSelect, name, price, description, imageCuisineByte,
                         new Category(categoryId, categoryName, categoryDescription)
                 );
@@ -284,7 +278,7 @@ public class GUI_ManageCuisineController implements Initializable {
             String categoryName = comboBox_cuisineCategory.getValue().getName();
             String categoryDescription = comboBox_cuisineCategory.getValue().getDescription();
 
-            CuisineDao cuisineDao = CuisineDao.getInstance();
+            CuisineDAO cuisineDao = CuisineDAO.getInstance();
             Cuisine cuisine = new Cuisine(name, price, description, imageCuisineByte,
                     new Category(categoryId, categoryName, categoryDescription)
             );
@@ -310,7 +304,7 @@ public class GUI_ManageCuisineController implements Initializable {
         Cuisine selectedItem = tabViewCuisine.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getCuisineId();
-            CuisineDao cuisineDao = CuisineDao.getInstance();
+            CuisineDAO cuisineDao = CuisineDAO.getInstance();
             if (cuisineDao.delete(idSelect)) {
                 System.out.println("Xoá món thành công");
             } else {
@@ -351,7 +345,7 @@ public class GUI_ManageCuisineController implements Initializable {
     void txt_cuisineSearch_clicked(MouseEvent event) {
         tabViewCuisine.getItems().clear();
         String input = txt_cuisineSearch.getText();
-        CuisineDao cuisineDao = CuisineDao.getInstance();
+        CuisineDAO cuisineDao = CuisineDAO.getInstance();
         List<Cuisine> cuisineList = cuisineDao.getByName(input);
         //
         ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
@@ -400,7 +394,7 @@ public class GUI_ManageCuisineController implements Initializable {
     private void searchCuisine() {
         tabViewCuisine.getItems().clear();
         String input = txt_cuisineSearch.getText();
-        CuisineDao cuisineDao = CuisineDao.getInstance();
+        CuisineDAO cuisineDao = CuisineDAO.getInstance();
         List<Cuisine> cuisineList = cuisineDao.getByName(input);
 
         ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);

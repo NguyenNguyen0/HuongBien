@@ -7,14 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public abstract class GenericDao<T> {
+public abstract class GenericDAO<T> {
     protected final StatementHelper statementHelper;
 
-    protected GenericDao() {
+    protected GenericDAO() {
         this.statementHelper = StatementHelper.getInstances();
     }
 
     public abstract T resultMapper(ResultSet resultSet) throws SQLException;
+
     public List<T> getMany(String sql, Object... args) {
         try {
             PreparedStatement statement = statementHelper.prepareStatement(sql, args);
@@ -28,6 +29,7 @@ public abstract class GenericDao<T> {
             throw new RuntimeException(e);
         }
     }
+
     public T getOne(String sql, Object... args) {
         try {
             PreparedStatement statement = statementHelper.prepareStatement(sql, args);
@@ -40,6 +42,7 @@ public abstract class GenericDao<T> {
             throw new RuntimeException(e);
         }
     }
+
     public boolean update(String sql, Object... args) {
         try {
             PreparedStatement statement = statementHelper.prepareStatement(sql, args);
@@ -49,5 +52,6 @@ public abstract class GenericDao<T> {
             throw new RuntimeException(e);
         }
     }
+
     public abstract boolean add(T object) throws SQLException;
 }

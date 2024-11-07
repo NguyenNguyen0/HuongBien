@@ -7,14 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AccountDao extends GenericDao<Account> {
-    private static final AccountDao instance = new AccountDao();
+public class AccountDAO extends GenericDAO<Account> {
+    private static final AccountDAO instance = new AccountDAO();
 
-    private AccountDao() {
+    private AccountDAO() {
         super();
     }
 
-    public static AccountDao getInstance() {
+    public static AccountDAO getInstance() {
         return instance;
     }
 
@@ -27,7 +27,7 @@ public class AccountDao extends GenericDao<Account> {
         account.setEmail(resultSet.getString("email"));
         account.setIsActive(resultSet.getBoolean("isActive"));
         account.setAvatar(resultSet.getBytes("avatar"));
-        account.setEmployeeInfo(EmployeeDao.getInstance().getById(account.getUsername()).getFirst());
+        account.setEmployeeInfo(EmployeeDAO.getInstance().getById(account.getUsername()).getFirst());
         return account;
     }
 

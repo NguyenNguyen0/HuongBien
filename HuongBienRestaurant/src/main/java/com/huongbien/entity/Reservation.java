@@ -23,7 +23,8 @@ public class Reservation {
     private Customer customer;
     private ArrayList<FoodOrder> foodOrders;
 
-    public Reservation() {}
+    public Reservation() {
+    }
 
     public Reservation(String reservationId, String partyType, int partySize, LocalDate reservationDate,
                        LocalTime reservationTime, LocalDate receiveDate, String status, double deposit,
@@ -45,7 +46,7 @@ public class Reservation {
         setFoodOrders(foodOrders);
     }
 
-//    constructor tạo mới 1 đơn đạt bàn
+    //    constructor tạo mới 1 đơn đạt bàn
     public Reservation(String partyType, int partySize, LocalDate receiveDate,
                        Payment payment, Employee employee, ArrayList<Table> tables,
                        Customer customer, ArrayList<FoodOrder> foodOrders) {

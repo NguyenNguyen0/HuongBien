@@ -21,7 +21,8 @@ public class Category {
         setDescription(description);
     }
 
-    public Category() {}
+    public Category() {
+    }
 
     public void setCategoryId(String categoryId) {
         if (categoryId == null) {

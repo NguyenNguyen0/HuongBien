@@ -17,7 +17,8 @@ public class Customer {
     private int accumulatedPoints;
     private int membershipLevel;
 
-    public Customer() {}
+    public Customer() {
+    }
 
     public Customer(String customerId, String name, String address, boolean gender,
                     String phoneNumber, String email, LocalDate birthday,

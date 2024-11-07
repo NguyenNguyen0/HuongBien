@@ -7,14 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class EmployeeDao extends GenericDao<Employee> {
-    private static final EmployeeDao instance = new EmployeeDao();
+public class EmployeeDAO extends GenericDAO<Employee> {
+    private static final EmployeeDAO instance = new EmployeeDAO();
 
-    private EmployeeDao() {
+    private EmployeeDAO() {
         super();
     }
 
-    public static EmployeeDao getInstance() {
+    public static EmployeeDAO getInstance() {
         return instance;
     }
 

@@ -1,6 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Statistics;
+import com.huongbien.dao.StatisticsDAO;
 import com.huongbien.entity.Customer;
 import com.huongbien.entity.Order;
 import com.huongbien.utils.Utils;
@@ -11,7 +11,10 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.Year;
@@ -129,10 +132,10 @@ public class GUI_StatisticsController {
     }
 
     private void setBusinessSummary() {
-        txt_TotalCustomers.setText(String.valueOf(DAO_Statistics.getTotalCustomers()));
-        txt_Reservations.setText(String.valueOf(DAO_Statistics.getTotalReservations()));
-        txt_TotalOfInvoice.setText(String.valueOf(DAO_Statistics.getTotalInvoices()));
-        txt_TotalOfRevenues.setText(Utils.formatMoney(DAO_Statistics.getTotalRevenues()));
+        txt_TotalCustomers.setText(String.valueOf(StatisticsDAO.getTotalCustomers()));
+        txt_Reservations.setText(String.valueOf(StatisticsDAO.getTotalReservations()));
+        txt_TotalOfInvoice.setText(String.valueOf(StatisticsDAO.getTotalInvoices()));
+        txt_TotalOfRevenues.setText(Utils.formatMoney(StatisticsDAO.getTotalRevenues()));
     }
 
     private void setBusinessSituation(double totalRevenue, int totalInvoices, int totalItems) {
@@ -145,9 +148,9 @@ public class GUI_StatisticsController {
     }
 
     private void loadMonthlyStatistics(int year) {
-        double totalRevenue = DAO_Statistics.getTotalRevenue("Năm", 0, year);
-        int totalInvoices = DAO_Statistics.getTotalInvoices("Năm", 0, year);
-        int totalItems = DAO_Statistics.getTotalItemsOrdered("Năm", 0, year);
+        double totalRevenue = StatisticsDAO.getTotalRevenue("Năm", 0, year);
+        int totalInvoices = StatisticsDAO.getTotalInvoices("Năm", 0, year);
+        int totalItems = StatisticsDAO.getTotalItemsOrdered("Năm", 0, year);
 
         setBusinessSituation(totalRevenue, totalInvoices, totalItems);
 
@@ -156,9 +159,9 @@ public class GUI_StatisticsController {
     }
 
     private void loadQuarterlyStatistics(int year) {
-        double totalRevenue = DAO_Statistics.getTotalRevenue("Năm", 0, year);
-        int totalInvoices = DAO_Statistics.getTotalInvoices("Năm", 0, year);
-        int totalItems = DAO_Statistics.getTotalItemsOrdered("Năm", 0, year);
+        double totalRevenue = StatisticsDAO.getTotalRevenue("Năm", 0, year);
+        int totalInvoices = StatisticsDAO.getTotalInvoices("Năm", 0, year);
+        int totalItems = StatisticsDAO.getTotalItemsOrdered("Năm", 0, year);
 
         setBusinessSituation(totalRevenue, totalInvoices, totalItems);
 
@@ -171,9 +174,9 @@ public class GUI_StatisticsController {
         int totalInvoices = 0;
         int totalItems = 0;
         for (int year : comboBox_Years.getItems()) {
-            totalRevenue += DAO_Statistics.getTotalRevenue("Năm", 0, year);
-            totalInvoices += DAO_Statistics.getTotalInvoices("Năm", 0, year);
-            totalItems += DAO_Statistics.getTotalItemsOrdered("Năm", 0, year);
+            totalRevenue += StatisticsDAO.getTotalRevenue("Năm", 0, year);
+            totalInvoices += StatisticsDAO.getTotalInvoices("Năm", 0, year);
+            totalItems += StatisticsDAO.getTotalItemsOrdered("Năm", 0, year);
         }
 
         setBusinessSituation(totalRevenue, totalInvoices, totalItems);
@@ -192,18 +195,18 @@ public class GUI_StatisticsController {
 
         if ("Tháng".equals(criteria)) {
             for (int month = 1; month <= periods; month++) {
-                double revenue = DAO_Statistics.getTotalRevenue("Tháng", month, year);
+                double revenue = StatisticsDAO.getTotalRevenue("Tháng", month, year);
                 series.getData().add(new XYChart.Data<>(String.valueOf(month), revenue));
             }
         } else if ("Quý".equals(criteria)) {
             for (int quarter = 1; quarter <= periods; quarter++) {
-                double revenue = DAO_Statistics.getTotalRevenue("Quý", quarter, year);
+                double revenue = StatisticsDAO.getTotalRevenue("Quý", quarter, year);
                 series.getData().add(new XYChart.Data<>("Quý " + quarter, revenue));
             }
         } else if ("Năm".equals(criteria)) {
             for (int i = 0; i < periods; i++) {
                 int yearToShow = comboBox_Years.getItems().get(i);
-                double revenue = DAO_Statistics.getTotalRevenue("Năm", 0, yearToShow);
+                double revenue = StatisticsDAO.getTotalRevenue("Năm", 0, yearToShow);
                 series.getData().add(new XYChart.Data<>("Năm " + yearToShow, revenue));
             }
         }
@@ -220,18 +223,18 @@ public class GUI_StatisticsController {
 
         if ("Tháng".equals(criteria)) {
             for (int month = 1; month <= periods; month++) {
-                int count = DAO_Statistics.getTotalInvoices("Tháng", month, year);
+                int count = StatisticsDAO.getTotalInvoices("Tháng", month, year);
                 series.getData().add(new XYChart.Data<>(String.valueOf(month), count));
             }
         } else if ("Quý".equals(criteria)) {
             for (int quarter = 1; quarter <= periods; quarter++) {
-                int count = DAO_Statistics.getTotalInvoices("Quý", quarter, year);
+                int count = StatisticsDAO.getTotalInvoices("Quý", quarter, year);
                 series.getData().add(new XYChart.Data<>("Quý " + quarter, count));
             }
         } else if ("Năm".equals(criteria)) {
             for (int i = 0; i < periods; i++) {
                 int yearToShow = comboBox_Years.getItems().get(i);
-                int count = DAO_Statistics.getTotalInvoices("Năm", 0, yearToShow);
+                int count = StatisticsDAO.getTotalInvoices("Năm", 0, yearToShow);
                 series.getData().add(new XYChart.Data<>("Năm " + yearToShow, count));
             }
         }
@@ -262,7 +265,7 @@ public class GUI_StatisticsController {
         tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
         tabCol_customerMemLevel.setCellValueFactory(new PropertyValueFactory<>("membershipLevel"));
 
-        ObservableList<Customer> customers = FXCollections.observableArrayList(DAO_Statistics.getNewCusomterInDay());
+        ObservableList<Customer> customers = FXCollections.observableArrayList(StatisticsDAO.getNewCusomterInDay());
 
         table_NewCustomers.setItems(customers);
     }
@@ -275,7 +278,7 @@ public class GUI_StatisticsController {
                 new SimpleStringProperty(Utils.toStringTables(cellDataFeatures.getValue().getTables()))
         );
 
-        ObservableList<Order> orders = FXCollections.observableArrayList(DAO_Statistics.getNewOrderInDay());
+        ObservableList<Order> orders = FXCollections.observableArrayList(StatisticsDAO.getNewOrderInDay());
 
         table_NewInvoices.setItems(orders);
     }

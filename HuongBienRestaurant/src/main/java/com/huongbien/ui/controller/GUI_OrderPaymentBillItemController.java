@@ -1,17 +1,11 @@
 package com.huongbien.ui.controller;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.utils.Utils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,14 +37,15 @@ public class GUI_OrderPaymentBillItemController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {}
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
 
     public void setDataBill(OrderDetail orderDetail) {
         lbl_cuisineID.setText(orderDetail.getCuisine().getCuisineId());
         lbl_cuisineName.setText(orderDetail.getCuisine().getName());
         lbl_cuisineSalePrice.setText(Utils.formatPrice(orderDetail.getCuisine().getPrice()));
         lbl_cuisineNote.setText(orderDetail.getNote());
-        lbl_cuisineQuantity.setText(orderDetail.getQuantity()+"");
+        lbl_cuisineQuantity.setText(orderDetail.getQuantity() + "");
         lbl_salePrice.setText(Utils.formatPrice(orderDetail.getSalePrice()));
     }
 }

@@ -7,32 +7,31 @@ import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
-import com.huongbien.dao.*;
-import com.huongbien.database.Database;
+import com.huongbien.dao.CustomerDAO;
+import com.huongbien.dao.EmployeeDAO;
+import com.huongbien.dao.PromotionDAO;
+import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
-import com.huongbien.utils.Converter;
 import com.huongbien.utils.Utils;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,16 +44,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
-
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
 
 public class GUI_OrderPaymentController implements Initializable {
     private final static String path_user = "src/main/resources/com/huongbien/temp/loginSession.json";
@@ -192,8 +181,8 @@ public class GUI_OrderPaymentController implements Initializable {
         for (JsonElement element : jsonArrayEmp) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
-            DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
-            Employee employee = dao_employee.get(id);
+            EmployeeDAO dao_employee = EmployeeDAO.getInstance();
+            Employee employee = dao_employee.getById(id).getFirst();
             lbl_payEmp.setText(employee.getName());
         }
         //table
@@ -201,8 +190,8 @@ public class GUI_OrderPaymentController implements Initializable {
         for (JsonElement element : jsonArrayTab) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            Table table = dao_table.get(id);
+            TableDAO dao_table = TableDAO.getInstance();
+            Table table = dao_table.getById(id);
             String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
             tabInfoBuilder.append(floorStr).append(" - ").append(table.getName()).append(", ");
         }
@@ -234,34 +223,28 @@ public class GUI_OrderPaymentController implements Initializable {
     }
 
     public void setCellValues() {
-        try {
-            DAO_Promotion dao_promotion = new DAO_Promotion(Database.getConnection());
-            List<Promotion> promotionList = dao_promotion.get();
-            promotionList.sort(Comparator.comparing(Promotion::getDiscount).reversed());
+        PromotionDAO promotionDAO = PromotionDAO.getInstance();
+        List<Promotion> promotionList = promotionDAO.getAll();
+        promotionList.sort(Comparator.comparing(Promotion::getDiscount).reversed());
 
-            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
-            col_proID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
-            col_proName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            col_proDiscount.setCellValueFactory(new PropertyValueFactory<>("discount"));
-            col_proDiscount.setCellFactory(col -> new TableCell<Promotion, Double>() {
-                @Override
-                public void updateItem(Double item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(String.format("%.0f%%", item * 100));
-                    }
+        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+        col_proID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+        col_proName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        col_proDiscount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+        col_proDiscount.setCellFactory(col -> new TableCell<Promotion, Double>() {
+            @Override
+            public void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.0f%%", item * 100));
                 }
-            });
+            }
+        });
 
-            tabView_promotion.setItems(listPromotion);
-            tabView_promotion.setDisable(true);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabView_promotion.setItems(listPromotion);
+        tabView_promotion.setDisable(true);
     }
 
     @Override
@@ -270,9 +253,7 @@ public class GUI_OrderPaymentController implements Initializable {
             loadingBill();
             setInfoPayment();
             setCellValues();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (FileNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -290,8 +271,8 @@ public class GUI_OrderPaymentController implements Initializable {
     @FXML
     void btn_searchCustomer(MouseEvent event) throws SQLException, FileNotFoundException {
         String inputPhone = txt_searchCustomer.getText().trim();
-        DAO_Customer dao_customer = new DAO_Customer(Database.getConnection());
-        Customer customer = dao_customer.getByPhone(inputPhone);
+        CustomerDAO customerDAO = CustomerDAO.getInstance();
+        Customer customer = customerDAO.getByPhoneNumber(inputPhone).getFirst();
         if (customer != null) {
             txt_idCustomer.setText(customer.getCustomerId());
             txt_nameCustomer.setText(customer.getName());
@@ -306,8 +287,8 @@ public class GUI_OrderPaymentController implements Initializable {
                 totalAmount += cuisineMoney;
             }
             double discount = 0.0;
-            DAO_Promotion dao_promotion = new DAO_Promotion(Database.getConnection());
-            List<Promotion> promotionList = dao_promotion.get();
+            PromotionDAO promotionDAO = PromotionDAO.getInstance();
+            List<Promotion> promotionList = promotionDAO.getAll();
             ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
             if (!listPromotion.isEmpty()) {
                 Promotion maxDiscountPromotion = listPromotion.stream()
@@ -345,8 +326,8 @@ public class GUI_OrderPaymentController implements Initializable {
         Promotion selectedItem = tabView_promotion.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getPromotionId();
-            DAO_Promotion dao_promotion = new DAO_Promotion(Database.getConnection());
-            Promotion promotion = dao_promotion.get(idSelect);
+            PromotionDAO promotionDAO = PromotionDAO.getInstance();
+            Promotion promotion = promotionDAO.getById(idSelect);
 
             double totalAmount = 0;
             JsonArray jsonArrayBill = Utils.readJsonFromFile(path_bill);
@@ -486,13 +467,9 @@ public class GUI_OrderPaymentController implements Initializable {
                 totalAmount += cuisineMoney;
             }
             double discount = 0.0;
-            DAO_Promotion dao_promotion = null;
-            try {
-                dao_promotion = new DAO_Promotion(Database.getConnection());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            List<Promotion> promotionList = dao_promotion.get();
+            PromotionDAO promotionDAO = null;
+            promotionDAO = PromotionDAO.getInstance();
+            List<Promotion> promotionList = promotionDAO.getAll();
             ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
             if (!listPromotion.isEmpty()) {
                 Promotion maxDiscountPromotion = listPromotion.stream()

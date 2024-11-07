@@ -64,7 +64,7 @@ public class GUI_LoginCarouselController implements Initializable {
             translateAnimation(0.5, slide03, -1000);
             translateAnimation(0.5, slide04, -1000);
             currentSlide = 3;
-        } else if(currentSlide == 3) {
+        } else if (currentSlide == 3) {
             slide01.setTranslateY(0);
             slide02.setTranslateY(1000);
             slide03.setTranslateY(2000);

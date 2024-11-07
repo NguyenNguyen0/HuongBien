@@ -1,18 +1,19 @@
 package com.huongbien.dao;
 
-import com.almasb.fxgl.scene3d.Cone;
-import com.huongbien.database.Database;
+import com.huongbien.database.StatementHelper;
 import com.huongbien.entity.Customer;
 import com.huongbien.entity.Order;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.entity.Table;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DAO_Statistics {
+public class StatisticsDAO {
 
     // Phương thức lấy tổng doanh thu từ bảng Order theo tiêu chí tháng, quý hoặc năm
     public static double getTotalRevenue(String criteria, int period, int year) {
@@ -26,8 +27,9 @@ public class DAO_Statistics {
             default -> "";
         };
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(query);
             if ("Tháng".equals(criteria) || "Quý".equals(criteria)) {
                 stmt.setInt(1, period);
                 stmt.setInt(2, year);
@@ -57,8 +59,9 @@ public class DAO_Statistics {
             default -> "";
         };
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(query);
             if ("Tháng".equals(criteria) || "Quý".equals(criteria)) {
                 stmt.setInt(1, period);
                 stmt.setInt(2, year);
@@ -91,8 +94,9 @@ public class DAO_Statistics {
             default -> "";
         };
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(query);
             if ("Tháng".equals(criteria) || "Quý".equals(criteria)) {
                 stmt.setInt(1, period);
                 stmt.setInt(2, year);
@@ -115,10 +119,10 @@ public class DAO_Statistics {
     public static int getTotalCustomers() {
         int totalCustomers = 0;
         String query = "SELECT COUNT(*) AS Total FROM [HuongBien].[dbo].[Customer]";
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 totalCustomers = rs.getInt("Total");
             }
@@ -131,10 +135,10 @@ public class DAO_Statistics {
     public static double getTotalRevenues() {
         double totalRevenues = 0.0;
         String query = "SELECT SUM(totalAmount) AS Total FROM [HuongBien].[dbo].[Order]";
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 totalRevenues = rs.getDouble("Total");
             }
@@ -147,10 +151,10 @@ public class DAO_Statistics {
     public static int getTotalInvoices() {
         int totalInvoices = 0;
         String query = "SELECT COUNT(*) AS Total FROM [HuongBien].[dbo].[Order]";
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 totalInvoices = rs.getInt("Total");
             }
@@ -163,10 +167,10 @@ public class DAO_Statistics {
     public static int getTotalReservations() {
         int totalReservations = 0;
         String query = "SELECT COUNT(*) AS Total FROM [HuongBien].[dbo].[Reservation]";
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 totalReservations = rs.getInt("Total");
             }
@@ -182,11 +186,10 @@ public class DAO_Statistics {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT * FROM Customer WHERE registrationDate = ?;";
 
-        try (Connection connection = Database.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setDate(1, Date.valueOf(LocalDate.now()));
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(sql, LocalDate.now());
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 Customer customer = new Customer();
                 customer.setCustomerId(rs.getString("id"));
@@ -215,17 +218,17 @@ public class DAO_Statistics {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM [Order] WHERE orderDate = ?;";
 
-        try (Connection connection = Database.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setDate(1, Date.valueOf(LocalDate.now()));
+        try {
+            StatementHelper statementHelper = StatementHelper.getInstances();
+            PreparedStatement stmt = statementHelper.prepareStatement(sql, LocalDate.now());
             ResultSet rs = stmt.executeQuery();
 
-            DAO_Customer customerDao = new DAO_Customer(connection);
-            DAO_Employee employeeDao = new DAO_Employee(connection);
-            DAO_Promotion promotionDao = new DAO_Promotion(connection);
-            DAO_Payment paymentDao = new DAO_Payment(connection);
-            DAO_OrderDetail orderDetailDao = new DAO_OrderDetail(connection);
-            DAO_Table tableDao = new DAO_Table(connection);
+            CustomerDAO customerDao = CustomerDAO.getInstance();
+            EmployeeDAO employeeDao = EmployeeDAO.getInstance();
+            PromotionDAO promotionDao = PromotionDAO.getInstance();
+            PaymentDAO paymentDao = PaymentDAO.getInstance();
+            OrderDetailDAO orderDetailDao = OrderDetailDAO.getInstance();
+            TableDAO tableDao = TableDAO.getInstance();
 
             while (rs.next()) {
                 Order order = new Order();
@@ -236,10 +239,10 @@ public class DAO_Statistics {
                 order.setDispensedAmount(rs.getDouble("dispensedAmount"));
                 order.setTotalAmount(rs.getDouble("totalAmount"));
                 order.setDiscount(rs.getDouble("discount"));
-                order.setCustomer(customerDao.get(rs.getString("customerId")));
-                order.setEmployee(employeeDao.get(rs.getString("employeeId")));
-                order.setPromotion(promotionDao.get(rs.getString("promotionId")));
-                order.setPayment(paymentDao.get(rs.getString("paymentId")));
+                order.setCustomer(customerDao.getById(rs.getString("customerId")));
+                order.setEmployee(employeeDao.getById(rs.getString("employeeId")).getFirst());
+                order.setPromotion(promotionDao.getById(rs.getString("promotionId")));
+                order.setPayment(paymentDao.getById(rs.getString("paymentId")));
 
                 order.setOrderDetails((ArrayList<OrderDetail>) orderDetailDao.getAllByOrderId(order.getOrderId()));
                 order.setTables((ArrayList<Table>) tableDao.getAllByOrderId(order.getOrderId()));

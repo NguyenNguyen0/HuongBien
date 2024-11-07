@@ -69,7 +69,7 @@ public class GUI_OrderBillItemController implements Initializable {
         lbl_cuisineName.setText(orderDetail.getCuisine().getName());
         lbl_cuisineSalePrice.setText(Utils.formatPrice(orderDetail.getCuisine().getPrice()));
         lbl_cuisineNote.setText(orderDetail.getNote());
-        lbl_cuisineQuantity.setText(orderDetail.getQuantity()+"");
+        lbl_cuisineQuantity.setText(orderDetail.getQuantity() + "");
         lbl_salePrice.setText(Utils.formatPrice(orderDetail.getSalePrice()));
     }
 
@@ -178,7 +178,6 @@ public class GUI_OrderBillItemController implements Initializable {
         }
         Utils.writeJsonToFile(jsonArray, path);
     }
-
 
 
     @FXML

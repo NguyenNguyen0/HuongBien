@@ -3,11 +3,10 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Category;
-import com.huongbien.dao.DAO_Table;
-import com.huongbien.dao.DAO_TableType;
-import com.huongbien.database.Database;
-import com.huongbien.entity.*;
+import com.huongbien.dao.TableDAO;
+import com.huongbien.dao.TableTypeDAO;
+import com.huongbien.entity.Table;
+import com.huongbien.entity.TableType;
 import com.huongbien.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,9 +26,10 @@ import javafx.util.StringConverter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class GUI_OrderTableController implements Initializable {
     private final static String path_table = "src/main/resources/com/huongbien/temp/temporaryTable.json";
@@ -96,74 +96,64 @@ public class GUI_OrderTableController implements Initializable {
     }
 
     private List<Table> data(String floor, String status, String type) {
-        try {
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            List<Table> ls = dao_table.getByCriteria(floor, status, type);
-            return ls;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        TableDAO tableDAO = TableDAO.getInstance();
+        List<Table> ls = tableDAO.getByCriteria(floor, status, type);
+        return ls;
     }
 
     private void setValueCombobox() {
-        try {
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            DAO_TableType dao_tableType = new DAO_TableType(Database.getConnection());
-            //floor
-            List<String> floors = dao_table.getDistinctFloor();
-            ObservableList<String> floorOptions = FXCollections.observableArrayList(floors);
-            comboBox_tabFloor.setItems(floorOptions);
-            comboBox_tabFloor.setConverter(new StringConverter<String>() {
-                @Override
-                public String toString(String floor) {
-                    return floor.equals("0") ? "Tầng trệt" : "Tầng " + floor;
-                }
-                @Override
-                public String fromString(String string) {
-                    return string.replace("Tầng ", "").trim();
-                }
-            });
-            comboBox_tabFloor.getSelectionModel().selectFirst();
-            //Status
-            List<String> statuses = dao_table.getDistinctStatuses();
-            ObservableList<String> statusOptions = FXCollections.observableArrayList("Tất cả trạng thái");
-            statusOptions.addAll(statuses);
-            comboBox_tabStatus.setItems(statusOptions);
-            comboBox_tabStatus.setConverter(new StringConverter<String>() {
-                @Override
-                public String toString(String status) {
-                    return status != null ? status : "";
-                }
-                @Override
-                public String fromString(String string) {
-                    return string;
-                }
-            });
-            comboBox_tabStatus.getSelectionModel().selectFirst();
-            //Type
-            List<String> tableTypes = dao_tableType.getDistinctTableType();
-            ObservableList<String> typeOptions = FXCollections.observableArrayList("Tất cả loại bàn");
-            typeOptions.addAll(tableTypes);
-            comboBox_tabType.setItems(typeOptions);
-            comboBox_tabType.setConverter(new StringConverter<String>() {
-                @Override
-                public String toString(String tableType) {
-                    return tableType != null ? tableType : "";
-                }
-                @Override
-                public String fromString(String string) {
-                    return string;
-                }
-            });
-            comboBox_tabType.getSelectionModel().selectFirst();
+        TableDAO tableDAO = TableDAO.getInstance();
+        TableTypeDAO tableTypeDAO = TableTypeDAO.getInstance();
+        //floor
+        List<String> floors = tableDAO.getDistinctFloor();
+        ObservableList<String> floorOptions = FXCollections.observableArrayList(floors);
+        comboBox_tabFloor.setItems(floorOptions);
+        comboBox_tabFloor.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String floor) {
+                return floor.equals("0") ? "Tầng trệt" : "Tầng " + floor;
+            }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+            @Override
+            public String fromString(String string) {
+                return string.replace("Tầng ", "").trim();
+            }
+        });
+        comboBox_tabFloor.getSelectionModel().selectFirst();
+        //Status
+        List<String> statuses = tableDAO.getDistinctStatuses();
+        ObservableList<String> statusOptions = FXCollections.observableArrayList("Tất cả trạng thái");
+        statusOptions.addAll(statuses);
+        comboBox_tabStatus.setItems(statusOptions);
+        comboBox_tabStatus.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String status) {
+                return status != null ? status : "";
+            }
+
+            @Override
+            public String fromString(String string) {
+                return string;
+            }
+        });
+        comboBox_tabStatus.getSelectionModel().selectFirst();
+        //Type
+        List<String> tableTypes = tableTypeDAO.getDistinctTableType();
+        ObservableList<String> typeOptions = FXCollections.observableArrayList("Tất cả loại bàn");
+        typeOptions.addAll(tableTypes);
+        comboBox_tabType.setItems(typeOptions);
+        comboBox_tabType.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String tableType) {
+                return tableType != null ? tableType : "";
+            }
+
+            @Override
+            public String fromString(String string) {
+                return string;
+            }
+        });
+        comboBox_tabType.getSelectionModel().selectFirst();
     }
 
     public void setTableTab(String name, int floor, int seats, String typeName) {
@@ -222,8 +212,8 @@ public class GUI_OrderTableController implements Initializable {
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            Table table = dao_table.get(id);
+            TableDAO tableDAO = TableDAO.getInstance();
+            Table table = tableDAO.getById(id);
             setTableTab(table.getName(), table.getFloor(), table.getSeats(), table.getTableType().getName());
         }
     }
@@ -233,8 +223,8 @@ public class GUI_OrderTableController implements Initializable {
         String floor = comboBox_tabFloor.getValue();
         String status = comboBox_tabStatus.getValue();
         String tableTypeName = comboBox_tabType.getValue();
-        DAO_TableType dao_tableType = new DAO_TableType(Database.getConnection());
-        TableType tableType = dao_tableType.getByName(tableTypeName);
+        TableTypeDAO tableDAOType = TableTypeDAO.getInstance();
+        TableType tableType = tableDAOType.getByName(tableTypeName);
         String tableTypeId = (tableType != null) ? tableType.getTableId() : "";
         compoent_gridTable.getChildren().clear();
         setGridPane(floor, status, tableTypeId);

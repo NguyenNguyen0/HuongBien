@@ -1,35 +1,25 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Order;
-import com.huongbien.dao.DAO_Promotion;
-import com.huongbien.database.Database;
+import com.huongbien.dao.OrderDAO;
 import com.huongbien.entity.Order;
-import com.huongbien.entity.Promotion;
 import com.huongbien.utils.Paginator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
-import javax.xml.crypto.Data;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import static com.huongbien.database.Database.connection;
 
 public class GUI_ManageInvoiceController implements Initializable {
     @FXML
@@ -74,25 +64,9 @@ public class GUI_ManageInvoiceController implements Initializable {
     private Label pageIndexLabel;
 
     //    TODO: viết lại logic cho code đỡ bẩn
-    private static final DAO_Order dao_order;
+    private static final OrderDAO orderDAO = OrderDAO.getInstance();
 
-    static {
-        try {
-            dao_order = new DAO_Order(Database.getConnection());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static final Paginator<Order> orderPaginator = new Paginator<>((offset, limit) -> {
-        DAO_Order daoOrder = null;
-        try {
-            daoOrder = new DAO_Order(Database.getConnection());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return daoOrder.getWithPaginator(offset, limit);
-    }, dao_order.getTotalOrderCount(), 10, false);
+    private static final Paginator<Order> orderPaginator = new Paginator<>((offset, limit) -> OrderDAO.getInstance().getWithPagination(offset, limit), orderDAO.getTotalOrderCount(), 10, false);
 
     public void setCellValues() {
         tabViewInvoice.getItems().clear();
@@ -133,8 +107,6 @@ public class GUI_ManageInvoiceController implements Initializable {
             tabViewInvoice.setItems(listOrder);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            Database.closeConnection();
         }
     }
 
@@ -143,57 +115,50 @@ public class GUI_ManageInvoiceController implements Initializable {
         setCellValues();
     }
 
-//    TODO: xử lý lại phần pagination khi search
+    //    TODO: xử lý lại phần pagination khi search
     @FXML
     void searchButtonOnClick(MouseEvent event) {
         String id = txt_invoiceSearch.getText();
-        try {
-            List<Order> orders = null;
+        List<Order> orders = null;
 
-            if (id.isEmpty() || id.isBlank()) {
-                orders = orderPaginator.getCurrentPage();
-            } else {
-                Connection connection = Database.getConnection();
-                DAO_Order dao_order = new DAO_Order(connection);
-                orders = dao_order.getSearch(id);
+        if (id.isEmpty() || id.isBlank()) {
+            orders = orderPaginator.getCurrentPage();
+        } else {
+//                TODO: xử lý lại phần search
+//                orders = orderDAO.searchOrder(id);
+        }
+
+        ObservableList<Order> listOrder = FXCollections.observableArrayList(orders);
+
+        tabCol_invoiceID.setCellValueFactory(new PropertyValueFactory<>("orderId"));
+        tabCol_dateCreateInvoice.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
+
+        DecimalFormat priceFormat = new DecimalFormat("#,###");
+        tabCol_totalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
+        tabCol_totalAmount.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+            @Override
+            public String toString(Double price) {
+                return price != null ? priceFormat.format(price) : "";
             }
 
-            ObservableList<Order> listOrder = FXCollections.observableArrayList(orders);
-
-            tabCol_invoiceID.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-            tabCol_dateCreateInvoice.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
-
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            tabCol_totalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-            tabCol_totalAmount.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
-                @Override
-                public String toString(Double price) {
-                    return price != null ? priceFormat.format(price) : "";
+            @Override
+            public Double fromString(String string) {
+                try {
+                    return priceFormat.parse(string).doubleValue();
+                } catch (Exception e) {
+                    return 0.0;
                 }
+            }
+        }));
 
-                @Override
-                public Double fromString(String string) {
-                    try {
-                        return priceFormat.parse(string).doubleValue();
-                    } catch (Exception e) {
-                        return 0.0;
-                    }
-                }
-            }));
+        tabCol_customer.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCustomer() != null ?
+                        cellData.getValue().getCustomer().getCustomerId() : ""));
 
-            tabCol_customer.setCellValueFactory(cellData ->
-                    new SimpleStringProperty(cellData.getValue().getCustomer() != null ?
-                            cellData.getValue().getCustomer().getCustomerId() : ""));
-
-            tabCol_employeeId.setCellValueFactory(cellData ->
-                    new SimpleStringProperty(cellData.getValue().getEmployee() != null ?
-                            cellData.getValue().getEmployee().getEmployeeId() : ""));
-            tabViewInvoice.setItems(listOrder);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabCol_employeeId.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEmployee() != null ?
+                        cellData.getValue().getEmployee().getEmployeeId() : ""));
+        tabViewInvoice.setItems(listOrder);
     }
 
     @FXML

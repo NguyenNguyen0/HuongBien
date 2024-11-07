@@ -17,8 +17,13 @@ public class StatementHelper {
     }
 
     public static StatementHelper getInstances() {
-        if (instance == null) {
-            instance = new StatementHelper();
+        try {
+            if (instance == null || instance.connection == null || instance.connection.isClosed()) {
+                instance = new StatementHelper();
+                System.out.println("StatementHelper created");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return instance;
     }
@@ -60,4 +65,4 @@ public class StatementHelper {
             throw new RuntimeException(e);
         }
     }
- }
+}

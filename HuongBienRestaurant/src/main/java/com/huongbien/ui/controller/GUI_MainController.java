@@ -3,8 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Employee;
-import com.huongbien.database.Database;
+import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
 import javafx.animation.FadeTransition;
@@ -23,7 +22,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -453,8 +455,8 @@ public class GUI_MainController implements Initializable {
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
-            DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
-            Employee employee = dao_employee.get(id);
+            EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
+            Employee employee = employeeDAO.getById(id).getFirst();
             lbl_empName.setText(employee.getName());
         }
     }

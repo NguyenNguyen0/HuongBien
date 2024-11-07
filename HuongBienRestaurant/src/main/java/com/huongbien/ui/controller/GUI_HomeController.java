@@ -3,12 +3,11 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Employee;
-import com.huongbien.dao.DAO_Statistics;
-import com.huongbien.database.Database;
+import com.huongbien.dao.EmployeeDAO;
+import com.huongbien.dao.StatisticsDAO;
 import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
-import javafx.application.Platform; 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -123,10 +122,10 @@ public class GUI_HomeController implements Initializable {
 
     private void setStatistics() {
         try {
-            txt_TotalCustomers.setText(String.valueOf(DAO_Statistics.getTotalCustomers()));
-            txt_TotalOfRevenues.setText(Utils.formatMoney(DAO_Statistics.getTotalRevenues()));
-            txt_Reservations.setText(String.valueOf(DAO_Statistics.getTotalReservations()));
-            txt_TotalOfInvoice.setText(String.valueOf(DAO_Statistics.getTotalInvoices()));
+            txt_TotalCustomers.setText(String.valueOf(StatisticsDAO.getTotalCustomers()));
+            txt_TotalOfRevenues.setText(Utils.formatMoney(StatisticsDAO.getTotalRevenues()));
+            txt_Reservations.setText(String.valueOf(StatisticsDAO.getTotalReservations()));
+            txt_TotalOfInvoice.setText(String.valueOf(StatisticsDAO.getTotalInvoices()));
         } catch (Exception e) {
             System.err.println("Error fetching statistics: " + e.getMessage());
         }
@@ -144,8 +143,8 @@ public class GUI_HomeController implements Initializable {
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
-            DAO_Employee dao_employee = new DAO_Employee(Database.getConnection());
-            Employee employee = dao_employee.get(id);
+            EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
+            Employee employee = employeeDAO.getById(id).getFirst();
             txt_EmployeeName.setText(employee.getName());
             txt_EmployeePosition.setText(employee.getPosition());
         }

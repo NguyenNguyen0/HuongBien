@@ -8,14 +8,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-public class CategoryDao extends GenericDao<Category> {
-    private static final CategoryDao instance = new CategoryDao();
+public class CategoryDAO extends GenericDAO<Category> {
+    private static final CategoryDAO instance = new CategoryDAO();
 
-    private CategoryDao() {
+    private CategoryDAO() {
         super();
     }
 
-    public static CategoryDao getInstance() {
+    public static CategoryDAO getInstance() {
         return instance;
     }
 

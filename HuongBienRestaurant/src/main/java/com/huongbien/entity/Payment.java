@@ -3,9 +3,7 @@ package com.huongbien.entity;
 import com.huongbien.utils.Utils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Payment {
@@ -15,7 +13,8 @@ public class Payment {
     private LocalTime paymentTime;
     private String paymentMethod;
 
-    public Payment() {}
+    public Payment() {
+    }
 
     public Payment(String paymentId, double amount, LocalDate paymentDate, String paymentMethod, LocalTime paymentTime) {
         setPaymentId(paymentId);

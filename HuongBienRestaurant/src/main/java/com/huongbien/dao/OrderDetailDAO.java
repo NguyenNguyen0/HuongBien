@@ -2,22 +2,20 @@ package com.huongbien.dao;
 
 import com.huongbien.entity.OrderDetail;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailDao extends GenericDao<OrderDetail> {
-    private final CuisineDao cuisineDao;
-    private static final OrderDetailDao instance = new OrderDetailDao();
+public class OrderDetailDAO extends GenericDAO<OrderDetail> {
+    private final CuisineDAO cuisineDao;
+    private static final OrderDetailDAO instance = new OrderDetailDAO();
 
-    private OrderDetailDao() {
-        this.cuisineDao = CuisineDao.getInstance();
+    private OrderDetailDAO() {
+        this.cuisineDao = CuisineDAO.getInstance();
     }
 
-    public static OrderDetailDao getInstance() {
+    public static OrderDetailDAO getInstance() {
         return instance;
     }
 

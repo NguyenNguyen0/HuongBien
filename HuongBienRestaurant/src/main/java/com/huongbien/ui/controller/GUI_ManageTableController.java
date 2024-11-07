@@ -1,8 +1,7 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.TableDao;
-import com.huongbien.dao.TableTypeDao;
-import com.huongbien.database.Database;
+import com.huongbien.dao.TableDAO;
+import com.huongbien.dao.TableTypeDAO;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
 import javafx.collections.FXCollections;
@@ -17,8 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -75,7 +72,7 @@ public class GUI_ManageTableController implements Initializable {
     private TextField txt_tabSeats;
 
     private void setCellValues() {
-        TableDao tableDao = TableDao.getInstance();
+        TableDAO tableDao = TableDAO.getInstance();
         List<Table> tableList = tableDao.getAll();
 
         ObservableList<Table> listTable = FXCollections.observableArrayList(tableList);
@@ -90,38 +87,32 @@ public class GUI_ManageTableController implements Initializable {
     }
 
     private void setValueCombobox() {
-        try {
-            Connection connection = Database.getConnection();
+        TableDAO tableDAO = TableDAO.getInstance();
+        List<String> statusList = tableDAO.getDistinctStatuses();
+        ObservableList<String> statuses = FXCollections.observableArrayList(statusList);
+        comboBox_tabStatus.setItems(statuses);
 
-            TableDao tableDAO = TableDao.getInstance();
-            List<String> statusList = tableDAO.getDistinctStatuses();
-            ObservableList<String> statuses = FXCollections.observableArrayList(statusList);
-            comboBox_tabStatus.setItems(statuses);
+        TableTypeDAO tableTypeDAO = TableTypeDAO.getInstance();
+        List<TableType> tableTypeList = tableTypeDAO.getAll();
+        ObservableList<TableType> tableTypes = FXCollections.observableArrayList(tableTypeList);
+        comboBox_tabType.setItems(tableTypes);
+        comboBox_tabType.setConverter(new StringConverter<TableType>() {
+            @Override
+            public String toString(TableType tableType) {
+                return tableType != null ? tableType.getName() : "";
+            }
 
-            TableTypeDao tableTypeDAO = TableTypeDao.getInstance();
-            List<TableType> tableTypeList = tableTypeDAO.getAll();
-            ObservableList<TableType> tableTypes = FXCollections.observableArrayList(tableTypeList);
-            comboBox_tabType.setItems(tableTypes);
-            comboBox_tabType.setConverter(new StringConverter<TableType>() {
-                @Override
-                public String toString(TableType tableType) {
-                    return tableType != null ? tableType.getName() : "";
-                }
+            @Override
+            public TableType fromString(String string) {
+                return comboBox_tabType.getItems().stream()
+                        .filter(item -> item.getName().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+        ObservableList<Integer> floorList = FXCollections.observableArrayList(0, 1, 2, 3);
+        comboBox_tabFloor.setItems(floorList);
 
-                @Override
-                public TableType fromString(String string) {
-                    return comboBox_tabType.getItems().stream()
-                            .filter(item -> item.getName().equals(string))
-                            .findFirst()
-                            .orElse(null);
-                }
-            });
-            ObservableList<Integer> floorList = FXCollections.observableArrayList(0, 1, 2, 3);
-            comboBox_tabFloor.setItems(floorList);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void clear() {
@@ -173,6 +164,7 @@ public class GUI_ManageTableController implements Initializable {
     void btn_clearSearch(MouseEvent event) {
         txt_tabSearch.setText("");
     }
+
     @FXML
     void btn_tabClear(ActionEvent event) {
         clear();
@@ -218,7 +210,7 @@ public class GUI_ManageTableController implements Initializable {
             return;
         }
 
-        TableDao tableDao = TableDao.getInstance();
+        TableDAO tableDao = TableDAO.getInstance();
 
         Table table = new Table(existingTableId, name, floor, seats, status, selectedTableType);
 
@@ -257,7 +249,7 @@ public class GUI_ManageTableController implements Initializable {
             return;
         }
 
-        TableDao tableDao = TableDao.getInstance();
+        TableDAO tableDao = TableDAO.getInstance();
 
         Table table = new Table(name, floor, seats, status, selectedTableType);
 
@@ -279,32 +271,26 @@ public class GUI_ManageTableController implements Initializable {
         Table selectedItem = tabViewTab.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getId();
-            try {
-                Connection connection = Database.getConnection();
-                TableDao tableDao = TableDao.getInstance();
-                Table table = tableDao.getById(idSelect);
+            TableDAO tableDao = TableDAO.getInstance();
+            Table table = tableDao.getById(idSelect);
 
-                txt_tabName.setText(table.getName());
-                txt_tabSeats.setText(String.valueOf(table.getSeats()));
+            txt_tabName.setText(table.getName());
+            txt_tabSeats.setText(String.valueOf(table.getSeats()));
 
-                comboBox_tabType.getItems().stream()
-                        .filter(type -> type.getName().equals(table.getTableTypeName()))
-                        .findFirst()
-                        .ifPresent(comboBox_tabType.getSelectionModel()::select);
+            comboBox_tabType.getItems().stream()
+                    .filter(type -> type.getName().equals(table.getTableTypeName()))
+                    .findFirst()
+                    .ifPresent(comboBox_tabType.getSelectionModel()::select);
 
-                comboBox_tabStatus.getItems().stream()
-                        .filter(status -> status.equals(table.getStatus()))
-                        .findFirst()
-                        .ifPresent(comboBox_tabStatus.getSelectionModel()::select);
+            comboBox_tabStatus.getItems().stream()
+                    .filter(status -> status.equals(table.getStatus()))
+                    .findFirst()
+                    .ifPresent(comboBox_tabStatus.getSelectionModel()::select);
 
-                comboBox_tabFloor.getItems().stream()
-                        .filter(floor -> floor.equals(table.getFloor()))
-                        .findFirst()
-                        .ifPresent(comboBox_tabFloor.getSelectionModel()::select);
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            comboBox_tabFloor.getItems().stream()
+                    .filter(floor -> floor.equals(table.getFloor()))
+                    .findFirst()
+                    .ifPresent(comboBox_tabFloor.getSelectionModel()::select);
 
             btn_tabMain.setVisible(true);
             btn_tabSub.setVisible(true);

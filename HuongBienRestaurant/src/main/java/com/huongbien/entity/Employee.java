@@ -22,7 +22,8 @@ public class Employee {
     private double salary;
     private Employee manager;
 
-    public Employee() {}
+    public Employee() {
+    }
 
     public Employee(String employeeId, String name, String phoneNumber, String citizenIDNumber,
                     boolean gender, String address, LocalDate birthday, String email,

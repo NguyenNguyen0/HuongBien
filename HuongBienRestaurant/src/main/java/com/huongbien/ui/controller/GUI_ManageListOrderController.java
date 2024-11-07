@@ -1,23 +1,12 @@
 package com.huongbien.ui.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.huongbien.entity.Order;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ResourceBundle;
 
 public class GUI_ManageListOrderController implements Initializable {
-//    private final String path_paymentQueue = "src/main/resources/com/huongbien/temp/paymentQueue.json";
+    //    private final String path_paymentQueue = "src/main/resources/com/huongbien/temp/paymentQueue.json";
 //    @FXML
 //    private TableColumn<Map<String, Object>, Integer> col_PaymentQueueNumericalOrder;
 //    @FXML

@@ -1,9 +1,5 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Cuisine;
-import com.huongbien.database.Database;
-import com.huongbien.entity.Cuisine;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,18 +8,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -90,14 +80,13 @@ public class GUI_LookupController implements Initializable {
         });
     }
 
-    private void setCellValues(){
+    private void setCellValues() {
 
     }
 
 
-
-    private void setColumnsName (){
-        if (comboBox_choice.getSelectionModel().isSelected(0)){
+    private void setColumnsName() {
+        if (comboBox_choice.getSelectionModel().isSelected(0)) {
             tabViewLookUp.getColumns().clear();
             tabCol_1.setText("Mã đơn");
             tabCol_2.setText("Ngày đặt");
@@ -110,8 +99,7 @@ public class GUI_LookupController implements Initializable {
             tabViewLookUp.getColumns().add(tabCol_4);
             tabViewLookUp.getColumns().add(tabCol_5);
             autoResizeColumns(tabViewLookUp);
-        }
-        else if (comboBox_choice.getSelectionModel().isSelected(1)){
+        } else if (comboBox_choice.getSelectionModel().isSelected(1)) {
             tabViewLookUp.getColumns().clear();
             tabCol_1.setText("Mã HD");
             tabCol_2.setText("Ngày lập");
@@ -124,8 +112,7 @@ public class GUI_LookupController implements Initializable {
             tabViewLookUp.getColumns().add(tabCol_4);
             tabViewLookUp.getColumns().add(tabCol_5);
             autoResizeColumns(tabViewLookUp);
-        }
-        else if (comboBox_choice.getSelectionModel().isSelected(2)){
+        } else if (comboBox_choice.getSelectionModel().isSelected(2)) {
             tabViewLookUp.getColumns().clear();
             tabCol_1.setText("Mã món");
             tabCol_2.setText("Tên món");
@@ -138,8 +125,7 @@ public class GUI_LookupController implements Initializable {
             tabViewLookUp.getColumns().add(tabCol_4);
             tabViewLookUp.getColumns().add(tabCol_5);
             autoResizeColumns(tabViewLookUp);
-        }
-        else if (comboBox_choice.getSelectionModel().isSelected(3)){
+        } else if (comboBox_choice.getSelectionModel().isSelected(3)) {
             tabViewLookUp.getColumns().clear();
             tabCol_1.setText("Mã bàn");
             tabCol_2.setText("Tên bàn");
@@ -154,8 +140,7 @@ public class GUI_LookupController implements Initializable {
             tabViewLookUp.getColumns().add(tabCol_5);
             tabViewLookUp.getColumns().add(tabCol_6);
             autoResizeColumns(tabViewLookUp);
-        }
-        else if (comboBox_choice.getSelectionModel().isSelected(4)){
+        } else if (comboBox_choice.getSelectionModel().isSelected(4)) {
             tabViewLookUp.getColumns().clear();
             tabCol_1.setText("Mã KH");
             tabCol_2.setText("Họ tên");
@@ -174,8 +159,7 @@ public class GUI_LookupController implements Initializable {
             tabViewLookUp.getColumns().add(tabCol_7);
             tabViewLookUp.getColumns().add(tabCol_8);
             autoResizeColumns(tabViewLookUp);
-        }
-        else if (comboBox_choice.getSelectionModel().isSelected(5)){
+        } else if (comboBox_choice.getSelectionModel().isSelected(5)) {
             tabViewLookUp.getColumns().clear();
             tabCol_1.setText("Mã NV");
             tabCol_2.setText("Họ tên");
@@ -196,8 +180,7 @@ public class GUI_LookupController implements Initializable {
             tabViewLookUp.getColumns().add(tabCol_8);
             tabViewLookUp.getColumns().add(tabCol_9);
             autoResizeColumns(tabViewLookUp);
-        }
-        else if (comboBox_choice.getSelectionModel().isSelected(6)){
+        } else if (comboBox_choice.getSelectionModel().isSelected(6)) {
             tabViewLookUp.getColumns().clear();
             tabCol_1.setText("Mã KM");
             tabCol_2.setText("Tên KM");
@@ -238,41 +221,42 @@ public class GUI_LookupController implements Initializable {
     @FXML
     void getInvoiceInfo(MouseEvent mouseEvent) {
     }
+
     @FXML
     void comboBox_choose(ActionEvent actionEvent) {
         //Chọn Đơn đặt
-        if (comboBox_choice.getSelectionModel().isSelected(0)){
+        if (comboBox_choice.getSelectionModel().isSelected(0)) {
             setColumnsName();
             setCellValues();
         }
         //Chọn Hóa đơn
-        if (comboBox_choice.getSelectionModel().isSelected(1)){
+        if (comboBox_choice.getSelectionModel().isSelected(1)) {
             setColumnsName();
             setCellValues();
         }
         //Chọn món ăn
-        if (comboBox_choice.getSelectionModel().isSelected(2)){
+        if (comboBox_choice.getSelectionModel().isSelected(2)) {
             setColumnsName();
             setCellValues();
 
         }
         //Chọn Bàn ăn
-        if (comboBox_choice.getSelectionModel().isSelected(3)){
+        if (comboBox_choice.getSelectionModel().isSelected(3)) {
             setColumnsName();
             setCellValues();
         }
         //Chọn Khách hàng
-        if (comboBox_choice.getSelectionModel().isSelected(4)){
+        if (comboBox_choice.getSelectionModel().isSelected(4)) {
             setColumnsName();
             setCellValues();
         }
         //Chọn Nhân viên
-        if (comboBox_choice.getSelectionModel().isSelected(5)){
+        if (comboBox_choice.getSelectionModel().isSelected(5)) {
             setColumnsName();
             setCellValues();
         }
         //Chọn Khuyến mãi
-        if (comboBox_choice.getSelectionModel().isSelected(6)){
+        if (comboBox_choice.getSelectionModel().isSelected(6)) {
             setColumnsName();
             setCellValues();
         }

@@ -3,9 +3,8 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Cuisine;
-import com.huongbien.dao.DAO_Table;
-import com.huongbien.database.Database;
+import com.huongbien.dao.CuisineDAO;
+import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.entity.Table;
@@ -17,7 +16,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -26,10 +24,7 @@ import javafx.scene.layout.VBox;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -141,15 +136,9 @@ public class GUI_OrderCuisineController implements Initializable {
     }
 
     private List<Cuisine> dataCuisine() {
-        try {
-            DAO_Cuisine cuisine_DAO = new DAO_Cuisine(Database.getConnection());
-            List<Cuisine> ls = cuisine_DAO.get();
-            return ls;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        CuisineDAO cuisineDAO = CuisineDAO.getInstance();
+        List<Cuisine> ls = cuisineDAO.getAll();
+        return ls;
     }
 
     private List<OrderDetail> dataBill() throws FileNotFoundException {
@@ -177,8 +166,8 @@ public class GUI_OrderCuisineController implements Initializable {
         for (JsonElement element : jsonArrayTab) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
-            DAO_Table dao_table = new DAO_Table(Database.getConnection());
-            Table table = dao_table.get(id);
+            TableDAO dao_table = TableDAO.getInstance();
+            Table table = dao_table.getById(id);
             String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
 
             tabInfoBuilder.append(floorStr).append(" - ").append(table.getName()).append(", ");

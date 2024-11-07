@@ -9,7 +9,8 @@ public class TableType {
     private String name;
     private String description;
 
-    public TableType() {}
+    public TableType() {
+    }
 
     public TableType(String tableId, String name, String description) {
         this.setTableId(tableId);

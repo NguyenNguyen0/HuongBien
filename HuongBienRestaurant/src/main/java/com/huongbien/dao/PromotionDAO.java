@@ -7,14 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PromotionDao extends GenericDao<Promotion> {
-    private static final PromotionDao instance = new PromotionDao();
+public class PromotionDAO extends GenericDAO<Promotion> {
+    private static final PromotionDAO instance = new PromotionDAO();
 
-    private PromotionDao() {
+    private PromotionDAO() {
         super();
     }
 
-    public static PromotionDao getInstance() {
+    public static PromotionDAO getInstance() {
         return instance;
     }
 
@@ -37,13 +37,35 @@ public class PromotionDao extends GenericDao<Promotion> {
         return getMany("SELECT * FROM Promotion");
     }
 
+    public List<Promotion> getAllById(String id) {
+        return getMany("SELECT * FROM Promotion WHERE id LIKE ?", "%" + id + "%");
+    }
+
     public List<Promotion> getForCustomer(int customerMembershipLevel, double orderAmount) {
         String sql = "SELECT * FROM Promotion WHERE membershipLevel <= ? AND minimumOrderAmount <= ? AND status = N'Còn hiệu lực' ORDER BY discount DESC;";
         return getMany(sql, customerMembershipLevel, orderAmount);
     }
 
+    public List<Promotion> getExpired() {
+        return getMany("SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE N'Hết hiệu lực'");
+    }
+
     public Promotion getById(String id) {
         return getOne("SELECT * FROM Promotion WHERE id = ?", id);
+    }
+
+    public boolean updateInfo(Promotion promotion) {
+        return update("UPDATE promotion SET name = ?, startDate = ?, endDate = ?, discount = ?, description = ?, minimumOrderAmount = ?, membershipLevel = ?, status = ? WHERE id = ?",
+                promotion.getName(),
+                promotion.getStartDate(),
+                promotion.getEndDate(),
+                promotion.getDiscount(),
+                promotion.getDescription(),
+                promotion.getMinimumOrderAmount(),
+                promotion.getMembershipLevel(),
+                promotion.getStatus(),
+                promotion.getPromotionId()
+        );
     }
 
     @Override

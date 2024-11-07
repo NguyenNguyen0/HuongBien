@@ -4,33 +4,32 @@ import com.huongbien.entity.Order;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.entity.Table;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDao extends GenericDao<Order> {
-    private final CustomerDao customerDao;
-    private final EmployeeDao employeeDao;
-    private final PromotionDao promotionDao;
-    private final PaymentDao paymentDao;
-    private final OrderDetailDao orderDetailDao;
-    private final TableDao tableDao;
-    private static final OrderDao instance = new OrderDao();
+public class OrderDAO extends GenericDAO<Order> {
+    private final CustomerDAO customerDao;
+    private final EmployeeDAO employeeDao;
+    private final PromotionDAO promotionDao;
+    private final PaymentDAO paymentDao;
+    private final OrderDetailDAO orderDetailDao;
+    private final TableDAO tableDao;
+    private static final OrderDAO instance = new OrderDAO();
 
-    private OrderDao() {
+    private OrderDAO() {
         super();
-        this.customerDao = CustomerDao.getInstance();
-        this.employeeDao = EmployeeDao.getInstance();
-        this.promotionDao = PromotionDao.getInstance();
-        this.paymentDao = PaymentDao.getInstance();
-        this.orderDetailDao = OrderDetailDao.getInstance();
-        this.tableDao = TableDao.getInstance();
+        this.customerDao = CustomerDAO.getInstance();
+        this.employeeDao = EmployeeDAO.getInstance();
+        this.promotionDao = PromotionDAO.getInstance();
+        this.paymentDao = PaymentDAO.getInstance();
+        this.orderDetailDao = OrderDetailDAO.getInstance();
+        this.tableDao = TableDAO.getInstance();
     }
 
-    public static OrderDao getInstance() {
+    public static OrderDAO getInstance() {
         return instance;
     }
 
@@ -62,6 +61,20 @@ public class OrderDao extends GenericDao<Order> {
 
     public List<Order> getAllByEmployeeId(String employeeId) {
         return getMany("SELECT * FROM [Order] WHERE employeeId = ?", employeeId);
+    }
+
+    public List<Order> getWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM [Order] ORDER BY orderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", offset, limit);
+    }
+
+    public int getTotalOrderCount() {
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT COUNT(*) AS totalOrder FROM [Order]");
+            ResultSet rs = statement.executeQuery();
+            return rs.next() ? rs.getInt("totalOrder") : 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Order> getAll() {

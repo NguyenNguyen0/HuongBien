@@ -16,7 +16,8 @@ public class Promotion {
     private int membershipLevel;
     private String status;
 
-    public Promotion() {}
+    public Promotion() {
+    }
 
     public Promotion(String promotionId, String name, LocalDate startDate,
                      LocalDate endDate, double discount, String description,

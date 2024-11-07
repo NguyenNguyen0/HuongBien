@@ -5,14 +5,14 @@ import com.huongbien.entity.Payment;
 import java.sql.*;
 import java.util.List;
 
-public class PaymentDao extends GenericDao<Payment> {
-    private static final PaymentDao instance = new PaymentDao();
+public class PaymentDAO extends GenericDAO<Payment> {
+    private static final PaymentDAO instance = new PaymentDAO();
 
-    private PaymentDao() {
+    private PaymentDAO() {
         super();
     }
 
-    public static PaymentDao getInstance() {
+    public static PaymentDAO getInstance() {
         return instance;
     }
 

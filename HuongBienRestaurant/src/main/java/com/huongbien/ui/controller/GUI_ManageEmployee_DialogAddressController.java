@@ -47,6 +47,7 @@ public class GUI_ManageEmployee_DialogAddressController implements Initializable
             public String toString(String status) {
                 return status != null ? status : "";
             }
+
             @Override
             public String fromString(String s) {
                 return "";
@@ -70,6 +71,7 @@ public class GUI_ManageEmployee_DialogAddressController implements Initializable
             public String toString(String status) {
                 return status != null ? status : "";
             }
+
             @Override
             public String fromString(String s) {
                 return "";
@@ -87,6 +89,7 @@ public class GUI_ManageEmployee_DialogAddressController implements Initializable
             public String toString(String status) {
                 return status != null ? status : "";
             }
+
             @Override
             public String fromString(String s) {
                 return "";

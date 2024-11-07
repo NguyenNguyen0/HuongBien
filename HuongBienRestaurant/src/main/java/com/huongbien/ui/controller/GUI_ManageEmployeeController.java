@@ -1,7 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.EmployeeDao;
-import com.huongbien.database.Database;
+import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.entity.Employee;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -25,8 +24,6 @@ import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -131,25 +128,20 @@ public class GUI_ManageEmployeeController implements Initializable {
     public byte[] imageEmpByte = null;
 
     private void setCellValues() {
-        try {
-            Connection connection = Database.getConnection();
-            EmployeeDao employeeDao = EmployeeDao.getInstance();
-            List<Employee> employeeList = employeeDao.getAll();
-            ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
-            tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
-            tabCol_empName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            tabCol_empGender.setCellValueFactory(cellData -> {
-                boolean gender = cellData.getValue().isGender();
-                String genderText = gender ? "Nam" : "Nữ";
-                return new SimpleStringProperty(genderText);
-            });
-            tabCol_empPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-            tabCol_empPosition.setCellValueFactory(new PropertyValueFactory<>("position"));
-            tabCol_empStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-            tabViewEmp.setItems(listEmployee);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        EmployeeDAO employeeDao = EmployeeDAO.getInstance();
+        List<Employee> employeeList = employeeDao.getAll();
+        ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
+        tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
+        tabCol_empName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabCol_empGender.setCellValueFactory(cellData -> {
+            boolean gender = cellData.getValue().isGender();
+            String genderText = gender ? "Nam" : "Nữ";
+            return new SimpleStringProperty(genderText);
+        });
+        tabCol_empPhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        tabCol_empPosition.setCellValueFactory(new PropertyValueFactory<>("position"));
+        tabCol_empStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        tabViewEmp.setItems(listEmployee);
     }
 
     private void setValueCombobox() {
@@ -187,33 +179,28 @@ public class GUI_ManageEmployeeController implements Initializable {
             }
         });
         //Position
-        try {
-            Connection connection = Database.getConnection();
-            EmployeeDao employeeDao = EmployeeDao.getInstance();
-            List<Employee> employeeList = employeeDao.getAll();
-            List<Employee> distinctEmployees = new ArrayList<>(employeeList.stream()
-                    .filter(e -> e.getPosition() != null && !"Quản lý".equals(e.getPosition()))
-                    .collect(Collectors.toMap(Employee::getPosition, e -> e, (e1, e2) -> e1))
-                    .values());
-            ObservableList<Employee> employees = FXCollections.observableArrayList(distinctEmployees);
-            comboBox_empPostion.setItems(employees);
-            comboBox_empPostion.setConverter(new StringConverter<Employee>() {
-                @Override
-                public String toString(Employee employee) {
-                    return employee != null ? employee.getPosition() : "";
-                }
+        EmployeeDAO employeeDao = EmployeeDAO.getInstance();
+        List<Employee> employeeList = employeeDao.getAll();
+        List<Employee> distinctEmployees = new ArrayList<>(employeeList.stream()
+                .filter(e -> e.getPosition() != null && !"Quản lý".equals(e.getPosition()))
+                .collect(Collectors.toMap(Employee::getPosition, e -> e, (e1, e2) -> e1))
+                .values());
+        ObservableList<Employee> employees = FXCollections.observableArrayList(distinctEmployees);
+        comboBox_empPostion.setItems(employees);
+        comboBox_empPostion.setConverter(new StringConverter<Employee>() {
+            @Override
+            public String toString(Employee employee) {
+                return employee != null ? employee.getPosition() : "";
+            }
 
-                @Override
-                public Employee fromString(String string) {
-                    return comboBox_empPostion.getItems().stream()
-                            .filter(item -> item.getPosition().equals(string))
-                            .findFirst()
-                            .orElse(null);
-                }
-            });
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            @Override
+            public Employee fromString(String string) {
+                return comboBox_empPostion.getItems().stream()
+                        .filter(item -> item.getPosition().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
     }
 
     public GUI_ManageEmployee_DialogAddressController gui_manageEmployee_dialogAddressController;
@@ -233,40 +220,35 @@ public class GUI_ManageEmployeeController implements Initializable {
         Employee selectedItem = tabViewEmp.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getEmployeeId();
-            try {
-                Connection connection = Database.getConnection();
-                EmployeeDao employeeDao = EmployeeDao.getInstance();
-                Employee employee = employeeDao.getById(idSelect).getFirst();
-                txt_empName.setText(employee.getName());
-                txt_empCitizenID.setText(employee.getCitizenIDNumber());
-                txt_empPhone.setText(employee.getPhoneNumber());
-                txt_empEmail.setText(employee.getEmail());
-                txt_empEmail.setText(employee.getEmail());
+            EmployeeDAO employeeDao = EmployeeDAO.getInstance();
+            Employee employee = employeeDao.getById(idSelect).getFirst();
+            txt_empName.setText(employee.getName());
+            txt_empCitizenID.setText(employee.getCitizenIDNumber());
+            txt_empPhone.setText(employee.getPhoneNumber());
+            txt_empEmail.setText(employee.getEmail());
+            txt_empEmail.setText(employee.getEmail());
 
-                DecimalFormat moneyFormat = new DecimalFormat("#,###");
-                //--Format
-                String formattedHourlyPay = moneyFormat.format(employee.getHourlyPay());
-                txt_empHourPay.setText(formattedHourlyPay);
-                //---------------
-                String formattedSalary = moneyFormat.format(employee.getSalary());
-                txt_empSalary.setText(formattedSalary);
+            DecimalFormat moneyFormat = new DecimalFormat("#,###");
+            //--Format
+            String formattedHourlyPay = moneyFormat.format(employee.getHourlyPay());
+            txt_empHourPay.setText(formattedHourlyPay);
+            //---------------
+            String formattedSalary = moneyFormat.format(employee.getSalary());
+            txt_empSalary.setText(formattedSalary);
 
-                txt_empAddress.setText(employee.getAddress());
-                if (employee.getHireDate() != null) {
-                    date_empHireDate.setValue(employee.getHireDate());
-                }
-                comboBox_empStatus.getSelectionModel().select(employee.getStatus());
-                comboBox_empPostion.getSelectionModel().select(employee);
-                if (employee.getBirthday() != null) {
-                    date_empBirthDate.setValue(employee.getBirthday());
-                }
-                if (employee.isGender()) {
-                    genderGroup.selectToggle(radio_empMale);
-                } else {
-                    genderGroup.selectToggle(radio_empFemale);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            txt_empAddress.setText(employee.getAddress());
+            if (employee.getHireDate() != null) {
+                date_empHireDate.setValue(employee.getHireDate());
+            }
+            comboBox_empStatus.getSelectionModel().select(employee.getStatus());
+            comboBox_empPostion.getSelectionModel().select(employee);
+            if (employee.getBirthday() != null) {
+                date_empBirthDate.setValue(employee.getBirthday());
+            }
+            if (employee.isGender()) {
+                genderGroup.selectToggle(radio_empMale);
+            } else {
+                genderGroup.selectToggle(radio_empFemale);
             }
             btn_empFired.setVisible(true);
             btn_empClear.setVisible(true);
@@ -410,7 +392,7 @@ public class GUI_ManageEmployeeController implements Initializable {
                 String address = txt_empAddress.getText();
                 String status = comboBox_empStatus.getValue();
                 String position = comboBox_empPostion.getValue() != null ? comboBox_empPostion.getValue().getPosition() : null;
-                EmployeeDao employeeDao = EmployeeDao.getInstance();
+                EmployeeDAO employeeDao = EmployeeDAO.getInstance();
                 Employee employee = new Employee(
                         idSelect, name, phone, citizenId, gender, address,
                         birthDate, email, status, hireDate, position, workHours, hourPay, salary, null
@@ -442,7 +424,7 @@ public class GUI_ManageEmployeeController implements Initializable {
                     ? comboBox_empPostion.getValue().getPosition()
                     : comboBox_empPostion.getEditor().getText();
             double workHours = 0;
-            EmployeeDao employeeDao = EmployeeDao.getInstance();
+            EmployeeDAO employeeDao = EmployeeDAO.getInstance();
             Employee employee = new Employee(name, phone, citizenId,
                     gender, address, birthDate, email, position, workHours, hourPay, salary, null);
             if (employeeDao.add(employee)) {
@@ -480,7 +462,7 @@ public class GUI_ManageEmployeeController implements Initializable {
         Employee selectedItem = tabViewEmp.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getEmployeeId();
-            EmployeeDao employeeDao = EmployeeDao.getInstance();
+            EmployeeDAO employeeDao = EmployeeDAO.getInstance();
             if (employeeDao.updateStatus(idSelect, "Nghỉ việc")) {
                 System.out.println("Sa thải nhan vien thanh cong");
             } else {
@@ -499,7 +481,7 @@ public class GUI_ManageEmployeeController implements Initializable {
         String name = txt_searchEmpName.getText();
         String phone = txt_searchEmpPhone.getText();
         String empID = txt_searchEmpID.getText();
-        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeeDAO employeeDao = EmployeeDAO.getInstance();
         List<Employee> employeeList = employeeDao.getByCriteria(phone, name, empID);
         ObservableList<Employee> listEmployee = FXCollections.observableArrayList(employeeList);
         tabCol_empID.setCellValueFactory(new PropertyValueFactory<>("employeeId"));

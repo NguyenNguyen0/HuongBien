@@ -1,11 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.DAO_Customer;
-import com.huongbien.dao.DAO_Employee;
-import com.huongbien.dao.DAO_Promotion;
-import com.huongbien.database.Database;
-import com.huongbien.entity.Customer;
-import com.huongbien.entity.Employee;
+import com.huongbien.dao.PromotionDAO;
 import com.huongbien.entity.Promotion;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,16 +17,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class GUI_ManagePromotionController implements Initializable {
 
@@ -75,7 +66,7 @@ public class GUI_ManagePromotionController implements Initializable {
     @FXML
     private TableColumn<Promotion, Double> tabCol_discount;
     @FXML
-    private  TableColumn<Promotion, String> tabCol_memberShipLevel;
+    private TableColumn<Promotion, String> tabCol_memberShipLevel;
     private Utils utils;
 
     public void utilsButton_1() {
@@ -144,89 +135,76 @@ public class GUI_ManagePromotionController implements Initializable {
         });
     }
 
-    public void setCellValues(){
-        try {
-            Connection connection = Database.getConnection();
-            DAO_Promotion dao_promotion = new DAO_Promotion(connection);
-            List<Promotion> promotionList = dao_promotion.get();
-            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+    public void setCellValues() {
+        PromotionDAO promotionDAO = PromotionDAO.getInstance();
+        List<Promotion> promotionList = promotionDAO.getAll();
+        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
 
-            txt_promotionName.setEditable(true);
-            txtArea_promotionDescription.setEditable(true);
-            txt_minimumOrder.setEditable(true);
+        txt_promotionName.setEditable(true);
+        txtArea_promotionDescription.setEditable(true);
+        txt_minimumOrder.setEditable(true);
 
-            tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+        tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
 
-            tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
-            tabCol_discount.setCellFactory(col -> new TableCell<Promotion, Double>() {
-                @Override
-                public void updateItem(Double item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        // Chuyển đổi và định dạng giá trị thành phần trăm
-                        setText(String.format("%.0f%%", item * 100));
-                    }
+        tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+        tabCol_discount.setCellFactory(col -> new TableCell<Promotion, Double>() {
+            @Override
+            public void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    // Chuyển đổi và định dạng giá trị thành phần trăm
+                    setText(String.format("%.0f%%", item * 100));
                 }
-            });
+            }
+        });
 
-            tabCol_memberShipLevel.setCellValueFactory(cellData -> {
-                int memberShip = cellData.getValue().getMembershipLevel();
-                String memberShipLevel = utils.toStringMembershipLevel(memberShip);
-                return new SimpleStringProperty(memberShipLevel);
-            });
-            tabCol_endedDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-            tabCol_startedDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-            tabViewPromotion.setItems(listPromotion);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabCol_memberShipLevel.setCellValueFactory(cellData -> {
+            int memberShip = cellData.getValue().getMembershipLevel();
+            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
+            return new SimpleStringProperty(memberShipLevel);
+        });
+        tabCol_endedDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        tabCol_startedDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        tabViewPromotion.setItems(listPromotion);
     }
 
-    public void setCellValuesExpired(){
-        try {
-            Connection connection = Database.getConnection();
-            DAO_Promotion dao_promotion = new DAO_Promotion(connection);
-            List<Promotion> promotionList = dao_promotion.getExpired();
-            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+    public void setCellValuesExpired() {
+        PromotionDAO promotionDAO = PromotionDAO.getInstance();
+        List<Promotion> promotionList = promotionDAO.getExpired();
+        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
 
-            txt_promotionName.setEditable(true);
-            txtArea_promotionDescription.setEditable(true);
-            txt_minimumOrder.setEditable(true);
+        txt_promotionName.setEditable(true);
+        txtArea_promotionDescription.setEditable(true);
+        txt_minimumOrder.setEditable(true);
 
-            tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+        tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
 
-            tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
-            tabCol_discount.setCellFactory(col -> new TableCell<Promotion, Double>() {
-                @Override
-                public void updateItem(Double item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        // Chuyển đổi và định dạng giá trị thành phần trăm
-                        setText(String.format("%.0f%%", item * 100));
-                    }
+        tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+        tabCol_discount.setCellFactory(col -> new TableCell<Promotion, Double>() {
+            @Override
+            public void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    // Chuyển đổi và định dạng giá trị thành phần trăm
+                    setText(String.format("%.0f%%", item * 100));
                 }
-            });
+            }
+        });
 
-            tabCol_memberShipLevel.setCellValueFactory(cellData -> {
-                int memberShip = cellData.getValue().getMembershipLevel();
-                String memberShipLevel = utils.toStringMembershipLevel(memberShip);
-                return new SimpleStringProperty(memberShipLevel);
-            });
-            tabCol_endedDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-            tabCol_startedDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-            tabViewPromotion.setItems(listPromotion);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabCol_memberShipLevel.setCellValueFactory(cellData -> {
+            int memberShip = cellData.getValue().getMembershipLevel();
+            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
+            return new SimpleStringProperty(memberShipLevel);
+        });
+        tabCol_endedDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        tabCol_startedDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        tabViewPromotion.setItems(listPromotion);
     }
+
     public void enableInput() {
         comboBox_statusPromotion.setDisable(false);
         txt_minimumOrder.setDisable(false);
@@ -249,7 +227,7 @@ public class GUI_ManagePromotionController implements Initializable {
         date_started.setDisable(true);
     }
 
-    public void clear(){
+    public void clear() {
         comboBox_statusPromotion.getSelectionModel().clearSelection();
         txt_minimumOrder.clear();
         txt_promotionName.clear();
@@ -260,24 +238,23 @@ public class GUI_ManagePromotionController implements Initializable {
         comboBox_memberShipLevel.getSelectionModel().clearSelection();
         tabViewPromotion.getSelectionModel().clearSelection();
     }
-    public boolean checkData(){
-        if (txt_promotionName.getText().trim().isEmpty()){
+
+    public boolean checkData() {
+        if (txt_promotionName.getText().trim().isEmpty()) {
             return false;
         }
-        if (txt_discount.getText().trim().isEmpty()){
+        if (txt_discount.getText().trim().isEmpty()) {
             return false;
         }
-        if (date_ended.getValue() == null){
+        if (date_ended.getValue() == null) {
             return false;
         }
-        if (date_started.getValue() == null){
+        if (date_started.getValue() == null) {
             return false;
         }
-        if (date_ended.getValue().isBefore(date_started.getValue())){
-            return false;
-        }
-        return true;
+        return !date_ended.getValue().isBefore(date_started.getValue());
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         disableInput();
@@ -290,7 +267,7 @@ public class GUI_ManagePromotionController implements Initializable {
     void getPromotionInfo(MouseEvent mouseEvent) {
         utilsButton_1();
         Promotion selectedItem = tabViewPromotion.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
+        if (selectedItem != null) {
             enableInput();
             txt_promotionName.setText(selectedItem.getName());
             comboBox_statusPromotion.getSelectionModel().select(selectedItem.getStatus());
@@ -302,11 +279,11 @@ public class GUI_ManagePromotionController implements Initializable {
             txt_minimumOrder.setText(formattedPrice);
 
             txtArea_promotionDescription.setText(selectedItem.getDescription());
-            txt_discount.setText(discount+"%");
+            txt_discount.setText(discount + "%");
             date_ended.setValue(selectedItem.getEndDate());
             date_started.setValue(selectedItem.getStartDate());
             int memberShip = selectedItem.getMembershipLevel();
-            String memberShipLevel = utils.toStringMembershipLevel(memberShip);
+            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
             comboBox_memberShipLevel.getSelectionModel().select(memberShipLevel);
         }
     }
@@ -320,40 +297,32 @@ public class GUI_ManagePromotionController implements Initializable {
     @FXML
     void txt_promotionSearch(KeyEvent keyEvent) {
         String id = txt_promotionSearch.getText();
-        try {
-            Connection connection = Database.getConnection();
-            DAO_Promotion dao_promotion = new DAO_Promotion(connection);
-            List<Promotion> promotionList = dao_promotion.search(id);
-            ObservableList<Promotion> promotions = FXCollections.observableArrayList(promotionList);
+        PromotionDAO promotionDAO = PromotionDAO.getInstance();
+        List<Promotion> promotionList = promotionDAO.getAllById(id);
+        ObservableList<Promotion> promotions = FXCollections.observableArrayList(promotionList);
 
-            tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
-            tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
-            tabCol_memberShipLevel.setCellValueFactory(cellData -> {
-                int memberShip = cellData.getValue().getMembershipLevel();
-                String memberShipLevel = utils.toStringMembershipLevel(memberShip);
-                return new SimpleStringProperty(memberShipLevel);
-            });
-            tabCol_endedDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-            tabCol_startedDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-            tabViewPromotion.setItems(promotions);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabCol_promotionID.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+        tabCol_discount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+        tabCol_memberShipLevel.setCellValueFactory(cellData -> {
+            int memberShip = cellData.getValue().getMembershipLevel();
+            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
+            return new SimpleStringProperty(memberShipLevel);
+        });
+        tabCol_endedDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        tabCol_startedDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        tabViewPromotion.setItems(promotions);
     }
 
     @FXML
     void btn_promotionSub(ActionEvent actionEvent) {
-        if(btn_promotionSub.getText().equals("Thêm")){
+        if (btn_promotionSub.getText().equals("Thêm")) {
             txt_promotionName.requestFocus();
             utilsButton_2();
             clear();
             enableInput();
             comboBox_statusPromotion.getSelectionModel().select(0);
             comboBox_statusPromotion.setDisable(true);
-        }
-        else{
+        } else {
             disableInput();
             utilsButton_1();
         }
@@ -361,7 +330,7 @@ public class GUI_ManagePromotionController implements Initializable {
 
     @FXML
     void btn_promotionMain(ActionEvent actionEvent) {
-        if (btn_promotionMain.getText().equals("Sửa")){
+        if (btn_promotionMain.getText().equals("Sửa")) {
             enableInput();
             Promotion promotion = null;
             if (checkData()) {
@@ -369,44 +338,37 @@ public class GUI_ManagePromotionController implements Initializable {
                 String status = comboBox_statusPromotion.getSelectionModel().getSelectedItem();
 
                 String minimum = txt_minimumOrder.getText();
-                double minimumOrder = Double.parseDouble(minimum.replace(",",""));
+                double minimumOrder = Double.parseDouble(minimum.replace(",", ""));
 
                 String dis = txt_discount.getText();
-                dis = dis.replace("%","");
+                dis = dis.replace("%", "");
                 double discount = Double.parseDouble(dis) / 100;
 
                 String memberShip = comboBox_memberShipLevel.getSelectionModel().getSelectedItem();
-                int memberShipLevel = utils.toIntMembershipLevel(memberShip);
+                int memberShipLevel = Utils.toIntMembershipLevel(memberShip);
 
                 LocalDate start = date_started.getValue();
                 LocalDate end = date_ended.getValue();
                 String description = txtArea_promotionDescription.getText();
                 String id = tabViewPromotion.getSelectionModel().getSelectedItem().getPromotionId();
-                try {
-                    Connection connection = Database.getConnection();
-                    DAO_Promotion dao_promotion = new DAO_Promotion(connection);
-                    promotion = dao_promotion.get(id);
-                    promotion.setName(name);
-                    promotion.setDescription(description);
-                    promotion.setEndDate(end);
-                    promotion.setStartDate(start);
-                    promotion.setDiscount(discount);
-                    promotion.setStatus(status);
-                    promotion.setMinimumOrderAmount(minimumOrder);
-                    promotion.setMembershipLevel(memberShipLevel);
-                    System.out.println(promotion.getStatus());
-                    if (dao_promotion.update(promotion)) {
-                        tabViewPromotion.getItems().clear();
-                        setCellValues();
-                    }
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                PromotionDAO promotionDAO = PromotionDAO.getInstance();
+                promotion = promotionDAO.getById(id);
+                promotion.setName(name);
+                promotion.setDescription(description);
+                promotion.setEndDate(end);
+                promotion.setStartDate(start);
+                promotion.setDiscount(discount);
+                promotion.setStatus(status);
+                promotion.setMinimumOrderAmount(minimumOrder);
+                promotion.setMembershipLevel(memberShipLevel);
+                System.out.println(promotion.getStatus());
+                if (promotionDAO.updateInfo(promotion)) {
+                    tabViewPromotion.getItems().clear();
+                    setCellValues();
                 }
             }
             clear();
-        }
-        else if (btn_promotionMain.getText().equals("Thêm")){
+        } else if (btn_promotionMain.getText().equals("Thêm")) {
             Promotion promotion = null;
             if (checkData()) {
                 String name = txt_promotionName.getText();
@@ -415,27 +377,21 @@ public class GUI_ManagePromotionController implements Initializable {
                 double minimumOrder = Double.parseDouble(txt_minimumOrder.getText());
                 String dis = txt_discount.getText();
                 int i = dis.indexOf("%");
-                dis = dis.substring(0,i);
+                dis = dis.substring(0, i);
                 Double discount = Double.parseDouble(dis) / 100;
 
                 String memberShip = comboBox_memberShipLevel.getSelectionModel().getSelectedItem();
 
-                int memberShipLevel = utils.toIntMembershipLevel(memberShip);
+                int memberShipLevel = Utils.toIntMembershipLevel(memberShip);
 
                 LocalDate start = date_started.getValue();
                 LocalDate end = date_ended.getValue();
                 String description = txtArea_promotionDescription.getText();
-                try {
-                    Connection connection = Database.getConnection();
-                    DAO_Promotion dao_promotion = new DAO_Promotion(connection);
-                    promotion = new Promotion(name, start, end, discount, description, minimumOrder, memberShipLevel, "Còn hiệu lực");
-                    if (dao_promotion.add(promotion)) {
-                        tabViewPromotion.getItems().clear();
-                        setCellValues();
-                    }
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                PromotionDAO promotionDAO = PromotionDAO.getInstance();
+                promotion = new Promotion(name, start, end, discount, description, minimumOrder, memberShipLevel, "Còn hiệu lực");
+                if (promotionDAO.add(promotion)) {
+                    tabViewPromotion.getItems().clear();
+                    setCellValues();
                 }
             }
             clear();
@@ -448,17 +404,17 @@ public class GUI_ManagePromotionController implements Initializable {
     }
 
     public void comboBox_status(ActionEvent actionEvent) {
-        if(comboBox_status.getSelectionModel().isSelected(0)){
+        if (comboBox_status.getSelectionModel().isSelected(0)) {
             setCellValues();
             btn_promotionSub.setVisible(true);
-        }
-        else{
+        } else {
             utilsButton_1();
             btn_promotionSub.setVisible(false);
             setCellValuesExpired();
             clear();
         }
     }
+
     @FXML
     void txt_minimumOrderKeyReleased(KeyEvent keyEvent) {
         String input = txt_minimumOrder.getText().replace(".", "").replace(",", "");

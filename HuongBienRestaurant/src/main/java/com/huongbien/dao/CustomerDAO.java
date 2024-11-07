@@ -5,16 +5,19 @@ import com.huongbien.entity.Customer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDao extends GenericDao<Customer> {
-    private static final CustomerDao instance = new CustomerDao();
+import static com.huongbien.database.Database.connection;
 
-    private CustomerDao() {
+public class CustomerDAO extends GenericDAO<Customer> {
+    private static final CustomerDAO instance = new CustomerDAO();
+
+    private CustomerDAO() {
         super();
     }
 
-    public static CustomerDao getInstance() {
+    public static CustomerDAO getInstance() {
         return instance;
     }
 
@@ -44,6 +47,25 @@ public class CustomerDao extends GenericDao<Customer> {
 
     public List<Customer> getByName(String name) {
         return getMany("SELECT * FROM Customer WHERE name LIKE ?", "%" + name + "%");
+    }
+
+    //  TODO: update this method
+    public List<String> getPhoneNumber() {
+        List<String> customersPhone = new ArrayList<>();
+        String sql = "SELECT phoneNumber FROM Customer";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String phone = rs.getString("phoneNumber");
+                customersPhone.add(phone);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customersPhone;
     }
 
     public Customer getById(String customerId) {

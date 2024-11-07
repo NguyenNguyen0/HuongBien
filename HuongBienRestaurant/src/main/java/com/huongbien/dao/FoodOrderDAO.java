@@ -2,20 +2,21 @@ package com.huongbien.dao;
 
 import com.huongbien.entity.FoodOrder;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class FoodOrderDao extends GenericDao<FoodOrder> {
-    private final CuisineDao cuisineDao;
-    private static final FoodOrderDao instance = new FoodOrderDao();
+public class FoodOrderDAO extends GenericDAO<FoodOrder> {
+    private final CuisineDAO cuisineDao;
+    private static final FoodOrderDAO instance = new FoodOrderDAO();
 
-    private FoodOrderDao() {
+    private FoodOrderDAO() {
         super();
-        this.cuisineDao = CuisineDao.getInstance();
+        this.cuisineDao = CuisineDAO.getInstance();
     }
 
-    public static FoodOrderDao getInstance() {
+    public static FoodOrderDAO getInstance() {
         return instance;
     }
 

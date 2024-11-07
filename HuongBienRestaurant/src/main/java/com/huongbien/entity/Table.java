@@ -12,7 +12,8 @@ public class Table {
     private String status;
     private TableType tableType;
 
-    public Table() {}
+    public Table() {
+    }
 
     public Table(String id, String name, int floor, int seats, String status, TableType tableType) {
         setId(id);
@@ -98,6 +99,7 @@ public class Table {
     public TableType getTableType() {
         return tableType;
     }
+
     public String getTableTypeName() {
         return tableType != null ? tableType.getName() : "";
     }

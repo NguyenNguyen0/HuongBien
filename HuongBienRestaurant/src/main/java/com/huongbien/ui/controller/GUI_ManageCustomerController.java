@@ -4,11 +4,10 @@ package com.huongbien.ui.controller;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.huongbien.dao.DAO_Customer;
-import com.huongbien.database.Database;
+import com.huongbien.dao.CustomerDAO;
 import com.huongbien.entity.Customer;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,13 +22,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.net.StandardSocketOptions;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -106,35 +102,28 @@ public class GUI_ManageCustomerController implements Initializable {
     private Utils utils;
 
     private void setCellValues() {
-        try {
-            Connection connection = Database.getConnection();
-            DAO_Customer dao_customer = new DAO_Customer(connection);
-            List<Customer> customerList = dao_customer.get();
-            ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
+        CustomerDAO customerDAO = CustomerDAO.getInstance();
+        List<Customer> customerList = customerDAO.getAll();
+        ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
 
-            txt_customerAddress.setEditable(true);
-            txt_customerName.setEditable(true);
+        txt_customerAddress.setEditable(true);
+        txt_customerName.setEditable(true);
 
-            tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-            tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            tabCol_customerGender.setCellValueFactory(cellData -> {
-                boolean gender = cellData.getValue().isGender();
-                String genderText = gender ? "Nam" : "Nữ";
-                return new SimpleStringProperty(genderText);
-            });
-            tabCol_customerMemLevel.setCellValueFactory(cellData -> {
-                int memberShip = cellData.getValue().getMembershipLevel();
-                String memberShipLevel = utils.toStringMembershipLevel(memberShip);
-                return new SimpleStringProperty(memberShipLevel);
-            });
-            tabCol_customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-            tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
-            tabViewCustomer.setItems(listCustomer);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabCol_customerGender.setCellValueFactory(cellData -> {
+            boolean gender = cellData.getValue().isGender();
+            String genderText = gender ? "Nam" : "Nữ";
+            return new SimpleStringProperty(genderText);
+        });
+        tabCol_customerMemLevel.setCellValueFactory(cellData -> {
+            int memberShip = cellData.getValue().getMembershipLevel();
+            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
+            return new SimpleStringProperty(memberShipLevel);
+        });
+        tabCol_customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
+        tabViewCustomer.setItems(listCustomer);
     }
 
 
@@ -182,38 +171,26 @@ public class GUI_ManageCustomerController implements Initializable {
         btn_customerMain.setStyle("-fx-background-color:  #1D557E");
     }
 
-    public boolean checkData(){
-        if (txt_customerName.getText().trim().isEmpty()){
+    public boolean checkData() {
+        if (txt_customerName.getText().trim().isEmpty()) {
             return false;
         }
-        if (!txt_customerPhone.getText().trim().isEmpty()){
-            try {
-                Connection connection = Database.getConnection();
-                DAO_Customer dao_customer = new DAO_Customer(connection);
-                List<String> customerList = dao_customer.getPhoneNumber();
-                for (String phone : customerList) {
-                    if (txt_customerPhone.getText().equals(phone)){
-                        System.out.println("Số điện thoại đã được đăng kí thành viên");
-                        return false;
-                    }
+        if (!txt_customerPhone.getText().trim().isEmpty()) {
+            CustomerDAO customerDAO = CustomerDAO.getInstance();
+            List<String> customerList = customerDAO.getPhoneNumber();
+            for (String phone : customerList) {
+                if (txt_customerPhone.getText().equals(phone)) {
+                    System.out.println("Số điện thoại đã được đăng kí thành viên");
+                    return false;
                 }
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                Database.closeConnection();
             }
-        }
-        else {
+        } else {
             return false;
         }
-        if (date_customerBirthDate.getValue() == null){
+        if (date_customerBirthDate.getValue() == null) {
             return false;
         }
-        if (genderGroup.getSelectedToggle() == null){
-            return false;
-        }
-        return true;
+        return genderGroup.getSelectedToggle() != null;
     }
 
     @Override
@@ -235,11 +212,11 @@ public class GUI_ManageCustomerController implements Initializable {
 
     @FXML
     void btn_customerMain(ActionEvent event) {
-        if(btn_customerMain.getText().equals("Thêm")) {
+        if (btn_customerMain.getText().equals("Thêm")) {
             enableInput();
             Customer customer = null;
             boolean gender = true;
-            if(checkData()) {
+            if (checkData()) {
                 String name = txt_customerName.getText();
                 String phone = txt_customerPhone.getText();
                 String email = txt_customerEmail.getText();
@@ -249,21 +226,13 @@ public class GUI_ManageCustomerController implements Initializable {
                     gender = false;
                 }
                 customer = new Customer(name, address, gender, phone, email, birthday);
-                try {
-                    Connection connection = Database.getConnection();
-                    DAO_Customer dao_customer = new DAO_Customer(connection);
-                    if (dao_customer.add(customer)){
-                        setCellValues();
-                    }
-                    connection.close();
-                }
-                catch (SQLException e){
-                    throw new RuntimeException(e);
+                CustomerDAO customerDAO = CustomerDAO.getInstance();
+                if (customerDAO.add(customer)) {
+                    setCellValues();
                 }
             }
             clear();
-        }
-        else if (btn_customerMain.getText().equals("Sửa")){
+        } else if (btn_customerMain.getText().equals("Sửa")) {
             enableInput();
             Customer customer = null;
             boolean gender = true;
@@ -277,22 +246,16 @@ public class GUI_ManageCustomerController implements Initializable {
                     gender = false;
                 }
                 String id = tabViewCustomer.getSelectionModel().getSelectedItem().getCustomerId();
-                try {
-                    Connection connection = Database.getConnection();
-                    DAO_Customer dao_customer = new DAO_Customer(connection);
-                    customer = dao_customer.get(id);
-                    customer.setName(name);
-                    customer.setEmail(email);
-                    customer.setPhoneNumber(phone);
-                    customer.setAddress(address);
-                    customer.setGender(gender);
-                    if (dao_customer.update(customer)) {
-                        tabViewCustomer.getItems().clear(); 
-                        setCellValues();
-                    }
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                CustomerDAO customerDAO = CustomerDAO.getInstance();
+                customer = customerDAO.getById(id);
+                customer.setName(name);
+                customer.setEmail(email);
+                customer.setPhoneNumber(phone);
+                customer.setAddress(address);
+                customer.setGender(gender);
+                if (customerDAO.updateCustomerInfo(customer)) {
+                    tabViewCustomer.getItems().clear();
+                    setCellValues();
                 }
             }
             clear();
@@ -304,8 +267,7 @@ public class GUI_ManageCustomerController implements Initializable {
         if (btn_customerMain.getText().equals("Thêm")) {
             utilsButton_1();
             disableInput();
-        }
-        else {
+        } else {
             utilsButton_2();
             clear();
             enableInput();
@@ -316,21 +278,20 @@ public class GUI_ManageCustomerController implements Initializable {
     void getCustomerInfo(MouseEvent event) {
         utilsButton_1();
         Customer selectedItem = tabViewCustomer.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
+        if (selectedItem != null) {
             enableInput();
             txt_customerName.setText(selectedItem.getName());
             txt_customerPhone.setText(selectedItem.getPhoneNumber());
             txt_customerAddress.setText(selectedItem.getAddress());
             txt_customerEmail.setText(selectedItem.getEmail());
-            txt_customerAccumulatedPoints.setText(selectedItem.getAccumulatedPoints()+"");
-            txt_customerMembershipLevel.setText(utils.toStringMembershipLevel(selectedItem.getMembershipLevel()));
+            txt_customerAccumulatedPoints.setText(selectedItem.getAccumulatedPoints() + "");
+            txt_customerMembershipLevel.setText(Utils.toStringMembershipLevel(selectedItem.getMembershipLevel()));
             date_customerBirthDate.setValue(selectedItem.getBirthday());
             date_registrationDate.setValue(selectedItem.getRegistrationDate());
 
-            if(selectedItem.isGender()){
+            if (selectedItem.isGender()) {
                 genderGroup.selectToggle(radio_customerMale);
-            }
-            else {
+            } else {
                 genderGroup.selectToggle(radio_customerFemale);
             }
         }
@@ -340,33 +301,27 @@ public class GUI_ManageCustomerController implements Initializable {
     @FXML
     void txt_searchCustomerPhone(KeyEvent event) {
         String phone = txt_searchCustomerPhone.getText();
-        try {
-            Connection connection = Database.getConnection();
-            DAO_Customer dao_customer = new DAO_Customer(connection);
-            List<Customer> customerList = dao_customer.searchCustomerPhone(phone);
-            ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
+        CustomerDAO customerDAO = CustomerDAO.getInstance();
+        List<Customer> customerList = customerDAO.getByPhoneNumber(phone);
+        ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
 
-            tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-            tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            tabCol_customerGender.setCellValueFactory(cellData -> {
-                boolean gender = cellData.getValue().isGender();
-                String genderText = gender ? "Nam" : "Nữ";
-                return new SimpleStringProperty(genderText);
-            });
-            tabCol_customerMemLevel.setCellValueFactory(cellData -> {
-                int memberShip = cellData.getValue().getMembershipLevel();
-                String memberShipLevel = utils.toStringMembershipLevel(memberShip);
-                return new SimpleStringProperty(memberShipLevel);
-            });
-            tabCol_customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-            tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
-            tabViewCustomer.setItems(listCustomer);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
-        }
+        tabCol_customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        tabCol_customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tabCol_customerGender.setCellValueFactory(cellData -> {
+            boolean gender = cellData.getValue().isGender();
+            String genderText = gender ? "Nam" : "Nữ";
+            return new SimpleStringProperty(genderText);
+        });
+        tabCol_customerMemLevel.setCellValueFactory(cellData -> {
+            int memberShip = cellData.getValue().getMembershipLevel();
+            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
+            return new SimpleStringProperty(memberShipLevel);
+        });
+        tabCol_customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tabCol_customerAccumulatedPoint.setCellValueFactory(new PropertyValueFactory<>("accumulatedPoints"));
+        tabViewCustomer.setItems(listCustomer);
     }
+
     @FXML
     public void btn_customerQR(ActionEvent actionEvent) {
         Customer selectedCustomer = tabViewCustomer.getSelectionModel().getSelectedItem();

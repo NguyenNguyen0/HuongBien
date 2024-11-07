@@ -7,16 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class CuisineDao extends GenericDao<Cuisine> {
-    private static final CuisineDao instance = new CuisineDao();
-    private final CategoryDao categoryDao;
+public class CuisineDAO extends GenericDAO<Cuisine> {
+    private static final CuisineDAO instance = new CuisineDAO();
+    private final CategoryDAO categoryDao;
 
-    public CuisineDao() {
+    public CuisineDAO() {
         super();
-        this.categoryDao = CategoryDao.getInstance();
+        this.categoryDao = CategoryDAO.getInstance();
     }
 
-    public static CuisineDao getInstance() {
+    public static CuisineDAO getInstance() {
         return instance;
     }
 

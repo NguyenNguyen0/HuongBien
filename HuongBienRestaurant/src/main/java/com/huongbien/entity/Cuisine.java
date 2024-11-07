@@ -30,7 +30,8 @@ public class Cuisine {
         setCategory(category);
     }
 
-    public Cuisine() {}
+    public Cuisine() {
+    }
 
     public void setCuisineId(String cuisineId) {
         if (cuisineId == null) {

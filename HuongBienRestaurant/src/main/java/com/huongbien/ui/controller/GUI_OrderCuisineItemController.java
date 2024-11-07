@@ -2,32 +2,23 @@ package com.huongbien.ui.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Cuisine;
-import com.huongbien.database.Database;
+import com.huongbien.dao.CuisineDAO;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class GUI_OrderCuisineItemController implements Initializable {
@@ -77,7 +68,7 @@ public class GUI_OrderCuisineItemController implements Initializable {
     private void writeDataJSONtoFile(String cuisineID, String cuisineName, double cuisinePrice, String cuisineNote, int cuisineQuantity) {
         boolean idExists = false;
         JsonArray jsonArray;
-        
+
         try {
             jsonArray = Utils.readJsonFromFile(path);
         } catch (FileNotFoundException e) {
@@ -114,8 +105,8 @@ public class GUI_OrderCuisineItemController implements Initializable {
     @FXML
     void ml_getInfoCuisine(MouseEvent event) throws FileNotFoundException, SQLException {
         String id = lbl_cuisineID.getText();
-        DAO_Cuisine dao_cuisine = new DAO_Cuisine(Database.getConnection());
-        Cuisine cuisine = dao_cuisine.get(id);
+        CuisineDAO cuisineDAO = CuisineDAO.getInstance();
+        Cuisine cuisine = cuisineDAO.getById(id);
         writeDataJSONtoFile(cuisine.getCuisineId(), cuisine.getName(), cuisine.getPrice(), "", 1);
         gui_orderCuisineController.compoent_gridBill.getChildren().clear();
         gui_orderCuisineController.loadingBill();

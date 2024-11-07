@@ -10,24 +10,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationDao extends GenericDao<Reservation> {
-    private static final ReservationDao instance = new ReservationDao();
-    private final CustomerDao customerDao;
-    private final EmployeeDao employeeDao;
-    private final PaymentDao paymentDao;
-    private final TableDao tableDao;
-    private final FoodOrderDao foodOrderDao;
+public class ReservationDAO extends GenericDAO<Reservation> {
+    private static final ReservationDAO instance = new ReservationDAO();
+    private final CustomerDAO customerDao;
+    private final EmployeeDAO employeeDao;
+    private final PaymentDAO paymentDao;
+    private final TableDAO tableDao;
+    private final FoodOrderDAO foodOrderDao;
 
-    private ReservationDao() {
+    private ReservationDAO() {
         super();
-        customerDao = CustomerDao.getInstance();
-        employeeDao = EmployeeDao.getInstance();
-        paymentDao = PaymentDao.getInstance();
-        tableDao = TableDao.getInstance();
-        foodOrderDao = FoodOrderDao.getInstance();
+        customerDao = CustomerDAO.getInstance();
+        employeeDao = EmployeeDAO.getInstance();
+        paymentDao = PaymentDAO.getInstance();
+        tableDao = TableDAO.getInstance();
+        foodOrderDao = FoodOrderDAO.getInstance();
     }
 
-    public static ReservationDao getInstance() {
+    public static ReservationDAO getInstance() {
         return instance;
     }
 

@@ -33,7 +33,8 @@ public class Account {
         setAvatar(avatar);
     }
 
-    public Account() {}
+    public Account() {
+    }
 
     public void setUsername(String employeeId) {
         if (employeeId == null || employeeId.trim().isEmpty()) {

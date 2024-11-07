@@ -2,11 +2,8 @@ package com.huongbien.ui.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.huongbien.dao.DAO_Account;
-import com.huongbien.dao.DAO_Employee;
-import com.huongbien.database.Database;
+import com.huongbien.dao.AccountDAO;
 import com.huongbien.entity.Account;
-import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,8 +26,6 @@ import javafx.stage.StageStyle;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -117,7 +112,7 @@ public class GUI_LoginController implements Initializable {
             txt_pwdShow.setVisible(true);
             compoent_hide.setVisible(false);
             txt_pwdHide.setVisible(false);
-            txt_pwdShow.setText(txt_pwdHide.getText() + "");
+            txt_pwdShow.setText(txt_pwdHide.getText());
             status = true;
         } else {
             Image imgHide = new Image(getClass().getResourceAsStream("/com/huongbien/icon/mg_login/hiddenEye-16px.png"));
@@ -126,7 +121,7 @@ public class GUI_LoginController implements Initializable {
             txt_pwdShow.setVisible(false);
             compoent_hide.setVisible(true);
             txt_pwdHide.setVisible(true);
-            txt_pwdHide.setText(txt_pwdShow.getText() + "");
+            txt_pwdHide.setText(txt_pwdShow.getText());
             status = false;
         }
     }
@@ -143,65 +138,59 @@ public class GUI_LoginController implements Initializable {
 
     @FXML
     void handleLogin(ActionEvent event) {
-        try {
-            DAO_Account accountDao = new DAO_Account(Database.getConnection());
+        AccountDAO accountDAO = AccountDAO.getInstance();
 
-            String username = txt_empID.getText();
-            String password = getCurrentPwd();
-            String passwordHash = Utils.hashPassword(password);
+        String username = txt_empID.getText();
+        String password = getCurrentPwd();
+        String passwordHash = Utils.hashPassword(password);
 
-            Account account = accountDao.get(username);
+        Account account = accountDAO.getByUsername(username);
 
-            if (account == null) {
-                text_message.setText("Tài khoản không tồn tại.");
-                text_message.setStyle("-fx-text-fill: red;");
-                return;
+        if (account == null) {
+            text_message.setText("Tài khoản không tồn tại.");
+            text_message.setStyle("-fx-text-fill: red;");
+            return;
+        }
+        if (username.equals(account.getUsername().trim()) && passwordHash.equals(account.getHashcode().trim())) {
+            text_message.setText("Đăng nhập thành công");
+            text_message.setStyle("-fx-text-fill: green;");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Main.fxml"));
+                Parent root = loader.load();
+                //
+                Scene mainScene = new Scene(root);
+                //
+                Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                loginStage.close();
+                //
+                Stage mainStage = new Stage();
+                mainStage.setScene(mainScene);
+                mainStage.setMaximized(true);
+                mainStage.setTitle("Dashboard - Huong Bien Restaurant");
+                mainStage.initStyle(StageStyle.UNDECORATED);
+                mainStage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            if (username.equals(account.getUsername().trim()) && passwordHash.equals(account.getHashcode().trim())) {
-                text_message.setText("Đăng nhập thành công");
-                text_message.setStyle("-fx-text-fill: green;");
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/GUI_Main.fxml"));
-                    Parent root = loader.load();
-                    //
-                    Scene mainScene = new Scene(root);
-                    //
-                    Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    loginStage.close();
-                    //
-                    Stage mainStage = new Stage();
-                    mainStage.setScene(mainScene);
-                    mainStage.setMaximized(true);
-                    mainStage.setTitle("Dashboard - Huong Bien Restaurant");
-                    mainStage.initStyle(StageStyle.UNDECORATED);
-                    mainStage.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //write JSON user current
-                JsonArray jsonArray;
-                try {
-                    jsonArray = Utils.readJsonFromFile(path_user);
-                } catch (FileNotFoundException e) {
-                    jsonArray = new JsonArray();
-                }
-                if (!jsonArray.isEmpty()) {
-                    jsonArray.remove(0);
-                }
-                //WRITE JSON
-                String id = txt_empID.getText();
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("Employee ID", id);
-                jsonArray.add(jsonObject);
-                Utils.writeJsonToFile(jsonArray, path_user);
-            } else {
-                text_message.setText("Sai mã nhân viên và mật khẩu đăng nhập");
-                text_message.setStyle("-fx-text-fill: red;");
+            //write JSON user current
+            JsonArray jsonArray;
+            try {
+                jsonArray = Utils.readJsonFromFile(path_user);
+            } catch (FileNotFoundException e) {
+                jsonArray = new JsonArray();
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            Database.closeConnection();
+            if (!jsonArray.isEmpty()) {
+                jsonArray.remove(0);
+            }
+            //WRITE JSON
+            String id = txt_empID.getText();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("Employee ID", id);
+            jsonArray.add(jsonObject);
+            Utils.writeJsonToFile(jsonArray, path_user);
+        } else {
+            text_message.setText("Sai mã nhân viên và mật khẩu đăng nhập");
+            text_message.setStyle("-fx-text-fill: red;");
         }
     }
 
