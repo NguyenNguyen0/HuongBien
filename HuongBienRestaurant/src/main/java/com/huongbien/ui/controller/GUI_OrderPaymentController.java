@@ -272,7 +272,8 @@ public class GUI_OrderPaymentController implements Initializable {
     void btn_searchCustomer(MouseEvent event) throws SQLException, FileNotFoundException {
         String inputPhone = txt_searchCustomer.getText().trim();
         CustomerDAO customerDAO = CustomerDAO.getInstance();
-        Customer customer = customerDAO.getByPhoneNumber(inputPhone).getFirst();
+        List<Customer> customers = customerDAO.getByPhoneNumber(inputPhone);
+        Customer customer = customers.isEmpty() ? null : customers.get(0);
         if (customer != null) {
             txt_idCustomer.setText(customer.getCustomerId());
             txt_nameCustomer.setText(customer.getName());
