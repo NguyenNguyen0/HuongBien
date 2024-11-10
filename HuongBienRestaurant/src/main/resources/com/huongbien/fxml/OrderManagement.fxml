@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderManagementController">
+   <right>
+      <VBox prefHeight="659.0" prefWidth="750.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="259.0" prefWidth="750.0">
+               <children>
+                  <HBox prefHeight="143.0" prefWidth="750.0" />
+                  <HBox prefHeight="102.0" prefWidth="750.0">
+                     <children>
+                        <VBox prefHeight="133.0" prefWidth="772.0">
+                           <children>
+                              <Label text="Mã hóa đơn">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderIdField" editable="false" minHeight="50.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="40.0" right="40.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="228.0" prefWidth="750.0">
+               <children>
+                  <HBox prefHeight="128.0" prefWidth="690.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="416.0">
+                           <children>
+                              <Label text="Ngày lập hóa đơn">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="orderDateDatePicker" editable="false" prefHeight="52.0" prefWidth="298.0">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </DatePicker>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="100.0" prefWidth="453.0">
+                           <children>
+                              <Label text="Giảm giá">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderDiscountField" editable="false" minHeight="50.0" prefHeight="50.0" prefWidth="288.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="20.0" right="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox prefHeight="125.0" prefWidth="690.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="263.0">
+                           <children>
+                              <Label text="Tiền đặt cọc">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderDispensedAmount" editable="false" minHeight="50.0" prefHeight="50.0" prefWidth="261.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox prefHeight="100.0" prefWidth="155.0">
+                           <children>
+                              <Label text="Thuế">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderVATField" editable="false" minHeight="50.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="278.0">
+                           <children>
+                              <Label text="Tổng tiền">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderTotalAmountField" editable="false" minHeight="50.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="100.0" prefWidth="350.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="356.0">
+                           <children>
+                              <Label text="Khách hàng">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderCustomerField" editable="false" minHeight="50.0" prefHeight="54.0" prefWidth="271.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="55.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="100.0" prefWidth="320.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Nhân viên thực hiện">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderEmployeeIdField" editable="false" minHeight="50.0" prefHeight="54.0" prefWidth="286.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="25.0" />
+                           </VBox.margin>
+                        </VBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="123.0" prefWidth="750.0">
+               <children>
+                  <VBox prefHeight="211.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox prefHeight="110.0" prefWidth="322.0">
+                           <children>
+                              <Label text="Mã giảm giá">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderPromotionIdField" editable="false" minHeight="50.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="40.0" right="40.0" />
+                           </VBox.margin>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="211.0" prefWidth="750.0">
+                     <children>
+                        <VBox prefHeight="110.0" prefWidth="670.0">
+                           <children>
+                              <Label text="Mã thanh toán">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="orderPaymentIdField" editable="false" minHeight="50.0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font></TextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="40.0" right="40.0" />
+                           </VBox.margin>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox prefHeight="259.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox prefHeight="185.0" prefWidth="670.0">
+                     <children>
+                        <Label text="Ghi chú">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextArea fx:id="orderNoteTextArea" editable="false" prefHeight="152.0" prefWidth="670.0" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </TextArea>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="40.0" right="40.0" />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </right>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="150.0" prefWidth="925.0" style="-fx-background-color: white;">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="1001.0">
+                     <children>
+                        <TextField fx:id="orderSearchField" prefHeight="67.0" prefWidth="616.0" promptText="Tìm kiếm hóa đơn nhanh bàng mã HD hoặc mã KH" styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <ImageView fx:id="clearSearchButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onClearSearchClickedClicked" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/all/close-64px.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="-40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
+                     <children>
+                        <Button fx:id="searchOrderButton" mnemonicParsing="false" onMouseClicked="#onSearchOrderButtonClicked" prefHeight="61.0" prefWidth="158.0" style="-fx-background-color: #000;" text="Tìm kiếm" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                        </Button>
+                     </children></HBox>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="649.0" prefWidth="925.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="orderTable" onMouseClicked="#onOrderTableClicked" prefHeight="701.0" prefWidth="905.0" HBox.hgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="orderIdColumn" editable="false" prefWidth="220.0" text="Mã HD">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic></TableColumn>
+                      <TableColumn fx:id="orderCreatedDateColumn" editable="false" prefWidth="183.0" text="Ngày lập HD" />
+                        <TableColumn fx:id="orderTotalAmountColumn" editable="false" prefWidth="150.0" text="Tổng tiền" />
+                        <TableColumn fx:id="orderEmployeeIdColumn" prefWidth="181.0" text="Nhân viên" />
+                        <TableColumn fx:id="customerIdColumn" prefWidth="159.0" text="Khách hàng" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </TableView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="94.0" prefWidth="925.0" style="-fx-background-color: white;">
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+               <children>
+                  <Button fx:id="firstPageButton" mnemonicParsing="false" onMouseClicked="#onFirstPageButtonClicked" text="&lt;&lt;">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+                  <Button fx:id="prevPageButton" mnemonicParsing="false" onMouseClicked="#onPrevPageButtonClicked" text="&lt;">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="pageIndexLabel" text="1/10">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="nextPageButton" mnemonicParsing="false" onMouseClicked="#onNextPageButtonClicked" text="&gt;">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="lastPageButton" mnemonicParsing="false" onMouseClicked="#onLastPageButtonClicked" text="&gt;&gt;">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
