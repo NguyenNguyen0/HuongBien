@@ -40,9 +40,11 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         reservation.setReservationDate(resultSet.getDate("reservationDate").toLocalDate());
         reservation.setReservationTime(resultSet.getTime("reservationTime").toLocalTime());
         reservation.setReceiveDate(resultSet.getDate("receiveDate").toLocalDate());
+        reservation.setReceiveTime(resultSet.getTime("receiveTime").toLocalTime());
         reservation.setStatus(resultSet.getString("status"));
         reservation.setDeposit(resultSet.getDouble("deposit"));
         reservation.setRefundDeposit(resultSet.getDouble("refundDeposit"));
+        reservation.setNote(resultSet.getString("note"));
         reservation.setCustomer(customerDao.getById(resultSet.getString("customerId")));
         reservation.setEmployee(employeeDao.getById(resultSet.getString("employeeId")).getFirst());
         reservation.setPayment(paymentDao.getById(resultSet.getString("paymentId")));

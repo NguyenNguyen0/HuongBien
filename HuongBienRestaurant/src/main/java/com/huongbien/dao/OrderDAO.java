@@ -38,6 +38,7 @@ public class OrderDAO extends GenericDAO<Order> {
         Order order = new Order();
         order.setOrderId(resultSet.getString("id"));
         order.setOrderDate(resultSet.getDate("orderDate").toLocalDate());
+        order.setOrderTime(resultSet.getTime("orderTime").toLocalTime());
         order.setNotes(resultSet.getString("notes"));
         order.setPaymentAmount(resultSet.getDouble("paymentAmount"));
         order.setDispensedAmount(resultSet.getDouble("dispensedAmount"));

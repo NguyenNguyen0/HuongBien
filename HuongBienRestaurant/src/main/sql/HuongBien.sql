@@ -132,9 +132,11 @@ CREATE TABLE Reservation (
     reservationDate DATE NOT NULL,
     reservationTime TIME NOT NULL,
     receiveDate DATE NOT NULL,
+    receiveTime TIME NOT NULL,
     status NVARCHAR(50) NOT NULL,
     deposit REAL DEFAULT 0 NOT NULL,
     refundDeposit REAL DEFAULT 0 NOT NULL,
+    note NVARCHAR(100),
 
     employeeId CHAR(11) NOT NULL,
     customerId CHAR(11) NOT NULL,
@@ -163,6 +165,7 @@ GO
 CREATE TABLE [Order] (
     id CHAR(17) PRIMARY KEY,
     orderDate DATE NOT NULL,
+    orderTime TIME NOT NULL,
     notes NVARCHAR(100) NOT NULL,
     vatTax REAL DEFAULT 0.1 NOT NULL,
     paymentAmount REAL NOT NULL,

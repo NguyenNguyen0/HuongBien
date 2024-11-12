@@ -10,6 +10,7 @@ import java.util.Objects;
 public class Order {
     private String orderId;
     private LocalDate orderDate;
+    private LocalTime orderTime;
     private String notes;
     private final double vatTax = 0.1;
     private double paymentAmount;
@@ -26,12 +27,13 @@ public class Order {
     public Order() {
     }
 
-    public Order(String orderId, LocalDate orderDate, String notes, double paymentAmount,
+    public Order(String orderId, LocalDate orderDate, LocalTime localTime, String notes, double paymentAmount,
                  double dispensedAmount, double totalAmount, double discount,
                  ArrayList<OrderDetail> orderDetails, Promotion promotion, Payment payment,
                  ArrayList<Table> tables, Customer customer, Employee employee) {
         setOrderId(orderId);
         setOrderDate(orderDate);
+        setOrderTime(localTime);
         setNotes(notes);
         setPaymentAmount(paymentAmount);
         setDispensedAmount(dispensedAmount);
@@ -49,6 +51,7 @@ public class Order {
                  ArrayList<OrderDetail> orderDetails, ArrayList<Table> tables,
                  Payment payment, Promotion promotion, String notes) {
         setOrderDate(LocalDate.now());
+        setOrderTime(LocalTime.now());
         setOrderId(null);
         setTotalAmount(getTotalAmount(orderDetails, promotion));
         setPaymentAmount(payment.getAmount());
@@ -98,6 +101,10 @@ public class Order {
             throw new IllegalArgumentException("Order date cannot be null");
         }
         this.orderDate = orderDate;
+    }
+
+    public void setOrderTime(LocalTime orderTime) {
+        this.orderTime = orderTime;
     }
 
     public void setNotes(String notes) {
@@ -179,6 +186,10 @@ public class Order {
         return orderDate;
     }
 
+    public LocalTime getOrderTime() {
+        return orderTime;
+    }
+
     public String getNotes() {
         return notes;
     }
@@ -232,6 +243,7 @@ public class Order {
         return "Order{" +
                 "orderId='" + orderId + '\'' +
                 ", orderDate=" + orderDate +
+                ", orderTime=" + orderTime +
                 ", notes='" + notes + '\'' +
                 ", vatTax=" + vatTax +
                 ", paymentAmount=" + paymentAmount +

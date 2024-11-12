@@ -14,9 +14,11 @@ public class Reservation {
     private LocalDate reservationDate;
     private LocalTime reservationTime;
     private LocalDate receiveDate;
+    private LocalTime receiveTime;
     private String status;
     private double deposit;
     private double refundDeposit;
+    private String note;
     private Payment payment;
     private Employee employee;
     private ArrayList<Table> tables;
@@ -27,18 +29,20 @@ public class Reservation {
     }
 
     public Reservation(String reservationId, String partyType, int partySize, LocalDate reservationDate,
-                       LocalTime reservationTime, LocalDate receiveDate, String status, double deposit,
-                       double refundDeposit, Payment payment, Employee employee, ArrayList<Table> tables,
-                       Customer customer, ArrayList<FoodOrder> foodOrders) {
+                       LocalTime reservationTime, LocalDate receiveDate, LocalTime receiveTime, String status,
+                       String note, double deposit, double refundDeposit, Payment payment, Employee employee,
+                       ArrayList<Table> tables, Customer customer, ArrayList<FoodOrder> foodOrders) {
         setReservationId(reservationId);
         setPartyType(partyType);
         setPartySize(partySize);
         setReservationDate(reservationDate);
         setReservationTime(reservationTime);
         setReceiveDate(receiveDate);
+        setReceiveTime(receiveTime);
         setStatus(status);
         setDeposit(deposit);
         setRefundDeposit(refundDeposit);
+        setNote(note);
         setPayment(payment);
         setEmployee(employee);
         setTables(tables);
@@ -48,8 +52,9 @@ public class Reservation {
 
     //    constructor tạo mới 1 đơn đạt bàn
     public Reservation(String partyType, int partySize, LocalDate receiveDate,
-                       Payment payment, Employee employee, ArrayList<Table> tables,
-                       Customer customer, ArrayList<FoodOrder> foodOrders) {
+                       String note, Payment payment, Employee employee,
+                       ArrayList<Table> tables, Customer customer,
+                       ArrayList<FoodOrder> foodOrders) {
         setPartyType(partyType);
         setPartySize(partySize);
         setReceiveDate(receiveDate);
@@ -58,6 +63,7 @@ public class Reservation {
         setTables(tables);
         setCustomer(customer);
         setFoodOrders(foodOrders);
+        setNote(note);
 
         setReservationDate(LocalDate.now());
         setReservationTime(LocalTime.now());
@@ -122,6 +128,10 @@ public class Reservation {
         this.receiveDate = receiveDate;
     }
 
+    public void setReceiveTime(LocalTime receiveTime) {
+        this.receiveTime = receiveTime;
+    }
+
     public void setStatus(String status) {
         if (status == null || status.trim().isEmpty()) {
             throw new IllegalArgumentException("Status cannot be empty");
@@ -141,6 +151,10 @@ public class Reservation {
             throw new IllegalArgumentException("Refund deposit must be greater than or equal to 0");
         }
         this.refundDeposit = refundDeposit;
+    }
+
+    public void setNote (String note) {
+        this.note = note;
     }
 
     public void setPayment(Payment payment) {
@@ -190,6 +204,10 @@ public class Reservation {
         return receiveDate;
     }
 
+    public LocalTime getReceiveTime() {
+        return receiveTime;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -200,6 +218,10 @@ public class Reservation {
 
     public double getRefundDeposit() {
         return refundDeposit;
+    }
+
+    public String getNote() {
+        return note;
     }
 
     public Payment getPayment() {
@@ -231,13 +253,16 @@ public class Reservation {
                 ", reservationDate=" + reservationDate +
                 ", reservationTime=" + reservationTime +
                 ", receiveDate=" + receiveDate +
+                ", receiveTime=" + receiveTime +
                 ", status='" + status + '\'' +
                 ", deposit=" + deposit +
                 ", refundDeposit=" + refundDeposit +
+                ", note='" + note + '\'' +
                 ", payment=" + payment +
                 ", employee=" + employee +
                 ", tables=" + tables +
                 ", customer=" + customer +
+                ", foodOrders=" + foodOrders +
                 '}';
     }
 
