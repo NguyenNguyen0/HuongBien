@@ -13,14 +13,14 @@ public class Account {
     private Employee employeeInfo;
     private byte[] avatar;
 
-    public Account(String username, String password, String role, String email, Employee employeeInfo, byte[] avatar) {
+    public Account(String username, String password, String role, String email, Employee employeeInfo) {
         setUsername(username);
         setHashcode(Utils.hashPassword(password));
         setRole(role);
         setIsActive(true);
         setEmployeeInfo(employeeInfo);
         setEmail(email);
-        setAvatar(avatar);
+        setAvatar(null);
     }
 
     public Account(String username, String hashcode, String role, String email, boolean isActive, Employee employeeInfo, byte[] avatar) {
@@ -75,6 +75,10 @@ public class Account {
     }
 
     public void setAvatar(byte[] avatar) {
+        if (avatar == null) {
+            this.avatar = new byte[0];
+            return;
+        }
         this.avatar = avatar;
     }
 
