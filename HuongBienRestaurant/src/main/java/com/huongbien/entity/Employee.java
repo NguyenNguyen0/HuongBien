@@ -25,10 +25,10 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String employeeId, String name, String address, boolean gender, LocalDate birthday,
-                String citizenIDNumber, String status, String phoneNumber, String email,
-                LocalDate hireDate, String position, double workHours, double hourlyPay,
-                double salary, Employee manager) {
+    public Employee(String employeeId, String name, String phoneNumber, String citizenIDNumber,
+                    boolean gender, String address, LocalDate birthday, String email,
+                    String status, LocalDate hireDate, String position, double workHours,
+                    double hourlyPay, double salary, Employee manager) {
         setEmployeeId(employeeId);
         setName(name);
         setAddress(address);
@@ -46,8 +46,8 @@ public class Employee {
         setManager(manager);
     }
 
-    public Employee(String name, String address, boolean gender,
-                    LocalDate birthday, String citizenIDNumber, String phoneNumber, String email,
+    public Employee(String name, String phoneNumber, String citizenIDNumber,
+                    boolean gender, String address, LocalDate birthday, String email,
                     String position, double workHours, double hourlyPay, double salary,
                     Employee manager) {
         setEmployeeId(null);
