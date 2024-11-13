@@ -8,13 +8,13 @@ import java.util.Objects;
 public class Employee {
     private String employeeId;
     private String name;
-    private String phoneNumber;
-    private String citizenIDNumber;
-    private boolean gender;
     private String address;
+    private boolean gender;
     private LocalDate birthday;
-    private String email;
+    private String citizenIDNumber;
     private String status;
+    private String phoneNumber;
+    private String email;
     private LocalDate hireDate;
     private String position;
     private double workHours;
@@ -25,19 +25,19 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String employeeId, String name, String phoneNumber, String citizenIDNumber,
-                    boolean gender, String address, LocalDate birthday, String email,
-                    String status, LocalDate hireDate, String position, double workHours,
-                    double hourlyPay, double salary, Employee manager) {
+    public Employee(String employeeId, String name, String address, boolean gender, LocalDate birthday,
+                String citizenIDNumber, String status, String phoneNumber, String email,
+                LocalDate hireDate, String position, double workHours, double hourlyPay,
+                double salary, Employee manager) {
         setEmployeeId(employeeId);
         setName(name);
-        setPhoneNumber(phoneNumber);
-        setCitizenIDNumber(citizenIDNumber);
-        setGender(gender);
         setAddress(address);
+        setGender(gender);
         setBirthday(birthday);
-        setEmail(email);
+        setCitizenIDNumber(citizenIDNumber);
         setStatus(status);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
         setHireDate(hireDate);
         setPosition(position);
         setWorkHours(workHours);
@@ -46,8 +46,8 @@ public class Employee {
         setManager(manager);
     }
 
-    public Employee(String name, String phoneNumber, String citizenIDNumber,
-                    boolean gender, String address, LocalDate birthday, String email,
+    public Employee(String name, String address, boolean gender,
+                    LocalDate birthday, String citizenIDNumber, String phoneNumber, String email,
                     String position, double workHours, double hourlyPay, double salary,
                     Employee manager) {
         setEmployeeId(null);
@@ -238,19 +238,19 @@ public class Employee {
         return "Employee{" +
                 "employeeId='" + employeeId + '\'' +
                 ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", citizenIDNumber='" + citizenIDNumber + '\'' +
-                ", gender=" + gender +
                 ", address='" + address + '\'' +
+                ", gender=" + gender +
                 ", birthday=" + birthday +
-                ", email='" + email + '\'' +
+                ", citizenIDNumber='" + citizenIDNumber + '\'' +
                 ", status='" + status + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
                 ", hireDate=" + hireDate +
                 ", position='" + position + '\'' +
                 ", workHours=" + workHours +
                 ", hourlyPay=" + hourlyPay +
                 ", salary=" + salary +
-                ", manager=" + (manager != null ? manager.getName() : "Không có quản lý") +
+                ", manager=" + manager +
                 '}';
     }
 

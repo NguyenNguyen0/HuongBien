@@ -7,15 +7,15 @@ import java.util.Objects;
 public class Table {
     private String id;
     private String name;
-    private int floor;
     private int seats;
+    private int floor;
     private String status;
     private TableType tableType;
 
     public Table() {
     }
 
-    public Table(String id, String name, int floor, int seats, String status, TableType tableType) {
+    public Table(String id, String name, int seats, int floor, String status, TableType tableType) {
         setId(id);
         setName(name);
         setFloor(floor);
@@ -24,7 +24,7 @@ public class Table {
         setTableType(tableType);
     }
 
-    public Table(String name, int floor, int seats, String status, TableType tableType) {
+    public Table(String name, int seats, int floor, String status, TableType tableType) {
         setId(null);
         setName(name);
         setFloor(floor);
@@ -109,8 +109,8 @@ public class Table {
         return "Table{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", floor=" + floor +
                 ", seats=" + seats +
+                ", floor=" + floor +
                 ", status='" + status + '\'' +
                 ", tableType=" + tableType +
                 '}';

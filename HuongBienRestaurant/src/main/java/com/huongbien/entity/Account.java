@@ -2,6 +2,7 @@ package com.huongbien.entity;
 
 import com.huongbien.utils.Utils;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Account {
@@ -9,28 +10,28 @@ public class Account {
     private String hashcode;
     private String role;
     private String email;
+    private byte[] avatar;
     private boolean isActive;
     private Employee employeeInfo;
-    private byte[] avatar;
 
     public Account(String username, String password, String role, String email, Employee employeeInfo) {
         setUsername(username);
         setHashcode(Utils.hashPassword(password));
+        setEmail(email);
         setRole(role);
         setIsActive(true);
-        setEmployeeInfo(employeeInfo);
-        setEmail(email);
         setAvatar(null);
+        setEmployeeInfo(employeeInfo);
     }
 
     public Account(String username, String hashcode, String role, String email, boolean isActive, Employee employeeInfo, byte[] avatar) {
         setUsername(username);
         setHashcode(hashcode);
-        setRole(role);
         setEmail(email);
+        setRole(role);
         setIsActive(isActive);
-        setEmployeeInfo(employeeInfo);
         setAvatar(avatar);
+        setEmployeeInfo(employeeInfo);
     }
 
     public Account() {
@@ -121,6 +122,7 @@ public class Account {
                 ", hashcode='" + hashcode + '\'' +
                 ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
+                ", avatar=" + Arrays.toString(avatar) +
                 ", isActive=" + isActive +
                 ", employeeInfo=" + employeeInfo +
                 '}';

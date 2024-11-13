@@ -17,20 +17,20 @@ public class Order {
     private double dispensedAmount;
     private double totalAmount;
     private double discount;
-    private ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+    private Customer customer;
+    private Employee employee;
     private Promotion promotion;
     private Payment payment;
     private ArrayList<Table> tables = new ArrayList<>();
-    private Customer customer;
-    private Employee employee;
+    private ArrayList<OrderDetail> orderDetails = new ArrayList<>();
 
     public Order() {
     }
 
     public Order(String orderId, LocalDate orderDate, LocalTime localTime, String notes, double paymentAmount,
                  double dispensedAmount, double totalAmount, double discount,
-                 ArrayList<OrderDetail> orderDetails, Promotion promotion, Payment payment,
-                 ArrayList<Table> tables, Customer customer, Employee employee) {
+                 Customer customer, Employee employee, Promotion promotion, Payment payment,
+                 ArrayList<Table> tables, ArrayList<OrderDetail> orderDetails) {
         setOrderId(orderId);
         setOrderDate(orderDate);
         setOrderTime(localTime);
@@ -39,17 +39,17 @@ public class Order {
         setDispensedAmount(dispensedAmount);
         setTotalAmount(totalAmount);
         setDiscount(discount);
-        setOrderDetails(orderDetails);
+        setCustomer(customer);
+        setEmployee(employee);
         setPromotion(promotion);
         setPayment(payment);
         setTables(tables);
-        setCustomer(customer);
-        setEmployee(employee);
+        setOrderDetails(orderDetails);
     }
 
-    public Order(Employee employee, Customer customer,
-                 ArrayList<OrderDetail> orderDetails, ArrayList<Table> tables,
-                 Payment payment, Promotion promotion, String notes) {
+    public Order(String notes, Employee employee, Customer customer,
+                 Payment payment, Promotion promotion,
+                 ArrayList<OrderDetail> orderDetails, ArrayList<Table> tables) {
         setOrderDate(LocalDate.now());
         setOrderTime(LocalTime.now());
         setOrderId(null);
@@ -250,12 +250,12 @@ public class Order {
                 ", dispensedAmount=" + dispensedAmount +
                 ", totalAmount=" + totalAmount +
                 ", discount=" + discount +
-                ", orderDetails=" + orderDetails +
+                ", customer=" + customer +
+                ", employee=" + employee +
                 ", promotion=" + promotion +
                 ", payment=" + payment +
                 ", tables=" + tables +
-                ", customer=" + customer +
-                ", employee=" + employee +
+                ", orderDetails=" + orderDetails +
                 '}';
     }
 
