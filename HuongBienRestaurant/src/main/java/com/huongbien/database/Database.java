@@ -1,14 +1,16 @@
 package com.huongbien.database;
 
+import com.huongbien.config.AppConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
     public static Connection connection = null;
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=HuongBien;encrypt=true;trustServerCertificate=true;loginTimeout=30";
-    private static final String USER = "sa";
-    private static final String PASSWORD = "sapassword";
+    private static final String URL = AppConfig.getDbUrl();
+    private static final String USER = AppConfig.getDbUser();
+    private static final String PASSWORD = AppConfig.getDbPassword();
 
     private Database() {
     }

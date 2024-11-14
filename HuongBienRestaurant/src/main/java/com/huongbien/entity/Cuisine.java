@@ -67,6 +67,10 @@ public class Cuisine {
     }
 
     public void setImage(byte[] image) {
+        if (image == null) {
+            this.image = new byte[0];
+            return;
+        }
         this.image = image;
     }
 

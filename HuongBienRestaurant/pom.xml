@@ -33,6 +33,12 @@
             <artifactId>javase</artifactId>
             <version>3.3.1</version>
         </dependency>
+        <!-- email -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.5</version>
+        </dependency>
         <!-- openCV -->
         <dependency>
             <groupId>org.openpnp</groupId>
@@ -45,6 +51,13 @@
             <artifactId>gson</artifactId>
             <version>2.11.0</version>
         </dependency>
+        <!-- .ENV -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>

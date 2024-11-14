@@ -14,9 +14,9 @@ public class FoodOrder {
     //  truyền mã FoodOrder hoặc truyền mã Reservation để tự động tạo mã mới nếu tạo FoodOrder mới
     public FoodOrder(String foodOrderId, int quantity, double salePrice, Cuisine cuisine, String note) {
         setFoodOrderId(foodOrderId);
-        setSalePrice(salePrice);
-        setNote(note);
         setQuantity(quantity);
+        setNote(note);
+        setSalePrice(salePrice);
         setCuisine(cuisine);
     }
 

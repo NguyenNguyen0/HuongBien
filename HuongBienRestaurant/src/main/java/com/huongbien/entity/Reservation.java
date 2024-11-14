@@ -21,8 +21,8 @@ public class Reservation {
     private String note;
     private Payment payment;
     private Employee employee;
-    private ArrayList<Table> tables;
     private Customer customer;
+    private ArrayList<Table> tables;
     private ArrayList<FoodOrder> foodOrders;
 
     public Reservation() {
@@ -260,8 +260,8 @@ public class Reservation {
                 ", note='" + note + '\'' +
                 ", payment=" + payment +
                 ", employee=" + employee +
-                ", tables=" + tables +
                 ", customer=" + customer +
+                ", tables=" + tables +
                 ", foodOrders=" + foodOrders +
                 '}';
     }
