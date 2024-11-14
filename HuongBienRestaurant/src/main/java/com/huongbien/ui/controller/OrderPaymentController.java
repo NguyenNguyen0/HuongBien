@@ -3,15 +3,12 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.zxing.*;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
+import com.huongbien.service.QRCodeHandler;
 import com.huongbien.utils.Utils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -88,6 +85,7 @@ public class OrderPaymentController implements Initializable {
 
     private VideoCapture capture;
     private Timer timer;
+    private QRCodeHandler qrCodeHandler;
 
     public RestaurantMainController restaurantMainController;
 
@@ -241,6 +239,7 @@ public class OrderPaymentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            this.qrCodeHandler = new QRCodeHandler();
             loadBill();
             setPaymentInfo();
             setPromotionTableValue();
@@ -344,7 +343,12 @@ public class OrderPaymentController implements Initializable {
             frame.setLocationRelativeTo(null);
             JLabel cameraLabel = new JLabel();
             frame.add(cameraLabel, BorderLayout.CENTER);
-
+            frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    stopCamera();
+                }
+            });
 
             frame.setVisible(true);
             readQRCode(cameraLabel, frame);
@@ -354,7 +358,7 @@ public class OrderPaymentController implements Initializable {
     private void readQRCode(JLabel cameraLabel, JFrame frame) {
         capture = new VideoCapture(0);
         if (!capture.isOpened()) {
-            showAlert("Không thể mở camera!", "Lỗi");
+            qrCodeHandler.showAlert("Không thể mở camera!", "Lỗi");
             return;
         }
 
@@ -362,8 +366,8 @@ public class OrderPaymentController implements Initializable {
             Mat frameMat = new Mat();
             if (capture != null && capture.read(frameMat)) {
                 if (!frameMat.empty()) {
-                    BufferedImage bufferedImage = matToBufferedImage(frameMat);
-                    String qrCodeContent = decodeQRCode(bufferedImage);
+                    BufferedImage bufferedImage = qrCodeHandler.matToBufferedImage(frameMat);
+                    String qrCodeContent = qrCodeHandler.decodeQRCode(bufferedImage);
                     if (qrCodeContent != null) {
                         try {
                             updateCustomerFields(qrCodeContent);
@@ -372,7 +376,7 @@ public class OrderPaymentController implements Initializable {
                         } catch (FileNotFoundException ex) {
                             throw new RuntimeException(ex);
                         }
-                        timer.stop();
+                        stopCamera();
                         capture.release();
                         cameraLabel.setIcon(null);
                         frame.dispose();
@@ -389,27 +393,12 @@ public class OrderPaymentController implements Initializable {
         timer.start();
     }
 
-
-    private BufferedImage matToBufferedImage(Mat matrix) {
-        int cols = matrix.cols();
-        int rows = matrix.rows();
-        int channels = matrix.channels();
-        byte[] data = new byte[cols * rows * channels];
-        matrix.get(0, 0, data);
-        BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_3BYTE_BGR);
-        image.getRaster().setDataElements(0, 0, cols, rows, data);
-        return image;
-    }
-
-    private String decodeQRCode(BufferedImage bufferedImage) {
-        BufferedImageLuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        try {
-            QRCodeReader reader = new QRCodeReader();
-            Result result = reader.decode(bitmap);
-            return result.getText();
-        } catch (NotFoundException | ChecksumException | FormatException e) {
-            return null;
+    private void stopCamera() {
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+        }
+        if (capture != null && capture.isOpened()) {
+            capture.release();
         }
     }
 
@@ -423,13 +412,6 @@ public class OrderPaymentController implements Initializable {
                 searchCustomerField.setText(parts[3]);
             });
         }
-    }
-
-    private void showAlert(String message, String title) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     public void addNewPaymentQueue() throws FileNotFoundException {
