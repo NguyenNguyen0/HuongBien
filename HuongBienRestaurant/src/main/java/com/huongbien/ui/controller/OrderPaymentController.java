@@ -182,7 +182,7 @@ public class OrderPaymentController implements Initializable {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
             EmployeeDAO dao_employee = EmployeeDAO.getInstance();
-            Employee employee = dao_employee.getById(id).getFirst();
+            Employee employee = dao_employee.getById(id).get(0);
             paymentEmployeeLabel.setText(employee.getName());
         }
         //table
@@ -362,18 +362,10 @@ public class OrderPaymentController implements Initializable {
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setSize(640, 480);
             frame.setLayout(new BorderLayout());
-
+            frame.setLocationRelativeTo(null);
             JLabel cameraLabel = new JLabel();
             frame.add(cameraLabel, BorderLayout.CENTER);
 
-            JButton closeButton = new JButton("Đóng");
-            closeButton.addActionListener(e -> {
-                if (capture != null) {
-                    capture.release();
-                }
-                frame.dispose();
-            });
-            frame.add(closeButton, BorderLayout.SOUTH);
 
             frame.setVisible(true);
             readQRCode(cameraLabel, frame);
