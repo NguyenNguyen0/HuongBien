@@ -260,7 +260,7 @@ public class OrderPaymentController implements Initializable {
         restaurantMainController.openManageCustomer();
     }
 
-    private void setDiscordFromPromotionSearch() throws FileNotFoundException {
+    private void setDiscountFromPromotionSearch() throws FileNotFoundException {
         double totalAmount = 0;
         JsonArray jsonArrayBill = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
         for (JsonElement element : jsonArrayBill) {
@@ -301,7 +301,7 @@ public class OrderPaymentController implements Initializable {
         Customer customer = customerDAO.getByOnePhoneNumber(inputPhone);
         if (customer != null) {
             // Set discount
-            setDiscordFromPromotionSearch();
+            setDiscountFromPromotionSearch();
             //Write Down JSON
             String customerID = customer.getCustomerId();
             String promotionID = promotionTableView.getSelectionModel().getSelectedItem().getPromotionId();
@@ -406,10 +406,12 @@ public class OrderPaymentController implements Initializable {
         String[] parts = qrCodeContent.split(",");
         if (parts.length >= 4) {
             Platform.runLater(() -> {
-                customerIdField.setText(parts[0]);
-                customerNameField.setText(parts[1]);
-                customerRankField.setText(Utils.toStringMembershipLevel(Integer.parseInt(parts[2])));
-                searchCustomerField.setText(parts[3]);
+//                customerIdField.setText(parts[0]);
+//                customerNameField.setText(parts[1]);
+//                customerRankField.setText(Utils.toStringMembershipLevel(Integer.parseInt(parts[2])));
+                String inputPhone = parts[3];
+                searchCustomerField.setText(inputPhone);
+                searchCustomerButton.fire();
             });
         }
     }
