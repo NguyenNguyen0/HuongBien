@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class OrderCuisineItemController implements Initializable {
-    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryBill.json";
+    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
     @FXML
     private Circle cuisineImageCircle;
 
@@ -44,7 +44,7 @@ public class OrderCuisineItemController implements Initializable {
     public void setCuisineData(Cuisine cuisine) {
         cuisineIdLabel.setText(cuisine.getCuisineId());
         cuisineNameLabel.setText(cuisine.getName());
-        cuisineSalePriceLabel.setText(Utils.formatPrice(cuisine.getPrice()));
+        cuisineSalePriceLabel.setText(String.format("%,.0f VNĐ", cuisine.getPrice()));
 
         byte[] imageBytes = cuisine.getImage();
         Image image;

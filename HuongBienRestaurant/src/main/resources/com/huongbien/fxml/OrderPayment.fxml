@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="898.0" prefWidth="1730.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderPaymentController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="898.0" prefWidth="1730.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderPaymentController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -124,7 +124,7 @@
                            </HBox.margin>
                         </Label>
                         <Pane prefHeight="200.0" prefWidth="5.0" />
-                        <TextField fx:id="searchCustomerField" prefHeight="50.0" prefWidth="260.0" text="0353999798" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchCustomerField" prefHeight="50.0" prefWidth="260.0" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>
@@ -132,18 +132,21 @@
                               <Font size="24.0" />
                            </font>
                         </TextField>
-                        <VBox alignment="CENTER" prefHeight="70.0" prefWidth="80.0">
-                           <children>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onSearchCustomerButtonClicked" pickOnBounds="true" preserveRatio="true">
+                        <Button fx:id="searchCustomerButton" mnemonicParsing="false" onAction="#onSearchCustomerButtonClicked" prefHeight="50.0" styleClass="transperant">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icon/payment/search-128px.png" />
                                  </image>
                               </ImageView>
-                           </children>
+                           </graphic>
                            <HBox.margin>
-                              <Insets left="-80.0" />
+                              <Insets left="-55.0" />
                            </HBox.margin>
-                        </VBox>
+                           <padding>
+                              <Insets right="25.0" />
+                           </padding>
+                        </Button>
                      </children>
                      <VBox.margin>
                         <Insets right="10.0" />
@@ -199,7 +202,7 @@
                         <Insets />
                      </VBox.margin>
                   </HBox>
-                  <TableView fx:id="promotionTable" onMouseClicked="#onPromotionTableClicked" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="promotionTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="promotionIdColumn" prefWidth="155.0" text="Mã" />
                       <TableColumn fx:id="promotionNameColumn" prefWidth="331.0" text="Tên" />
@@ -257,7 +260,7 @@
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentEmployeeLabel" text="xxxxxxxxxxx" textFill="WHITE">
+                                    <Label fx:id="paymentEmployeeLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -272,7 +275,7 @@
                                        </font>
                                     </Label>
                                     <Pane prefHeight="39.0" prefWidth="2.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="tableInfoLabel" text="xxxxxxxx" textFill="WHITE">
+                                    <Label fx:id="tableInfoLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -287,7 +290,7 @@
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentCuisineQuantityLabel" text="0 món" textFill="WHITE">
+                                    <Label fx:id="paymentCuisineQuantityLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -302,7 +305,7 @@
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentTotalAmountLabel" text="0" textFill="WHITE">
+                                    <Label fx:id="paymentTotalAmountLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -311,13 +314,13 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
                                  <children>
-                                    <Label text="Thuế GTGT (10%):" textFill="WHITE">
+                                    <Label text="Thuế VAT (10%):" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentVATLabel" text="0" textFill="WHITE">
+                                    <Label fx:id="paymentVATLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -332,7 +335,7 @@
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentDiscountLabel" text="0" textFill="WHITE">
+                                    <Label fx:id="paymentDiscountLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -347,7 +350,7 @@
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentFinalAmountLabel" text="0" textFill="WHITE">
+                                    <Label fx:id="paymentFinalAmountLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -369,7 +372,7 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Button>
-                              <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Lưu tạm (F8)">
+                              <Button mnemonicParsing="false" onAction="#onSavePaymentQueueButtonClicked" prefHeight="60.0" prefWidth="200.0" text="Lưu tạm (F8)">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
@@ -452,7 +455,7 @@
       </StackPane>
    </right>
    <top>
-      <HBox prefHeight="70.0" prefWidth="1730.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="1730.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="70.0" prefWidth="70.0" styleClass="transperant">
                <graphic>

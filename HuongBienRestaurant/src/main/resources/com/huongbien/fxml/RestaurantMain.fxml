@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="1159.0" styleClass="gradient-main">
          <left>
@@ -260,7 +260,7 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="70.0">
                            <children>
-                              <Label fx:id="featureTitleLabel" text="Trang chủ" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="featureTitleLabel" text="Unknown" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="Arial Bold" size="20.0" />
                                  </font>
@@ -278,7 +278,7 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="70.0">
                            <children>
-                              <Label fx:id="currentTimeLabel" text="**:**:**" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="currentTimeLabel" text="Unknown" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="17.0" />
                                  </font>
@@ -290,7 +290,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="70.0">
                            <children>
-                              <Label fx:id="currentDayLabel" text="******" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="currentDayLabel" text="Unknown" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="17.0" />
                                  </font>
@@ -302,7 +302,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="70.0">
                            <children>
-                              <Label fx:id="currentDateLabel" text="**/**/****" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="currentDateLabel" text="Unknown" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="17.0" />
                                  </font>
@@ -338,7 +338,7 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <Label fx:id="employeeNameLabel" text="xxxxxxx" textAlignment="CENTER" textFill="WHITE">
+                              <Label fx:id="employeeNameLabel" text="Unknown" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="Calibri Bold" size="17.0" />
                                  </font>

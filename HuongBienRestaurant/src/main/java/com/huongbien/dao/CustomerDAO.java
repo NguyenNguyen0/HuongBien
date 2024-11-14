@@ -41,7 +41,11 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return getMany("SELECT * FROM Customer");
     }
 
-    public List<Customer> getByPhoneNumber(String phoneNumber) {
+    public Customer getByOnePhoneNumber(String phoneNumber) {
+        return getOne("SELECT * FROM Customer WHERE phoneNumber = ?", phoneNumber);
+    }
+
+    public List<Customer> getByManyPhoneNumber(String phoneNumber) {
         return getMany("SELECT * FROM Customer WHERE phoneNumber LIKE ?", phoneNumber + "%");
     }
 

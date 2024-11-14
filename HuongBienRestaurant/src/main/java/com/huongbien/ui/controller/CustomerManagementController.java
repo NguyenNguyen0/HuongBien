@@ -21,7 +21,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-import javax.swing.text.html.ImageView;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -305,7 +304,7 @@ public class CustomerManagementController implements Initializable {
     void onSearchCustomerPhoneFieldKeyReleased(KeyEvent event) {
         String phone = searchCustomerPhoneField.getText();
         CustomerDAO customerDAO = CustomerDAO.getInstance();
-        List<Customer> customerList = customerDAO.getByPhoneNumber(phone);
+        List<Customer> customerList = customerDAO.getByManyPhoneNumber(phone);
         ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
 
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));

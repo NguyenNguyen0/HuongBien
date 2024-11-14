@@ -46,63 +46,44 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderPaymentController implements Initializable {
-    private final static String TEMPORARY_USER_PATH = "src/main/resources/com/huongbien/temp/loginSession.json";
-    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryBill.json";
-    private final static String TEMPORARY_TABLE_PATH = "src/main/resources/com/huongbien/temp/temporaryTable.json";
     @FXML
-    private TableView<Promotion> promotionTable;
-
+    public TableView<Promotion> promotionTableView;
     @FXML
     private TableColumn<Promotion, Double> promotionDiscountColumn;
-
     @FXML
     private TableColumn<Promotion, String> promotionIdColumn;
-
     @FXML
     private TableColumn<Promotion, String> promotionNameColumn;
-
     @FXML
     private Label paymentEmployeeLabel;
-
     @FXML
     private Label paymentCuisineQuantityLabel;
-
     @FXML
     private Label paymentTotalAmountLabel;
-
     @FXML
     private Label paymentVATLabel;
-
     @FXML
     private Label paymentDiscountLabel;
-
     @FXML
     private Label paymentFinalAmountLabel;
-
     @FXML
     private Label tableInfoLabel;
-
     @FXML
     private ScrollPane billScrollPane;
-
     @FXML
     public GridPane billGridPane;
-
     @FXML
     private TextField searchCustomerField;
-
     @FXML
     private TextField customerIdField;
-
     @FXML
     private TextField customerNameField;
-
     @FXML
     private TextField customerRankField;
-
+    @FXML
+    private Button searchCustomerButton;
     @FXML
     private Button addCustomerButton;
-
     @FXML
     private Button createCustomerQRButton;
 
@@ -146,7 +127,7 @@ public class OrderPaymentController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -169,14 +150,13 @@ public class OrderPaymentController implements Initializable {
     }
 
     private List<OrderDetail> getBillData() throws FileNotFoundException {
-        List<OrderDetail> ls = readFromBillJSON();
-        return ls;
+        return readFromBillJSON();
     }
 
     public void setPaymentInfo() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayBill = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
-        JsonArray jsonArrayTab = Utils.readJsonFromFile(TEMPORARY_TABLE_PATH);
-        JsonArray jsonArrayEmp = Utils.readJsonFromFile(TEMPORARY_USER_PATH);
+        JsonArray jsonArrayBill = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        JsonArray jsonArrayTab = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+        JsonArray jsonArrayEmp = Utils.readJsonFromFile(Utils.LOGINSESSION_PATH);
         //Emp Session
         for (JsonElement element : jsonArrayEmp) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -193,7 +173,7 @@ public class OrderPaymentController implements Initializable {
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
             String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
-            tabInfoBuilder.append(floorStr).append(" - ").append(table.getName()).append(", ");
+            tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append(") ").append(", ");
         }
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
@@ -211,15 +191,16 @@ public class OrderPaymentController implements Initializable {
         //set discount
         double discount = 0.0;
         double discountMoney = totalAmount * discount;
-        paymentDiscountLabel.setText(Utils.formatPrice(discountMoney) + " VNĐ");
+        paymentDiscountLabel.setText(String.format("%,.0f VNĐ", discountMoney));
         //set VAT
         double vat = totalAmount * 0.1;
         paymentCuisineQuantityLabel.setText(totalQuantityCuisine + " món");
-        paymentTotalAmountLabel.setText(Utils.formatPrice(totalAmount) + " VNĐ");
-        paymentVATLabel.setText("- " + Utils.formatPrice(vat) + " VNĐ");
+        paymentTotalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
+        paymentVATLabel.setText(String.format("%,.0f VNĐ", vat));
         //FinalAmount
-        double finalAmount = totalAmount - discountMoney - vat;
-        paymentFinalAmountLabel.setText(Utils.formatPrice(finalAmount) + " VNĐ");
+        double finalAmount = totalAmount - discountMoney + vat;
+        paymentFinalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
+        readCumtomerExistsFromJSON();
     }
 
     public void setPromotionTableValue() {
@@ -243,8 +224,20 @@ public class OrderPaymentController implements Initializable {
             }
         });
 
-        promotionTable.setItems(listPromotion);
-        promotionTable.setDisable(true);
+        promotionTableView.setItems(listPromotion);
+    }
+
+    private void readCumtomerExistsFromJSON() throws FileNotFoundException {
+        JsonArray customerArray = Utils.readJsonFromFile(Utils.TEMPORARYCUSTOMER_PATH);
+        if (!customerArray.isEmpty()) {
+            JsonObject customerObject = customerArray.get(0).getAsJsonObject();
+            String idCustomer = customerObject.get("Customer ID").getAsString();
+            CustomerDAO customerDAO = CustomerDAO.getInstance();
+            Customer customer = customerDAO.getById(idCustomer);
+            searchCustomerField.setText((customer != null ? customer.getPhoneNumber() : ""));
+        } else {
+            searchCustomerField.setText("");
+        }
     }
 
     @Override
@@ -256,11 +249,13 @@ public class OrderPaymentController implements Initializable {
         } catch (FileNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
+        searchCustomerButton.fire();
+        promotionTableView.setMouseTransparent(true);
     }
 
     @FXML
     void onBackButtonClicked(ActionEvent event) throws IOException {
-        restaurantMainController.openCuisine();
+        restaurantMainController.openOrderCuisine();
     }
 
     @FXML
@@ -268,86 +263,72 @@ public class OrderPaymentController implements Initializable {
         restaurantMainController.openManageCustomer();
     }
 
-    @FXML
-    void onSearchCustomerButtonClicked(MouseEvent event) throws SQLException, FileNotFoundException {
-        String inputPhone = searchCustomerField.getText().trim();
-        CustomerDAO customerDAO = CustomerDAO.getInstance();
-        List<Customer> customers = customerDAO.getByPhoneNumber(inputPhone);
-        Customer customer = customers.isEmpty() ? null : customers.get(0);
-        if (customer != null) {
-            customerIdField.setText(customer.getCustomerId());
-            customerNameField.setText(customer.getName());
-            customerRankField.setText(Utils.toStringMembershipLevel(customer.getMembershipLevel()));
-            promotionTable.setDisable(false);
-            // Set discount
-            double totalAmount = 0;
-            JsonArray jsonArrayBill = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
-            for (JsonElement element : jsonArrayBill) {
-                JsonObject jsonObject = element.getAsJsonObject();
-                double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
-                totalAmount += cuisineMoney;
-            }
-            double discount = 0.0;
-            PromotionDAO promotionDAO = PromotionDAO.getInstance();
-            List<Promotion> promotionList = promotionDAO.getAll();
-            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
-            if (!listPromotion.isEmpty()) {
-                Promotion maxDiscountPromotion = listPromotion.stream()
-                        .max(Comparator.comparingDouble(Promotion::getDiscount))
-                        .orElse(null);
-
-                promotionTable.getSelectionModel().select(maxDiscountPromotion);
-                discount = maxDiscountPromotion.getDiscount();
-            } else {
-                discount = 0.0;
-                System.out.println("No promotions available.");
-            }
-            double discountMoney = totalAmount * discount;
-            paymentDiscountLabel.setText(" - " + Utils.formatPrice(discountMoney) + " VNĐ");
-            //set VAT
-            double vat = totalAmount * 0.1;
-            paymentTotalAmountLabel.setText(Utils.formatPrice(totalAmount) + " VNĐ");
-            paymentVATLabel.setText("- " + Utils.formatPrice(vat) + " VNĐ");
-            //FinalAmount
-            double finalAmount = totalAmount - discountMoney - vat;
-            paymentFinalAmountLabel.setText(Utils.formatPrice(finalAmount) + " VNĐ");
-        } else {
-            System.out.println("Không tìm thấy khách hàng, vui lòng đăng ký thành viên");
-            customerIdField.setText("");
-            customerNameField.setText("");
-            customerRankField.setText("");
-            promotionTable.setDisable(true);
-            promotionTable.getSelectionModel().clearSelection();
-            setPaymentInfo();
+    private void setDiscordFromPromotionSearch() throws FileNotFoundException {
+        double totalAmount = 0;
+        JsonArray jsonArrayBill = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        for (JsonElement element : jsonArrayBill) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
+            totalAmount += cuisineMoney;
         }
+        double discount = 0.0;
+        PromotionDAO promotionDAO = PromotionDAO.getInstance();
+        List<Promotion> promotionList = promotionDAO.getAll();
+        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+        if (!listPromotion.isEmpty()) {
+            Promotion maxDiscountPromotion = listPromotion.stream()
+                    .max(Comparator.comparingDouble(Promotion::getDiscount))
+                    .orElse(null);
+
+            promotionTableView.getSelectionModel().select(maxDiscountPromotion);
+            discount = maxDiscountPromotion.getDiscount();
+        } else {
+            //Not promotion cause, I set default 0
+            discount = 0.0;
+        }
+        double discountMoney = totalAmount * discount;
+        paymentDiscountLabel.setText(String.format("- %,.0f VNĐ", discountMoney));
+        //set VAT
+        double vat = totalAmount * 0.1;
+        paymentTotalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
+        paymentVATLabel.setText(String.format("%,.0f VNĐ", vat));
+        //FinalAmount
+        double finalAmount = totalAmount - discountMoney + vat;
+        paymentFinalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
     }
 
     @FXML
-    void onPromotionTableClicked(MouseEvent event) throws FileNotFoundException, SQLException {
-        Promotion selectedItem = promotionTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            String idSelect = selectedItem.getPromotionId();
-            PromotionDAO promotionDAO = PromotionDAO.getInstance();
-            Promotion promotion = promotionDAO.getById(idSelect);
-
-            double totalAmount = 0;
-            JsonArray jsonArrayBill = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
-            for (JsonElement element : jsonArrayBill) {
-                JsonObject jsonObject = element.getAsJsonObject();
-                double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
-                totalAmount += cuisineMoney;
-            }
-
-            double discount = promotion.getDiscount();
-            double discountMoney = totalAmount * discount;
-            paymentDiscountLabel.setText(" - " + Utils.formatPrice(discountMoney) + " VNĐ");
-            //set VAT
-            double vat = totalAmount * 0.1;
-            paymentTotalAmountLabel.setText(Utils.formatPrice(totalAmount) + " VNĐ");
-            paymentVATLabel.setText("- " + Utils.formatPrice(vat) + " VNĐ");
-            //FinalAmount
-            double finalAmount = totalAmount - discountMoney - vat;
-            paymentFinalAmountLabel.setText(Utils.formatPrice(finalAmount) + " VNĐ");
+    void onSearchCustomerButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
+        String inputPhone = searchCustomerField.getText().trim();
+        CustomerDAO customerDAO = CustomerDAO.getInstance();
+        Customer customer = customerDAO.getByOnePhoneNumber(inputPhone);
+        if (customer != null) {
+            // Set discount
+            setDiscordFromPromotionSearch();
+            //Write Down JSON
+            String customerID = customer.getCustomerId();
+            String promotionID = promotionTableView.getSelectionModel().getSelectedItem().getPromotionId();
+            JsonArray customerArray = new JsonArray();
+            JsonObject customerObject = new JsonObject();
+            customerObject.addProperty("Customer ID", customerID);
+            customerObject.addProperty("Promotion ID", promotionID);
+            customerArray.add(customerObject);
+            Utils.writeJsonToFile(customerArray, Utils.TEMPORARYCUSTOMER_PATH);
+            //display label
+            customerIdField.setText(customerID);
+            customerNameField.setText(customer.getName());
+            customerRankField.setText(Utils.toStringMembershipLevel(customer.getMembershipLevel()));
+            //enable table
+            promotionTableView.setDisable(false);
+        } else {
+            customerIdField.setText("");
+            customerNameField.setText("");
+            customerRankField.setText("");
+            promotionTableView.setDisable(true);
+            promotionTableView.getSelectionModel().clearSelection();
+            //clear JSON if exists
+            Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUSTOMER_PATH);
+            setPaymentInfo();
         }
     }
 
@@ -452,47 +433,6 @@ public class OrderPaymentController implements Initializable {
                 searchCustomerField.setText(parts[3]);
             });
         }
-        Platform.runLater(() -> {
-            promotionTable.setDisable(false);
-            // Set discount
-            double totalAmount = 0;
-            JsonArray jsonArrayBill = null;
-            try {
-                jsonArrayBill = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            for (JsonElement element : jsonArrayBill) {
-                JsonObject jsonObject = element.getAsJsonObject();
-                double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
-                totalAmount += cuisineMoney;
-            }
-            double discount = 0.0;
-            PromotionDAO promotionDAO = null;
-            promotionDAO = PromotionDAO.getInstance();
-            List<Promotion> promotionList = promotionDAO.getAll();
-            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
-            if (!listPromotion.isEmpty()) {
-                Promotion maxDiscountPromotion = listPromotion.stream()
-                        .max(Comparator.comparingDouble(Promotion::getDiscount))
-                        .orElse(null);
-
-                promotionTable.getSelectionModel().select(maxDiscountPromotion);
-                discount = maxDiscountPromotion.getDiscount();
-            } else {
-                discount = 0.0;
-                System.out.println("No promotions available.");
-            }
-            double discountMoney = totalAmount * discount;
-            paymentDiscountLabel.setText(" - " + Utils.formatPrice(discountMoney) + " VNĐ");
-            //set VAT
-            double vat = totalAmount * 0.1;
-            paymentTotalAmountLabel.setText(Utils.formatPrice(totalAmount) + " VNĐ");
-            paymentVATLabel.setText("- " + Utils.formatPrice(vat) + " VNĐ");
-            //FinalAmount
-            double finalAmount = totalAmount - discountMoney - vat;
-            paymentFinalAmountLabel.setText(Utils.formatPrice(finalAmount) + " VNĐ");
-        });
     }
 
     private void showAlert(String message, String title) {
@@ -500,5 +440,74 @@ public class OrderPaymentController implements Initializable {
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void addNewPaymentQueue() throws FileNotFoundException {
+        JsonArray paymentQueueArray;
+        JsonArray tableArray;
+        JsonArray cuisineArray;
+
+        try {
+            paymentQueueArray = Utils.readJsonFromFile(Utils.PAYMENTQUEUE_PATH);
+            tableArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+            cuisineArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        } catch (FileNotFoundException e) {
+            paymentQueueArray = new JsonArray();
+            tableArray = new JsonArray();
+            cuisineArray = new JsonArray();
+        }
+
+        int newNumericalOrder = !paymentQueueArray.isEmpty()
+                ? paymentQueueArray.get(paymentQueueArray.size() - 1).getAsJsonObject().get("Numerical Order").getAsInt() + 1
+                : 1;
+
+        JsonObject newPaymentQueue = new JsonObject();
+        newPaymentQueue.addProperty("Numerical Order", newNumericalOrder);
+        //
+        JsonArray customerArray = Utils.readJsonFromFile(Utils.TEMPORARYCUSTOMER_PATH);
+        if (!customerArray.isEmpty()) {
+            JsonObject customerObject = customerArray.get(0).getAsJsonObject();
+            newPaymentQueue.addProperty("Customer ID", customerObject.get("Customer ID").getAsString());
+            newPaymentQueue.addProperty("Promotion ID", customerObject.get("Promotion ID").getAsString());
+        } else {
+            newPaymentQueue.addProperty("Customer ID", "");
+            newPaymentQueue.addProperty("Promotion ID", "");
+        }
+        //
+        JsonArray tableIDs = new JsonArray();
+        for (int i = 0; i < tableArray.size(); i++) {
+            JsonObject tableObject = tableArray.get(i).getAsJsonObject();
+            tableIDs.add(tableObject.get("Table ID").getAsString());
+        }
+        newPaymentQueue.add("Table ID", tableIDs);
+
+        JsonArray cuisineOrderArray = new JsonArray();
+        for (int i = 0; i < cuisineArray.size(); i++) {
+            JsonObject billItem = cuisineArray.get(i).getAsJsonObject();
+            JsonObject cuisineOrderItem = new JsonObject();
+            //
+            cuisineOrderItem.addProperty("Cuisine ID", billItem.get("Cuisine ID").getAsString());
+            cuisineOrderItem.addProperty("Cuisine Name", billItem.get("Cuisine Name").getAsString());
+            cuisineOrderItem.addProperty("Cuisine Price", billItem.get("Cuisine Price").getAsDouble());
+            cuisineOrderItem.addProperty("Cuisine Note", billItem.get("Cuisine Note").getAsString());
+            cuisineOrderItem.addProperty("Cuisine Quantity", billItem.get("Cuisine Quantity").getAsInt());
+            cuisineOrderItem.addProperty("Cuisine Money", billItem.get("Cuisine Money").getAsDouble());
+            cuisineOrderArray.add(cuisineOrderItem);
+        }
+        newPaymentQueue.add("Cuisine Order", cuisineOrderArray);
+
+        paymentQueueArray.add(newPaymentQueue);
+
+        Utils.writeJsonToFile(paymentQueueArray, Utils.PAYMENTQUEUE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUISINE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYTABLE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUSTOMER_PATH);
+    }
+
+    //save payment queue
+    @FXML
+    void onSavePaymentQueueButtonClicked(ActionEvent event) throws IOException {
+        addNewPaymentQueue();
+        restaurantMainController.ReservationManagement();
     }
 }

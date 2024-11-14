@@ -259,7 +259,7 @@ public class OrderTableController implements Initializable {
             return;
         }
 
-        restaurantMainController.openCuisine();
+        restaurantMainController.openOrderCuisine();
     }
 
 }
