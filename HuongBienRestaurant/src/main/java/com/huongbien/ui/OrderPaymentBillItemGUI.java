@@ -16,7 +16,7 @@ public class OrderPaymentBillItemGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/OrderPaymentBillItem.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/OrderPaymentItem.fxml"));
 //        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
         primaryStage.setTitle("Bill Item - Huong Bien Restaurant");

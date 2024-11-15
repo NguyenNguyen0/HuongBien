@@ -23,6 +23,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import org.opencv.core.Core;
@@ -104,7 +106,7 @@ public class OrderPaymentController implements Initializable {
         try {
             for (int i = 0; i < orderDetails.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentBillItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentItem.fxml"));
                 HBox paymentBillBox = fxmlLoader.load();
                 OrderPaymentBillItemController _OrderPaymentBillItemController = fxmlLoader.getController();
                 _OrderPaymentBillItemController.setDataBill(orderDetails.get(i));
@@ -231,8 +233,6 @@ public class OrderPaymentController implements Initializable {
             CustomerDAO customerDAO = CustomerDAO.getInstance();
             Customer customer = customerDAO.getById(idCustomer);
             searchCustomerField.setText((customer != null ? customer.getPhoneNumber() : ""));
-        } else {
-            searchCustomerField.setText("");
         }
     }
 
@@ -358,7 +358,7 @@ public class OrderPaymentController implements Initializable {
     private void readQRCode(JLabel cameraLabel, JFrame frame) {
         capture = new VideoCapture(0);
         if (!capture.isOpened()) {
-            qrCodeHandler.showAlert("Không thể mở camera!", "Lỗi");
+            Utils.showAlert("Không thể mở camera!", "Lỗi");
             return;
         }
 
@@ -406,6 +406,7 @@ public class OrderPaymentController implements Initializable {
         String[] parts = qrCodeContent.split(",");
         if (parts.length >= 4) {
             Platform.runLater(() -> {
+//              No Delete that code, it's for testing
 //                customerIdField.setText(parts[0]);
 //                customerNameField.setText(parts[1]);
 //                customerRankField.setText(Utils.toStringMembershipLevel(Integer.parseInt(parts[2])));
@@ -483,5 +484,17 @@ public class OrderPaymentController implements Initializable {
     void onSavePaymentQueueButtonClicked(ActionEvent event) throws IOException {
         addNewPaymentQueue();
         restaurantMainController.ReservationManagement();
+    }
+
+    @FXML
+    void onSearchCustomerFieldKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            searchCustomerButton.fire();
+        }
+    }
+
+    @FXML
+    void onPaymentButtonClicked(ActionEvent event) {
+        Utils.showAlert("Chức năng đang phát triển", "Thông báo gián đoạn");
     }
 }

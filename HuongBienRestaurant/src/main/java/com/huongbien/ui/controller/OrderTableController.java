@@ -156,7 +156,7 @@ public class OrderTableController implements Initializable {
         tableTypeComboBox.getSelectionModel().selectFirst();
     }
 
-    public void setTableTab(String name, int floor, int seats, String typeName) {
+    public void setTableTabPane(String name, int floor, int seats, String typeName) {
         String floorString;
         if (floor == 0) {
             floorString = "Tầng trệt";
@@ -214,7 +214,7 @@ public class OrderTableController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO tableDAO = TableDAO.getInstance();
             Table table = tableDAO.getById(id);
-            setTableTab(table.getName(), table.getFloor(), table.getSeats(), table.getTableType().getName());
+            setTableTabPane(table.getName(), table.getFloor(), table.getSeats(), table.getTableType().getName());
         }
     }
 
@@ -255,7 +255,7 @@ public class OrderTableController implements Initializable {
             return;
         }
         if (jsonArray.isEmpty()) {
-            System.out.println("Vui lòng chọn bàn");
+            Utils.showAlert("Vui lòng chọn bàn", "Reminder");
             return;
         }
 

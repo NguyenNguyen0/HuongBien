@@ -3,6 +3,7 @@ package com.huongbien.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.huongbien.entity.Table;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -119,6 +120,14 @@ public class Utils {
         } else {
             return df.format(money) + " đ";
         }
+    }
+
+    //Alert
+    public static void showAlert(String message, String title) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 

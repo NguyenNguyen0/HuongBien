@@ -82,12 +82,4 @@ public class QRCodeHandler {
             return null;
         }
     }
-
-    public void showAlert(String message, String title) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
 }

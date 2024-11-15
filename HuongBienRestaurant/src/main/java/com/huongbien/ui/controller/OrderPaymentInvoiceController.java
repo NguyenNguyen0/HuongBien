@@ -40,7 +40,7 @@ public class OrderPaymentInvoiceController implements Initializable {
         try {
             for (int i = 0; i < orderDetails.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentBillItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentItem.fxml"));
                 HBox paymentBillBox = fxmlLoader.load();
                 OrderPaymentBillItemController _OrderPaymentBillItemController = fxmlLoader.getController();
                 _OrderPaymentBillItemController.setDataBill(orderDetails.get(i));
@@ -83,8 +83,7 @@ public class OrderPaymentInvoiceController implements Initializable {
     }
 
     private List<OrderDetail> getBillData() throws FileNotFoundException {
-        List<OrderDetail> ls = readFromBillJSON();
-        return ls;
+        return readFromBillJSON();
     }
 
     @Override

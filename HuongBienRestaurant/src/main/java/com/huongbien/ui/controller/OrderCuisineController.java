@@ -34,7 +34,6 @@ public class OrderCuisineController implements Initializable {
     private ScrollPane cuisineScrollPane;
     @FXML
     private GridPane cuisineGridPane;
-
     @FXML
     private ScrollPane billScrollPane;
     @FXML
@@ -190,7 +189,7 @@ public class OrderCuisineController implements Initializable {
         if (!jsonArray.isEmpty()) {
             restaurantMainController.openOrderPayment();
         } else {
-            System.out.println("Vui lòng chọn món ăn");
+            Utils.showAlert("Vui lòng chọn món", "Reminder");
         }
     }
 

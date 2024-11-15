@@ -21,17 +21,14 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class OrderCuisineItemController implements Initializable {
+public class OrderCuisineItemController {
     private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
     @FXML
     private Circle cuisineImageCircle;
-
     @FXML
     private Label cuisineIdLabel;
-
     @FXML
     private Label cuisineNameLabel;
-
     @FXML
     private Label cuisineSalePriceLabel;
 
@@ -45,35 +42,30 @@ public class OrderCuisineItemController implements Initializable {
         cuisineIdLabel.setText(cuisine.getCuisineId());
         cuisineNameLabel.setText(cuisine.getName());
         cuisineSalePriceLabel.setText(String.format("%,.0f VNĐ", cuisine.getPrice()));
-
         byte[] imageBytes = cuisine.getImage();
         Image image;
-
+        //-----------------
         if (imageBytes != null) {
             image = Converter.bytesToImage(imageBytes);
         } else {
             image = new Image("/com/huongbien/icon/mg_cuisine/empty-256px.png");
         }
-
+        //design circle cuisine image
         cuisineImageCircle.setFill(new ImagePattern(image));
         cuisineImageCircle.setStroke(Color.BLUE);
         cuisineImageCircle.setEffect(new DropShadow(+25d, 0d, +2d, Color.DARKSEAGREEN));
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-    }
-
     private void writeDataToJSONFile(String cuisineID, String cuisineName, double cuisinePrice, String cuisineNote, int cuisineQuantity) {
         boolean idExists = false;
         JsonArray jsonArray;
-
+        //-----------------
         try {
             jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
-
+        //-----------------
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
             String existingCuisineID = jsonObject.get("Cuisine ID").getAsString();

@@ -41,44 +41,30 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RestaurantMainController implements Initializable {
-    private final static String TEMPORARY_USER_PATH = "src/main/resources/com/huongbien/temp/loginSession.json";
-
     @FXML
     public Label employeeNameLabel;
-
     @FXML
     private Button hideMenuButton;
-
     @FXML
     private Button showMenuButton;
-
     @FXML
     private BorderPane menuBorderPane;
-
     @FXML
     private HBox hidedMenuBarHBox;
-
     @FXML
     private HBox mainOverlayHBox;
-
     @FXML
     private VBox overlayMenubarVBox;
-
     @FXML
     private Pane linePane;
-
     @FXML
     private Label currentDateLabel;
-
     @FXML
     private Label currentDayLabel;
-
     @FXML
     private Label currentTimeLabel;
-
     @FXML
     private Label featureTitleLabel;
-
     @FXML
     private BorderPane mainBorderPane;
 
@@ -99,7 +85,6 @@ public class RestaurantMainController implements Initializable {
         timeline.play();
     }
 
-    //eventNav
     public void openHome() throws IOException {
         featureTitleLabel.setText("Trang chủ");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantHome.fxml"));
@@ -428,7 +413,7 @@ public class RestaurantMainController implements Initializable {
                 e.printStackTrace();
             }
             JsonArray jsonArray = new JsonArray();
-            Utils.writeJsonToFile(jsonArray, TEMPORARY_USER_PATH);
+            Utils.writeJsonToFile(jsonArray, Utils.LOGINSESSION_PATH);
         }
     }
 
@@ -455,7 +440,7 @@ public class RestaurantMainController implements Initializable {
     }
 
     private void loadEmployeeInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_USER_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Utils.LOGINSESSION_PATH);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();

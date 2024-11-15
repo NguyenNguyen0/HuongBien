@@ -7,35 +7,25 @@ import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Table;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
-public class OrderTableItemController implements Initializable {
-    private final static String TEMPORARY_TABLE_PATH = "src/main/resources/com/huongbien/temp/temporaryTable.json";
-
+public class OrderTableItemController {
     @FXML
     private ImageView tableImageView;
-
     @FXML
     private ImageView checkedImageView;
-
     @FXML
-    private Label tableIdLabel;
-
+    private Label tableIdLabel; // Table ID displayed in the table item, get from the database !important
     @FXML
     private Label tableNameLabel;
-
     @FXML
     private Label tableSeatLabel;
-
     @FXML
     private Label tableTypeLabel;
 
@@ -43,6 +33,7 @@ public class OrderTableItemController implements Initializable {
 
     public OrderTableController orderTableController;
 
+    // Set the orderTableController
     public void setOrderTableController(OrderTableController orderTableController) {
         this.orderTableController = orderTableController;
     }
@@ -52,7 +43,6 @@ public class OrderTableItemController implements Initializable {
         tableNameLabel.setText(table.getName());
         tableTypeLabel.setText(table.getTableType().getName());
         tableSeatLabel.setText("Số chỗ: " + table.getSeats());
-
         setTableImage(table.getStatus());
         setCheckedTableFromJSON();
     }
@@ -69,7 +59,7 @@ public class OrderTableItemController implements Initializable {
     private void setCheckedTableFromJSON() {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_TABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -93,7 +83,7 @@ public class OrderTableItemController implements Initializable {
     public void updateCheckedIcon(String tableId) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_TABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -114,18 +104,15 @@ public class OrderTableItemController implements Initializable {
         }
     }
 
-    private void writeDataToJSONFile(String tableId) throws SQLException {
-        TableDAO dao_table = TableDAO.getInstance();
-        Table table = dao_table.getById(tableId);
-
+    private void writeDataToJSONFile(String tableId) {
+        Table table = TableDAO.getInstance().getById(tableId);
         if (table != null) {
             JsonArray jsonArray;
             try {
-                jsonArray = Utils.readJsonFromFile(TEMPORARY_TABLE_PATH);
+                jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
-
             boolean tableExists = false;
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonObject existingTable = jsonArray.get(i).getAsJsonObject();
@@ -135,31 +122,32 @@ public class OrderTableItemController implements Initializable {
                     break;
                 }
             }
-
             if (!tableExists) {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("Table ID", table.getId());
                 jsonArray.add(jsonObject);
             }
-
-            Utils.writeJsonToFile(jsonArray, TEMPORARY_TABLE_PATH);
-
+            Utils.writeJsonToFile(jsonArray, Utils.TEMPORARYTABLE_PATH);
             updateCheckedIcon(tableId);
         } else {
             System.out.println("Table with ID " + tableId + " not found in the database.");
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
     @FXML
     void onTableItemComponentClicked(MouseEvent event) throws FileNotFoundException, SQLException {
+        //check status of table
         String tableId = tableIdLabel.getText();
-        writeDataToJSONFile(tableId);
-        orderTableController.tableInfoTabPane.getTabs().clear();
-        orderTableController.readTableDataFromJSON();
+        Table table = TableDAO.getInstance().getById(tableId);
+        switch (table.getStatus()) {
+            case "Đặt trước" -> Utils.showAlert("Bàn đang được đặt trước, không thể chọn bàn này.", "Đặt trước");
+            case "Phục vụ" -> Utils.showAlert("Bàn đang được phục vụ, không thể chọn bàn này.", "Phục vụ");
+            case "Bàn đóng" -> Utils.showAlert("Bàn đã đóng, không thể chọn bàn này.", "Bàn đóng");
+            case "Bàn trống" -> {
+                writeDataToJSONFile(tableId);
+                orderTableController.tableInfoTabPane.getTabs().clear();
+                orderTableController.readTableDataFromJSON();
+            }
+        }
     }
 }
