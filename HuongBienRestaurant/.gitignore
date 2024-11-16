@@ -39,12 +39,14 @@ build/
 /src/main/java/com/huongbien/test/
 
 # ignore all files in temp package
-temp/**
-temp/
-src/main/resources/com/huongbien/img/qr
-src/main/resources/com/huongbien/qrCode
+/src/main/resources/com/huongbien/temp/**
+
+# ignore all files in qr package
+/src/main/resources/com/huongbien/qrCode/**
 
 # ignore all files in Faker package
 src/main/java/com/huongbien/database/faker/
 src/main/java/com/huongbien/database/faker/**
+
+# ignore .env file
 /.env
