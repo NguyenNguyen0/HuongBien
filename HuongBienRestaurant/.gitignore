@@ -42,6 +42,7 @@ build/
 temp/**
 temp/
 src/main/resources/com/huongbien/img/qr
+src/main/resources/com/huongbien/qrCode
 
 # ignore all files in Faker package
 src/main/java/com/huongbien/database/faker/

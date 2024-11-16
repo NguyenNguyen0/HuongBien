@@ -16,7 +16,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,19 +29,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderCuisineController implements Initializable {
-    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryBill.json";
-    private final static String TEMPORARY_TABLE_PATH = "src/main/resources/com/huongbien/temp/temporaryTable.json";
     //cuisine
-    @FXML
-    private BorderPane cuisineBorderPane;
     @FXML
     private ScrollPane cuisineScrollPane;
     @FXML
     private GridPane cuisineGridPane;
-
-    private List<Cuisine> cuisines;
-
-    private List<OrderDetail> orderDetails;
     @FXML
     private ScrollPane billScrollPane;
     @FXML
@@ -61,16 +52,16 @@ public class OrderCuisineController implements Initializable {
     }
 
     private void loadCuisine() {
-        cuisines = new ArrayList<>(getCuisineData());
+        List<Cuisine> cuisines = new ArrayList<>(getCuisineData());
         int columns = 0;
         int rows = 1;
         try {
-            for (int i = 0; i < cuisines.size(); i++) {
+            for (Cuisine cuisine : cuisines) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderCuisineItem.fxml"));
                 VBox cuisineBox = fxmlLoader.load();
                 OrderCuisineItemController orderCuisineItemController = fxmlLoader.getController();
-                orderCuisineItemController.setCuisineData(cuisines.get(i));
+                orderCuisineItemController.setCuisineData(cuisine);
                 orderCuisineItemController.setOrderCuisineController(this);
                 if (columns == 3) {
                     columns = 0;
@@ -87,16 +78,16 @@ public class OrderCuisineController implements Initializable {
     }
 
     public void loadBill() throws FileNotFoundException {
-        orderDetails = new ArrayList<>(getBillData());
+        List<OrderDetail> orderDetails = new ArrayList<>(getBillData());
         int columns = 0;
         int rows = 1;
         try {
-            for (int i = 0; i < orderDetails.size(); i++) {
+            for (OrderDetail orderDetail : orderDetails) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderBillItem.fxml"));
                 HBox billBox = fxmlLoader.load();
                 OrderBillItemController _orderBillItemController = fxmlLoader.getController();
-                _orderBillItemController.setDataBill(orderDetails.get(i));
+                _orderBillItemController.setDataBill(orderDetail);
                 _orderBillItemController.setOrderBillController(this);
                 if (columns == 1) {
                     columns = 0;
@@ -113,7 +104,7 @@ public class OrderCuisineController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -137,18 +128,16 @@ public class OrderCuisineController implements Initializable {
 
     private List<Cuisine> getCuisineData() {
         CuisineDAO cuisineDAO = CuisineDAO.getInstance();
-        List<Cuisine> ls = cuisineDAO.getAll();
-        return ls;
+        return cuisineDAO.getAll();
     }
 
     private List<OrderDetail> getBillData() throws FileNotFoundException {
-        List<OrderDetail> ls = readFromBillJSON();
-        return ls;
+        return readFromBillJSON();
     }
 
     public void setCuisinesInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayBill = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
-        JsonArray jsonArrayTab = Utils.readJsonFromFile(TEMPORARY_TABLE_PATH);
+        JsonArray jsonArrayBill = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        JsonArray jsonArrayTab = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
 
         int totalQuantityCuisine = 0;
         double totalAmount = 0.0;
@@ -159,7 +148,7 @@ public class OrderCuisineController implements Initializable {
             totalAmount += cuisineMoney;
         }
         billCuisineQuantityLabel.setText(totalQuantityCuisine + " món");
-        billTotalAmountLabel.setText(Utils.formatPrice(totalAmount) + " VNĐ");
+        billTotalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
 
         //table
         StringBuilder tabInfoBuilder = new StringBuilder();
@@ -168,9 +157,12 @@ public class OrderCuisineController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
-
-            tabInfoBuilder.append(floorStr).append(" - ").append(table.getName()).append(", ");
+            if (table != null) {
+                String floorStr = (table.getFloor() == 0) ? "Tầng trệt" : "Tầng " + table.getFloor();
+                tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append("), ");
+            } else {
+                tabInfoBuilder.append("Thông tin bàn không xác định, ");
+            }
         }
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
@@ -193,22 +185,22 @@ public class OrderCuisineController implements Initializable {
 
     @FXML
     void onPayButtonClicked(ActionEvent event) throws IOException {
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
         if (!jsonArray.isEmpty()) {
-            restaurantMainController.openPayment();
+            restaurantMainController.openOrderPayment();
         } else {
-            System.out.println("Vui lòng chọn món ăn");
+            Utils.showAlert("Vui lòng chọn món", "Reminder");
         }
     }
 
     @FXML
     void onBackButtonClicked(ActionEvent event) throws IOException {
-        restaurantMainController.openOrder();
+        restaurantMainController.openOrderTable();
     }
 
     @FXML
     void onCancelButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
-        Utils.writeJsonToFile(new JsonArray(), TEMPORARY_BILL_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUISINE_PATH);
         billGridPane.getChildren().clear();
         loadBill();
         setCuisinesInfoFromJSON();

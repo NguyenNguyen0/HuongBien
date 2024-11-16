@@ -36,48 +36,35 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RestaurantMainController implements Initializable {
-    private final static String TEMPORARY_USER_PATH = "src/main/resources/com/huongbien/temp/loginSession.json";
-
     @FXML
     public Label employeeNameLabel;
-
     @FXML
     private Button hideMenuButton;
-
     @FXML
     private Button showMenuButton;
-
     @FXML
     private BorderPane menuBorderPane;
-
     @FXML
     private HBox hidedMenuBarHBox;
-
     @FXML
     private HBox mainOverlayHBox;
-
     @FXML
     private VBox overlayMenubarVBox;
-
     @FXML
     private Pane linePane;
-
     @FXML
     private Label currentDateLabel;
-
     @FXML
     private Label currentDayLabel;
-
     @FXML
     private Label currentTimeLabel;
-
     @FXML
     private Label featureTitleLabel;
-
     @FXML
     private BorderPane mainBorderPane;
 
@@ -98,7 +85,6 @@ public class RestaurantMainController implements Initializable {
         timeline.play();
     }
 
-    //eventNav
     public void openHome() throws IOException {
         featureTitleLabel.setText("Trang chủ");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantHome.fxml"));
@@ -117,38 +103,38 @@ public class RestaurantMainController implements Initializable {
         lookup.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void openOrder() throws IOException {
+    public void openOrderTable() throws IOException {
         featureTitleLabel.setText("Đặt bàn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderTable.fxml"));
-        BorderPane order = loader.load();
-        mainBorderPane.setCenter(order);
-        order.prefWidthProperty().bind(mainBorderPane.widthProperty());
-        order.prefHeightProperty().bind(mainBorderPane.heightProperty());
-        //
+        BorderPane orderTable = loader.load();
+        mainBorderPane.setCenter(orderTable);
+        orderTable.prefWidthProperty().bind(mainBorderPane.widthProperty());
+        orderTable.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
         OrderTableController orderTableController = loader.getController();
         orderTableController.setRestaurantMainController(this);
     }
 
-    public void openCuisine() throws IOException {
+    public void openOrderCuisine() throws IOException {
         featureTitleLabel.setText("Đặt bàn  -  Đặt món");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderCuisine.fxml"));
-        BorderPane cuisine = loader.load();
-        mainBorderPane.setCenter(cuisine);
-        cuisine.prefWidthProperty().bind(mainBorderPane.widthProperty());
-        cuisine.prefHeightProperty().bind(mainBorderPane.heightProperty());
-        //
+        BorderPane orderCuisine = loader.load();
+        mainBorderPane.setCenter(orderCuisine);
+        orderCuisine.prefWidthProperty().bind(mainBorderPane.widthProperty());
+        orderCuisine.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
         OrderCuisineController orderCuisineController = loader.getController();
         orderCuisineController.setRestaurantMainController(this);
     }
 
-    public void openPayment() throws IOException {
+    public void openOrderPayment() throws IOException {
         featureTitleLabel.setText("Đặt bàn  -  Đặt món  -  Thanh toán");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderPayment.fxml"));
-        BorderPane payment = loader.load();
-        mainBorderPane.setCenter(payment);
-        payment.prefWidthProperty().bind(mainBorderPane.widthProperty());
-        payment.prefHeightProperty().bind(mainBorderPane.heightProperty());
-        //
+        BorderPane orderPayment = loader.load();
+        mainBorderPane.setCenter(orderPayment);
+        orderPayment.prefWidthProperty().bind(mainBorderPane.widthProperty());
+        orderPayment.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
         OrderPaymentController orderPaymentController = loader.getController();
         orderPaymentController.setRestaurantMainController(this);
     }
@@ -162,13 +148,16 @@ public class RestaurantMainController implements Initializable {
         statistics.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void openReservation() throws IOException {
+    public void ReservationManagement() throws IOException {
         featureTitleLabel.setText("Quản lý đơn đặt");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/ReservationManagement.fxml"));
         BorderPane listOrder = loader.load();
         mainBorderPane.setCenter(listOrder);
         listOrder.prefWidthProperty().bind(mainBorderPane.widthProperty());
         listOrder.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
+        ReservationManagementController reservationManagementController = loader.getController();
+        reservationManagementController.setRestaurantMainController(this);
     }
 
     public void openManageBill() throws IOException {
@@ -271,12 +260,12 @@ public class RestaurantMainController implements Initializable {
 
     @FXML
     void onHideOrderButtonClicked(ActionEvent event) throws IOException {
-        openOrder();
+        openOrderTable();
     }
 
     @FXML
     void onHideReservationButtonClicked(ActionEvent event) throws IOException {
-        openReservation();
+        ReservationManagement();
     }
 
     @FXML
@@ -335,13 +324,13 @@ public class RestaurantMainController implements Initializable {
     @FXML
     void onShowOrderButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openOrder();
+        openOrderTable();
     }
 
     @FXML
     void onShowReservationButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openReservation();
+        ReservationManagement();
     }
 
     @FXML
@@ -424,7 +413,7 @@ public class RestaurantMainController implements Initializable {
                 e.printStackTrace();
             }
             JsonArray jsonArray = new JsonArray();
-            Utils.writeJsonToFile(jsonArray, TEMPORARY_USER_PATH);
+            Utils.writeJsonToFile(jsonArray, Utils.LOGINSESSION_PATH);
         }
     }
 
@@ -451,12 +440,14 @@ public class RestaurantMainController implements Initializable {
     }
 
     private void loadEmployeeInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_USER_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Utils.LOGINSESSION_PATH);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
             EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
-            Employee employee = employeeDAO.getById(id).getFirst();
+            List<Employee> employees = employeeDAO.getById(id);
+            Employee employee = (employees.isEmpty() ? null : employees.get(0));
+            assert employee != null;
             employeeNameLabel.setText(employee.getName());
         }
     }

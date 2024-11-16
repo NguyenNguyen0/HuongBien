@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OrderPaymentBillItemController implements Initializable {
-    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryBill.json";
+    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
     @FXML
     private Label cuisineIdLabel;
     @FXML
@@ -43,9 +43,9 @@ public class OrderPaymentBillItemController implements Initializable {
     public void setDataBill(OrderDetail orderDetail) {
         cuisineIdLabel.setText(orderDetail.getCuisine().getCuisineId());
         cuisineNameLabel.setText(orderDetail.getCuisine().getName());
-        cuisineSalePriceLabel.setText(Utils.formatPrice(orderDetail.getCuisine().getPrice()));
+        cuisineSalePriceLabel.setText(String.format("%,.0f VNĐ", orderDetail.getCuisine().getPrice()));
         cuisineNoteLabel.setText(orderDetail.getNote());
         cuisineQuantityLabel.setText(orderDetail.getQuantity() + "");
-        cuisineTotalPriceLabel.setText(Utils.formatPrice(orderDetail.getSalePrice()));
+        cuisineTotalPriceLabel.setText(String.format("%,.0f VNĐ", orderDetail.getSalePrice()));
     }
 }

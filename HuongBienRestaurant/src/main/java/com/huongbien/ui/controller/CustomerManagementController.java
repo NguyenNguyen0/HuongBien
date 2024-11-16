@@ -7,8 +7,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.huongbien.config.AppConfig;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.entity.Customer;
+import com.huongbien.service.EmailService;
+import com.huongbien.service.QRCodeHandler;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -22,6 +25,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import javax.swing.text.html.ImageView;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -103,6 +107,7 @@ public class CustomerManagementController implements Initializable {
     private TextField searchCustomerPhoneField;
 
     private Utils utils;
+    private final QRCodeHandler qrCodeHandler = new QRCodeHandler();
 
     private void setCustomerTableValues() {
         CustomerDAO customerDAO = CustomerDAO.getInstance();
@@ -305,7 +310,7 @@ public class CustomerManagementController implements Initializable {
     void onSearchCustomerPhoneFieldKeyReleased(KeyEvent event) {
         String phone = searchCustomerPhoneField.getText();
         CustomerDAO customerDAO = CustomerDAO.getInstance();
-        List<Customer> customerList = customerDAO.getByPhoneNumber(phone);
+        List<Customer> customerList = customerDAO.getByManyPhoneNumber(phone);
         ObservableList<Customer> listCustomer = FXCollections.observableArrayList(customerList);
 
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -335,41 +340,32 @@ public class CustomerManagementController implements Initializable {
                     + selectedCustomer.getMembershipLevel() + ","
                     + selectedCustomer.getPhoneNumber();
 
-            createQRCode(selectedCustomer, qrContent);
+            QRCodeHandler qrCodeHandler = new QRCodeHandler();
+            qrCodeHandler.createQRCode(selectedCustomer, qrContent);
+
+            String qrImagePath = "src/main/resources/com/huongbien/qrCode/QrCode_Ma" + selectedCustomer.getCustomerId() + ".png";
+            File qrFile = new File(qrImagePath);
+
+            if (qrFile.exists()) {
+                EmailService emailService = new EmailService(AppConfig.getEmailUsername(), AppConfig.getEmailPassword());
+                boolean emailSent = emailService.sendEmailWithQRCode(selectedCustomer.getEmail(), qrImagePath);
+
+                if (emailSent) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "QR code created and email sent successfully!");
+                    alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to send email!");
+                    alert.showAndWait();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to create QR code for customer ID: " + selectedCustomer.getCustomerId());
+                alert.showAndWait();
+            }
+
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Vui lòng chọn một khách hàng để tạo mã QR!");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a customer to generate a QR code!");
             alert.showAndWait();
         }
     }
 
-    private void createQRCode(Customer selectedCustomer, String qrContent) {
-        try {
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-
-            Map<EncodeHintType, Object> hints = new HashMap<>();
-            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-
-            BitMatrix matrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, 400, 400, hints);
-
-            String customerId = selectedCustomer.getCustomerId();
-            String outputFile = "src/main/resources/com/huongbien/img/qr/QrCode_MaKH" + customerId + ".png";
-            Path path = Paths.get(outputFile);
-
-            Files.createDirectories(path.getParent());
-
-            MatrixToImageWriter.writeToPath(matrix, "PNG", path);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "QR code được tạo thành công tại: " + outputFile);
-            alert.showAndWait();
-        } catch (WriterException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi viết mã QR: " + e.getMessage());
-            alert.showAndWait();
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi khi ghi tệp: " + e.getMessage());
-            alert.showAndWait();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Lỗi không xác định: " + e.getMessage());
-            alert.showAndWait();
-        }
-    }
 }

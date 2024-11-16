@@ -3,18 +3,23 @@ package com.huongbien.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.huongbien.entity.Table;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.stream.Collectors;
 
 // class Utils là để những hàm chức năng (hỗ trợ) sài chung cho nhiều nơi cho dự án
 public class Utils {
+    public final static String LOGINSESSION_PATH = "src/main/resources/com/huongbien/temp/loginSession.json";
+    public final static String TEMPORARYCUISINE_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
+    public final static String TEMPORARYTABLE_PATH = "src/main/resources/com/huongbien/temp/temporaryTable.json";
+    public final static String TEMPORARYCUSTOMER_PATH = "src/main/resources/com/huongbien/temp/temporaryCustomer.json";
+    public final static String PAYMENTQUEUE_PATH = "src/main/resources/com/huongbien/temp/paymentQueue.json";
 
     //  hàm băm mật khẩu bằng thuật toán sha256
     public static String hashPassword(String password) {
@@ -63,7 +68,7 @@ public class Utils {
         };
     }
 
-    //  Hàm ghi dữ liệu Binary xuống file text
+    //  Hàm ghi dữ liệu Binary xuống file text - Không dùng nhưng vẫn để đó cho tao =))
     public boolean WriteToFile(Object obj, String filePath) throws Exception {
         ObjectOutputStream oos = null;
         oos = new ObjectOutputStream(new FileOutputStream(filePath));
@@ -73,7 +78,7 @@ public class Utils {
         return true;
     }
 
-    // Hàm đọc dữ liệu từ file lên
+    // Hàm đọc dữ liệu từ file lên - Không dùng nhưng vẫn để đó cho tao =))
     public Object ReadFromFile(String filePath) throws Exception {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
         Object o = ois.readObject();
@@ -117,13 +122,12 @@ public class Utils {
         }
     }
 
-    //Format đơn vị nhỏ
-    public static String formatPrice(double price) {
-        DecimalFormat formatter = new DecimalFormat("#,###");
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-        return formatter.format(price);
+    //Alert
+    public static void showAlert(String message, String title) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 

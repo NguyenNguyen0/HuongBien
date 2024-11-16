@@ -9,7 +9,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="956.0" prefWidth="1614.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantHomeController">
+<BorderPane prefHeight="956.0" prefWidth="1614.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantHomeController">
    <top>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" styleClass="textField-line-bot" BorderPane.alignment="CENTER">
          <children>
@@ -36,22 +36,22 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="employeeNameField" layoutX="181.0" layoutY="51.0" text="xxxxx">
+                  <Label fx:id="employeeNameField" layoutX="181.0" layoutY="51.0" text="Unknown">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="employeePositionField" layoutX="181.0" layoutY="110.0" text="xxxxxx">
+                  <Label fx:id="employeePositionField" layoutX="181.0" layoutY="110.0" text="Unknown">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="timeWorksField" layoutX="1498.0" layoutY="51.0" prefHeight="35.0" prefWidth="100.0" text="1:00:11" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="1498.0" AnchorPane.rightAnchor="77.0" AnchorPane.topAnchor="51.0">
+                  <Label fx:id="timeWorksField" layoutX="1498.0" layoutY="51.0" prefHeight="35.0" prefWidth="100.0" text="Unknown" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="1498.0" AnchorPane.rightAnchor="77.0" AnchorPane.topAnchor="51.0">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="startTimeField" layoutX="1261.0" layoutY="114.0" prefHeight="35.0" prefWidth="376.0" text="14:00 | Saturday 02/11/2024" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="1261.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="114.0">
+                  <Label fx:id="startTimeField" layoutX="1261.0" layoutY="114.0" prefHeight="35.0" prefWidth="376.0" text="Unknown" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="1261.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="114.0">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -106,22 +106,22 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="totalCustomersField" alignment="CENTER" layoutX="231.0" layoutY="101.0" prefHeight="27.0" prefWidth="223.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="totalCustomersField" alignment="CENTER" layoutX="231.0" layoutY="101.0" prefHeight="27.0" prefWidth="223.0" text="Unknown" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="totalOrderField" alignment="CENTER" layoutX="1186.0" layoutY="95.0" prefHeight="27.0" prefWidth="224.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="totalOrderField" alignment="CENTER" layoutX="1186.0" layoutY="95.0" prefHeight="27.0" prefWidth="224.0" text="Unknown" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="totalReservationField" alignment="CENTER" layoutX="854.0" layoutY="95.0" prefHeight="27.0" prefWidth="224.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="totalReservationField" alignment="CENTER" layoutX="854.0" layoutY="95.0" prefHeight="27.0" prefWidth="224.0" text="Unknown" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="totalRevenuesField" alignment="CENTER" layoutX="538.0" layoutY="95.0" prefHeight="27.0" prefWidth="226.0" text="0" textFill="#fcf9f9">
+                  <Label fx:id="totalRevenuesField" alignment="CENTER" layoutX="538.0" layoutY="95.0" prefHeight="27.0" prefWidth="226.0" text="Unknown" textFill="#fcf9f9">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

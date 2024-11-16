@@ -22,7 +22,7 @@ public class CustomerBUS {
     }
 
     public List<Customer> getCustomerByPhoneNumber(String phoneNumber) {
-        return customerDao.getByPhoneNumber(phoneNumber);
+        return customerDao.getByManyPhoneNumber(phoneNumber);
     }
 
     public Customer getCustomer(String customerId) {
