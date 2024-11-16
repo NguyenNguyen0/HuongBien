@@ -38,7 +38,7 @@ public class PromotionDAO extends GenericDAO<Promotion> {
     }
 
     public List<Promotion> getAllById(String id) {
-        return getMany("SELECT * FROM Promotion WHERE id LIKE ?", "%" + id + "%");
+        return getMany("SELECT * FROM Promotion WHERE id LIKE ?", id + "%");
     }
 
     public List<Promotion> getForCustomer(int customerMembershipLevel, double orderAmount) {
@@ -46,12 +46,36 @@ public class PromotionDAO extends GenericDAO<Promotion> {
         return getMany(sql, customerMembershipLevel, orderAmount);
     }
 
-    public List<Promotion> getExpired() {
-        return getMany("SELECT id, name, startDate, endDate, discount, description, minimumOrderAmount, membershipLevel, status FROM Promotion WHERE status LIKE N'Hết hiệu lực'");
+    public List<Promotion> getByStatus(String status) {
+        return getMany("SELECT * FROM Promotion WHERE status = ?", status);
+    }
+
+    public List<Promotion> getByStatusWithPagination(int offset, int limit, String status) {
+        return getMany("SELECT * FROM Promotion WHERE status = ? ORDER BY endDate DESC, membershipLevel DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", status, offset, limit);
+    }
+
+    public List<Promotion> getAllWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM Promotion ORDER BY endDate DESC, membershipLevel DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", offset, limit);
+    }
+
+    public List<Promotion> getAllByIdWithPagination(int offset, int limit, String id) {
+        return getMany("SELECT * FROM Promotion WHERE id LIKE ? ORDER BY endDate DESC, membershipLevel DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", id + "%", offset, limit);
     }
 
     public Promotion getById(String id) {
         return getOne("SELECT * FROM Promotion WHERE id = ?", id);
+    }
+
+    public int countTotal() {
+        return count("SELECT COUNT(*) FROM Promotion");
+    }
+
+    public int countTotalByStatus(String status) {
+        return count("SELECT COUNT(*) FROM Promotion WHERE status = ?", status);
+    }
+
+    public int countTotalById(String id) {
+        return count("SELECT COUNT(*) FROM Promotion WHERE id LIKE ?", id + "%");
     }
 
     public boolean updateInfo(Promotion promotion) {

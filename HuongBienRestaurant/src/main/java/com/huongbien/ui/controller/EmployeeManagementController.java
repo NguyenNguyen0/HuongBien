@@ -124,8 +124,8 @@ public class EmployeeManagementController implements Initializable {
     private Button chooseImageButton;
 
     @FXML
-    private ImageView imgView_emp;
-    public byte[] imageEmpByte = null;
+    private ImageView employeeAvatar;
+    public byte[] employeeImageBytes = null;
 
     private void setPromotionTableValue() {
         EmployeeDAO employeeDao = EmployeeDAO.getInstance();
@@ -148,7 +148,7 @@ public class EmployeeManagementController implements Initializable {
         //Status
         ObservableList<String> statusList = FXCollections.observableArrayList("Đang làm", "Nghỉ phép", "Nghỉ việc");
         employeeStatusComboBox.setItems(statusList);
-        employeeStatusComboBox.setConverter(new StringConverter<String>() {
+        employeeStatusComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String status) {
                 return status != null ? status : "";
@@ -163,7 +163,7 @@ public class EmployeeManagementController implements Initializable {
             }
         });
 //        employeeStatusComboBox.getSelectionModel().selectFirst();
-        employeeStatusComboBox.setCellFactory(lv -> new ListCell<String>() {
+        employeeStatusComboBox.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -278,9 +278,9 @@ public class EmployeeManagementController implements Initializable {
     }
 
     public void clearChooserImage() {
-        imageEmpByte = null;
+        employeeImageBytes = null;
         Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png"));
-        imgView_emp.setImage(image);
+        employeeAvatar.setImage(image);
     }
 
     public void clear() {

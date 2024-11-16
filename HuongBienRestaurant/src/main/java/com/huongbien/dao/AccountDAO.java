@@ -1,6 +1,7 @@
 package com.huongbien.dao;
 
 import com.huongbien.entity.Account;
+import com.huongbien.entity.Employee;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +28,8 @@ public class AccountDAO extends GenericDAO<Account> {
         account.setEmail(resultSet.getString("email"));
         account.setIsActive(resultSet.getBoolean("isActive"));
         account.setAvatar(resultSet.getBytes("avatar"));
-        account.setEmployeeInfo(EmployeeDAO.getInstance().getById(account.getUsername()).getFirst());
+        List<Employee> employees = EmployeeDAO.getInstance().getById(account.getUsername());
+        account.setEmployeeInfo(!employees.isEmpty() ? employees.getFirst() : null);
         return account;
     }
 

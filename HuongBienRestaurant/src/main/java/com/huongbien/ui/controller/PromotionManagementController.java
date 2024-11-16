@@ -1,7 +1,8 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.PromotionDAO;
+import com.huongbien.bus.PromotionBUS;
 import com.huongbien.entity.Promotion;
+import com.huongbien.utils.Pagination;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -26,7 +27,9 @@ import java.util.ResourceBundle;
 
 public class PromotionManagementController implements Initializable {
     @FXML
-    private ImageView deleteSearchButton;
+    private Label pageIndexLabel;
+    @FXML
+    private ImageView clearSearchButton;
     @FXML
     private TextField promotionSearchField;
     @FXML
@@ -36,7 +39,7 @@ public class PromotionManagementController implements Initializable {
     @FXML
     private DatePicker endedDateDatePicker;
     @FXML
-    private TextField orderDiscountField;
+    private TextField discountField;
     @FXML
     private ComboBox<String> promotionStatusComboBox;
     @FXML
@@ -48,11 +51,9 @@ public class PromotionManagementController implements Initializable {
     @FXML
     private Button handleActionPromotionButton;
     @FXML
-    private Button clearPromotionFormButton;
-    @FXML
     private Button swapModePromotionButton;
     @FXML
-    private ComboBox<String> searchPromotionStatusComboBox;
+    private ComboBox<String> filterPromotionStatusComboBox;
     @FXML
     private TableView<Promotion> promotionTable;
     @FXML
@@ -65,7 +66,10 @@ public class PromotionManagementController implements Initializable {
     private TableColumn<Promotion, Double> promotionDiscountColumn;
     @FXML
     private TableColumn<Promotion, String> promotionMembershipLevelColumn;
-    private Utils utils;
+
+    PromotionBUS promotionBUS = new PromotionBUS();
+
+    Pagination<Promotion> promotionPagination;
 
     public void changeHandleButtonModeToEditPromotion() {
         swapModePromotionButton.setText("Thêm");
@@ -82,7 +86,7 @@ public class PromotionManagementController implements Initializable {
     }
 
     private void setComboBoxValue() {
-        //Status
+        // Membership level
         ObservableList<String> memberShipLevelList = FXCollections.observableArrayList("Đồng", "Bạc", "Vàng", "Kim cương");
         memberShipLevelComboBox.setItems(memberShipLevelList);
         memberShipLevelComboBox.setConverter(new StringConverter<String>() {
@@ -99,9 +103,11 @@ public class PromotionManagementController implements Initializable {
                         .orElse(null);
             }
         });
-        ObservableList<String> statusList = FXCollections.observableArrayList("Còn hiệu lực", "Hết hiệu lực");
-        searchPromotionStatusComboBox.setItems(statusList);
-        searchPromotionStatusComboBox.setConverter(new StringConverter<String>() {
+        // Promotion status
+        ObservableList<String> statusList = FXCollections.observableArrayList("Còn hiệu lực", "Hết hiệu lực", "Tất cả");
+        filterPromotionStatusComboBox.setItems(statusList);
+        filterPromotionStatusComboBox.setValue(statusList.getFirst());
+        filterPromotionStatusComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String status) {
                 return status != null ? status : "";
@@ -109,7 +115,7 @@ public class PromotionManagementController implements Initializable {
 
             @Override
             public String fromString(String string) {
-                return searchPromotionStatusComboBox.getItems().stream()
+                return filterPromotionStatusComboBox.getItems().stream()
                         .filter(item -> item.equals(string))
                         .findFirst()
                         .orElse(null);
@@ -117,7 +123,7 @@ public class PromotionManagementController implements Initializable {
         });
 
         promotionStatusComboBox.setItems(statusList);
-        promotionStatusComboBox.setConverter(new StringConverter<String>() {
+        promotionStatusComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String status) {
                 return status != null ? status : "";
@@ -133,19 +139,17 @@ public class PromotionManagementController implements Initializable {
         });
     }
 
-    public void setPromotionTableValue() {
-        PromotionDAO promotionDAO = PromotionDAO.getInstance();
-        List<Promotion> promotionList = promotionDAO.getAll();
-        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
-
-        promotionNameField.setEditable(true);
-        promotionDescriptionTextArea.setEditable(true);
-        minimumOrderField.setEditable(true);
-
+    public void setPromotionTableColumn() {
         promotionIdColumn.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
-
+        promotionEndedDateColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        promotionStartedDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        promotionMembershipLevelColumn.setCellValueFactory(cellData -> {
+            int memberShip = cellData.getValue().getMembershipLevel();
+            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
+            return new SimpleStringProperty(memberShipLevel);
+        });
         promotionDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
-        promotionDiscountColumn.setCellFactory(col -> new TableCell<Promotion, Double>() {
+        promotionDiscountColumn.setCellFactory(_ -> new TableCell<>() {
             @Override
             public void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
@@ -157,57 +161,75 @@ public class PromotionManagementController implements Initializable {
                 }
             }
         });
-
-        promotionMembershipLevelColumn.setCellValueFactory(cellData -> {
-            int memberShip = cellData.getValue().getMembershipLevel();
-            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
-            return new SimpleStringProperty(memberShipLevel);
-        });
-        promotionEndedDateColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-        promotionStartedDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        promotionTable.setItems(listPromotion);
     }
 
-    public void setPromotionTableValueExpired() {
-        PromotionDAO promotionDAO = PromotionDAO.getInstance();
-        List<Promotion> promotionList = promotionDAO.getExpired();
-        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+    public void setPromotionTableValue() {
+        promotionTable.getItems().clear();
+        List<Promotion> promotions = promotionPagination.getCurrentPage();
+        if (promotions.isEmpty()) {
+            Label placeholder = new Label("Không có khuyến mãi");
+            placeholder.setStyle("-fx-text-fill: #ccc; -fx-font-size: 24px; -fx-font-weight: bold;");
+            promotionTable.setPlaceholder(placeholder);
+        } else {
+            promotionTable.setItems(FXCollections.observableArrayList(promotions));
+        }
+        setPageIndexLabel();
+    }
 
-        promotionNameField.setEditable(true);
-        promotionDescriptionTextArea.setEditable(true);
-        minimumOrderField.setEditable(true);
+    public void setPaginationGetByStatus() {
+        String status = filterPromotionStatusComboBox.getValue();
+        int itemPerPage = 7;
+        int totalPromotions = promotionBUS.countTotalPromotionByStatus(status);
+        boolean isRollBack = false;
+        promotionPagination  = new Pagination<>(
+                (offset, limit) -> promotionBUS.getPromotionByStatusWithPagination(offset, limit, status),
+                itemPerPage,
+                totalPromotions,
+                isRollBack
+        );
+    }
 
-        promotionIdColumn.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+    public void setPaginationSearchById() {
+        String id = promotionSearchField.getText();
+        int itemPerPage = 7;
+        boolean isRollBack = false;
+        int totalPromotions = promotionBUS.countTotalPromotionById(id);
+        promotionPagination = new Pagination<>(
+                (offset, limit) -> promotionBUS.getPromotionByIdWithPagination(offset, limit, id),
+                itemPerPage,
+                totalPromotions,
+                isRollBack
+        );
+    }
 
-        promotionDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
-        promotionDiscountColumn.setCellFactory(col -> new TableCell<Promotion, Double>() {
-            @Override
-            public void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    // Chuyển đổi và định dạng giá trị thành phần trăm
-                    setText(String.format("%.0f%%", item * 100));
-                }
-            }
-        });
+    public void setPageIndexLabel() {
+        pageIndexLabel.setText(promotionPagination.getCurrentPageIndex() + "/" + promotionPagination.getTotalPages());
+    }
 
-        promotionMembershipLevelColumn.setCellValueFactory(cellData -> {
-            int memberShip = cellData.getValue().getMembershipLevel();
-            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
-            return new SimpleStringProperty(memberShipLevel);
-        });
-        promotionEndedDateColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-        promotionStartedDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        promotionTable.setItems(listPromotion);
+    public void setPromotionDataToForm(Promotion promotion) {
+        promotionNameField.setText(promotion.getName());
+        promotionStatusComboBox.getSelectionModel().select(promotion.getStatus());
+        double dis = promotion.getDiscount();
+        int discount = (int) (dis * 100);
+
+        DecimalFormat priceFormat = new DecimalFormat("#,###");
+        String formattedPrice = priceFormat.format(promotion.getMinimumOrderAmount());
+        minimumOrderField.setText(formattedPrice);
+
+        promotionDescriptionTextArea.setText(promotion.getDescription());
+        discountField.setText(Double.toString(discount));
+        endedDateDatePicker.setValue(promotion.getEndDate());
+        startedDateDatePicker.setValue(promotion.getStartDate());
+        int memberShip = promotion.getMembershipLevel();
+        String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
+        memberShipLevelComboBox.getSelectionModel().select(memberShipLevel);
     }
 
     public void enableInput() {
         promotionStatusComboBox.setDisable(false);
         minimumOrderField.setDisable(false);
         promotionNameField.setDisable(false);
-        orderDiscountField.setDisable(false);
+        discountField.setDisable(false);
         memberShipLevelComboBox.setDisable(false);
         promotionDescriptionTextArea.setDisable(false);
         endedDateDatePicker.setDisable(false);
@@ -218,7 +240,7 @@ public class PromotionManagementController implements Initializable {
         promotionStatusComboBox.setDisable(true);
         minimumOrderField.setDisable(true);
         promotionNameField.setDisable(true);
-        orderDiscountField.setDisable(true);
+        discountField.setDisable(true);
         memberShipLevelComboBox.setDisable(true);
         promotionDescriptionTextArea.setDisable(true);
         endedDateDatePicker.setDisable(true);
@@ -229,7 +251,7 @@ public class PromotionManagementController implements Initializable {
         promotionStatusComboBox.getSelectionModel().clearSelection();
         minimumOrderField.clear();
         promotionNameField.clear();
-        orderDiscountField.clear();
+        discountField.clear();
         promotionDescriptionTextArea.clear();
         startedDateDatePicker.setValue(null);
         endedDateDatePicker.setValue(null);
@@ -241,7 +263,7 @@ public class PromotionManagementController implements Initializable {
         if (promotionNameField.getText().trim().isEmpty()) {
             return false;
         }
-        if (orderDiscountField.getText().trim().isEmpty()) {
+        if (discountField.getText().trim().isEmpty()) {
             return false;
         }
         if (endedDateDatePicker.getValue() == null) {
@@ -253,12 +275,56 @@ public class PromotionManagementController implements Initializable {
         return !endedDateDatePicker.getValue().isBefore(startedDateDatePicker.getValue());
     }
 
+    public Promotion getPromotionFromForm() {
+        String name = promotionNameField.getText();
+        LocalDate startDate = startedDateDatePicker.getValue();
+        LocalDate endDate = endedDateDatePicker.getValue();
+        String status = promotionStatusComboBox.getSelectionModel().getSelectedItem();
+        String description = promotionDescriptionTextArea.getText();
+        double minimumOrder = Double.parseDouble(minimumOrderField.getText().replace(",", ""));
+        double discount = Double.parseDouble(discountField.getText().replace("%", "")) / 100;
+        int membershipLevel = Utils.toIntMembershipLevel(memberShipLevelComboBox.getSelectionModel().getSelectedItem());
+
+        return new Promotion(name, startDate, endDate, discount, description, minimumOrder, membershipLevel, status);
+    }
+
+    public void handleEditPromotion() {
+        if (!validatePromotionData()) return;
+        if (promotionTable.getSelectionModel().getSelectedItem() == null) return;
+
+        Promotion editedPromotion = getPromotionFromForm();
+        Promotion selectedPromotion = promotionTable.getSelectionModel().getSelectedItem();
+        editedPromotion.setPromotionId(selectedPromotion.getPromotionId());
+        if (promotionBUS.updatePromotion(editedPromotion)) {
+            setPromotionTableValue();
+            setPageIndexLabel();
+            clearPromotionForm();
+//            TODO: show toast message here
+        }
+    }
+
+    public void handleAddPromotion() {
+        if (!validatePromotionData()) return;
+
+        Promotion newPromotion = getPromotionFromForm();
+        if (newPromotion != null && promotionBUS.addPromotion(newPromotion)) {
+            setPromotionTableValue();
+            setPageIndexLabel();
+            clearPromotionForm();
+//            TODO: show toast message here
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        clearSearchButton.setVisible(false);
         disableInput();
-        setPromotionTableValue();
         setComboBoxValue();
-        searchPromotionStatusComboBox.getSelectionModel().select(0);
+        setPromotionTableColumn();
+
+        setPaginationGetByStatus();
+        setPromotionTableValue();
+        setPageIndexLabel();
     }
 
     @FXML
@@ -267,132 +333,56 @@ public class PromotionManagementController implements Initializable {
         Promotion selectedItem = promotionTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             enableInput();
-            promotionNameField.setText(selectedItem.getName());
-            promotionStatusComboBox.getSelectionModel().select(selectedItem.getStatus());
-            double dis = selectedItem.getDiscount();
-            int discount = (int) (dis * 100);
-
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            String formattedPrice = priceFormat.format(selectedItem.getMinimumOrderAmount());
-            minimumOrderField.setText(formattedPrice);
-
-            promotionDescriptionTextArea.setText(selectedItem.getDescription());
-            orderDiscountField.setText(discount + "%");
-            endedDateDatePicker.setValue(selectedItem.getEndDate());
-            startedDateDatePicker.setValue(selectedItem.getStartDate());
-            int memberShip = selectedItem.getMembershipLevel();
-            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
-            memberShipLevelComboBox.getSelectionModel().select(memberShipLevel);
+            setPromotionDataToForm(selectedItem);
         }
     }
 
     @FXML
-    void onDeleteSearchButtonClicked(MouseEvent mouseEvent) {
+    void onClearSearchButtonClicked(MouseEvent mouseEvent) {
         promotionSearchField.setText("");
+        clearSearchButton.setVisible(false);
+        setPaginationGetByStatus();
         setPromotionTableValue();
     }
 
     @FXML
     void onPromotionSearchFieldKeyReleased(KeyEvent keyEvent) {
         String id = promotionSearchField.getText();
-        PromotionDAO promotionDAO = PromotionDAO.getInstance();
-        List<Promotion> promotionList = promotionDAO.getAllById(id);
-        ObservableList<Promotion> promotions = FXCollections.observableArrayList(promotionList);
-
-        promotionIdColumn.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
-        promotionDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
-        promotionMembershipLevelColumn.setCellValueFactory(cellData -> {
-            int memberShip = cellData.getValue().getMembershipLevel();
-            String memberShipLevel = Utils.toStringMembershipLevel(memberShip);
-            return new SimpleStringProperty(memberShipLevel);
-        });
-        promotionEndedDateColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-        promotionStartedDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        promotionTable.setItems(promotions);
+        if (id.isBlank()) {
+            clearSearchButton.setVisible(false);
+            setPaginationGetByStatus();
+            setPromotionTableValue();
+        } else {
+            clearSearchButton.setVisible(true);
+            setPaginationSearchById();
+            setPromotionTableValue();
+        }
     }
 
     @FXML
     void onSwapModePromotionButtonClicked(ActionEvent actionEvent) {
-        if (swapModePromotionButton.getText().equals("Thêm")) {
-            promotionNameField.requestFocus();
-            changeHandleButtonModeToAddPromotion();
-            clearPromotionForm();
-            enableInput();
-            promotionStatusComboBox.getSelectionModel().select(0);
-            promotionStatusComboBox.setDisable(true);
-        } else {
-            disableInput();
-            changeHandleButtonModeToEditPromotion();
+        switch (swapModePromotionButton.getText()) {
+            case "Thêm" -> {
+                promotionNameField.requestFocus();
+                changeHandleButtonModeToAddPromotion();
+                clearPromotionForm();
+                enableInput();
+                promotionStatusComboBox.getSelectionModel().select(0);
+                promotionStatusComboBox.setDisable(true);
+            }
+            case "Sửa" -> {
+                disableInput();
+                changeHandleButtonModeToEditPromotion();
+            }
         }
     }
 
     @FXML
     void onHandleActionPromotionButtonClicked(ActionEvent actionEvent) {
         if (handleActionPromotionButton.getText().equals("Sửa")) {
-            enableInput();
-            Promotion promotion = null;
-            if (validatePromotionData()) {
-                String name = promotionNameField.getText();
-                String status = promotionStatusComboBox.getSelectionModel().getSelectedItem();
-
-                String minimum = minimumOrderField.getText();
-                double minimumOrder = Double.parseDouble(minimum.replace(",", ""));
-
-                String dis = orderDiscountField.getText();
-                dis = dis.replace("%", "");
-                double discount = Double.parseDouble(dis) / 100;
-
-                String memberShip = memberShipLevelComboBox.getSelectionModel().getSelectedItem();
-                int memberShipLevel = Utils.toIntMembershipLevel(memberShip);
-
-                LocalDate start = startedDateDatePicker.getValue();
-                LocalDate end = endedDateDatePicker.getValue();
-                String description = promotionDescriptionTextArea.getText();
-                String id = promotionTable.getSelectionModel().getSelectedItem().getPromotionId();
-                PromotionDAO promotionDAO = PromotionDAO.getInstance();
-                promotion = promotionDAO.getById(id);
-                promotion.setName(name);
-                promotion.setDescription(description);
-                promotion.setEndDate(end);
-                promotion.setStartDate(start);
-                promotion.setDiscount(discount);
-                promotion.setStatus(status);
-                promotion.setMinimumOrderAmount(minimumOrder);
-                promotion.setMembershipLevel(memberShipLevel);
-                System.out.println(promotion.getStatus());
-                if (promotionDAO.updateInfo(promotion)) {
-                    promotionTable.getItems().clear();
-                    setPromotionTableValue();
-                }
-            }
-            clearPromotionForm();
+            handleEditPromotion();
         } else if (handleActionPromotionButton.getText().equals("Thêm")) {
-            Promotion promotion = null;
-            if (validatePromotionData()) {
-                String name = promotionNameField.getText();
-                String status = promotionStatusComboBox.getSelectionModel().getSelectedItem();
-
-                double minimumOrder = Double.parseDouble(minimumOrderField.getText());
-                String dis = orderDiscountField.getText();
-                int i = dis.indexOf("%");
-                dis = dis.substring(0, i);
-                Double discount = Double.parseDouble(dis) / 100;
-
-                String memberShip = memberShipLevelComboBox.getSelectionModel().getSelectedItem();
-
-                int memberShipLevel = Utils.toIntMembershipLevel(memberShip);
-
-                LocalDate start = startedDateDatePicker.getValue();
-                LocalDate end = endedDateDatePicker.getValue();
-                String description = promotionDescriptionTextArea.getText();
-                PromotionDAO promotionDAO = PromotionDAO.getInstance();
-                promotion = new Promotion(name, start, end, discount, description, minimumOrder, memberShipLevel, "Còn hiệu lực");
-                if (promotionDAO.add(promotion)) {
-                    promotionTable.getItems().clear();
-                    setPromotionTableValue();
-                }
-            }
-            clearPromotionForm();
+            handleAddPromotion();
         }
     }
 
@@ -402,16 +392,14 @@ public class PromotionManagementController implements Initializable {
     }
 
     @FXML
-    public void onSearchPromotionStatusComboBoxSelected(ActionEvent actionEvent) {
-        if (searchPromotionStatusComboBox.getSelectionModel().isSelected(0)) {
-            setPromotionTableValue();
-            swapModePromotionButton.setVisible(true);
-        } else {
-            changeHandleButtonModeToEditPromotion();
-            swapModePromotionButton.setVisible(false);
-            setPromotionTableValueExpired();
-            clearPromotionForm();
-        }
+    public void onFilterPromotionStatusComboBoxSelected(ActionEvent actionEvent) {
+        String statusFilter = filterPromotionStatusComboBox.getValue();
+        if (statusFilter == null) return;
+        promotionPagination.setCurrentPage(
+                (offset, limit) -> promotionBUS.getPromotionByStatusWithPagination(offset, limit, statusFilter),
+                promotionBUS.countTotalPromotionByStatus(statusFilter)
+        );
+        setPromotionTableValue();
     }
 
     @FXML
@@ -435,5 +423,29 @@ public class PromotionManagementController implements Initializable {
             minimumOrderField.setText(validInput.toString());
             minimumOrderField.positionCaret(validInput.length());
         }
+    }
+
+    @FXML
+    void onFirstPageButtonClicked(MouseEvent event) {
+        promotionPagination.goToFirstPage();
+        setPromotionTableValue();
+    }
+
+    @FXML
+    void onPrevPageButtonClicked(MouseEvent event) {
+        promotionPagination.goToPreviousPage();
+        setPromotionTableValue();
+    }
+
+    @FXML
+    void onNextPageButtonClicked(MouseEvent event) {
+        promotionPagination.goToNextPage();
+        setPromotionTableValue();
+    }
+
+    @FXML
+    void onLastPageButtonClicked(MouseEvent event) {
+        promotionPagination.goToLastPage();
+        setPromotionTableValue();
     }
 }

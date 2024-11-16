@@ -43,6 +43,19 @@ public abstract class GenericDAO<T> {
         }
     }
 
+    public int count(String sql, Object... args) {
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement(sql, args);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean update(String sql, Object... args) {
         try {
             PreparedStatement statement = statementHelper.prepareStatement(sql, args);

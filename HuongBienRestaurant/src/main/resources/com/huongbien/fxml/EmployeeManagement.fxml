@@ -23,7 +23,7 @@
          <children>
             <VBox alignment="CENTER" prefHeight="236.0" prefWidth="750.0">
                <children>
-                  <ImageView fx:id="imgView_emp" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="employeeAvatar" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/mg_employee/user-256px.png" />
                      </image>

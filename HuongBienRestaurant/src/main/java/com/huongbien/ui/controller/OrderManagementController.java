@@ -2,7 +2,7 @@ package com.huongbien.ui.controller;
 
 import com.huongbien.dao.OrderDAO;
 import com.huongbien.entity.Order;
-import com.huongbien.utils.Paginator;
+import com.huongbien.utils.Pagination;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -67,13 +67,13 @@ public class OrderManagementController implements Initializable {
     //    TODO: viết lại logic cho code đỡ bẩn
     private static final OrderDAO orderDAO = OrderDAO.getInstance();
 
-    private static final Paginator<Order> orderPaginator = new Paginator<>((offset, limit) -> OrderDAO.getInstance().getWithPagination(offset, limit), orderDAO.getTotalOrderCount(), 10, false);
+    private static final Pagination<Order> orderPagination = new Pagination<>((offset, limit) -> OrderDAO.getInstance().getWithPagination(offset, limit), orderDAO.getTotalOrderCount(), 10, false);
 
     public void setOrderTableValue() {
         orderTable.getItems().clear();
         try {
-            List<Order> orders = orderPaginator.getCurrentPage();
-            setPageIndexLabel(orderPaginator.getCurrentPageIndex(), orderPaginator.getTotalPages());
+            List<Order> orders = orderPagination.getCurrentPage();
+            setPageIndexLabel(orderPagination.getCurrentPageIndex(), orderPagination.getTotalPages());
             ObservableList<Order> listOrder = FXCollections.observableArrayList(orders);
 
             orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
@@ -123,7 +123,7 @@ public class OrderManagementController implements Initializable {
         List<Order> orders = null;
 
         if (id.isEmpty() || id.isBlank()) {
-            orders = orderPaginator.getCurrentPage();
+            orders = orderPagination.getCurrentPage();
         } else {
 //                TODO: xử lý lại phần search
 //                orders = orderDAO.searchOrder(id);
@@ -213,25 +213,25 @@ public class OrderManagementController implements Initializable {
 
     @FXML
     void onLastPageButtonClicked(MouseEvent event) {
-        orderPaginator.goToLastPage();
+        orderPagination.goToLastPage();
         setOrderTableValue();
     }
 
     @FXML
     void onNextPageButtonClicked(MouseEvent event) {
-        orderPaginator.goToNextPage();
+        orderPagination.goToNextPage();
         setOrderTableValue();
     }
 
     @FXML
     void onPrevPageButtonClicked(MouseEvent event) {
-        orderPaginator.goToPreviousPage();
+        orderPagination.goToPreviousPage();
         setOrderTableValue();
     }
 
     @FXML
     void onFirstPageButtonClicked(MouseEvent event) {
-        orderPaginator.goToFirstPage();
+        orderPagination.goToFirstPage();
         setOrderTableValue();
     }
 }
