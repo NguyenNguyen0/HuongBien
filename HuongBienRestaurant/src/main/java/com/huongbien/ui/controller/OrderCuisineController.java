@@ -84,11 +84,11 @@ public class OrderCuisineController implements Initializable {
         try {
             for (OrderDetail orderDetail : orderDetails) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderBillItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderCuisineBillItem.fxml"));
                 HBox billBox = fxmlLoader.load();
-                OrderBillItemController _orderBillItemController = fxmlLoader.getController();
-                _orderBillItemController.setDataBill(orderDetail);
-                _orderBillItemController.setOrderBillController(this);
+                OrderCuisineBillItemController orderCuisineBillItemController = fxmlLoader.getController();
+                orderCuisineBillItemController.setDataBill(orderDetail);
+                orderCuisineBillItemController.setOrderBillController(this);
                 if (columns == 1) {
                     columns = 0;
                     ++rows;

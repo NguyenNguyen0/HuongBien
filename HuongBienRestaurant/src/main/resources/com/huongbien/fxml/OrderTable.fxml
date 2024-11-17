@@ -16,25 +16,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
+<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
    <top>
       <HBox prefHeight="150.0" prefWidth="1584.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="880.0">
+            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="1187.0">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="89.0" prefWidth="658.0">
                      <children>
-                        <ComboBox fx:id="tableFloorComboBox" onAction="#onTableFloorComboBoxSelected" prefHeight="70.0" prefWidth="280.0">
+                        <ComboBox fx:id="tableFloorComboBox" onAction="#onTableFloorComboBoxSelected" prefHeight="70.0" prefWidth="270.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <ComboBox fx:id="tableStatusComboBox" onAction="#onTableStatusComboBoxSelected" prefHeight="70.0" prefWidth="280.0">
+                        <ComboBox fx:id="tableStatusComboBox" onAction="#onTableStatusComboBoxSelected" prefHeight="70.0" prefWidth="270.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <ComboBox fx:id="tableTypeComboBox" onAction="#onTableTypeComboBoxSelected" prefHeight="70.0" prefWidth="280.0">
+                        <ComboBox fx:id="tableTypeComboBox" onAction="#onTableTypeComboBoxSelected" prefHeight="70.0" prefWidth="270.0">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                        <ComboBox fx:id="tableTypeComboBox1" onAction="#onTableTypeComboBoxSelected" prefHeight="70.0" prefWidth="270.0" promptText="Số người">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -44,7 +49,7 @@
                         <Insets />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="471.0" styleClass="border-line-top">
+                  <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="471.0">
                      <children>
                         <Label text="Tổng quan nhà hàng đang trống:" textFill="WHITE">
                            <HBox.margin>
@@ -88,97 +93,108 @@
                         </Label>
                      </children>
                      <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
+                        <Insets left="10.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
                </children>
             </VBox>
-            <Pane prefHeight="150.0" prefWidth="11.0" HBox.hgrow="ALWAYS" />
-            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="699.0">
+            <Pane prefHeight="150.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER_RIGHT">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="166.0" prefWidth="699.0">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0">
-                           <children>
-                              <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/order/tab-empty-512px.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="145.0" text="Bàn trống" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0">
-                           <children>
-                              <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/order/tab-preOrder-512px.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="169.0" text="Bàn đặt trước" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0">
-                           <children>
-                              <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/order/tab-ordered-512px.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="202.0" text="Bàn đang phục vụ" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </VBox>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/order/tab-empty-512px.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="145.0" text="Bàn trống" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
                      </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </HBox>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0">
+                     <children>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/order/tab-preOrder-512px.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="169.0" text="Bàn đặt trước" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0">
+                     <children>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/order/tab-ordered-512px.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="202.0" text="Bàn đang phục vụ" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
                </children>
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
-            </VBox>
+            </HBox>
          </children>
       </HBox>
    </top>
    <bottom>
       <HBox prefHeight="120.0" prefWidth="1692.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="120.0" prefWidth="1266.0" HBox.hgrow="ALWAYS">
+            <VBox prefHeight="120.0" prefWidth="500.0">
                <children>
-                  <TabPane fx:id="tableInfoTabPane" prefHeight="200.0" prefWidth="1692.0" tabClosingPolicy="UNAVAILABLE" />
+                  <TabPane fx:id="tableInfoTabPane" prefHeight="200.0" prefWidth="1692.0" tabClosingPolicy="UNAVAILABLE">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></TabPane>
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="120.0" prefWidth="250.0">
+            <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onChooseCuisineButtonClicked" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tiếp tục">
+                  <Button mnemonicParsing="false" onAction="#onPreOrderButtonClicked" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#onChooseCuisineButtonClicked" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tại chỗ">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
-            </VBox>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </HBox>
          </children>
       </HBox>
    </bottom>

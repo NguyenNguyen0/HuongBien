@@ -64,7 +64,7 @@ public class RestaurantMainController implements Initializable {
     @FXML
     private Label currentTimeLabel;
     @FXML
-    private Label featureTitleLabel;
+    public Label featureTitleLabel;
     @FXML
     private BorderPane mainBorderPane;
 
@@ -95,16 +95,19 @@ public class RestaurantMainController implements Initializable {
     }
 
     public void openLookup() throws IOException {
-        featureTitleLabel.setText("Tra cứu");
+        featureTitleLabel.setText("Tra cứu bàn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantLookup.fxml"));
         BorderPane lookup = loader.load();
         mainBorderPane.setCenter(lookup);
         lookup.prefWidthProperty().bind(mainBorderPane.widthProperty());
         lookup.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
+        RestaurantLookupController restaurantLookupController = loader.getController();
+        restaurantLookupController.setRestaurantMainController(this);
     }
 
     public void openOrderTable() throws IOException {
-        featureTitleLabel.setText("Đặt bàn");
+        featureTitleLabel.setText("Chọn bàn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderTable.fxml"));
         BorderPane orderTable = loader.load();
         mainBorderPane.setCenter(orderTable);
@@ -115,8 +118,20 @@ public class RestaurantMainController implements Initializable {
         orderTableController.setRestaurantMainController(this);
     }
 
+    public void openPreOrderTable() throws IOException {
+        featureTitleLabel.setText("Chọn bàn  -  Thông tin đặt trước");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/PreOrderTable.fxml"));
+        BorderPane orderTable = loader.load();
+        mainBorderPane.setCenter(orderTable);
+        orderTable.prefWidthProperty().bind(mainBorderPane.widthProperty());
+        orderTable.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
+        PreOrderTableController preOrderTableController = loader.getController();
+        preOrderTableController.setRestaurantMainController(this);
+    }
+
     public void openOrderCuisine() throws IOException {
-        featureTitleLabel.setText("Đặt bàn  -  Đặt món");
+        featureTitleLabel.setText("Chọn bàn  -  Đặt món");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderCuisine.fxml"));
         BorderPane orderCuisine = loader.load();
         mainBorderPane.setCenter(orderCuisine);
@@ -128,7 +143,7 @@ public class RestaurantMainController implements Initializable {
     }
 
     public void openOrderPayment() throws IOException {
-        featureTitleLabel.setText("Đặt bàn  -  Đặt món  -  Thanh toán");
+        featureTitleLabel.setText("Chọn bàn  -  Đặt món  -  Thanh toán");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderPayment.fxml"));
         BorderPane orderPayment = loader.load();
         mainBorderPane.setCenter(orderPayment);
@@ -137,6 +152,18 @@ public class RestaurantMainController implements Initializable {
         //setController
         OrderPaymentController orderPaymentController = loader.getController();
         orderPaymentController.setRestaurantMainController(this);
+    }
+
+    public void openOrderPaymentFinal() throws IOException {
+        featureTitleLabel.setText("Chọn bàn  -  Đặt món  -  Thanh toán  -  Hoá đơn thanh toán");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderPaymentFinal.fxml"));
+        BorderPane orderPayment = loader.load();
+        mainBorderPane.setCenter(orderPayment);
+        orderPayment.prefWidthProperty().bind(mainBorderPane.widthProperty());
+        orderPayment.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
+        OrderPaymentFinalController orderPaymentFinalController = loader.getController();
+        orderPaymentFinalController.setRestaurantMainController(this);
     }
 
     public void openStatistics() throws IOException {
@@ -148,7 +175,7 @@ public class RestaurantMainController implements Initializable {
         statistics.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void ReservationManagement() throws IOException {
+    public void openReservationManagement() throws IOException {
         featureTitleLabel.setText("Quản lý đơn đặt");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/ReservationManagement.fxml"));
         BorderPane listOrder = loader.load();
@@ -160,7 +187,7 @@ public class RestaurantMainController implements Initializable {
         reservationManagementController.setRestaurantMainController(this);
     }
 
-    public void openManageBill() throws IOException {
+    public void openOrderManagement() throws IOException {
         featureTitleLabel.setText("Quản lý hoá đơn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderManagement.fxml"));
         BorderPane manageBill = loader.load();
@@ -169,7 +196,7 @@ public class RestaurantMainController implements Initializable {
         manageBill.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void openManageCuisine() throws IOException {
+    public void openCuisineManagement() throws IOException {
         featureTitleLabel.setText("Quản lý món ăn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/CuisineManagement.fxml"));
         BorderPane manageCuisine = loader.load();
@@ -178,7 +205,7 @@ public class RestaurantMainController implements Initializable {
         manageCuisine.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void openManageTable() throws IOException {
+    public void openTableManagement() throws IOException {
         featureTitleLabel.setText("Quản lý bàn ăn");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/TableManagement.fxml"));
         BorderPane manageTable = loader.load();
@@ -187,7 +214,7 @@ public class RestaurantMainController implements Initializable {
         manageTable.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void openManageCustomer() throws IOException {
+    public void openCustomerManagement() throws IOException {
         featureTitleLabel.setText("Quản lý khách hàng");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/CustomerManagement.fxml"));
         BorderPane manageCustomer = loader.load();
@@ -196,7 +223,7 @@ public class RestaurantMainController implements Initializable {
         manageCustomer.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void openManageEmployee() throws IOException {
+    public void openEmployeeManagement() throws IOException {
         featureTitleLabel.setText("Quản lý nhân viên");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/EmployeeManagement.fxml"));
         BorderPane manageEmployee = loader.load();
@@ -205,7 +232,7 @@ public class RestaurantMainController implements Initializable {
         manageEmployee.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    public void openManagePromotion() throws IOException {
+    public void openPromotionManagement() throws IOException {
         featureTitleLabel.setText("Quản lý khuyến mãi");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/PromotionManagement.fxml"));
         BorderPane managePromotion = loader.load();
@@ -265,7 +292,7 @@ public class RestaurantMainController implements Initializable {
 
     @FXML
     void onHideReservationButtonClicked(ActionEvent event) throws IOException {
-        ReservationManagement();
+        openReservationManagement();
     }
 
     @FXML
@@ -275,32 +302,32 @@ public class RestaurantMainController implements Initializable {
 
     @FXML
     void onHideBillButtonClicked(ActionEvent event) throws IOException {
-        openManageBill();
+        openOrderManagement();
     }
 
     @FXML
     void onHideCuisineButtonClicked(ActionEvent event) throws IOException {
-        openManageCuisine();
+        openCuisineManagement();
     }
 
     @FXML
     void onHideTableButtonClicked(ActionEvent event) throws IOException {
-        openManageTable();
+        openTableManagement();
     }
 
     @FXML
     void onHideCustomerButtonClicked(ActionEvent event) throws IOException {
-        openManageCustomer();
+        openCustomerManagement();
     }
 
     @FXML
     void onHideEmployeeButtonClicked(ActionEvent event) throws IOException {
-        openManageEmployee();
+        openEmployeeManagement();
     }
 
     @FXML
     void onHidePromotionButtonClicked(ActionEvent event) throws IOException {
-        openManagePromotion();
+        openPromotionManagement();
     }
 
     //navbar-show
@@ -330,7 +357,7 @@ public class RestaurantMainController implements Initializable {
     @FXML
     void onShowReservationButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        ReservationManagement();
+        openReservationManagement();
     }
 
     @FXML
@@ -342,37 +369,37 @@ public class RestaurantMainController implements Initializable {
     @FXML
     void onShowBillButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openManageBill();
+        openOrderManagement();
     }
 
     @FXML
     void onShowCuisineButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openManageCuisine();
+        openCuisineManagement();
     }
 
     @FXML
     void onShowTableButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openManageTable();
+        openTableManagement();
     }
 
     @FXML
     void onShowCustomerButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openManageCustomer();
+        openCustomerManagement();
     }
 
     @FXML
     void onShowEmployeeButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openManageEmployee();
+        openEmployeeManagement();
     }
 
     @FXML
     void onShowPromotionButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
-        openManagePromotion();
+        openPromotionManagement();
     }
 
     @FXML

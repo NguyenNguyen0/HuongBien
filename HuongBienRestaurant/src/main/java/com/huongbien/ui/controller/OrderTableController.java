@@ -32,32 +32,25 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderTableController implements Initializable {
-    private final static String TEMPORARY_TABLE_PATH = "src/main/resources/com/huongbien/temp/temporaryTable.json";
-
     @FXML
     private ScrollPane orderTableScrollPane;
-
     @FXML
     private GridPane orderTableGridPane;
-
     @FXML
     public ComboBox<String> tableFloorComboBox;
-
     @FXML
     public ComboBox<String> tableStatusComboBox;
-
     @FXML
     public ComboBox<String> tableTypeComboBox;
-
     @FXML
     public TabPane tableInfoTabPane;
-
+    //---
     public RestaurantMainController restaurantMainController;
-
+    //---
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
-
+    //---
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadTablesToGridPane("0", "Tất cả trạng thái", "Tất cả loại bàn");
@@ -68,7 +61,7 @@ public class OrderTableController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
+    //---
     private void loadTablesToGridPane(String floor, String status, String type) {
         List<Table> tables = new ArrayList<>(getTableDataByCriteria(floor, status, type));
         int columns = 0;
@@ -178,7 +171,7 @@ public class OrderTableController implements Initializable {
         tableNameHBox.getChildren().addAll(tableNameValue);
 
         HBox tableseparator1 = new HBox(10);
-        Label separator1 = new Label("|");
+        Label separator1 = new Label("-");
         separator1.setFont(new Font("System Bold", 20));
         tableseparator1.getChildren().addAll(separator1);
 
@@ -190,7 +183,7 @@ public class OrderTableController implements Initializable {
         seatCountHBox.getChildren().addAll(seatCountLabel, seatCountValue);
 
         HBox tableseparator2 = new HBox(10);
-        Label separator2 = new Label("|");
+        Label separator2 = new Label("-");
         separator2.setFont(new Font("System Bold", 20));
         tableseparator2.getChildren().addAll(separator2);
 
@@ -208,7 +201,7 @@ public class OrderTableController implements Initializable {
     }
 
     public void readTableDataFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_TABLE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
@@ -249,7 +242,7 @@ public class OrderTableController implements Initializable {
     void onChooseCuisineButtonClicked(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_TABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File không tồn tại.");
             return;
@@ -258,8 +251,22 @@ public class OrderTableController implements Initializable {
             Utils.showAlert("Vui lòng chọn bàn", "Reminder");
             return;
         }
-
         restaurantMainController.openOrderCuisine();
     }
 
+    @FXML
+    void onPreOrderButtonClicked(ActionEvent event) throws IOException {
+        JsonArray jsonArray;
+        try {
+            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+        } catch (FileNotFoundException e) {
+            System.out.println("File không tồn tại.");
+            return;
+        }
+        if (jsonArray.isEmpty()) {
+            Utils.showAlert("Vui lòng chọn bàn", "Reminder");
+            return;
+        }
+        restaurantMainController.openPreOrderTable();
+    }
 }
