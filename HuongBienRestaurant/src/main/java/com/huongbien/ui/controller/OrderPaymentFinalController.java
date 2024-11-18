@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.utils.Utils;
@@ -64,7 +65,7 @@ public class OrderPaymentFinalController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();

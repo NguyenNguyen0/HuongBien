@@ -101,55 +101,5 @@ public class RestaurantLookupController implements Initializable {
         setDefaultRestaurantLookupComboBox();
         setDefaultTableView(); //set default table view display table first
 
-    @FXML
-    void onOrderSearchFieldKeyReleased(KeyEvent keyEvent) {
-    }
-
-    @FXML
-    void onClearSearchButtonClicked(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    void onOrderTableClicked(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    void onChoiceComboBoxSelected(ActionEvent actionEvent) {
-        //Chọn Đơn đặt
-        if (choiceComboBox.getSelectionModel().isSelected(0)) {
-            setColumnsName();
-            setPromotionTableValue();
-        }
-        //Chọn Hóa đơn
-        if (choiceComboBox.getSelectionModel().isSelected(1)) {
-            setColumnsName();
-            setPromotionTableValue();
-        }
-        //Chọn món ăn
-        if (choiceComboBox.getSelectionModel().isSelected(2)) {
-            setColumnsName();
-            setPromotionTableValue();
-
-        }
-        //Chọn Bàn ăn
-        if (choiceComboBox.getSelectionModel().isSelected(3)) {
-            setColumnsName();
-            setPromotionTableValue();
-        }
-        //Chọn Khách hàng
-        if (choiceComboBox.getSelectionModel().isSelected(4)) {
-            setColumnsName();
-            setPromotionTableValue();
-        }
-        //Chọn Nhân viên
-        if (choiceComboBox.getSelectionModel().isSelected(5)) {
-            setColumnsName();
-            setPromotionTableValue();
-        }
-        //Chọn Khuyến mãi
-        if (choiceComboBox.getSelectionModel().isSelected(6)) {
-            setColumnsName();
-            setPromotionTableValue();
-        }
     }
 }

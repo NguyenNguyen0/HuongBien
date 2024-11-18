@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Table;
 import com.huongbien.utils.Utils;
@@ -59,7 +60,7 @@ public class OrderTableItemController {
     private void setCheckedTableFromJSON() {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -83,7 +84,7 @@ public class OrderTableItemController {
     public void updateCheckedIcon(String tableId) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -109,7 +110,7 @@ public class OrderTableItemController {
         if (table != null) {
             JsonArray jsonArray;
             try {
-                jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+                jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
@@ -127,7 +128,7 @@ public class OrderTableItemController {
                 jsonObject.addProperty("Table ID", table.getId());
                 jsonArray.add(jsonObject);
             }
-            Utils.writeJsonToFile(jsonArray, Utils.TEMPORARYTABLE_PATH);
+            Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_TABLE_PATH);
             updateCheckedIcon(tableId);
         } else {
             System.out.println("Table with ID " + tableId + " not found in the database.");

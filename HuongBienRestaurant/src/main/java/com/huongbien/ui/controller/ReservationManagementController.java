@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
@@ -23,7 +24,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
-import org.opencv.core.Core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -136,7 +136,7 @@ public class ReservationManagementController implements Initializable {
         ObservableList<Map<String, Object>> paymentQueueObservableList = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode rootNode = objectMapper.readTree(new File(Utils.PAYMENTQUEUE_PATH));
+            JsonNode rootNode = objectMapper.readTree(new File(Constants.PAYMENT_QUEUE_PATH));
             for (JsonNode orderNode : rootNode) {
                 Map<String, Object> orderMap = objectMapper.convertValue(orderNode, Map.class);
                 paymentQueueObservableList.add(orderMap);
@@ -153,7 +153,7 @@ public class ReservationManagementController implements Initializable {
         if (selectedIndex != -1) {
             Integer numericalOrder = paymentQueueNumericalOrderColumn.getCellData(selectedIndex);
 
-            JsonArray paymentQueueArray = Utils.readJsonFromFile(Utils.PAYMENTQUEUE_PATH);
+            JsonArray paymentQueueArray = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
 
             JsonObject selectedPaymentQueue = null;
             int selectedPaymentQueueIndex = -1;
@@ -169,7 +169,7 @@ public class ReservationManagementController implements Initializable {
             if (selectedPaymentQueue != null) {
                 //cuisine JSON
                 JsonArray cuisineOrderArray = selectedPaymentQueue.getAsJsonArray("Cuisine Order");
-                Utils.writeJsonToFile(cuisineOrderArray, Utils.TEMPORARYCUISINE_PATH);
+                Utils.writeJsonToFile(cuisineOrderArray, Constants.TEMPORARY_CUISINE_PATH);
                 //Table JSON
                 JsonArray tableIDArray = selectedPaymentQueue.getAsJsonArray("Table ID");
                 JsonArray tableArray = new JsonArray();
@@ -178,18 +178,18 @@ public class ReservationManagementController implements Initializable {
                     tableObject.addProperty("Table ID", tableIDArray.get(i).getAsString());
                     tableArray.add(tableObject);
                 }
-                Utils.writeJsonToFile(tableArray, Utils.TEMPORARYTABLE_PATH);
+                Utils.writeJsonToFile(tableArray, Constants.TEMPORARY_TABLE_PATH);
                 // Customer JSON
                 JsonArray customerArray = new JsonArray();
                 JsonObject customerObject = new JsonObject();
                 customerObject.addProperty("Customer ID", selectedPaymentQueue.get("Customer ID").getAsString());
                 customerObject.addProperty("Promotion ID", selectedPaymentQueue.get("Promotion ID").getAsString());
                 customerArray.add(customerObject);
-                Utils.writeJsonToFile(customerArray, Utils.TEMPORARYCUSTOMER_PATH);
+                Utils.writeJsonToFile(customerArray, Constants.TEMPORARY_CUSTOMER_PATH);
                 //
                 //remove after write tempBill.json and tempTab.json
                 paymentQueueArray.remove(selectedPaymentQueueIndex);
-                Utils.writeJsonToFile(paymentQueueArray, Utils.PAYMENTQUEUE_PATH);
+                Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
 
                 restaurantMainController.openOrderPayment();
             } else {
@@ -206,7 +206,7 @@ public class ReservationManagementController implements Initializable {
             Integer numericalOrder = paymentQueueNumericalOrderColumn.getCellData(selectedIndex);
             System.out.println("Xóa Numerical Order: " + numericalOrder);
 
-            JsonArray paymentQueueArray = Utils.readJsonFromFile(Utils.PAYMENTQUEUE_PATH);
+            JsonArray paymentQueueArray = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
 
             int selectedPaymentQueueIndex = -1;
             for (int i = 0; i < paymentQueueArray.size(); i++) {
@@ -219,7 +219,7 @@ public class ReservationManagementController implements Initializable {
 
             if (selectedPaymentQueueIndex != -1) {
                 paymentQueueArray.remove(selectedPaymentQueueIndex);
-                Utils.writeJsonToFile(paymentQueueArray, Utils.PAYMENTQUEUE_PATH);
+                Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
                 System.out.println("Đã xóa mục thanh toán có Numerical Order: " + numericalOrder);
             } else {
                 System.out.println("Không tìm thấy mục thanh toán với Numerical Order: " + numericalOrder);
@@ -235,7 +235,7 @@ public class ReservationManagementController implements Initializable {
         int selectedIndex = paymentQueueTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             Integer numericalOrder = paymentQueueNumericalOrderColumn.getCellData(selectedIndex);
-            JsonArray jsonArray = Utils.readJsonFromFile(Utils.PAYMENTQUEUE_PATH);
+            JsonArray jsonArray = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
             for (JsonElement element : jsonArray) {
                 JsonObject order = element.getAsJsonObject();
                 if (order.get("Numerical Order").getAsInt() == numericalOrder) {

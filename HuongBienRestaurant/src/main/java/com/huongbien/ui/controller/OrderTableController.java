@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.dao.TableTypeDAO;
 import com.huongbien.entity.Table;
@@ -201,7 +202,7 @@ public class OrderTableController implements Initializable {
     }
 
     public void readTableDataFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
@@ -242,7 +243,7 @@ public class OrderTableController implements Initializable {
     void onChooseCuisineButtonClicked(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File không tồn tại.");
             return;
@@ -258,7 +259,7 @@ public class OrderTableController implements Initializable {
     void onPreOrderButtonClicked(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File không tồn tại.");
             return;

@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.CuisineDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Cuisine;
@@ -104,7 +105,7 @@ public class OrderCuisineController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -136,8 +137,8 @@ public class OrderCuisineController implements Initializable {
     }
 
     public void setCuisinesInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayBill = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
-        JsonArray jsonArrayTab = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
+        JsonArray jsonArrayBill = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArrayTab = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
 
         int totalQuantityCuisine = 0;
         double totalAmount = 0.0;
@@ -185,7 +186,7 @@ public class OrderCuisineController implements Initializable {
 
     @FXML
     void onPayButtonClicked(ActionEvent event) throws IOException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         if (!jsonArray.isEmpty()) {
             restaurantMainController.openOrderPayment();
         } else {
@@ -200,7 +201,7 @@ public class OrderCuisineController implements Initializable {
 
     @FXML
     void onCancelButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
-        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUISINE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUISINE_PATH);
         billGridPane.getChildren().clear();
         loadBill();
         setCuisinesInfoFromJSON();

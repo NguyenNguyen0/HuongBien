@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
@@ -440,7 +441,7 @@ public class RestaurantMainController implements Initializable {
                 e.printStackTrace();
             }
             JsonArray jsonArray = new JsonArray();
-            Utils.writeJsonToFile(jsonArray, Utils.LOGINSESSION_PATH);
+            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
         }
     }
 
@@ -467,7 +468,7 @@ public class RestaurantMainController implements Initializable {
     }
 
     private void loadEmployeeInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Utils.LOGINSESSION_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();

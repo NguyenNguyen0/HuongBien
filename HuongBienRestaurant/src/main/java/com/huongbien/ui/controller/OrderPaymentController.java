@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
@@ -126,7 +127,7 @@ public class OrderPaymentController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -153,9 +154,9 @@ public class OrderPaymentController implements Initializable {
     }
 
     public void setPaymentInfo() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayBill = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
-        JsonArray jsonArrayTab = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
-        JsonArray jsonArrayEmp = Utils.readJsonFromFile(Utils.LOGINSESSION_PATH);
+        JsonArray jsonArrayBill = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArrayTab = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+        JsonArray jsonArrayEmp = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         //Emp Session
         for (JsonElement element : jsonArrayEmp) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -226,7 +227,7 @@ public class OrderPaymentController implements Initializable {
     }
 
     private void readCumtomerExistsFromJSON() throws FileNotFoundException {
-        JsonArray customerArray = Utils.readJsonFromFile(Utils.TEMPORARYCUSTOMER_PATH);
+        JsonArray customerArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
         if (!customerArray.isEmpty()) {
             JsonObject customerObject = customerArray.get(0).getAsJsonObject();
             String idCustomer = customerObject.get("Customer ID").getAsString();
@@ -262,7 +263,7 @@ public class OrderPaymentController implements Initializable {
 
     private void setDiscountFromPromotionSearch() throws FileNotFoundException {
         double totalAmount = 0;
-        JsonArray jsonArrayBill = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+        JsonArray jsonArrayBill = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         for (JsonElement element : jsonArrayBill) {
             JsonObject jsonObject = element.getAsJsonObject();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
@@ -310,7 +311,7 @@ public class OrderPaymentController implements Initializable {
             customerObject.addProperty("Customer ID", customerID);
             customerObject.addProperty("Promotion ID", promotionID);
             customerArray.add(customerObject);
-            Utils.writeJsonToFile(customerArray, Utils.TEMPORARYCUSTOMER_PATH);
+            Utils.writeJsonToFile(customerArray, Constants.TEMPORARY_CUSTOMER_PATH);
             //display label
             customerIdField.setText(customerID);
             customerNameField.setText(customer.getName());
@@ -324,7 +325,7 @@ public class OrderPaymentController implements Initializable {
             promotionTableView.setDisable(true);
             promotionTableView.getSelectionModel().clearSelection();
             //clear JSON if exists
-            Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUSTOMER_PATH);
+            Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUSTOMER_PATH);
             setPaymentInfo();
         }
     }
@@ -423,9 +424,9 @@ public class OrderPaymentController implements Initializable {
         JsonArray cuisineArray;
 
         try {
-            paymentQueueArray = Utils.readJsonFromFile(Utils.PAYMENTQUEUE_PATH);
-            tableArray = Utils.readJsonFromFile(Utils.TEMPORARYTABLE_PATH);
-            cuisineArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
+            paymentQueueArray = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
+            tableArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+            cuisineArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         } catch (FileNotFoundException e) {
             paymentQueueArray = new JsonArray();
             tableArray = new JsonArray();
@@ -439,7 +440,7 @@ public class OrderPaymentController implements Initializable {
         JsonObject newPaymentQueue = new JsonObject();
         newPaymentQueue.addProperty("Numerical Order", newNumericalOrder);
         //
-        JsonArray customerArray = Utils.readJsonFromFile(Utils.TEMPORARYCUSTOMER_PATH);
+        JsonArray customerArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
         if (!customerArray.isEmpty()) {
             JsonObject customerObject = customerArray.get(0).getAsJsonObject();
             newPaymentQueue.addProperty("Customer ID", customerObject.get("Customer ID").getAsString());
@@ -473,10 +474,10 @@ public class OrderPaymentController implements Initializable {
 
         paymentQueueArray.add(newPaymentQueue);
 
-        Utils.writeJsonToFile(paymentQueueArray, Utils.PAYMENTQUEUE_PATH);
-        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUISINE_PATH);
-        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYTABLE_PATH);
-        Utils.writeJsonToFile(new JsonArray(), Utils.TEMPORARYCUSTOMER_PATH);
+        Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_TABLE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUSTOMER_PATH);
     }
 
     //save payment queue

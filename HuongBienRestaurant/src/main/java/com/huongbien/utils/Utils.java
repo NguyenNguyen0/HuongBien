@@ -15,12 +15,6 @@ import java.util.stream.Collectors;
 
 // class Utils là để những hàm chức năng (hỗ trợ) sài chung cho nhiều nơi cho dự án
 public class Utils {
-    public final static String LOGINSESSION_PATH = "src/main/resources/com/huongbien/temp/loginSession.json";
-    public final static String TEMPORARYCUISINE_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
-    public final static String TEMPORARYTABLE_PATH = "src/main/resources/com/huongbien/temp/temporaryTable.json";
-    public final static String TEMPORARYCUSTOMER_PATH = "src/main/resources/com/huongbien/temp/temporaryCustomer.json";
-    public final static String PAYMENTQUEUE_PATH = "src/main/resources/com/huongbien/temp/paymentQueue.json";
-
     //  hàm băm mật khẩu bằng thuật toán sha256
     public static String hashPassword(String password) {
         try {
