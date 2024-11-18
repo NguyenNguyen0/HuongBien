@@ -92,12 +92,7 @@ public class ReservationManagementController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setUIDefault();
-        loadPaymentQueueDataFromJSON();
-    }
-
+    //function area -------------------------------------------------------------------Payment Queue
     private void loadPaymentQueueDataFromJSON() {
         //cell
         paymentQueueNumericalOrderColumn.setCellValueFactory(cellData ->
@@ -115,7 +110,6 @@ public class ReservationManagementController implements Initializable {
             return new SimpleObjectProperty<>(customerName);
         });
 
-
         PromotionDAO promotionDAO = PromotionDAO.getInstance();
         paymentQueuePromotionColumn.setCellValueFactory(cellData -> {
             String promotionId = (String) cellData.getValue().get("Promotion ID");
@@ -126,7 +120,6 @@ public class ReservationManagementController implements Initializable {
             String promotionName = (promotion != null) ? promotion.getName() : "Không xác định";
             return new SimpleObjectProperty<>(promotionName);
         });
-
 
         paymentQueueQuantityCuisineColumn.setCellValueFactory(cellData -> {
             int cuisineCount = ((List<Map<String, Object>>) cellData.getValue().get("Cuisine Order")).size();
@@ -139,7 +132,7 @@ public class ReservationManagementController implements Initializable {
                     .sum();
             return new SimpleObjectProperty<>(String.format("%,.0f VNĐ", totalAmount));
         });
-        //
+
         ObservableList<Map<String, Object>> paymentQueueObservableList = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -152,64 +145,6 @@ public class ReservationManagementController implements Initializable {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void onPaymentQueueTableViewClicked(MouseEvent event) throws FileNotFoundException {
-        int selectedIndex = paymentQueueTableView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex != -1) {
-            Integer numericalOrder = paymentQueueNumericalOrderColumn.getCellData(selectedIndex);
-            JsonArray jsonArray = Utils.readJsonFromFile(Utils.PAYMENTQUEUE_PATH);
-            for (JsonElement element : jsonArray) {
-                JsonObject order = element.getAsJsonObject();
-                if (order.get("Numerical Order").getAsInt() == numericalOrder) {
-                    // Lấy thông tin khách hàng
-                    String customerID = order.has("Customer ID") ? order.get("Customer ID").getAsString() : "";
-                    Customer customer = customerID.isEmpty() ? null : CustomerDAO.getInstance().getById(customerID);
-                    String customerName = (customer != null) ? customer.getName() : "Khách vãng lai";
-                    // Lấy thông tin khu vực bàn
-                    TableDAO tableDAO = TableDAO.getInstance();
-                    JsonArray tableIDArray = order.getAsJsonArray("Table ID");
-                    StringBuilder tableArea = new StringBuilder();
-                    for (int j = 0; j < tableIDArray.size(); j++) {
-                        String tableId = tableIDArray.get(j).getAsString();
-                        Table table = tableDAO.getById(tableId);
-                        if (table != null) {
-                            String tableName = table.getName();
-                            int tableFloor = table.getFloor();
-                            String tableFloorStr = (tableFloor == 0) ? "Tầng trệt" : "Tầng " + tableFloor;
-                            tableArea.append(tableName).append(" (").append(tableFloorStr).append(")");
-                        } else {
-                            tableArea.append("Tên bàn không xác định");
-                        }
-                        if (j < tableIDArray.size() - 1) {
-                            tableArea.append(", ");
-                        }
-                    }
-                    // Lấy thông tin khuyến mãi
-                    String promotionID = order.has("Promotion ID") ? order.get("Promotion ID").getAsString() : "";
-                    Promotion promotion = promotionID.isEmpty() ? null : PromotionDAO.getInstance().getById(promotionID);
-                    String promotionName = (promotion != null) ? promotion.getName() : "Không áp dụng";
-
-                    JsonArray cuisineOrderArray = order.getAsJsonArray("Cuisine Order");
-                    int cuisineQuantity = cuisineOrderArray.size();
-                    double totalAmount = 0;
-                    for (JsonElement cuisineElement : cuisineOrderArray) {
-                        JsonObject cuisine = cuisineElement.getAsJsonObject();
-                        double money = cuisine.get("Cuisine Money").getAsDouble();
-                        totalAmount += money;
-                    }
-                    //setLabel
-                    customerNamePaymentQueueLabel.setText(customerName);
-                    tableAreaPaymentQueueLabel.setText(tableArea.toString());
-                    cuisineQuantityPaymentQueueLabel.setText(cuisineQuantity+" món");
-                    promotionNamePaymentQueueLabel.setText(promotionName);
-                    totalAmountPaymentQueueLabel.setText(String.format("%,.0f VNĐ", totalAmount));
-                    break;
-                }
-            }
-            enablePayQueueButton();
         }
     }
 
@@ -294,6 +229,65 @@ public class ReservationManagementController implements Initializable {
         }
     }
 
+    //Event area -------------------------------------------------------------------Payment Queue
+    @FXML
+    void onPaymentQueueTableViewClicked(MouseEvent event) throws FileNotFoundException {
+        int selectedIndex = paymentQueueTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex != -1) {
+            Integer numericalOrder = paymentQueueNumericalOrderColumn.getCellData(selectedIndex);
+            JsonArray jsonArray = Utils.readJsonFromFile(Utils.PAYMENTQUEUE_PATH);
+            for (JsonElement element : jsonArray) {
+                JsonObject order = element.getAsJsonObject();
+                if (order.get("Numerical Order").getAsInt() == numericalOrder) {
+                    // Lấy thông tin khách hàng
+                    String customerID = order.has("Customer ID") ? order.get("Customer ID").getAsString() : "";
+                    Customer customer = customerID.isEmpty() ? null : CustomerDAO.getInstance().getById(customerID);
+                    String customerName = (customer != null) ? customer.getName() : "Khách vãng lai";
+                    // Lấy thông tin khu vực bàn
+                    TableDAO tableDAO = TableDAO.getInstance();
+                    JsonArray tableIDArray = order.getAsJsonArray("Table ID");
+                    StringBuilder tableArea = new StringBuilder();
+                    for (int j = 0; j < tableIDArray.size(); j++) {
+                        String tableId = tableIDArray.get(j).getAsString();
+                        Table table = tableDAO.getById(tableId);
+                        if (table != null) {
+                            String tableName = table.getName();
+                            int tableFloor = table.getFloor();
+                            String tableFloorStr = (tableFloor == 0) ? "Tầng trệt" : "Tầng " + tableFloor;
+                            tableArea.append(tableName).append(" (").append(tableFloorStr).append(")");
+                        } else {
+                            tableArea.append("Tên bàn không xác định");
+                        }
+                        if (j < tableIDArray.size() - 1) {
+                            tableArea.append(", ");
+                        }
+                    }
+                    // Lấy thông tin khuyến mãi
+                    String promotionID = order.has("Promotion ID") ? order.get("Promotion ID").getAsString() : "";
+                    Promotion promotion = promotionID.isEmpty() ? null : PromotionDAO.getInstance().getById(promotionID);
+                    String promotionName = (promotion != null) ? promotion.getName() : "Không áp dụng";
+
+                    JsonArray cuisineOrderArray = order.getAsJsonArray("Cuisine Order");
+                    int cuisineQuantity = cuisineOrderArray.size();
+                    double totalAmount = 0;
+                    for (JsonElement cuisineElement : cuisineOrderArray) {
+                        JsonObject cuisine = cuisineElement.getAsJsonObject();
+                        double money = cuisine.get("Cuisine Money").getAsDouble();
+                        totalAmount += money;
+                    }
+                    //setLabel
+                    customerNamePaymentQueueLabel.setText(customerName);
+                    tableAreaPaymentQueueLabel.setText(tableArea.toString());
+                    cuisineQuantityPaymentQueueLabel.setText(cuisineQuantity+" món");
+                    promotionNamePaymentQueueLabel.setText(promotionName);
+                    totalAmountPaymentQueueLabel.setText(String.format("%,.0f VNĐ", totalAmount));
+                    break;
+                }
+            }
+            enablePayQueueButton();
+        }
+    }
+
     @FXML
     void onOrderPaymentButtonClicked(ActionEvent event) throws IOException {
         writeInfoToTempJsonHandlers();
@@ -305,5 +299,19 @@ public class ReservationManagementController implements Initializable {
         paymentQueueTableView.getItems().clear();
         loadPaymentQueueDataFromJSON();
         setUIDefault();
+    }
+
+    @FXML
+    void onPreOrderTableButtonAction(ActionEvent event) throws IOException {
+        restaurantMainController.openPreOrderTable();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Payment Queue
+        setUIDefault();
+        loadPaymentQueueDataFromJSON();
+        //Pre-Order
+        //...
     }
 }

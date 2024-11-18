@@ -1,133 +1,361 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLookupController">
-   <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLookupController">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="1675.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="150.0" prefWidth="925.0" style="-fx-background-color: white;">
+            <Label text="Tra cứu tổng quan">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" right="10.0" />
+               </HBox.margin>
+            </Label>
+            <ComboBox fx:id="restaurantLookupComboBox" onAction="#onRestaurantLookupComboBoxAction" prefHeight="60.0" prefWidth="250.0">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </ComboBox>
+            <Pane prefHeight="200.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
+            <Label text="Lưu ý cho Dev: Tất cả comboBox đều phải get dưới database set vào &lt;/Không set cứng&gt;" textFill="RED">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold Italic" size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
                <children>
-                  <HBox prefHeight="150.0" prefWidth="1800.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="150.0" prefWidth="660.0">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="273.0" text="Chọn mục cần tra cứu">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Label>
-                              <ComboBox fx:id="choiceComboBox" onAction="#onChoiceComboBoxSelected" prefHeight="52.0" prefWidth="246.0" />
+                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
                            </children>
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
                         </HBox>
-                        <HBox prefHeight="150.0" prefWidth="952.0">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ImageView fitHeight="100.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" translateX="10.0" translateY="60.0">
-                                 <image>
-                                    <Image url="@../icon/all/filter.png" />
-                                 </image>
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="107.0" style="-fx-background-color: #FFFFFF;" text="Bộ lọc" translateX="10.0" translateY="50.0">
+                              <TextField prefHeight="60.0" prefWidth="300.0" promptText="Tên bàn">
                                  <font>
-                                    <Font name="System Bold" size="25.0" />
+                                    <Font size="25.0" />
                                  </font>
+                              </TextField>
+                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/all/close-64px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="-60.0" />
+                                 </HBox.margin>
                               </Button>
                            </children>
                         </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <TableView prefHeight="700.0" prefWidth="1675.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="Khu vực tầng" />
+                      <TableColumn prefWidth="75.0" text="Bàn" />
+                        <TableColumn prefWidth="75.0" text="Số chỗ" />
+                        <TableColumn prefWidth="75.0" text="Loại bàn" />
+                        <TableColumn prefWidth="75.0" text="Trạng thái" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
+                     <children>
+                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                           <HBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Pagination>
                      </children>
                   </HBox>
                </children>
-               <VBox.margin>
-                  <Insets left="10.0" right="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox prefHeight="649.0" prefWidth="925.0" VBox.vgrow="ALWAYS">
+            </VBox>
+            <VBox fx:id="restaurantLookupCuisineVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
                <children>
-                  <TableView fx:id="lookupTable" onMouseClicked="#onOrderTableClicked" prefHeight="712.0" prefWidth="679.0" HBox.hgrow="ALWAYS">
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox prefHeight="60.0" prefWidth="350.0" promptText="Tất cả" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <TextField prefHeight="60.0" prefWidth="350.0" promptText="Tên món">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </TextField>
+                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/all/close-64px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="-60.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <TableView prefHeight="700.0" prefWidth="1675.0">
                      <columns>
-                        <TableColumn fx:id="column1" editable="false" prefWidth="190.66665649414062" text="Mã HD" />
-                        <TableColumn fx:id="column2" editable="false" prefWidth="246.33334350585938" text="Ngày lập HD" />
-                        <TableColumn fx:id="column3" editable="false" prefWidth="195.66668701171875" text="Tổng tiền" />
-                        <TableColumn fx:id="column4" prefWidth="207.00006103515625" text="Nhân viên" />
-                        <TableColumn fx:id="column5" prefWidth="263.333251953125" text="Khách hàng" />
-                        <TableColumn fx:id="column6" prefWidth="285.0" text="Column X" />
-                        <TableColumn fx:id="column7" prefWidth="258.0" text="Column X" />
-                        <TableColumn fx:id="column8" prefWidth="75.0" text="Column X" />
-                        <TableColumn fx:id="column9" prefWidth="75.0" text="Column X" />
+                        <TableColumn prefWidth="75.0" text="Loại món" />
+                        <TableColumn prefWidth="75.0" text="Tên món" />
+                        <TableColumn prefWidth="75.0" text="Giá món" />
+                        <TableColumn prefWidth="75.0" text="Lượt bán&lt;Thống kê bán chạy từ HĐ&gt;" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </HBox.margin>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </TableView>
+                  <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
+                     <children>
+                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                           <HBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Pagination>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="94.0" prefWidth="925.0" style="-fx-background-color: white;">
-               <VBox.margin>
-                  <Insets left="10.0" right="10.0" />
-               </VBox.margin>
+            </VBox>
+            <VBox fx:id="restaurantLookupPromotionVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
                <children>
-                  <Button mnemonicParsing="false" text="&lt;&lt;">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Button>
-                  <Button mnemonicParsing="false" text="&lt;">
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Label text="1/10">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Button mnemonicParsing="false" text="&gt;">
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" text="&gt;&gt;">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Button>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <TextField prefHeight="60.0" prefWidth="250.0" promptText="Tên khuyến mãi">
+                                 <font>
+                                    <Font size="23.0" />
+                                 </font>
+                              </TextField>
+                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/all/close-64px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="-60.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <DatePicker prefWidth="250.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <DatePicker prefWidth="250.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <TableView prefHeight="700.0" prefWidth="1675.0">
+                     <columns>
+                        <TableColumn prefWidth="75.0" text="Khuyến mãi" />
+                        <TableColumn prefWidth="75.0" text="Ngày bắt đầu" />
+                        <TableColumn prefWidth="75.0" text="Ngày kết thúc" />
+                        <TableColumn prefWidth="75.0" text="Giảm giá (%)" />
+                        <TableColumn prefWidth="75.0" text="Áp dụng từ (VNĐ)" />
+                        <TableColumn prefWidth="75.0" text="Trạng thái" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
+                     <children>
+                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                           <HBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Pagination>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+            </VBox>
+            <VBox fx:id="restaurantLookupPreOrderTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <TextField prefHeight="60.0" prefWidth="250.0" promptText="Mã đặt bàn">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </TextField>
+                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/all/close-64px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="-60.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <TextField prefHeight="60.0" prefWidth="220.0" promptText="Tên khách hàng">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </TextField>
+                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/all/close-64px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="-60.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <DatePicker prefHeight="60.0" prefWidth="250.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <DatePicker prefHeight="60.0" prefWidth="250.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="5.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <TableView prefHeight="700.0" prefWidth="1675.0">
+                     <columns>
+                        <TableColumn prefWidth="75.0" text="Mã đặt bàn" />
+                        <TableColumn prefWidth="75.0" text="Khách hàng" />
+                        <TableColumn prefWidth="75.0" text="Ngày đặt" />
+                        <TableColumn prefWidth="75.0" text="Giờ đặt" />
+                        <TableColumn prefWidth="75.0" text="Ngày nhận" />
+                        <TableColumn prefWidth="75.0" text="Giờ nhận" />
+                        <TableColumn prefWidth="75.0" text="Tiền đặt cọc" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
+                     <children>
+                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                           <HBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Pagination>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
-      </VBox>
+      </StackPane>
    </center>
+   <stylesheets>
+      <URL value="@../css/style.css" />
+      <URL value="@../css/utils/Pagination.css" />
+   </stylesheets>
 </BorderPane>

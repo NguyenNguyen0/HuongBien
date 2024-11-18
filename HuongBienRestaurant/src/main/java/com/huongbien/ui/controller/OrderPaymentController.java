@@ -84,11 +84,11 @@ public class OrderPaymentController implements Initializable {
     private Button addCustomerButton;
     @FXML
     private Button createCustomerQRButton;
-
+    //---
     private VideoCapture capture;
     private Timer timer;
     private QRCodeHandler qrCodeHandler;
-
+    //---
     public RestaurantMainController restaurantMainController;
 
     static {
@@ -106,7 +106,7 @@ public class OrderPaymentController implements Initializable {
         try {
             for (int i = 0; i < orderDetails.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentBillItem.fxml"));
                 HBox paymentBillBox = fxmlLoader.load();
                 OrderPaymentBillItemController _OrderPaymentBillItemController = fxmlLoader.getController();
                 _OrderPaymentBillItemController.setDataBill(orderDetails.get(i));
@@ -257,7 +257,7 @@ public class OrderPaymentController implements Initializable {
 
     @FXML
     void addCustomerButton(ActionEvent event) throws IOException {
-        restaurantMainController.openManageCustomer();
+        restaurantMainController.openCustomerManagement();
     }
 
     private void setDiscountFromPromotionSearch() throws FileNotFoundException {
@@ -483,7 +483,7 @@ public class OrderPaymentController implements Initializable {
     @FXML
     void onSavePaymentQueueButtonClicked(ActionEvent event) throws IOException {
         addNewPaymentQueue();
-        restaurantMainController.ReservationManagement();
+        restaurantMainController.openReservationManagement();
     }
 
     @FXML
@@ -494,7 +494,8 @@ public class OrderPaymentController implements Initializable {
     }
 
     @FXML
-    void onPaymentButtonClicked(ActionEvent event) {
+    void onPaymentButtonClicked(ActionEvent event) throws IOException {
         Utils.showAlert("Chức năng đang phát triển", "Thông báo gián đoạn");
+        restaurantMainController.openOrderPaymentFinal();
     }
 }

@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class OrderBillItemController implements Initializable {
+public class OrderCuisineBillItemController implements Initializable {
     private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
 
     @FXML

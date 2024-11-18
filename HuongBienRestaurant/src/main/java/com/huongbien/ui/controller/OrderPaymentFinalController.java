@@ -21,16 +21,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class OrderPaymentInvoiceController implements Initializable {
-    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
+public class OrderPaymentFinalController implements Initializable {
     @FXML
     private ScrollPane billScrollPane;
-
     @FXML
     public GridPane billGridPane;
+    //---
+    public RestaurantMainController restaurantMainController;
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
+    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
+        this.restaurantMainController = restaurantMainController;
     }
 
     public void loadBill() throws FileNotFoundException {
@@ -40,7 +44,7 @@ public class OrderPaymentInvoiceController implements Initializable {
         try {
             for (int i = 0; i < orderDetails.size(); i++) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderPaymentBillItem.fxml"));
                 HBox paymentBillBox = fxmlLoader.load();
                 OrderPaymentBillItemController _OrderPaymentBillItemController = fxmlLoader.getController();
                 _OrderPaymentBillItemController.setDataBill(orderDetails.get(i));
@@ -60,7 +64,7 @@ public class OrderPaymentInvoiceController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Utils.TEMPORARYCUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -88,10 +92,6 @@ public class OrderPaymentInvoiceController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            loadBill();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+//        loadBill();
     }
 }

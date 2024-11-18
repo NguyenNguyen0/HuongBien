@@ -15,10 +15,228 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" style="-fx-background-color: white;" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" style="-fx-background-color: white;" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
+            <Tab text="Đặt trước">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox alignment="CENTER" prefWidth="1675.0" styleClass="main-color">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="60.0">
+                                 <children>
+                                    <Label text="Ngày nhận bàn" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="24.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <DatePicker prefHeight="60.0" prefWidth="250.0">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </DatePicker>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="60.0">
+                                 <children>
+                                    <Label text="Trạng thái" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="24.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Thành công hay thất bại" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </HBox>
+                              <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="255.0" styleClass="white-color" text="Thay đổi thông tin">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#onPreOrderTableButtonAction" prefHeight="60.0" prefWidth="200.0" styleClass="white-color" text="Đặt chỗ">
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView prefHeight="449.0" prefWidth="1675.0" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn prefWidth="75.0" text="Mã đặt bàn" />
+                              <TableColumn prefWidth="75.0" text="Khách hàng" />
+                              <TableColumn prefWidth="75.0" text="Số người" />
+                              <TableColumn prefWidth="75.0" text="Giờ đến" />
+                              <TableColumn prefWidth="75.0" text="Loại dịch vụ" />
+                              <TableColumn prefWidth="75.0" text="Trạng thái" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox prefHeight="350.0" prefWidth="1675.0" styleClass="main-color">
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="499.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label prefHeight="34.0" prefWidth="400.0" text="Thông tin đặt trước của ông/bà:" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label maxWidth="760.0" text="Unknown &lt;/ Chưa tối ưu col trên table cần xếp lại&gt;" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="23.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
+                                       <children>
+                                          <Label prefWidth="400.0" text="Khu vực bàn:" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label maxWidth="690.0" text="Unknown" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
+                                       <children>
+                                          <Label prefHeight="34.0" prefWidth="400.0" text="Yêu cầu đặt món trước:" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label maxWidth="760.0" text="Unknown" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
+                                       <children>
+                                          <Label prefWidth="400.0" text="Hoàn tiền (VNĐ):" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label maxWidth="760.0" text="Unknown &lt;/Để không bị bắt lỗi hoàn tiền thì xây dựng xử lý hoàn tiền&gt;" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
+                                       <children>
+                                          <Label prefWidth="400.0" text="Tiền đặt trước (VNĐ):" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label maxWidth="760.0" text="Unknown" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
+                                       <children>
+                                          <Label prefWidth="400.0" text="Ghi chú:" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label prefHeight="34.0" prefWidth="760.0" text="Unknown" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <HBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="463.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Huỷ đặt trước">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets bottom="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Nhận bàn">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets bottom="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+               <graphic>
+                  <Label alignment="CENTER_RIGHT" text="(Unknown)" textFill="WHITE">
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </Label>
+               </graphic>
+            </Tab>
             <Tab text="Chờ thanh toán">
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
@@ -153,225 +371,7 @@
                   </VBox>
                </content>
                <graphic>
-                  <Label alignment="CENTER_RIGHT" text="(5)" textFill="WHITE">
-                     <padding>
-                        <Insets right="10.0" />
-                     </padding>
-                  </Label>
-               </graphic>
-            </Tab>
-            <Tab text="Đặt trước">
-               <content>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <HBox alignment="CENTER" prefWidth="1675.0" styleClass="main-color">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="60.0">
-                                 <children>
-                                    <Label text="Ngày đặt bàn" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="24.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets right="20.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <DatePicker prefHeight="60.0" prefWidth="250.0">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </DatePicker>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" prefHeight="60.0">
-                                 <children>
-                                    <Label text="Trạng thái" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="24.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets right="20.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <ComboBox prefHeight="60.0" prefWidth="250.0" />
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
-                              </HBox>
-                              <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                              <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="white-color" text="Thay đổi">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets right="20.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="white-color" text="Đặt chỗ">
-                                 <HBox.margin>
-                                    <Insets right="20.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <padding>
-                              <Insets bottom="20.0" top="20.0" />
-                           </padding>
-                        </HBox>
-                        <TableView prefHeight="449.0" prefWidth="1675.0" VBox.vgrow="ALWAYS">
-                           <columns>
-                              <TableColumn prefWidth="75.0" text="Mã đặt bàn" />
-                              <TableColumn prefWidth="75.0" text="Khách hàng" />
-                              <TableColumn prefWidth="75.0" text="Số người" />
-                              <TableColumn prefWidth="75.0" text="Giờ đến" />
-                              <TableColumn prefWidth="75.0" text="Loại dịch vụ" />
-                              <TableColumn prefWidth="75.0" text="Trạng thái" />
-                           </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                        <HBox prefHeight="350.0" prefWidth="1675.0" styleClass="main-color">
-                           <children>
-                              <VBox prefHeight="200.0" prefWidth="499.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0" VBox.vgrow="ALWAYS">
-                                       <children>
-                                          <Label prefHeight="34.0" prefWidth="400.0" text="Thông tin đặt trước của ông/bà:" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label maxWidth="760.0" text="Unknown" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="23.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
-                                       <children>
-                                          <Label prefWidth="400.0" text="Khu vực bàn:" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label maxWidth="690.0" text="Unknown" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
-                                       <children>
-                                          <Label prefHeight="34.0" prefWidth="400.0" text="Yêu cầu đặt món trước:" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label maxWidth="760.0" text="Unknown" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
-                                       <children>
-                                          <Label prefWidth="400.0" text="Tiền đặt trước (VNĐ):" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label maxWidth="760.0" text="Unknown" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
-                                       <children>
-                                          <Label prefWidth="400.0" text="Hoàn tiền (VNĐ):" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label maxWidth="760.0" text="Unknown" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
-                                       <children>
-                                          <Label prefWidth="400.0" text="Ghi chú:" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label prefHeight="34.0" prefWidth="760.0" text="Unknown" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <HBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="463.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Huỷ đặt trước">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets bottom="20.0" right="20.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Nhận bàn">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets bottom="20.0" right="20.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </content>
-               <graphic>
-                  <Label alignment="CENTER_RIGHT" text="(2)" textFill="WHITE">
+                  <Label alignment="CENTER_RIGHT" text="(Unknown)" textFill="WHITE">
                      <padding>
                         <Insets right="10.0" />
                      </padding>

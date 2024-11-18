@@ -1,7 +1,6 @@
 package com.huongbien.ui.controller;
 
 import com.huongbien.entity.OrderDetail;
-import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -30,10 +29,10 @@ public class OrderPaymentBillItemController implements Initializable {
         this.orderPaymentController = orderPaymentController;
     }
 
-    private OrderPaymentInvoiceController orderPaymentInvoiceController;
+    private OrderPaymentFinalController orderPaymentFinalController;
 
-    public void setOrderPaymentInvoiceController(OrderPaymentInvoiceController orderPaymentInvoiceController) {
-        this.orderPaymentInvoiceController = orderPaymentInvoiceController;
+    public void setOrderPaymentInvoiceController(OrderPaymentFinalController orderPaymentFinalController) {
+        this.orderPaymentFinalController = orderPaymentFinalController;
     }
 
     @Override

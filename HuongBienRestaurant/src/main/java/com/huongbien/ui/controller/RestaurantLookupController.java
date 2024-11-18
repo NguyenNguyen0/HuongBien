@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.net.URL;
@@ -18,196 +19,87 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class RestaurantLookupController implements Initializable {
+    @FXML
+    private ComboBox<String> restaurantLookupComboBox;
+    @FXML
+    private VBox restaurantLookupCuisineVBox;
+    @FXML
+    private VBox restaurantLookupPreOrderTableVBox;
+    @FXML
+    private VBox restaurantLookupPromotionVBox;
+    @FXML
+    private VBox restaurantLookupTableVBox;
 
-    @FXML
-    private ComboBox<String> choiceComboBox;
-    @FXML
-    private TableView<Objects> lookupTable;
-    @FXML
-    private TableColumn<Objects, ?> column1;
-    @FXML
-    private TableColumn<Objects, ?> column2;
-    @FXML
-    private TableColumn<Objects, ?> column3;
-    @FXML
-    private TableColumn<Objects, ?> column4;
-    @FXML
-    private TableColumn<Objects, ?> column5;
-    @FXML
-    private TableColumn<Objects, ?> column6;
-    @FXML
-    private TableColumn<Objects, ?> column7;
-    @FXML
-    private TableColumn<Objects, ?> column8;
-    @FXML
-    private TableColumn<Objects, ?> column9;
+    public RestaurantMainController restaurantMainController;
 
-    private final DecimalFormat priceFormat = new DecimalFormat("#,##0.00");
+    //function area--------------------------------------------------------------------------
+    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
+        this.restaurantMainController = restaurantMainController;
+    }
 
-    private void setChoiceComboBoxValue() {
-        //Status
-        ObservableList<String> statusList = FXCollections.observableArrayList("Đơn đặt", "Hóa đơn", "Món ăn", "Bàn ăn", "Khách hàng", "Nhân viên", "Khuyến mãi");
-        choiceComboBox.setItems(statusList);
-        choiceComboBox.setConverter(new StringConverter<String>() {
+    private void setDefaultTableView() {
+        restaurantLookupCuisineVBox.setVisible(true);
+        restaurantLookupPreOrderTableVBox.setVisible(false);
+        restaurantLookupPromotionVBox.setVisible(false);
+        restaurantLookupTableVBox.setVisible(false);
+    }
+
+    private void setDefaultRestaurantLookupComboBox() {
+        ObservableList<String> restaurantLookupList = FXCollections.observableArrayList();
+        restaurantLookupList.add("Bàn");
+        restaurantLookupList.add("Món ăn");
+        restaurantLookupList.add("Khuyến mãi");
+        restaurantLookupList.add("Đơn đặt trước");
+        restaurantLookupComboBox.setItems(restaurantLookupList);
+        restaurantLookupComboBox.setConverter(new StringConverter<String>() {
             @Override
-            public String toString(String status) {
-                return status != null ? status : "";
+            public String toString(String object) {
+                return object;
             }
-
             @Override
             public String fromString(String string) {
-                return choiceComboBox.getItems().stream()
-                        .filter(item -> item.equals(string))
-                        .findFirst()
-                        .orElse(null);
+                return string;
             }
         });
+        restaurantLookupComboBox.getSelectionModel().selectFirst();
     }
+    //---TODO: add more function
 
-    private void autoResizeColumns(TableView<Objects> tableView) {
-        for (TableColumn<Objects, ?> column : tableView.getColumns()) {
-            column.setPrefWidth(150);
-            column.setResizable(true);
-            column.setMinWidth(50);
-            column.setMaxWidth(250);
-            column.setStyle("-fx-alignment: CENTER;");
-        }
-        tableView.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double totalWidth = tableView.getWidth();
-            for (TableColumn<Objects, ?> column : tableView.getColumns()) {
-                column.setPrefWidth(totalWidth / tableView.getColumns().size());
-            }
-        });
-    }
-
-    private void setPromotionTableValue() {
-
-    }
-
-    private void setColumnsName() {
-        if (choiceComboBox.getSelectionModel().isSelected(0)) {
-            lookupTable.getColumns().clear();
-            column1.setText("Mã đơn");
-            column2.setText("Ngày đặt");
-            column3.setText("Khách hàng");
-            column4.setText("SDT");
-            column5.setText("Giờ nhận");
-            lookupTable.getColumns().add(column1);
-            lookupTable.getColumns().add(column2);
-            lookupTable.getColumns().add(column3);
-            lookupTable.getColumns().add(column4);
-            lookupTable.getColumns().add(column5);
-            autoResizeColumns(lookupTable);
-        } else if (choiceComboBox.getSelectionModel().isSelected(1)) {
-            lookupTable.getColumns().clear();
-            column1.setText("Mã HD");
-            column2.setText("Ngày lập");
-            column3.setText("Khách hàng");
-            column4.setText("Nhân viên");
-            column5.setText("Tổng tiền");
-            lookupTable.getColumns().add(column1);
-            lookupTable.getColumns().add(column2);
-            lookupTable.getColumns().add(column3);
-            lookupTable.getColumns().add(column4);
-            lookupTable.getColumns().add(column5);
-            autoResizeColumns(lookupTable);
-        } else if (choiceComboBox.getSelectionModel().isSelected(2)) {
-            lookupTable.getColumns().clear();
-            column1.setText("Mã món");
-            column2.setText("Tên món");
-            column3.setText("Giá tiền");
-            column4.setText("Loại món");
-            column5.setText("Mô tả");
-            lookupTable.getColumns().add(column1);
-            lookupTable.getColumns().add(column2);
-            lookupTable.getColumns().add(column3);
-            lookupTable.getColumns().add(column4);
-            lookupTable.getColumns().add(column5);
-            autoResizeColumns(lookupTable);
-        } else if (choiceComboBox.getSelectionModel().isSelected(3)) {
-            lookupTable.getColumns().clear();
-            column1.setText("Mã bàn");
-            column2.setText("Tên bàn");
-            column3.setText("Số chỗ");
-            column4.setText("Loại bàn");
-            column5.setText("Tầng");
-            column6.setText("Trạng thái");
-            lookupTable.getColumns().add(column1);
-            lookupTable.getColumns().add(column2);
-            lookupTable.getColumns().add(column3);
-            lookupTable.getColumns().add(column4);
-            lookupTable.getColumns().add(column5);
-            lookupTable.getColumns().add(column6);
-            autoResizeColumns(lookupTable);
-        } else if (choiceComboBox.getSelectionModel().isSelected(4)) {
-            lookupTable.getColumns().clear();
-            column1.setText("Mã KH");
-            column2.setText("Họ tên");
-            column3.setText("Giới tính");
-            column4.setText("Địa chỉ");
-            column5.setText("Điểm");
-            column6.setText("Hạng thành viên");
-            column7.setText("Ngày sinh");
-            column8.setText("Ngày tham gia");
-            lookupTable.getColumns().add(column1);
-            lookupTable.getColumns().add(column2);
-            lookupTable.getColumns().add(column3);
-            lookupTable.getColumns().add(column4);
-            lookupTable.getColumns().add(column5);
-            lookupTable.getColumns().add(column6);
-            lookupTable.getColumns().add(column7);
-            lookupTable.getColumns().add(column8);
-            autoResizeColumns(lookupTable);
-        } else if (choiceComboBox.getSelectionModel().isSelected(5)) {
-            lookupTable.getColumns().clear();
-            column1.setText("Mã NV");
-            column2.setText("Họ tên");
-            column3.setText("Giới tính");
-            column4.setText("Địa chỉ");
-            column5.setText("CCCD");
-            column6.setText("SDT");
-            column7.setText("Ngày sinh");
-            column8.setText("Chức vụ");
-            column9.setText("Ngày vào làm");
-            lookupTable.getColumns().add(column1);
-            lookupTable.getColumns().add(column2);
-            lookupTable.getColumns().add(column3);
-            lookupTable.getColumns().add(column4);
-            lookupTable.getColumns().add(column5);
-            lookupTable.getColumns().add(column6);
-            lookupTable.getColumns().add(column7);
-            lookupTable.getColumns().add(column8);
-            lookupTable.getColumns().add(column9);
-            autoResizeColumns(lookupTable);
-        } else if (choiceComboBox.getSelectionModel().isSelected(6)) {
-            lookupTable.getColumns().clear();
-            column1.setText("Mã KM");
-            column2.setText("Tên KM");
-            column3.setText("Ngày bắt đầu");
-            column4.setText("Ngày kết thúc");
-            column5.setText("Giảm giá");
-            column6.setText("Hạng áp dụng");
-            column7.setText("Hóa đơn tối thiểu");
-            column8.setText("Trạng thái");
-            column9.setText("Mô tả");
-            lookupTable.getColumns().add(column1);
-            lookupTable.getColumns().add(column2);
-            lookupTable.getColumns().add(column3);
-            lookupTable.getColumns().add(column4);
-            lookupTable.getColumns().add(column5);
-            lookupTable.getColumns().add(column6);
-            lookupTable.getColumns().add(column7);
-            lookupTable.getColumns().add(column8);
-            lookupTable.getColumns().add(column9);
-            autoResizeColumns(lookupTable);
+    //event area--------------------------------------------------------------------------
+    //---
+    @FXML
+    void onRestaurantLookupComboBoxAction(ActionEvent event) {
+        String selectedItem = restaurantLookupComboBox.getValue();
+        restaurantLookupCuisineVBox.setVisible(false);
+        restaurantLookupPreOrderTableVBox.setVisible(false);
+        restaurantLookupPromotionVBox.setVisible(false);
+        restaurantLookupTableVBox.setVisible(false);
+        switch (selectedItem) {
+            case "Bàn":
+                restaurantMainController.featureTitleLabel.setText("Tra cứu bàn");
+                restaurantLookupTableVBox.setVisible(true);
+                break;
+            case "Món ăn":
+                restaurantMainController.featureTitleLabel.setText("Tra cứu món ăn");
+                restaurantLookupCuisineVBox.setVisible(true);
+                break;
+            case "Khuyến mãi":
+                restaurantMainController.featureTitleLabel.setText("Tra cứu khuyến mãi");
+                restaurantLookupPromotionVBox.setVisible(true);
+                break;
+            case "Đơn đặt trước":
+                restaurantMainController.featureTitleLabel.setText("Tra cứu đơn đặt trước");
+                restaurantLookupPreOrderTableVBox.setVisible(true);
+                break;
         }
     }
+    //---TODO: add more event
 
+    //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        lookupTable.getColumns().clear();
-        setChoiceComboBoxValue();
-    }
+        setDefaultRestaurantLookupComboBox();
+        setDefaultTableView(); //set default table view display table first
 
     @FXML
     void onOrderSearchFieldKeyReleased(KeyEvent keyEvent) {
