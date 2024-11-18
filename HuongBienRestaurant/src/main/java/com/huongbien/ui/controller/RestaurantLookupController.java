@@ -214,7 +214,7 @@ public class RestaurantLookupController implements Initializable {
     }
 
     @FXML
-    void onClearSearchClickedClicked(MouseEvent mouseEvent) {
+    void onClearSearchButtonClicked(MouseEvent mouseEvent) {
     }
 
     @FXML
