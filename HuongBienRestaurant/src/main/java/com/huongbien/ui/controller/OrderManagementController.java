@@ -1,17 +1,21 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.dao.OrderDAO;
+import com.huongbien.bus.OrderBUS;
 import com.huongbien.entity.Order;
+import com.huongbien.entity.OrderDetail;
 import com.huongbien.utils.Pagination;
+import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
@@ -27,7 +31,7 @@ public class OrderManagementController implements Initializable {
     @FXML
     public TextField orderDiscountField;
     @FXML
-    public TextField orderDispensedAmount;
+    public TextField orderTotalOrderDetailAmount;
     @FXML
     public TextField orderVATField;
     @FXML
@@ -41,7 +45,11 @@ public class OrderManagementController implements Initializable {
     @FXML
     public TextField orderPaymentIdField;
     @FXML
+    private TextField orderTablesField;
+    @FXML
     public TextArea orderNoteTextArea;
+    @FXML
+    private ComboBox<String> searchMethodComboBox;
     @FXML
     public TextField orderSearchField;
     @FXML
@@ -50,6 +58,7 @@ public class OrderManagementController implements Initializable {
     public ImageView clearSearchButton;
     @FXML
     public TableView<Order> orderTable;
+    @FXML
     public TableColumn<Order, String> orderIdColumn;
     @FXML
     public TableColumn<Order, Date> orderCreatedDateColumn;
@@ -58,85 +67,39 @@ public class OrderManagementController implements Initializable {
     @FXML
     public TableColumn<Order, String> orderEmployeeIdColumn;
     @FXML
-    public TableColumn<Order, String> customerIdColumn;
+    public TableColumn<Order, String> customerPhoneNumberColumn;
     @FXML
     public DatePicker orderDateDatePicker;
     @FXML
     private Label pageIndexLabel;
-
-    //    TODO: viết lại logic cho code đỡ bẩn
-    private static final OrderDAO orderDAO = OrderDAO.getInstance();
-
-    private static final Pagination<Order> orderPagination = new Pagination<>((offset, limit) -> OrderDAO.getInstance().getWithPagination(offset, limit), orderDAO.getTotalOrderCount(), 10, false);
-
-    public void setOrderTableValue() {
-        orderTable.getItems().clear();
-        try {
-            List<Order> orders = orderPagination.getCurrentPage();
-            setPageIndexLabel(orderPagination.getCurrentPageIndex(), orderPagination.getTotalPages());
-            ObservableList<Order> listOrder = FXCollections.observableArrayList(orders);
-
-            orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-            orderCreatedDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
-
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            orderTotalAmountColumn.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-            orderTotalAmountColumn.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
-                @Override
-                public String toString(Double price) {
-                    return price != null ? priceFormat.format(price) : "";
-                }
-
-                @Override
-                public Double fromString(String string) {
-                    try {
-                        return priceFormat.parse(string).doubleValue();
-                    } catch (Exception e) {
-                        return 0.0;
-                    }
-                }
-            }));
-
-            customerIdColumn.setCellValueFactory(cellData ->
-                    new SimpleStringProperty(cellData.getValue().getCustomer() != null ?
-                            cellData.getValue().getCustomer().getCustomerId() : ""));
-
-            orderEmployeeIdColumn.setCellValueFactory(cellData ->
-                    new SimpleStringProperty(cellData.getValue().getEmployee() != null ?
-                            cellData.getValue().getEmployee().getEmployeeId() : ""));
-
-            orderTable.setItems(listOrder);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setOrderTableValue();
-    }
-
-    //    TODO: xử lý lại phần pagination khi search
     @FXML
-    void onSearchOrderButtonClicked(MouseEvent event) {
-        String id = orderSearchField.getText();
-        List<Order> orders = null;
+    private TableColumn<OrderDetail, String> orderDetailCuisineColumn;
+    @FXML
+    private TableColumn<OrderDetail, String> orderDetailNoteColumn;
+    @FXML
+    private TableColumn<OrderDetail, Integer> orderDetailQuantityColumn;
+    @FXML
+    private TableColumn<OrderDetail, Double> orderDetailSalePriceColumn;
+    @FXML
+    private TableView<OrderDetail> orderDetailTable;
 
-        if (id.isEmpty() || id.isBlank()) {
-            orders = orderPagination.getCurrentPage();
-        } else {
-//                TODO: xử lý lại phần search
-//                orders = orderDAO.searchOrder(id);
-        }
+    private static final OrderBUS orderBUS = new OrderBUS();
 
-        ObservableList<Order> listOrder = FXCollections.observableArrayList(orders);
+    private static Pagination<Order> orderPagination;
 
+    public void setSearchMethodComboBoxValue() {
+        searchMethodComboBox.getItems().addAll("Mã nhân viên", "Số điện thoại khách hàng", "Mã hóa đơn", "Tất cả");
+        searchMethodComboBox.setValue("Tất cả");
+        orderSearchField.setDisable(true);
+    }
+
+    public void setOrderTableColumn() {
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         orderCreatedDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
 
         DecimalFormat priceFormat = new DecimalFormat("#,###");
         orderTotalAmountColumn.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-        orderTotalAmountColumn.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+        orderTotalAmountColumn.setCellFactory(_ -> new TextFieldTableCell<>(new StringConverter<>() {
             @Override
             public String toString(Double price) {
                 return price != null ? priceFormat.format(price) : "";
@@ -151,64 +114,187 @@ public class OrderManagementController implements Initializable {
                 }
             }
         }));
-
-        customerIdColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getCustomer() != null ?
-                        cellData.getValue().getCustomer().getCustomerId() : ""));
-
+        customerPhoneNumberColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue().getCustomer() != null
+                                ? cellData.getValue().getCustomer().getPhoneNumber()
+                                : ""
+                )
+        );
         orderEmployeeIdColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getEmployee() != null ?
-                        cellData.getValue().getEmployee().getEmployeeId() : ""));
+                new SimpleStringProperty(
+                        cellData.getValue().getEmployee() != null
+                                ? cellData.getValue().getEmployee().getEmployeeId()
+                                : ""
+                )
+        );
+    }
+
+    public void setOrderTableValue() {
+        orderTable.getItems().clear();
+        setPageIndexLabel();
+        ObservableList<Order> listOrder = FXCollections.observableArrayList(orderPagination.getCurrentPage());
         orderTable.setItems(listOrder);
     }
 
-    @FXML
-    void onClearSearchClickedClicked(MouseEvent mouseEvent) {
-        orderSearchField.clear();
+    public void setOrderDetailTableColumn() {
+        orderDetailCuisineColumn.setCellValueFactory(new PropertyValueFactory<>("cuisine"));
+        orderDetailCuisineColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCuisine().getName())
+        );
+        orderDetailQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        orderDetailSalePriceColumn.setCellValueFactory(new PropertyValueFactory<>("salePrice"));
+        orderDetailNoteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
+    }
+
+    public void setPageIndexLabel() {
+        pageIndexLabel.setText(orderPagination.getCurrentPageIndex() + "/" + orderPagination.getTotalPages());
+    }
+
+    public void setOrderDetailTableValue(List<OrderDetail> orderDetails) {
+        orderDetailTable.getItems().clear();
+        orderDetailTable.setItems(FXCollections.observableArrayList(orderDetails));
+    }
+
+    public void setOrderPaginationGetAllOrder() {
+        boolean isRollback = false;
+        int itemsPerPage = 10;
+        int totalItems = orderBUS.getTotalOrderCount();
+        orderPagination = new Pagination<>(
+                orderBUS::getAllWithPagination,
+                itemsPerPage,
+                totalItems,
+                isRollback
+        );
+    }
+
+    public void setOrderPaginationGetByOrderId(String orderId) {
+        boolean isRollback = false;
+        int itemsPerPage = 10;
+        int totalItems = orderBUS.countTotalOrdersByOrderId(orderId);
+        orderPagination = new Pagination<>(
+                (offset, limit) -> orderBUS.getOrdersByIdWithPagination(offset, limit, orderId),
+                itemsPerPage,
+                totalItems,
+                isRollback
+        );
+    }
+
+    public void setOrderPaginationGetByCustomerPhoneNumber(String phoneNumber) {
+        boolean isRollback = false;
+        int itemsPerPage = 10;
+        int totalItems = orderBUS.countTotalOrdersByCustomerPhoneNumber(phoneNumber);
+        orderPagination = new Pagination<>(
+                (offset, limit) -> orderBUS.getOrdersByCustomerPhoneNumberWithPagination(offset, limit, phoneNumber),
+                itemsPerPage,
+                totalItems,
+                isRollback
+        );
+    }
+
+    public void setOrderPaginationGetByEmployeeId(String employeeId) {
+        boolean isRollback = false;
+        int itemsPerPage = 10;
+        int totalItems = orderBUS.countTotalOrdersByEmployeeId(employeeId);
+        orderPagination = new Pagination<>(
+                (offset, limit) -> orderBUS.getOrdersByEmployeeIdWithPagination(offset, limit, employeeId),
+                itemsPerPage,
+                totalItems,
+                isRollback
+        );
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        clearSearchButton.setVisible(false);
+        setSearchMethodComboBoxValue();
+        setOrderTableColumn();
+        setOrderDetailTableColumn();
+        setOrderPaginationGetAllOrder();
         setOrderTableValue();
+    }
+
+    @FXML
+    void onSearchOrderButtonClicked(MouseEvent event) {
+        String searchInfo = orderSearchField.getText();
+
+        switch (searchMethodComboBox.getValue()) {
+            case "Mã nhân viên" -> setOrderPaginationGetByEmployeeId(searchInfo);
+            case "Số điện thoại khách hàng" -> setOrderPaginationGetByCustomerPhoneNumber(searchInfo);
+            case "Mã hóa đơn" -> setOrderPaginationGetByOrderId(searchInfo);
+            case "Tất cả" -> setOrderPaginationGetAllOrder();
+        }
+
+        setOrderTableValue();
+    }
+
+    @FXML
+    void onClearSearchButtonClicked(MouseEvent mouseEvent) {
+        orderSearchField.clear();
+        clearSearchButton.setVisible(false);
+        setOrderTableValue();
+    }
+
+    @FXML
+    void onSearchFieldKeyReleased(KeyEvent keyEvent) {
+        clearSearchButton.setVisible(!orderSearchField.getText().isEmpty());
+    }
+
+    @FXML
+    void onSearchMethodComboBoxSelected(ActionEvent actionEvent) {
+        String selectedMethod = searchMethodComboBox.getValue();
+        orderSearchField.setDisable(selectedMethod.equals("Tất cả"));
+        String searchMethod = searchMethodComboBox.getValue();
+        switch (searchMethod) {
+            case "Mã nhân viên" -> orderSearchField.setPromptText("Nhập mã nhân viên");
+            case "Số điện thoại khách hàng" -> orderSearchField.setPromptText("Nhập số điện thoại khách hàng");
+            case "Mã hóa đơn" -> orderSearchField.setPromptText("Nhập mã hóa đơn");
+            case "Tất cả" -> orderSearchField.setPromptText("Tìm kiếm");
+        }
     }
 
     @FXML
     void onOrderTableClicked(MouseEvent mouseEvent) {
         Order selectedItem = orderTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            orderIdField.setText(selectedItem.getOrderId());
-            orderDateDatePicker.setValue(selectedItem.getOrderDate());
+        if (selectedItem == null) return;
 
-            double vat = selectedItem.getVatTax();
-            int vatTax = (int) (vat * 100);
-            orderVATField.setText(vatTax + "%");
+        orderIdField.setText(selectedItem.getOrderId());
+        orderTablesField.setText(Utils.toStringTables(selectedItem.getTables()));
 
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            String formattedDiscount = priceFormat.format(selectedItem.getDiscount());
-            orderDiscountField.setText(formattedDiscount);
-            String formattedDispensed = priceFormat.format(selectedItem.getDispensedAmount());
-            orderDispensedAmount.setText(formattedDispensed);
-            String formattedTotalAmount = priceFormat.format(selectedItem.getTotalAmount());
-            orderTotalAmountField.setText(formattedTotalAmount);
-
-            if (selectedItem.getCustomer() == null) {
-                orderCustomerField.setText("Vãng lai");
-            } else {
-                orderCustomerField.setText(selectedItem.getCustomer().getCustomerId());
-            }
-
-            orderEmployeeIdField.setText(selectedItem.getEmployee().getEmployeeId());
-
-            if (selectedItem.getPromotion() == null) {
-                orderPromotionIdField.setText("Không");
-            } else {
-                orderPromotionIdField.setText(selectedItem.getPromotion().getPromotionId());
-            }
-
-            orderPaymentIdField.setText(selectedItem.getPayment().getPaymentId());
-            orderNoteTextArea.setText(selectedItem.getNotes());
-
+        if (selectedItem.getCustomer() == null) {
+            orderCustomerField.setText("Vãng lai");
+        } else {
+            orderCustomerField.setText(selectedItem.getCustomer().getCustomerId());
         }
-    }
 
-    public void setPageIndexLabel(int currentPage, int totalPage) {
-        pageIndexLabel.setText(currentPage + "/" + totalPage);
+        orderDateDatePicker.setValue(selectedItem.getOrderDate());
+        orderEmployeeIdField.setText(selectedItem.getEmployee().getEmployeeId());
+
+        setOrderDetailTableValue(selectedItem.getOrderDetails());
+
+        DecimalFormat priceFormat = new DecimalFormat("#,###");
+
+        double totalOrderDetailAmount = selectedItem.calculateTotalAmount();
+        String formattedTotalOrderDetailAmount = priceFormat.format(totalOrderDetailAmount);
+        orderTotalOrderDetailAmount.setText(formattedTotalOrderDetailAmount);
+
+        String formattedDiscount = priceFormat.format(selectedItem.calculateReducedAmount());
+        orderDiscountField.setText(formattedDiscount);
+
+        String formattedTotalAmount = priceFormat.format(selectedItem.getTotalAmount());
+        orderTotalAmountField.setText(formattedTotalAmount);
+
+        String formattedVatTax = priceFormat.format(selectedItem.calculateVatTaxAmount());
+        orderVATField.setText(formattedVatTax);
+
+        if (selectedItem.getPromotion() == null) {
+            orderPromotionIdField.setText("Không");
+        } else {
+            orderPromotionIdField.setText(selectedItem.getPromotion().getPromotionId());
+        }
+
+        orderPaymentIdField.setText(selectedItem.getPayment().getPaymentId());
+        orderNoteTextArea.setText(selectedItem.getNotes());
     }
 
     @FXML

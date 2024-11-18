@@ -53,7 +53,7 @@ public class Order {
         setOrderDate(LocalDate.now());
         setOrderTime(LocalTime.now());
         setOrderId(null);
-        setTotalAmount(getTotalAmount(orderDetails, promotion));
+        setTotalAmount(calculateGrandTotal());
         setPaymentAmount(payment.getAmount());
         setDiscount(promotion == null ? 0 : promotion.getDiscount());
         setDispensedAmount(getTotalAmount() - getPaymentAmount());
@@ -67,11 +67,25 @@ public class Order {
         setNotes(notes);
     }
 
-    public double getTotalAmount(ArrayList<OrderDetail> orderDetails, Promotion promotion) {
-        return Math.round((promotion == null ? 1 : (1 + promotion.getDiscount())) * orderDetails
+    public double calculateTotalAmount() {
+        return Math.round(orderDetails
                 .stream()
                 .map((orderDetail -> orderDetail.getSalePrice() * orderDetail.getQuantity()))
                 .reduce(0.0, Double::sum));
+    }
+
+    public double calculateReducedAmount() {
+        double discount = (promotion == null ? 0 : promotion.getDiscount());
+        return Math.round(calculateTotalAmount() * discount);
+    }
+
+    public double calculateVatTaxAmount() {
+        return Math.round((calculateTotalAmount() - calculateReducedAmount()) * vatTax);
+    }
+
+    public double calculateGrandTotal() {
+        double reducedAmount = calculateReducedAmount();
+        return Math.round((calculateTotalAmount() - reducedAmount) + calculateVatTaxAmount());
     }
 
     public void setOrderId(String orderId) {

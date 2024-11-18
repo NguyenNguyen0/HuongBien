@@ -64,18 +64,20 @@ public class OrderDAO extends GenericDAO<Order> {
         return getMany("SELECT * FROM [Order] WHERE employeeId = ?", employeeId);
     }
 
-    public List<Order> getWithPagination(int offset, int limit) {
+    public List<Order> getAllWithPagination(int offset, int limit) {
         return getMany("SELECT * FROM [Order] ORDER BY orderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", offset, limit);
     }
 
-    public int getTotalOrderCount() {
-        try {
-            PreparedStatement statement = statementHelper.prepareStatement("SELECT COUNT(*) AS totalOrder FROM [Order]");
-            ResultSet rs = statement.executeQuery();
-            return rs.next() ? rs.getInt("totalOrder") : 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public List<Order> getAllByCustomerPhoneNumberWithPagination(int offset, int limit, String customerPhoneNumber) {
+        return getMany("SELECT * FROM [Order] WHERE customerId IN (SELECT id FROM Customer WHERE phoneNumber LIKE ?) ORDER BY orderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", customerPhoneNumber + "%", offset, limit);
+    }
+
+    public List<Order> getAllByEmployeeIdWithPagination(int offset, int limit, String employeeId) {
+        return getMany("SELECT * FROM [Order] WHERE employeeId LIKE ? ORDER BY orderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", employeeId + "%", offset, limit);
+    }
+
+    public List<Order> getAllByIdWithPagination(int offset, int limit, String orderId) {
+        return getMany("SELECT * FROM [Order] WHERE id LIKE ? ORDER BY orderDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY",  orderId + "%", offset, limit);
     }
 
     public List<Order> getAll() {
@@ -84,6 +86,22 @@ public class OrderDAO extends GenericDAO<Order> {
 
     public Order getById(String id) {
         return getOne("SELECT * FROM [Order] WHERE id = ?", id);
+    }
+
+    public int countTotal() {
+        return count("SELECT COUNT(*) AS totalOrder FROM [Order]");
+    }
+
+    public int countTotalByOrderId(String orderId) {
+        return count("SELECT COUNT(*) AS totalOrder FROM [Order] WHERE id = ?", orderId);
+    }
+
+    public int countTotalByCustomerPhoneNumber(String customerPhoneNumber) {
+        return count("SELECT COUNT(*) AS totalOrder FROM [Order] WHERE customerId IN (SELECT id FROM Customer WHERE phoneNumber LIKE ?)", customerPhoneNumber + "%");
+    }
+
+    public int countTotalByEmployeeId(String employeeId) {
+        return count("SELECT COUNT(*) AS totalOrder FROM [Order] WHERE employeeId LIKE ?", employeeId + "%");
     }
 
     @Override
