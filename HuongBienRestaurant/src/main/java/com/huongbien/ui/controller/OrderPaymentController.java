@@ -331,7 +331,7 @@ public class OrderPaymentController implements Initializable {
     }
 
     @FXML
-    void onCreateCustomerQRButtonClicked(ActionEvent event) {
+    void onCreateCustomerQRButtonClickedClicked(ActionEvent event) {
         openSwingWindow();
     }
 
