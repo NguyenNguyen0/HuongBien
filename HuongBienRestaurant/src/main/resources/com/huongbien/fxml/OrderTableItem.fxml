@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="tableItemComponent" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onTableItemComponentClicked" prefHeight="320.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableItemController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onOrderTableItemVBoxClicked" prefHeight="300.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableItemController">
    <children>
       <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="tableTypeImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="tableImageView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="checkedImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
          </children>
@@ -23,26 +23,17 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER">
-         <children>
-            <Label fx:id="tableTypeLabel" text="Bàn VIP">
-               <font>
-                  <Font name="System Bold Italic" size="18.0" />
-               </font>
-            </Label>
             <Label text="-">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin>
-               <font>
-                  <Font name="System Bold Italic" size="18.0" />
-               </font>
             </Label>
             <Label fx:id="tableSeatLabel" text="5 Người">
                <font>
-                  <Font name="System Bold Italic" size="18.0" />
+                  <Font name="System Bold Italic" size="25.0" />
                </font>
             </Label>
          </children>

@@ -18,6 +18,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import jdk.jshell.execution.Util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,17 +29,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderPaymentFinalController implements Initializable {
-    @FXML private VBox screenDefaultMethodVBox;
     @FXML private VBox screenCashMethodVBox;
     @FXML private VBox screenBankingMethodVBox;
     @FXML private VBox screenEWalletMethodVBox;
-    @FXML private Label paymentEmployeeLabel;
-    @FXML private Label paymentCuisineQuantityLabel;
-    @FXML private Label paymentTotalAmountLabel;
-    @FXML private Label paymentVATLabel;
-    @FXML private Label paymentDiscountLabel;
-    @FXML private Label paymentFinalAmountLabel;
-    @FXML private Label tableInfoLabel;
+    @FXML private Label finalAmountLabel;
     @FXML private ScrollPane billScrollPane;
     @FXML public GridPane billGridPane;
 
@@ -115,45 +109,28 @@ public class OrderPaymentFinalController implements Initializable {
     public void setInfo() throws FileNotFoundException, SQLException {
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
-        JsonArray jsonArrayLoginSession = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
         //Set screen method default
-        screenDefaultMethodVBox.setVisible(true);
-        screenCashMethodVBox.setVisible(false);
+        screenCashMethodVBox.setVisible(true);
         screenBankingMethodVBox.setVisible(false);
         screenEWalletMethodVBox.setVisible(false);
-        //Session
-        for (JsonElement element : jsonArrayLoginSession) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            String id = jsonObject.get("Employee ID").getAsString();
-            EmployeeDAO dao_employee = EmployeeDAO.getInstance();
-            Employee employee = dao_employee.getById(id).get(0);
-            paymentEmployeeLabel.setText(employee.getName());
-        }
-        //table
-        StringBuilder tabInfoBuilder = new StringBuilder();
+        //calc table amount
+        double tableAmount = 0.0;
         for (JsonElement element : jsonArrayTable) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
-            tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append(") ").append(", ");
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? 100000 : 0;
         }
-        if (!tabInfoBuilder.isEmpty()) {
-            tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
-        }
-        tableInfoLabel.setText(tabInfoBuilder.toString());
-        //
-        int totalQuantityCuisine = 0;
-        double totalAmount = 0.0;
+        //calc cuisine amount
+        double cuisineAmount = 0.0;
         for (JsonElement element : jsonArrayCuisine) {
-            totalQuantityCuisine++;
             JsonObject jsonObject = element.getAsJsonObject();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
-            totalAmount += cuisineMoney;
+            cuisineAmount += cuisineMoney;
         }
-        //set discount
+        //calc discount
         double discount = 0.0;
         for (JsonElement element : jsonArrayCustomer) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -164,38 +141,25 @@ public class OrderPaymentFinalController implements Initializable {
                 discount = promotion.getDiscount();
             }
         }
-        double discountMoney = totalAmount * discount;
-        if (discountMoney > 0) {
-            paymentDiscountLabel.setText(String.format("- %,.0f VNĐ", discountMoney));
-        } else {
-            paymentDiscountLabel.setText("0 VNĐ");
-        }
-        //set VAT
-        double vat = totalAmount * 0.1;
-        paymentCuisineQuantityLabel.setText(totalQuantityCuisine + " món");
-        paymentTotalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
-        paymentVATLabel.setText(String.format("%,.0f VNĐ", vat));
-        //FinalAmount
-        double finalAmount = totalAmount - discountMoney + vat;
-        paymentFinalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
+        double discountMoney = cuisineAmount * discount;
+        double vat = cuisineAmount * 0.1;
+        double finalAmount = tableAmount + cuisineAmount + vat - discountMoney;
+        finalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
     }
 
     public void openCashMethod() {
-        screenDefaultMethodVBox.setVisible(false);
         screenCashMethodVBox.setVisible(true);
         screenBankingMethodVBox.setVisible(false);
         screenEWalletMethodVBox.setVisible(false);
     }
 
     public void openBankingMethod() {
-        screenDefaultMethodVBox.setVisible(false);
         screenCashMethodVBox.setVisible(false);
         screenBankingMethodVBox.setVisible(true);
         screenEWalletMethodVBox.setVisible(false);
     }
 
     public void openEWalletMethod() {
-        screenDefaultMethodVBox.setVisible(false);
         screenCashMethodVBox.setVisible(false);
         screenBankingMethodVBox.setVisible(false);
         screenEWalletMethodVBox.setVisible(true);
@@ -219,5 +183,10 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML
     void onEWalletButtonAction(ActionEvent event) {
         openEWalletMethod();
+    }
+
+    @FXML
+    void onCompleteOrderPaymentFinalAction(ActionEvent event) {
+        Utils.showAlert("Chức năng đang phát triển", "Thông báo gián đoạn");
     }
 }

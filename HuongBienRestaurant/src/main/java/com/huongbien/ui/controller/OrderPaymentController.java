@@ -49,13 +49,14 @@ public class OrderPaymentController implements Initializable {
     @FXML private TableColumn<Promotion, Double> promotionDiscountColumn;
     @FXML private TableColumn<Promotion, String> promotionIdColumn;
     @FXML private TableColumn<Promotion, String> promotionNameColumn;
-    @FXML private Label paymentEmployeeLabel;
-    @FXML private Label paymentCuisineQuantityLabel;
-    @FXML private Label paymentTotalAmountLabel;
-    @FXML private Label paymentVATLabel;
-    @FXML private Label paymentDiscountLabel;
-    @FXML private Label paymentFinalAmountLabel;
+    @FXML private Label employeeLabel;
     @FXML private Label tableInfoLabel;
+    @FXML private Label cuisineQuantityLabel;
+    @FXML private Label tableAmountLabel;
+    @FXML private Label cuisineAmountLabel;
+    @FXML private Label vATLabel;
+    @FXML private Label promotionDiscountLabel;
+    @FXML private Label finalAmountLabel;
     @FXML private ScrollPane billScrollPane;
     @FXML public GridPane billGridPane;
     @FXML private TextField searchCustomerField;
@@ -63,8 +64,6 @@ public class OrderPaymentController implements Initializable {
     @FXML private TextField customerNameField;
     @FXML private TextField customerRankField;
     @FXML private Button searchCustomerButton;
-    @FXML private Button addCustomerButton;
-    @FXML private Button createCustomerQRButton;
 
     private VideoCapture capture;
     private Timer timer;
@@ -150,51 +149,58 @@ public class OrderPaymentController implements Initializable {
 
     public void setPaymentInfo() throws FileNotFoundException, SQLException {
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
-        JsonArray jsonArrayTab = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
-        JsonArray jsonArrayEmp = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
+        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+        JsonArray jsonArraySession = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
+        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
         //Emp Session
-        for (JsonElement element : jsonArrayEmp) {
+        String currentUser = "";
+        for (JsonElement element : jsonArraySession) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
             EmployeeDAO dao_employee = EmployeeDAO.getInstance();
             Employee employee = dao_employee.getById(id).get(0);
-            paymentEmployeeLabel.setText(employee.getName());
+            currentUser  = (employee.getName() != null ? employee.getName() : "Không xác định");
         }
-        //table
+        //get info table and calc table amout
         StringBuilder tabInfoBuilder = new StringBuilder();
-        for (JsonElement element : jsonArrayTab) {
+        double tableAmount = 0.0;
+        for (JsonElement element : jsonArrayTable) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
+            //append table info
             String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
             tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append(") ").append(", ");
+            //calc table amount
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? 100000 : 0;
         }
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
         }
-        tableInfoLabel.setText(tabInfoBuilder.toString());
-        //
+        //calc quantity and amount
         int totalQuantityCuisine = 0;
-        double totalAmount = 0.0;
+        double cuisineAmount = 0.0;
         for (JsonElement element : jsonArrayCuisine) {
             totalQuantityCuisine++;
             JsonObject jsonObject = element.getAsJsonObject();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
-            totalAmount += cuisineMoney;
+            cuisineAmount += cuisineMoney;
         }
-        //set discount
+        //calc discount
         double discount = 0.0;
-        double discountMoney = totalAmount * discount;
-        paymentDiscountLabel.setText(String.format("%,.0f VNĐ", discountMoney));
-        //set VAT
-        double vat = totalAmount * 0.1;
-        paymentCuisineQuantityLabel.setText(totalQuantityCuisine + " món");
-        paymentTotalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
-        paymentVATLabel.setText(String.format("%,.0f VNĐ", vat));
-        //FinalAmount
-        double finalAmount = totalAmount - discountMoney + vat;
-        paymentFinalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
+        double discountMoney = cuisineAmount * discount;
+        double vat = cuisineAmount * 0.1;
+        double finalAmount = tableAmount + cuisineAmount + vat - discountMoney;
+        //set Info
+        employeeLabel.setText(currentUser);
+        tableInfoLabel.setText(tabInfoBuilder.toString());
+        cuisineQuantityLabel.setText(totalQuantityCuisine + " món");
+        tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
+        cuisineAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount));
+        vATLabel.setText(String.format("%,.0f VNĐ", vat));
+        promotionDiscountLabel.setText(String.format("%,.0f VNĐ", discountMoney));
+        finalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
         readCumtomerExistsFromJSON();
     }
 
@@ -245,6 +251,7 @@ public class OrderPaymentController implements Initializable {
     private void setDiscountFromPromotionSearch() throws FileNotFoundException {
         double totalAmount = 0;
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         for (JsonElement element : jsonArrayCuisine) {
             JsonObject jsonObject = element.getAsJsonObject();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
@@ -265,15 +272,24 @@ public class OrderPaymentController implements Initializable {
             //Not promotion set default 0
             discount = 0.0;
         }
+        //calc table amount
+        double tableAmount = 0.0;
+        for (JsonElement element : jsonArrayTable) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String id = jsonObject.get("Table ID").getAsString();
+            TableDAO dao_table = TableDAO.getInstance();
+            Table table = dao_table.getById(id);
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? 100000 : 0;
+        }
         double discountMoney = totalAmount * discount;
-        paymentDiscountLabel.setText(String.format("- %,.0f VNĐ", discountMoney));
-        //set VAT
         double vat = totalAmount * 0.1;
-        paymentTotalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
-        paymentVATLabel.setText(String.format("%,.0f VNĐ", vat));
-        //FinalAmount
-        double finalAmount = totalAmount - discountMoney + vat;
-        paymentFinalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
+        double finalAmount = tableAmount + totalAmount  + vat - discountMoney;
+        //set Label
+        tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
+        cuisineAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
+        vATLabel.setText(String.format("%,.0f VNĐ", vat));
+        promotionDiscountLabel.setText(String.format("- %,.0f VNĐ", discountMoney));
+        finalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
     }
 
     @FXML

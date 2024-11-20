@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLookupController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLookupController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="1675.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -37,12 +37,12 @@
                </HBox.margin>
             </ComboBox>
             <Pane prefHeight="200.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-            <Label text="Lưu ý cho Dev: Tất cả comboBox đều phải get dưới database set vào &lt;/Không set cứng&gt;" textFill="RED">
+            <Label text="Lưu ý cho Dev: Tránh dữ liệu cũ, tất cả comboBox đều phải get dưới database set vào &lt;/Không set cứng&gt;" textFill="RED">
                <HBox.margin>
                   <Insets left="20.0" right="20.0" />
                </HBox.margin>
                <font>
-                  <Font name="System Bold Italic" size="25.0" />
+                  <Font name="System Bold Italic" size="20.0" />
                </font>
             </Label>
          </children>
@@ -51,7 +51,7 @@
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
+            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
