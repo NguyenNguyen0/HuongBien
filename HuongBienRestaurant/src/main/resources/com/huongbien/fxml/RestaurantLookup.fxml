@@ -51,13 +51,13 @@
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
+            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                              <ComboBox fx:id="tableDistinctFloorComboBox" prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">

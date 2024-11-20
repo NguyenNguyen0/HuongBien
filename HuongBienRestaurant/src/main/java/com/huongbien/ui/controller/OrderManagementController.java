@@ -81,7 +81,7 @@ public class OrderManagementController implements Initializable {
 
         DecimalFormat priceFormat = new DecimalFormat("#,###");
         orderTotalAmountColumn.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-        orderTotalAmountColumn.setCellFactory(_ -> new TextFieldTableCell<>(new StringConverter<>() {
+        orderTotalAmountColumn.setCellFactory(cellData -> new TextFieldTableCell<>(new StringConverter<>() {
             @Override
             public String toString(Double price) {
                 return price != null ? priceFormat.format(price) : "";
