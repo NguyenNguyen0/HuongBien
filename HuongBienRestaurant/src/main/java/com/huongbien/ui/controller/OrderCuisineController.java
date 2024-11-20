@@ -36,8 +36,10 @@ public class OrderCuisineController implements Initializable {
     @FXML private ScrollPane billScrollPane;
     @FXML public GridPane billGridPane;
     @FXML private Label tableInfoLabel;
-    @FXML private Label billTotalAmountLabel;
-    @FXML private Label billCuisineQuantityLabel;
+    @FXML private Label cuisineAmountLabel;
+    @FXML private Label cuisineQuantityLabel;
+    @FXML private Label tableAmountLabel;
+    @FXML private Label totalAmountLabel;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -145,35 +147,41 @@ public class OrderCuisineController implements Initializable {
         JsonArray jsonArrayBill = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         JsonArray jsonArrayTab = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
 
-        int totalQuantityCuisine = 0;
-        double totalAmount = 0.0;
+        int cuisineQuantity = 0;
+        double cuisineAmount = 0.0;
         for (JsonElement element : jsonArrayBill) {
             JsonObject jsonObject = element.getAsJsonObject();
-            totalQuantityCuisine++;
+            cuisineQuantity++;
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
-            totalAmount += cuisineMoney;
+            cuisineAmount += cuisineMoney;
         }
-        billCuisineQuantityLabel.setText(totalQuantityCuisine + " món");
-        billTotalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
-
         //table
-        StringBuilder tabInfoBuilder = new StringBuilder();
+        double tableAmount = 0.0;
+        StringBuilder tableInfoBuilder = new StringBuilder();
         for (JsonElement element : jsonArrayTab) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
             if (table != null) {
+                //set table text
                 String floorStr = (table.getFloor() == 0) ? "Tầng trệt" : "Tầng " + table.getFloor();
-                tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append("), ");
+                tableInfoBuilder.append(table.getName()).append(" (").append(floorStr).append("), ");
+                //set table amount : if type VIP -> 100.000 VNĐ
+                tableAmount += table.getTableType().getTableId().equals("LB002") ? 100000 : 0;
             } else {
-                tabInfoBuilder.append("Thông tin bàn không xác định, ");
+                tableInfoBuilder.append("Thông tin bàn không xác định, ");
             }
         }
-        if (!tabInfoBuilder.isEmpty()) {
-            tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
+        if (!tableInfoBuilder.isEmpty()) {
+            tableInfoBuilder.setLength(tableInfoBuilder.length() - 2);
         }
-        tableInfoLabel.setText(tabInfoBuilder.toString());
+        //setLabel
+        tableInfoLabel.setText(tableInfoBuilder.toString());
+        cuisineQuantityLabel.setText(cuisineQuantity + " món");
+        cuisineAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount));
+        tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
+        totalAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount + tableAmount));
     }
 
     @FXML

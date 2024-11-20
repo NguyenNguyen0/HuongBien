@@ -24,7 +24,7 @@
          <children>
             <BorderPane fx:id="compoent_orderBill">
                <center>
-                  <ScrollPane fx:id="billScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <ScrollPane fx:id="billScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
                      <content>
                         <GridPane fx:id="billGridPane">
                            <columnConstraints>
@@ -35,34 +35,19 @@
                   </ScrollPane>
                </center>
                <bottom>
-                  <VBox alignment="BOTTOM_CENTER" prefHeight="446.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;" BorderPane.alignment="CENTER">
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox prefHeight="379.0" prefWidth="1100.0" VBox.vgrow="ALWAYS">
+                        <VBox prefHeight="105.0" prefWidth="1100.0" VBox.vgrow="ALWAYS">
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
                                  <children>
-                                    <Label text="Thu ngân:" textFill="WHITE">
+                                    <Label text="Số tiền khách đưa:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentEmployeeLabel" text="Unknown" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
-                                 <children>
-                                    <Label text="Khu vực bàn:" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                    <Pane prefHeight="39.0" prefWidth="2.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="tableInfoLabel" text="Unknown" textFill="WHITE">
+                                    <Label text="Unknown" textFill="#00eea3">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -71,13 +56,13 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Label text="Số lượng món:" textFill="WHITE">
+                                    <Label text="Số tiền cần phải thu từ khách hàng:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentCuisineQuantityLabel" text="Unknown" textFill="WHITE">
+                                    <Label fx:id="finalAmountLabel" text="Unknown" textFill="#eb0000">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -86,13 +71,13 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
                                  <children>
-                                    <Label text="Tổng tiền:" textFill="WHITE">
+                                    <Label text="Số tiền hoàn lại cho khách dư:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentTotalAmountLabel" text="Unknown" textFill="WHITE">
+                                    <Label text="Unknown" textFill="#fcdf05">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -101,43 +86,13 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
                                  <children>
-                                    <Label text="Thuế VAT (10%):" textFill="WHITE">
+                                    <Label text="Trạng thái:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentVATLabel" text="Unknown" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
-                                 <children>
-                                    <Label text="Giảm giá:" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentDiscountLabel" text="Unknown" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
-                                 <children>
-                                    <Label text="Thành tiền:" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentFinalAmountLabel" text="Unknown" textFill="WHITE">
+                                    <Label text="Khách chưa đưa đủ tiền" textFill="RED">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -149,11 +104,11 @@
                               <Insets left="20.0" right="20.0" />
                            </padding>
                         </VBox>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;">
+                        <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #1D557E;">
                            <children>
                               <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="In hoá đơn">
                                  <HBox.margin>
-                                    <Insets left="5.0" right="5.0" />
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
                                  <font>
                                     <Font name="System Bold" size="20.0" />
@@ -161,15 +116,15 @@
                               </Button>
                               <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Huỷ thanh toán">
                                  <HBox.margin>
-                                    <Insets left="5.0" right="5.0" />
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
                                  <font>
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Hoàn tất">
+                              <Button mnemonicParsing="false" onAction="#onCompleteOrderPaymentFinalAction" prefHeight="60.0" prefWidth="200.0" text="Hoàn tất">
                                  <HBox.margin>
-                                    <Insets left="5.0" right="5.0" />
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
                                  <font>
                                     <Font name="System Bold" size="20.0" />
@@ -316,15 +271,6 @@
             </VBox>
             <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #1D557E;" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox fx:id="screenDefaultMethodVBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false">
-                     <children>
-                        <Label text="Vui lòng chọn phương thức thanh toán">
-                           <font>
-                              <Font name="System Bold Italic" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
                   <VBox fx:id="screenCashMethodVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <VBox>
@@ -351,7 +297,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <TextField alignment="BOTTOM_RIGHT" editable="false" prefHeight="60.0" style="-fx-background-color: white; -fx-border-color: transparent;" text="30.000" HBox.hgrow="ALWAYS">
+                                    <TextField alignment="BOTTOM_RIGHT" editable="false" prefHeight="60.0" style="-fx-background-color: white; -fx-border-color: transparent;" text="&lt;/&gt; 30.000" HBox.hgrow="ALWAYS">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>

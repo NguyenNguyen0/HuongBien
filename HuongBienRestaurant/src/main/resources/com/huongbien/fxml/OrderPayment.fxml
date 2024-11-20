@@ -248,33 +248,39 @@
                   </ScrollPane>
                </center>
                <bottom>
-                  <VBox alignment="BOTTOM_CENTER" prefHeight="446.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;" BorderPane.alignment="CENTER">
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="470.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;" BorderPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="379.0" prefWidth="1100.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0">
                                  <children>
                                     <Label text="Thu ngân:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentEmployeeLabel" text="Unknown" textFill="WHITE">
+                                    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
+                                    <Label fx:id="employeeLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0">
                                  <children>
                                     <Label text="Khu vực bàn:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Pane prefHeight="39.0" prefWidth="2.0" HBox.hgrow="ALWAYS" />
+                                    <Pane prefHeight="39.0" prefWidth="2.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
                                     <Label fx:id="tableInfoLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
@@ -282,75 +288,108 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Label text="Số lượng món:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentCuisineQuantityLabel" text="Unknown" textFill="WHITE">
+                                    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
+                                    <Label fx:id="cuisineQuantityLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0">
                                  <children>
-                                    <Label text="Tổng tiền:" textFill="WHITE">
+                                    <Label text="Tiền bàn:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentTotalAmountLabel" text="Unknown" textFill="WHITE">
+                                    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
+                                    <Label fx:id="tableAmountLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0">
                                  <children>
-                                    <Label text="Thuế VAT (10%):" textFill="WHITE">
+                                    <Label text="Tiền món:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentVATLabel" text="Unknown" textFill="WHITE">
+                                    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
+                                    <Label fx:id="cuisineAmountLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0">
                                  <children>
-                                    <Label text="Giảm giá:" textFill="WHITE">
+                                    <Label text="Thuế VAT = (10%):" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentDiscountLabel" text="Unknown" textFill="WHITE">
+                                    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
+                                    <Label fx:id="vATLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="106.0" prefWidth="550.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0">
+                                 <children>
+                                    <Label text="Khuyến mãi:" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
+                                    <Label fx:id="promotionDiscountLabel" text="Unknown" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="106.0" prefWidth="550.0">
                                  <children>
                                     <Label text="Thành tiền:" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="paymentFinalAmountLabel" text="Unknown" textFill="WHITE">
+                                    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: dashed; -fx-border-width: 0 0 0.5 0; -fx-border-color: white;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </HBox.margin></Pane>
+                                    <Label fx:id="finalAmountLabel" text="Unknown" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
