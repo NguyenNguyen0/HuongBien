@@ -9,13 +9,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PreOrderTableController implements Initializable {
-
+    //Controller area
     public RestaurantMainController restaurantMainController;
-
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
-
+    //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

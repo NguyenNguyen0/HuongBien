@@ -26,66 +26,48 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderManagementController implements Initializable {
-    @FXML
-    public TextField orderIdField;
-    @FXML
-    public TextField orderDiscountField;
-    @FXML
-    public TextField orderTotalOrderDetailAmount;
-    @FXML
-    public TextField orderVATField;
-    @FXML
-    public TextField orderTotalAmountField;
-    @FXML
-    public TextField orderCustomerField;
-    @FXML
-    public TextField orderEmployeeIdField;
-    @FXML
-    public TextField orderPromotionIdField;
-    @FXML
-    public TextField orderPaymentIdField;
-    @FXML
-    private TextField orderTablesField;
-    @FXML
-    public TextArea orderNoteTextArea;
-    @FXML
-    private ComboBox<String> searchMethodComboBox;
-    @FXML
-    public TextField orderSearchField;
-    @FXML
-    public Button searchOrderButton;
-    @FXML
-    public ImageView clearSearchButton;
-    @FXML
-    public TableView<Order> orderTable;
-    @FXML
-    public TableColumn<Order, String> orderIdColumn;
-    @FXML
-    public TableColumn<Order, Date> orderCreatedDateColumn;
-    @FXML
-    public TableColumn<Order, Double> orderTotalAmountColumn;
-    @FXML
-    public TableColumn<Order, String> orderEmployeeIdColumn;
-    @FXML
-    public TableColumn<Order, String> customerPhoneNumberColumn;
-    @FXML
-    public DatePicker orderDateDatePicker;
-    @FXML
-    private Label pageIndexLabel;
-    @FXML
-    private TableColumn<OrderDetail, String> orderDetailCuisineColumn;
-    @FXML
-    private TableColumn<OrderDetail, String> orderDetailNoteColumn;
-    @FXML
-    private TableColumn<OrderDetail, Integer> orderDetailQuantityColumn;
-    @FXML
-    private TableColumn<OrderDetail, Double> orderDetailSalePriceColumn;
-    @FXML
-    private TableView<OrderDetail> orderDetailTable;
+    @FXML public TextField orderIdField;
+    @FXML public TextField orderDiscountField;
+    @FXML public TextField orderTotalOrderDetailAmount;
+    @FXML public TextField orderVATField;
+    @FXML public TextField orderTotalAmountField;
+    @FXML public TextField orderCustomerField;
+    @FXML public TextField orderEmployeeIdField;
+    @FXML public TextField orderPromotionIdField;
+    @FXML public TextField orderPaymentIdField;
+    @FXML private TextField orderTablesField;
+    @FXML public TextArea orderNoteTextArea;
+    @FXML private ComboBox<String> searchMethodComboBox;
+    @FXML public TextField orderSearchField;
+    @FXML public Button searchOrderButton;
+    @FXML public ImageView clearSearchButton;
+    @FXML public TableView<Order> orderTable;
+    @FXML public TableColumn<Order, String> orderIdColumn;
+    @FXML public TableColumn<Order, Date> orderCreatedDateColumn;
+    @FXML public TableColumn<Order, Double> orderTotalAmountColumn;
+    @FXML public TableColumn<Order, String> orderEmployeeIdColumn;
+    @FXML public TableColumn<Order, String> customerPhoneNumberColumn;
+    @FXML public DatePicker orderDateDatePicker;
+    @FXML private Label pageIndexLabel;
+    @FXML private TableColumn<OrderDetail, String> orderDetailCuisineColumn;
+    @FXML private TableColumn<OrderDetail, String> orderDetailNoteColumn;
+    @FXML private TableColumn<OrderDetail, Integer> orderDetailQuantityColumn;
+    @FXML private TableColumn<OrderDetail, Double> orderDetailSalePriceColumn;
+    @FXML private TableView<OrderDetail> orderDetailTable;
 
     private static final OrderBUS orderBUS = new OrderBUS();
-
     private static Pagination<Order> orderPagination;
+
+    // initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        clearSearchButton.setVisible(false);
+        setSearchMethodComboBoxValue();
+        setOrderTableColumn();
+        setOrderDetailTableColumn();
+        setOrderPaginationGetAllOrder();
+        setOrderTableValue();
+    }
 
     public void setSearchMethodComboBoxValue() {
         searchMethodComboBox.getItems().addAll("Mã nhân viên", "Số điện thoại khách hàng", "Mã hóa đơn", "Tất cả");
@@ -202,16 +184,6 @@ public class OrderManagementController implements Initializable {
                 totalItems,
                 isRollback
         );
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        clearSearchButton.setVisible(false);
-        setSearchMethodComboBoxValue();
-        setOrderTableColumn();
-        setOrderDetailTableColumn();
-        setOrderPaginationGetAllOrder();
-        setOrderTableValue();
     }
 
     @FXML

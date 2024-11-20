@@ -19,29 +19,33 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class RestaurantLookupController implements Initializable {
-    @FXML
-    private ComboBox<String> restaurantLookupComboBox;
-    @FXML
-    private VBox restaurantLookupCuisineVBox;
-    @FXML
-    private VBox restaurantLookupPreOrderTableVBox;
-    @FXML
-    private VBox restaurantLookupPromotionVBox;
-    @FXML
-    private VBox restaurantLookupTableVBox;
+    @FXML private ComboBox<String> restaurantLookupComboBox;
+    @FXML private VBox restaurantLookupCuisineVBox;
+    @FXML private VBox restaurantLookupPreOrderTableVBox;
+    @FXML private VBox restaurantLookupPromotionVBox;
+    @FXML private VBox restaurantLookupTableVBox;
 
+    //Controller area
     public RestaurantMainController restaurantMainController;
 
-    //function area--------------------------------------------------------------------------
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
 
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setDefaultRestaurantLookupComboBox();
+        setDefaultTableView(); //set default table view display table first
+
+    }
+
+    //function area
     private void setDefaultTableView() {
-        restaurantLookupCuisineVBox.setVisible(true);
-        restaurantLookupPreOrderTableVBox.setVisible(false);
+        restaurantLookupTableVBox.setVisible(true);
+        restaurantLookupCuisineVBox.setVisible(false);
         restaurantLookupPromotionVBox.setVisible(false);
-        restaurantLookupTableVBox.setVisible(false);
+        restaurantLookupPreOrderTableVBox.setVisible(false);
     }
 
     private void setDefaultRestaurantLookupComboBox() {
@@ -95,11 +99,5 @@ public class RestaurantLookupController implements Initializable {
     }
     //---TODO: add more event
 
-    //initialize area
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setDefaultRestaurantLookupComboBox();
-        setDefaultTableView(); //set default table view display table first
 
-    }
 }

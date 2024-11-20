@@ -20,56 +20,29 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class TableManagementController implements Initializable {
-    @FXML
-    private Button clearTableFormButton;
+    @FXML private Button clearTableFormButton;
+    @FXML private Button handleActionTableButton;
+    @FXML private Button swapModeTableButton;
+    @FXML private ComboBox<Integer> tableFloorComboBox;
+    @FXML private ComboBox<String> tableStatusComboBox;
+    @FXML private ComboBox<TableType> tableTypeComboBox;
+    @FXML private ImageView tableImageView;
+    @FXML private TableColumn<Table, Integer> tableFloorColumn;
+    @FXML private TableColumn<?, ?> tableIdColumn;
+    @FXML private TableColumn<?, ?> tableNameColumn;
+    @FXML private TableColumn<?, ?> tableSeatsColumn;
+    @FXML private TableColumn<?, ?> tableStatusColumn;
+    @FXML private TableColumn<?, ?> tableTypeColumn;
+    @FXML private TableView<Table> tableTableView;
+    @FXML private TextField tableNameField;
+    @FXML private TextField tableSearchField;
+    @FXML private TextField tableSeatsField;
 
-    @FXML
-    private Button handleActionTableButton;
-
-    @FXML
-    private Button swapModeTableButton;
-
-    @FXML
-    private ComboBox<Integer> tableFloorComboBox;
-
-    @FXML
-    private ComboBox<String> tableStatusComboBox;
-
-    @FXML
-    private ComboBox<TableType> tableTypeComboBox;
-
-    @FXML
-    private ImageView tableImageView;
-
-    @FXML
-    private TableColumn<Table, Integer> tableFloorColumn;
-
-    @FXML
-    private TableColumn<?, ?> tableIdColumn;
-
-    @FXML
-    private TableColumn<?, ?> tableNameColumn;
-
-    @FXML
-    private TableColumn<?, ?> tableSeatsColumn;
-
-    @FXML
-    private TableColumn<?, ?> tableStatusColumn;
-
-    @FXML
-    private TableColumn<?, ?> tableTypeColumn;
-
-    @FXML
-    private TableView<Table> tableTableView;
-
-    @FXML
-    private TextField tableNameField;
-
-    @FXML
-    private TextField tableSearchField;
-
-    @FXML
-    private TextField tableSeatsField;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setPromotionTableValue();
+        setComboBoxValue();
+    }
 
     private void setPromotionTableValue() {
         TableDAO tableDao = TableDAO.getInstance();
@@ -151,12 +124,6 @@ public class TableManagementController implements Initializable {
         tableFloorComboBox.setDisable(false);
         tableStatusComboBox.setDisable(false);
         tableTypeComboBox.setDisable(false);
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setPromotionTableValue();
-        setComboBoxValue();
     }
 
     @FXML

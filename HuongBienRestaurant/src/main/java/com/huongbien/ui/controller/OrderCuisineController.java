@@ -31,25 +31,30 @@ import java.util.ResourceBundle;
 
 public class OrderCuisineController implements Initializable {
     //cuisine
-    @FXML
-    private ScrollPane cuisineScrollPane;
-    @FXML
-    private GridPane cuisineGridPane;
-    @FXML
-    private ScrollPane billScrollPane;
-    @FXML
-    public GridPane billGridPane;
-    @FXML
-    private Label tableInfoLabel;
-    @FXML
-    private Label billTotalAmountLabel;
-    @FXML
-    private Label billCuisineQuantityLabel;
+    @FXML private ScrollPane cuisineScrollPane;
+    @FXML private GridPane cuisineGridPane;
+    @FXML private ScrollPane billScrollPane;
+    @FXML public GridPane billGridPane;
+    @FXML private Label tableInfoLabel;
+    @FXML private Label billTotalAmountLabel;
+    @FXML private Label billCuisineQuantityLabel;
 
+    //Controller area
     public RestaurantMainController restaurantMainController;
-
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
+    }
+
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        loadCuisine();
+        try {
+            loadBill();
+            setCuisinesInfoFromJSON();
+        } catch (FileNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadCuisine() {
@@ -169,19 +174,6 @@ public class OrderCuisineController implements Initializable {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
         }
         tableInfoLabel.setText(tabInfoBuilder.toString());
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadCuisine();
-        try {
-            //bill
-            loadBill();
-            //lbl
-            setCuisinesInfoFromJSON();
-        } catch (FileNotFoundException | SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @FXML

@@ -33,99 +33,46 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class EmployeeManagementController implements Initializable {
-    @FXML
-    private TableColumn<Employee, String> employeeGenderColumn;
+    @FXML private TableColumn<Employee, String> employeeGenderColumn;
+    @FXML private TableColumn<Employee, String> employeeIdColumn;
+    @FXML private TableColumn<Employee, String> employeeNameColumn;
+    @FXML private TableColumn<Employee, String> employeePhoneColumn;
+    @FXML private TableColumn<Employee, String> employeePositionColumn;
+    @FXML private TableColumn<Employee, String> employeeStatusColumn;
+    @FXML private TableView<Employee> employeeTable;
+    @FXML private ComboBox<String> employeeStatusComboBox;
+    @FXML private ComboBox<Employee> employeePositionComboBox;
+    @FXML private DatePicker employeeBirthdayDatePicker;
+    @FXML private RadioButton femaleRadioButton;
+    @FXML private RadioButton maleRadioButton;
+    @FXML public TextField employeeAddressField;
+    @FXML private TextField employeeCitizenIdField;
+    @FXML private TextField employeeEmailField;
+    @FXML private DatePicker employeeHiredateDatePicker;
+    @FXML private TextField employeeNameField;
+    @FXML private TextField employeePhoneField;
+    @FXML private TextField employeeSalaryField;
+    @FXML private TextField employeeHourlyPayField;
+    @FXML private ToggleGroup genderGroup;
+    @FXML private TextField employeeIdSearchField;
+    @FXML private TextField employeeNameSearchField;
+    @FXML private TextField employeePhoneSearchField;
+    @FXML private Button employeeClearFormButton;
+    @FXML private Button fireEmployeeButton;
+    @FXML private Button handleActionEmployeeButton;
+    @FXML private Button searchEmployeeButton;
+    @FXML private Button swapModeEmployeeButton;
+    @FXML private Button chooseImageButton;
+    @FXML private ImageView employeeAvatar;
 
-    @FXML
-    private TableColumn<Employee, String> employeeIdColumn;
-
-    @FXML
-    private TableColumn<Employee, String> employeeNameColumn;
-
-    @FXML
-    private TableColumn<Employee, String> employeePhoneColumn;
-
-    @FXML
-    private TableColumn<Employee, String> employeePositionColumn;
-
-    @FXML
-    private TableColumn<Employee, String> employeeStatusColumn;
-
-    @FXML
-    private TableView<Employee> employeeTable;
-
-    @FXML
-    private ComboBox<String> employeeStatusComboBox;
-
-    @FXML
-    private ComboBox<Employee> employeePositionComboBox;
-
-    @FXML
-    private DatePicker employeeBirthdayDatePicker;
-
-    @FXML
-    private RadioButton femaleRadioButton;
-
-    @FXML
-    private RadioButton maleRadioButton;
-
-    @FXML
-    public TextField employeeAddressField;
-
-    @FXML
-    private TextField employeeCitizenIdField;
-
-    @FXML
-    private TextField employeeEmailField;
-
-    @FXML
-    private DatePicker employeeHiredateDatePicker;
-
-    @FXML
-    private TextField employeeNameField;
-
-    @FXML
-    private TextField employeePhoneField;
-
-    @FXML
-    private TextField employeeSalaryField;
-
-    @FXML
-    private TextField employeeHourlyPayField;
-
-    @FXML
-    private ToggleGroup genderGroup;
-
-    @FXML
-    private TextField employeeIdSearchField;
-
-    @FXML
-    private TextField employeeNameSearchField;
-
-    @FXML
-    private TextField employeePhoneSearchField;
-
-    @FXML
-    private Button employeeClearFormButton;
-
-    @FXML
-    private Button fireEmployeeButton;
-
-    @FXML
-    private Button handleActionEmployeeButton;
-
-    @FXML
-    private Button searchEmployeeButton;
-
-    @FXML
-    private Button swapModeEmployeeButton;
-
-    @FXML
-    private Button chooseImageButton;
-
-    @FXML
-    private ImageView employeeAvatar;
     public byte[] employeeImageBytes = null;
+
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setPromotionTableValue();
+        setComboBoxValue();
+    }
 
     private void setPromotionTableValue() {
         EmployeeDAO employeeDao = EmployeeDAO.getInstance();
@@ -207,12 +154,6 @@ public class EmployeeManagementController implements Initializable {
 
     public void setController(EmployeeAddressDialogController _manageEmployee_dialogAddressController) {
         this._manageEmployee_dialogAddressController = _manageEmployee_dialogAddressController;
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setPromotionTableValue();
-        setComboBoxValue();
     }
 
     @FXML
@@ -506,10 +447,9 @@ public class EmployeeManagementController implements Initializable {
         Scene scene = new Scene(root, 1200, 700);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Diage Address - Huong Bien Restaurant");
         primaryStage.setMaximized(true);
-        EmployeeAddressDialogController dialogController = loader.getController();
-        dialogController.setGUIManageEmployeeController(this);
+        EmployeeAddressDialogController employeeAddressDialogController = loader.getController();
+        employeeAddressDialogController.setEmployeeManagementController(this);
         primaryStage.show();
     }
 

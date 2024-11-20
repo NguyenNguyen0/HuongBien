@@ -42,36 +42,35 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RestaurantMainController implements Initializable {
-    @FXML
-    public Label employeeNameLabel;
-    @FXML
-    private Button hideMenuButton;
-    @FXML
-    private Button showMenuButton;
-    @FXML
-    private BorderPane menuBorderPane;
-    @FXML
-    private HBox hidedMenuBarHBox;
-    @FXML
-    private HBox mainOverlayHBox;
-    @FXML
-    private VBox overlayMenubarVBox;
-    @FXML
-    private Pane linePane;
-    @FXML
-    private Label currentDateLabel;
-    @FXML
-    private Label currentDayLabel;
-    @FXML
-    private Label currentTimeLabel;
-    @FXML
-    public Label featureTitleLabel;
-    @FXML
-    private BorderPane mainBorderPane;
+    @FXML public Label employeeNameLabel;
+    @FXML private Button hideMenuButton;
+    @FXML private Button showMenuButton;
+    @FXML private BorderPane menuBorderPane;
+    @FXML private HBox hidedMenuBarHBox;
+    @FXML private HBox mainOverlayHBox;
+    @FXML private VBox overlayMenubarVBox;
+    @FXML private Pane linePane;
+    @FXML private Label currentDateLabel;
+    @FXML private Label currentDayLabel;
+    @FXML private Label currentTimeLabel;
+    @FXML public Label featureTitleLabel;
+    @FXML private BorderPane mainBorderPane;
 
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        menuBorderPane.setTranslateX(-250);
+        setTime();
+        try {
+            openHome();
+            loadEmployeeInfoFromJSON();
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void setTime() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -144,7 +143,7 @@ public class RestaurantMainController implements Initializable {
     }
 
     public void openOrderPayment() throws IOException {
-        featureTitleLabel.setText("Chọn bàn  -  Đặt món  -  Thanh toán");
+        featureTitleLabel.setText("Chọn bàn  -  Đặt món  -  Tính tiền");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderPayment.fxml"));
         BorderPane orderPayment = loader.load();
         mainBorderPane.setCenter(orderPayment);
@@ -156,7 +155,7 @@ public class RestaurantMainController implements Initializable {
     }
 
     public void openOrderPaymentFinal() throws IOException {
-        featureTitleLabel.setText("Chọn bàn  -  Đặt món  -  Thanh toán  -  Hoá đơn thanh toán");
+        featureTitleLabel.setText("Chọn bàn  -  Đặt món  -  Tính tiền  -  Thanh toán");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/OrderPaymentFinal.fxml"));
         BorderPane orderPayment = loader.load();
         mainBorderPane.setCenter(orderPayment);
@@ -477,18 +476,6 @@ public class RestaurantMainController implements Initializable {
             Employee employee = (employees.isEmpty() ? null : employees.get(0));
             assert employee != null;
             employeeNameLabel.setText(employee.getName());
-        }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        menuBorderPane.setTranslateX(-250);
-        setTime();
-        try {
-            openHome();
-            loadEmployeeInfoFromJSON();
-        } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 }

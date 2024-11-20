@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="898.0" prefWidth="1730.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderPaymentController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="898.0" prefWidth="1730.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderPaymentController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -364,7 +364,7 @@
                         </VBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;">
                            <children>
-                              <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="In tạm tính (F7)">
+                              <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="In tạm tính">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
@@ -372,7 +372,7 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#onSavePaymentQueueButtonClicked" prefHeight="60.0" prefWidth="200.0" text="Lưu tạm (F8)">
+                              <Button mnemonicParsing="false" onAction="#onSavePaymentQueueButtonClicked" prefHeight="60.0" prefWidth="200.0" text="Lưu tạm">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
@@ -380,7 +380,7 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#onPaymentButtonClicked" prefHeight="60.0" prefWidth="200.0" text="Thanh toán (F9)">
+                              <Button mnemonicParsing="false" onAction="#onPaymentButtonClicked" prefHeight="60.0" prefWidth="200.0" text="Thanh toán">
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
@@ -455,7 +455,7 @@
       </StackPane>
    </right>
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="1730.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1730.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="70.0" prefWidth="70.0" styleClass="transperant">
                <graphic>

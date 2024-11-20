@@ -45,63 +45,58 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderPaymentController implements Initializable {
-    @FXML
-    public TableView<Promotion> promotionTableView;
-    @FXML
-    private TableColumn<Promotion, Double> promotionDiscountColumn;
-    @FXML
-    private TableColumn<Promotion, String> promotionIdColumn;
-    @FXML
-    private TableColumn<Promotion, String> promotionNameColumn;
-    @FXML
-    private Label paymentEmployeeLabel;
-    @FXML
-    private Label paymentCuisineQuantityLabel;
-    @FXML
-    private Label paymentTotalAmountLabel;
-    @FXML
-    private Label paymentVATLabel;
-    @FXML
-    private Label paymentDiscountLabel;
-    @FXML
-    private Label paymentFinalAmountLabel;
-    @FXML
-    private Label tableInfoLabel;
-    @FXML
-    private ScrollPane billScrollPane;
-    @FXML
-    public GridPane billGridPane;
-    @FXML
-    private TextField searchCustomerField;
-    @FXML
-    private TextField customerIdField;
-    @FXML
-    private TextField customerNameField;
-    @FXML
-    private TextField customerRankField;
-    @FXML
-    private Button searchCustomerButton;
-    @FXML
-    private Button addCustomerButton;
-    @FXML
-    private Button createCustomerQRButton;
-    //---
+    @FXML public TableView<Promotion> promotionTableView;
+    @FXML private TableColumn<Promotion, Double> promotionDiscountColumn;
+    @FXML private TableColumn<Promotion, String> promotionIdColumn;
+    @FXML private TableColumn<Promotion, String> promotionNameColumn;
+    @FXML private Label paymentEmployeeLabel;
+    @FXML private Label paymentCuisineQuantityLabel;
+    @FXML private Label paymentTotalAmountLabel;
+    @FXML private Label paymentVATLabel;
+    @FXML private Label paymentDiscountLabel;
+    @FXML private Label paymentFinalAmountLabel;
+    @FXML private Label tableInfoLabel;
+    @FXML private ScrollPane billScrollPane;
+    @FXML public GridPane billGridPane;
+    @FXML private TextField searchCustomerField;
+    @FXML private TextField customerIdField;
+    @FXML private TextField customerNameField;
+    @FXML private TextField customerRankField;
+    @FXML private Button searchCustomerButton;
+    @FXML private Button addCustomerButton;
+    @FXML private Button createCustomerQRButton;
+
     private VideoCapture capture;
     private Timer timer;
     private QRCodeHandler qrCodeHandler;
-    //---
-    public RestaurantMainController restaurantMainController;
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
+    //Controller area
+    public RestaurantMainController restaurantMainController;
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
 
-    public void loadBill() throws FileNotFoundException {
-        List<OrderDetail> orderDetails = new ArrayList<>(getBillData());
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            this.qrCodeHandler = new QRCodeHandler();
+            loadCuisine();
+            setPaymentInfo();
+            setPromotionTableValue();
+        } catch (FileNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+        searchCustomerButton.fire();
+        promotionTableView.setMouseTransparent(true);
+    }
+
+    public void loadCuisine() throws FileNotFoundException {
+        List<OrderDetail> orderDetails = new ArrayList<>(getCuisineData());
         int columns = 0;
         int rows = 1;
         try {
@@ -111,7 +106,7 @@ public class OrderPaymentController implements Initializable {
                 HBox paymentBillBox = fxmlLoader.load();
                 OrderPaymentBillItemController _OrderPaymentBillItemController = fxmlLoader.getController();
                 _OrderPaymentBillItemController.setDataBill(orderDetails.get(i));
-                _OrderPaymentBillItemController.setOrderPaymentBillController(this);
+                _OrderPaymentBillItemController.setOrderPaymentController(this);
                 if (columns == 1) {
                     columns = 0;
                     ++rows;
@@ -125,7 +120,7 @@ public class OrderPaymentController implements Initializable {
         billGridPane.prefWidthProperty().bind(billScrollPane.widthProperty());
     }
 
-    public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
+    public List<OrderDetail> readFromCuisineJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
 
@@ -149,12 +144,12 @@ public class OrderPaymentController implements Initializable {
         return orderDetailsList;
     }
 
-    private List<OrderDetail> getBillData() throws FileNotFoundException {
-        return readFromBillJSON();
+    private List<OrderDetail> getCuisineData() throws FileNotFoundException {
+        return readFromCuisineJSON();
     }
 
     public void setPaymentInfo() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayBill = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         JsonArray jsonArrayTab = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         JsonArray jsonArrayEmp = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         //Emp Session
@@ -182,7 +177,7 @@ public class OrderPaymentController implements Initializable {
         //
         int totalQuantityCuisine = 0;
         double totalAmount = 0.0;
-        for (JsonElement element : jsonArrayBill) {
+        for (JsonElement element : jsonArrayCuisine) {
             totalQuantityCuisine++;
             JsonObject jsonObject = element.getAsJsonObject();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
@@ -237,20 +232,6 @@ public class OrderPaymentController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            this.qrCodeHandler = new QRCodeHandler();
-            loadBill();
-            setPaymentInfo();
-            setPromotionTableValue();
-        } catch (FileNotFoundException | SQLException e) {
-            throw new RuntimeException(e);
-        }
-        searchCustomerButton.fire();
-        promotionTableView.setMouseTransparent(true);
-    }
-
     @FXML
     void onBackButtonClicked(ActionEvent event) throws IOException {
         restaurantMainController.openOrderCuisine();
@@ -263,8 +244,8 @@ public class OrderPaymentController implements Initializable {
 
     private void setDiscountFromPromotionSearch() throws FileNotFoundException {
         double totalAmount = 0;
-        JsonArray jsonArrayBill = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
-        for (JsonElement element : jsonArrayBill) {
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        for (JsonElement element : jsonArrayCuisine) {
             JsonObject jsonObject = element.getAsJsonObject();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
             totalAmount += cuisineMoney;
@@ -281,7 +262,7 @@ public class OrderPaymentController implements Initializable {
             promotionTableView.getSelectionModel().select(maxDiscountPromotion);
             discount = maxDiscountPromotion.getDiscount();
         } else {
-            //Not promotion cause, I set default 0
+            //Not promotion set default 0
             discount = 0.0;
         }
         double discountMoney = totalAmount * discount;
@@ -459,15 +440,15 @@ public class OrderPaymentController implements Initializable {
 
         JsonArray cuisineOrderArray = new JsonArray();
         for (int i = 0; i < cuisineArray.size(); i++) {
-            JsonObject billItem = cuisineArray.get(i).getAsJsonObject();
+            JsonObject cuisineItem = cuisineArray.get(i).getAsJsonObject();
             JsonObject cuisineOrderItem = new JsonObject();
             //
-            cuisineOrderItem.addProperty("Cuisine ID", billItem.get("Cuisine ID").getAsString());
-            cuisineOrderItem.addProperty("Cuisine Name", billItem.get("Cuisine Name").getAsString());
-            cuisineOrderItem.addProperty("Cuisine Price", billItem.get("Cuisine Price").getAsDouble());
-            cuisineOrderItem.addProperty("Cuisine Note", billItem.get("Cuisine Note").getAsString());
-            cuisineOrderItem.addProperty("Cuisine Quantity", billItem.get("Cuisine Quantity").getAsInt());
-            cuisineOrderItem.addProperty("Cuisine Money", billItem.get("Cuisine Money").getAsDouble());
+            cuisineOrderItem.addProperty("Cuisine ID", cuisineItem.get("Cuisine ID").getAsString());
+            cuisineOrderItem.addProperty("Cuisine Name", cuisineItem.get("Cuisine Name").getAsString());
+            cuisineOrderItem.addProperty("Cuisine Price", cuisineItem.get("Cuisine Price").getAsDouble());
+            cuisineOrderItem.addProperty("Cuisine Note", cuisineItem.get("Cuisine Note").getAsString());
+            cuisineOrderItem.addProperty("Cuisine Quantity", cuisineItem.get("Cuisine Quantity").getAsInt());
+            cuisineOrderItem.addProperty("Cuisine Money", cuisineItem.get("Cuisine Money").getAsDouble());
             cuisineOrderArray.add(cuisineOrderItem);
         }
         newPaymentQueue.add("Cuisine Order", cuisineOrderArray);
@@ -496,7 +477,6 @@ public class OrderPaymentController implements Initializable {
 
     @FXML
     void onPaymentButtonClicked(ActionEvent event) throws IOException {
-        Utils.showAlert("Chức năng đang phát triển", "Thông báo gián đoạn");
         restaurantMainController.openOrderPaymentFinal();
     }
 }

@@ -33,40 +33,30 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CuisineManagementController implements Initializable {
-    @FXML
-    private TableColumn<Cuisine, String> cuisineCategoryColumn;
-    @FXML
-    private TableColumn<Cuisine, String> cuisineIdColumn;
-    @FXML
-    private TableColumn<Cuisine, String> cuisineNameColumn;
-    @FXML
-    private TableColumn<Cuisine, Double> cuisinePriceColumn;
-    @FXML
-    private TableView<Cuisine> cuisineTable;
-    @FXML
-    private TextField cuisineNameField;
-    @FXML
-    private TextField cuisinePriceField;
-    @FXML
-    private ComboBox<Category> cuisineCategoryComboBox;
-    @FXML
-    private TextArea cuisineDescriptionTextArea;
-    @FXML
-    private TextField cuisineSearchField;
-    @FXML
-    private Button swapModeCuisineButton;
-    @FXML
-    private Button handleActionCuisineButton;
-    @FXML
-    private Button deleteCuisineButton;
-    @FXML
-    private Button clearCuisineButton;
-    @FXML
-    private Button chooseImageButton;
-    @FXML
-    private ImageView cuisineImageView;
+    @FXML private TableColumn<Cuisine, String> cuisineCategoryColumn;
+    @FXML private TableColumn<Cuisine, String> cuisineIdColumn;
+    @FXML private TableColumn<Cuisine, String> cuisineNameColumn;
+    @FXML private TableColumn<Cuisine, Double> cuisinePriceColumn;
+    @FXML private TableView<Cuisine> cuisineTable;
+    @FXML private TextField cuisineNameField;
+    @FXML private TextField cuisinePriceField;
+    @FXML private ComboBox<Category> cuisineCategoryComboBox;
+    @FXML private TextArea cuisineDescriptionTextArea;
+    @FXML private TextField cuisineSearchField;
+    @FXML private Button swapModeCuisineButton;
+    @FXML private Button handleActionCuisineButton;
+    @FXML private Button deleteCuisineButton;
+    @FXML private Button clearCuisineButton;
+    @FXML private Button chooseImageButton;
+    @FXML private ImageView cuisineImageView;
 
     public byte[] imageCuisineByte = null;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setCuisineTableValues();
+        setValueComboBox();
+    }
 
     private void setCuisineTableValues() {
         CuisineDAO cuisineDao = CuisineDAO.getInstance();
@@ -190,7 +180,7 @@ public class CuisineManagementController implements Initializable {
         handleActionCuisineButton.setStyle("-fx-background-color:  #1D557E");
     }
 
-    void disableInput() {
+    public void disableInput() {
         cuisineNameField.setDisable(true);
         cuisinePriceField.setDisable(true);
         cuisineCategoryComboBox.setDisable(true);
@@ -198,7 +188,7 @@ public class CuisineManagementController implements Initializable {
         chooseImageButton.setDisable(true);
     }
 
-    void enableInput() {
+    public void enableInput() {
         cuisineNameField.setDisable(false);
         cuisinePriceField.setDisable(false);
         cuisineCategoryComboBox.setDisable(false);
@@ -206,14 +196,8 @@ public class CuisineManagementController implements Initializable {
         chooseImageButton.setDisable(false);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setCuisineTableValues();
-        setValueComboBox();
-    }
-
     @FXML
-    void onCuisineTableViewClicked(MouseEvent event) {
+    public void onCuisineTableViewClicked(MouseEvent event) {
         Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getCuisineId();
@@ -248,7 +232,7 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    void onClearCuisineClicked(ActionEvent event) {
+    public void onClearCuisineClicked(ActionEvent event) {
         clearCuisineButton.setVisible(false);
         deleteCuisineButton.setVisible(false);
         swapModeCuisineButton.setVisible(true);
@@ -260,7 +244,7 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    void onClearSearchClicked(MouseEvent event) {
+    public void onClearSearchClicked(MouseEvent event) {
         cuisineSearchField.setText("");
         cuisineSearchField.requestFocus();
         cuisineTable.getItems().clear();
@@ -268,7 +252,7 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    void onSwapModeButtonClicked(ActionEvent event) {
+    public void onSwapModeButtonClicked(ActionEvent event) {
         if (swapModeCuisineButton.getText().equals("Sửa món")) {
             clearChooserImage();
             setHandleActionButtonToEditCuisine();
@@ -284,7 +268,7 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    void onHandleActionButtonClicked(ActionEvent event) {
+    public void onHandleActionButtonClicked(ActionEvent event) {
         if (handleActionCuisineButton.getText().equals("Sửa món")) {
             //Lay ID cua table thuc hien chinh sua
             Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
@@ -336,7 +320,7 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    void onDeleteCuisineButtonClicked(ActionEvent event) throws SQLException {
+    public void onDeleteCuisineButtonClicked(ActionEvent event) throws SQLException {
         Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             String idSelect = selectedItem.getCuisineId();
@@ -354,7 +338,7 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    void onCuisinePriceTextFieldKeyReleased(KeyEvent event) {
+    public void onCuisinePriceTextFieldKeyReleased(KeyEvent event) {
         String input = cuisinePriceField.getText().replace(".", "").replace(",", "");
         if (input.isEmpty()) {
             return;
@@ -378,7 +362,7 @@ public class CuisineManagementController implements Initializable {
 
     //search cuisine area
     @FXML
-    void onCuisineSearchTextFieldClicked(MouseEvent event) {
+    public void onCuisineSearchTextFieldClicked(MouseEvent event) {
         cuisineTable.getItems().clear();
         String input = cuisineSearchField.getText();
         CuisineDAO cuisineDao = CuisineDAO.getInstance();
@@ -416,7 +400,7 @@ public class CuisineManagementController implements Initializable {
     private Timeline searchDelay;
 
     @FXML
-    void onCuisineSearchTextFieldKeyReleased(KeyEvent event) {
+    public void onCuisineSearchTextFieldKeyReleased(KeyEvent event) {
         if (searchDelay != null) {
             searchDelay.stop();
         }
@@ -428,7 +412,7 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    void onImageChooserButtonClicked(ActionEvent event) {
+    public void onImageChooserButtonClicked(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
                 "Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")

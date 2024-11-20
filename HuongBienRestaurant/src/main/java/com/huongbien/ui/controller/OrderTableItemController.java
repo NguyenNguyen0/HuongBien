@@ -17,24 +17,17 @@ import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 public class OrderTableItemController {
-    @FXML
-    private ImageView tableImageView;
-    @FXML
-    private ImageView checkedImageView;
-    @FXML
-    private Label tableIdLabel; // Table ID displayed in the table item, get from the database !important
-    @FXML
-    private Label tableNameLabel;
-    @FXML
-    private Label tableSeatLabel;
-    @FXML
-    private Label tableTypeLabel;
+    @FXML private ImageView tableImageView;
+    @FXML private ImageView checkedImageView;
+    @FXML private Label tableIdLabel; // Table ID displayed in the table item, get from the database !important
+    @FXML private Label tableNameLabel;
+    @FXML private Label tableSeatLabel;
+    @FXML private Label tableTypeLabel;
 
     private boolean isCheck = false;
 
+    //Controller area
     public OrderTableController orderTableController;
-
-    // Set the orderTableController
     public void setOrderTableController(OrderTableController orderTableController) {
         this.orderTableController = orderTableController;
     }

@@ -26,50 +26,41 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class PromotionManagementController implements Initializable {
-    @FXML
-    private Label pageIndexLabel;
-    @FXML
-    private ImageView clearSearchButton;
-    @FXML
-    private TextField promotionSearchField;
-    @FXML
-    private TextField promotionNameField;
-    @FXML
-    private DatePicker startedDateDatePicker;
-    @FXML
-    private DatePicker endedDateDatePicker;
-    @FXML
-    private TextField discountField;
-    @FXML
-    private ComboBox<String> promotionStatusComboBox;
-    @FXML
-    private TextField minimumOrderField;
-    @FXML
-    private ComboBox<String> memberShipLevelComboBox;
-    @FXML
-    private TextArea promotionDescriptionTextArea;
-    @FXML
-    private Button handleActionPromotionButton;
-    @FXML
-    private Button swapModePromotionButton;
-    @FXML
-    private ComboBox<String> filterPromotionStatusComboBox;
-    @FXML
-    private TableView<Promotion> promotionTable;
-    @FXML
-    private TableColumn<Promotion, String> promotionIdColumn;
-    @FXML
-    private TableColumn<Promotion, Date> promotionStartedDateColumn;
-    @FXML
-    private TableColumn<Promotion, Date> promotionEndedDateColumn;
-    @FXML
-    private TableColumn<Promotion, Double> promotionDiscountColumn;
-    @FXML
-    private TableColumn<Promotion, String> promotionMembershipLevelColumn;
+    @FXML private Label pageIndexLabel;
+    @FXML private ImageView clearSearchButton;
+    @FXML private TextField promotionSearchField;
+    @FXML private TextField promotionNameField;
+    @FXML private DatePicker startedDateDatePicker;
+    @FXML private DatePicker endedDateDatePicker;
+    @FXML private TextField discountField;
+    @FXML private ComboBox<String> promotionStatusComboBox;
+    @FXML private TextField minimumOrderField;
+    @FXML private ComboBox<String> memberShipLevelComboBox;
+    @FXML private TextArea promotionDescriptionTextArea;
+    @FXML private Button handleActionPromotionButton;
+    @FXML private Button swapModePromotionButton;
+    @FXML private ComboBox<String> filterPromotionStatusComboBox;
+    @FXML private TableView<Promotion> promotionTable;
+    @FXML private TableColumn<Promotion, String> promotionIdColumn;
+    @FXML private TableColumn<Promotion, Date> promotionStartedDateColumn;
+    @FXML private TableColumn<Promotion, Date> promotionEndedDateColumn;
+    @FXML private TableColumn<Promotion, Double> promotionDiscountColumn;
+    @FXML private TableColumn<Promotion, String> promotionMembershipLevelColumn;
 
     PromotionBUS promotionBUS = new PromotionBUS();
-
     Pagination<Promotion> promotionPagination;
+
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        clearSearchButton.setVisible(false);
+        disableInput();
+        setComboBoxValue();
+        setPromotionTableColumn();
+        setPaginationGetByStatus();
+        setPromotionTableValue();
+        setPageIndexLabel();
+    }
 
     public void changeHandleButtonModeToEditPromotion() {
         swapModePromotionButton.setText("Thêm");
@@ -313,18 +304,6 @@ public class PromotionManagementController implements Initializable {
             clearPromotionForm();
 //            TODO: show toast message here
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        clearSearchButton.setVisible(false);
-        disableInput();
-        setComboBoxValue();
-        setPromotionTableColumn();
-
-        setPaginationGetByStatus();
-        setPromotionTableValue();
-        setPageIndexLabel();
     }
 
     @FXML

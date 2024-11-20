@@ -33,25 +33,20 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderTableController implements Initializable {
-    @FXML
-    private ScrollPane orderTableScrollPane;
-    @FXML
-    private GridPane orderTableGridPane;
-    @FXML
-    public ComboBox<String> tableFloorComboBox;
-    @FXML
-    public ComboBox<String> tableStatusComboBox;
-    @FXML
-    public ComboBox<String> tableTypeComboBox;
-    @FXML
-    public TabPane tableInfoTabPane;
-    //---
+    @FXML private ScrollPane orderTableScrollPane;
+    @FXML private GridPane orderTableGridPane;
+    @FXML public ComboBox<String> tableFloorComboBox;
+    @FXML public ComboBox<String> tableStatusComboBox;
+    @FXML public ComboBox<String> tableTypeComboBox;
+    @FXML public TabPane tableInfoTabPane;
+
+    //Controller area
     public RestaurantMainController restaurantMainController;
-    //---
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
-    //---
+
+    //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadTablesToGridPane("0", "Tất cả trạng thái", "Tất cả loại bàn");

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="988.0" prefWidth="1496.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderTableController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="988.0" prefWidth="1496.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderTableController">
    <center>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <children>
@@ -334,15 +334,6 @@
    <top>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1496.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#onReservationManagementButtonAction" style="-fx-background-color: white;" text="Danh sách đặt trước">
-               <font>
-                  <Font name="System Bold" size="30.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="10.0" right="10.0" />
-               </HBox.margin>
-            </Button>
-            <Pane prefHeight="100.0" prefWidth="144.0" HBox.hgrow="ALWAYS" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="550.0">
                <children>
                   <Label text="Lưu ý: Bàn VIP phí đặt trước 100.000 VNĐ" textFill="RED">
@@ -352,6 +343,15 @@
                   </Label>
                </children>
             </HBox>
+            <Pane prefHeight="100.0" prefWidth="144.0" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#onReservationManagementButtonAction" style="-fx-background-color: white;" text="Danh sách đặt trước">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
    </top>

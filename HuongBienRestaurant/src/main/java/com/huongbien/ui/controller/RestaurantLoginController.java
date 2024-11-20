@@ -2,6 +2,7 @@ package com.huongbien.ui.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.AccountDAO;
 import com.huongbien.entity.Account;
 import com.huongbien.utils.Utils;
@@ -30,39 +31,26 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RestaurantLoginController implements Initializable {
-    private final static String TEMPORARY_USER_PATH = "src/main/resources/com/huongbien/temp/loginSession.json";
+    @FXML private TextField employeeIdField;
+    @FXML private PasswordField hidedPasswordField;
+    @FXML private TextField showedPasswordField;
+    @FXML private BorderPane borderPaneCarousel;
+    @FXML private AnchorPane compoent_hide;
+    @FXML private AnchorPane compoent_show;
+    @FXML private ImageView toggleShowingPasswordButton;
+    @FXML private Label loginMessageLabel;
+    @FXML private Button loginButton;
 
-    @FXML
-    private TextField employeeIdField;
-
-    @FXML
-    private PasswordField hidedPasswordField;
-
-    @FXML
-    private TextField showedPasswordField;
-
-    @FXML
-    private BorderPane borderPaneCarousel;
-
-    @FXML
-    private AnchorPane compoent_hide;
-
-    @FXML
-    private AnchorPane compoent_show;
-
-    @FXML
-    private ImageView toggleShowingPasswordButton;
-
-    @FXML
-    private Label loginMessageLabel;
-
-    @FXML
-    private Button loginButton;
-
+    //Controller area
     public RestaurantMainController restaurantMainController;
+    public void setRestaurantMainController(RestaurantMainController restaurant_mainController) {
+        this.restaurantMainController = restaurant_mainController;
+    }
 
-    public void setRestaurantMainController(RestaurantMainController _Restaurant_mainController) {
-        this.restaurantMainController = _Restaurant_mainController;
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        loadCarousel();
     }
 
     private void loadCarousel() {
@@ -88,7 +76,7 @@ public class RestaurantLoginController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == btn_ok) {
             JsonArray jsonArray = new JsonArray();
-            Utils.writeJsonToFile(jsonArray, TEMPORARY_USER_PATH);
+            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
             System.exit(0);
         } else if (result.isPresent() && result.get() == onCancelButtonClicked) {
             employeeIdField.requestFocus();
@@ -175,7 +163,7 @@ public class RestaurantLoginController implements Initializable {
             //write JSON user current
             JsonArray jsonArray;
             try {
-                jsonArray = Utils.readJsonFromFile(TEMPORARY_USER_PATH);
+                jsonArray = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
@@ -187,7 +175,7 @@ public class RestaurantLoginController implements Initializable {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("Employee ID", id);
             jsonArray.add(jsonObject);
-            Utils.writeJsonToFile(jsonArray, TEMPORARY_USER_PATH);
+            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
         } else {
             loginMessageLabel.setText("Sai mã nhân viên và mật khẩu đăng nhập");
             loginMessageLabel.setStyle("-fx-text-fill: red;");
@@ -227,10 +215,5 @@ public class RestaurantLoginController implements Initializable {
         if (event.getCode() == KeyCode.ENTER) {
             loginButton.fire();
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadCarousel();
     }
 }

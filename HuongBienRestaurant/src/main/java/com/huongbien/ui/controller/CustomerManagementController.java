@@ -38,76 +38,34 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class CustomerManagementController implements Initializable {
-    @FXML
-    public Button createCustomerQRButton;
-    @FXML
-    private Button clearCustomerFormButton;
+    @FXML public Button createCustomerQRButton;
+    @FXML private Button handleActionCustomerButton;
+    @FXML private Button swapModeCustomerButton;
+    @FXML private DatePicker customerBirthdayDatePicker;
+    @FXML private DatePicker registrationDateDatePicker;
+    @FXML private ToggleGroup genderGroup;
+    @FXML private RadioButton femaleRadioButton;
+    @FXML private RadioButton maleRadioButton;
+    @FXML private TableColumn<Customer, Integer> customerAccumulatedPointColumn;
+    @FXML private TableColumn<Customer, String> customerAddressColumn;
+    @FXML private TableColumn<Customer, String> customerGenderColumn;
+    @FXML private TableColumn<Customer, String> customerIdColumn;
+    @FXML private TableColumn<Customer, String> customerMembershipLevelColumn;
+    @FXML private TableColumn<Customer, String> customerNameColumn;
+    @FXML private TableView<Customer> customerTable;
+    @FXML private TextField customerAccumulatedPointsField;
+    @FXML private TextField customerAddressField;
+    @FXML private TextField customerEmailField;
+    @FXML private TextField customerMembershipLevelField;
+    @FXML private TextField customerNameField;
+    @FXML private TextField customerPhoneField;
+    @FXML private TextField searchCustomerPhoneField;
 
-    @FXML
-    private Button handleActionCustomerButton;
-
-    @FXML
-    private Button swapModeCustomerButton;
-
-    @FXML
-    private DatePicker customerBirthdayDatePicker;
-
-    @FXML
-    private DatePicker registrationDateDatePicker;
-
-    @FXML
-    private ToggleGroup genderGroup;
-
-    @FXML
-    private RadioButton femaleRadioButton;
-
-    @FXML
-    private RadioButton maleRadioButton;
-
-    @FXML
-    private TableColumn<Customer, Integer> customerAccumulatedPointColumn;
-
-    @FXML
-    private TableColumn<Customer, String> customerAddressColumn;
-
-    @FXML
-    private TableColumn<Customer, String> customerGenderColumn;
-
-    @FXML
-    private TableColumn<Customer, String> customerIdColumn;
-
-    @FXML
-    private TableColumn<Customer, String> customerMembershipLevelColumn;
-
-    @FXML
-    private TableColumn<Customer, String> customerNameColumn;
-
-    @FXML
-    private TableView<Customer> customerTable;
-
-    @FXML
-    private TextField customerAccumulatedPointsField;
-
-    @FXML
-    private TextField customerAddressField;
-
-    @FXML
-    private TextField customerEmailField;
-
-    @FXML
-    private TextField customerMembershipLevelField;
-
-    @FXML
-    private TextField customerNameField;
-
-    @FXML
-    private TextField customerPhoneField;
-
-    @FXML
-    private TextField searchCustomerPhoneField;
-
-    private Utils utils;
-    private final QRCodeHandler qrCodeHandler = new QRCodeHandler();
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setCustomerTableValues();
+    }
 
     private void setCustomerTableValues() {
         CustomerDAO customerDAO = CustomerDAO.getInstance();
@@ -199,11 +157,6 @@ public class CustomerManagementController implements Initializable {
             return false;
         }
         return genderGroup.getSelectedToggle() != null;
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setCustomerTableValues();
     }
 
     @FXML
