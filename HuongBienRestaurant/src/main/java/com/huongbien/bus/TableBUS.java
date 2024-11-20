@@ -14,6 +14,32 @@ public class TableBUS {
         tableDao = TableDAO.getInstance();
     }
 
+
+    public int countTotalTables() {
+        return tableDao.countTotalTables();
+    }
+
+    public int countTotalTablesByName(String name) {
+        return tableDao.countTotalTablesByName(name);
+    }
+
+    public int countTotalTablesByFloor(int floor) {
+        return tableDao.countTotalTablesByFloor(floor);
+    }
+
+    public List<Table> getTablesByFloorWithPagination(int floor, int offset, int limit) {
+        if (floor < 0) return null;
+        return tableDao.getByFloorWithPagination(floor, offset, limit);
+    }
+
+    public List<Table> getTablesByNameWithPagination(int offset, int limit, String name) {
+        return tableDao.getByNameWithPagination(name, offset, limit);
+    }
+
+    public List<Table> getTablesWithPagination(int offset, int limit) {
+        return tableDao.getAllWithPagination(offset, limit);
+    }
+
     public List<Table> getAllTable() {
         return tableDao.getAll();
     }
@@ -42,9 +68,18 @@ public class TableBUS {
         return tableDao.getDistinctStatuses();
     }
 
+    public List<Integer> getDistinctFloors() {
+        return tableDao.getDistinctFloors();
+    }
+
     public boolean updateTableStatus(String tableId, String status) {
         if (tableId.isBlank() || tableId.isEmpty() || status.isBlank() || status.isEmpty()) return false;
         return tableDao.updateStatus(tableId, status);
+    }
+
+    public boolean updateTableInfo(Table table) {
+        if (table == null) return false;
+        return tableDao.updateTableInfo(table);
     }
 
     public boolean addTable(Table table) {
