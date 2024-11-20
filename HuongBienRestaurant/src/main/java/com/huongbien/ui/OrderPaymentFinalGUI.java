@@ -18,7 +18,6 @@ public class OrderPaymentFinalGUI extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/OrderPaymentFinal.fxml"));
         primaryStage.setScene(new Scene(root, 1200, 700));
-        primaryStage.setTitle("Invoice Pay - Huong Bien Restaurant");
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

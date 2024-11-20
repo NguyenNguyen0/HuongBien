@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
-import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
@@ -15,10 +14,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import jdk.jshell.execution.Util;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,9 +30,16 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML private VBox screenCashMethodVBox;
     @FXML private VBox screenBankingMethodVBox;
     @FXML private VBox screenEWalletMethodVBox;
+    @FXML private ScrollPane cuisineScrollPane;
+    @FXML public GridPane cuisineGridPane;
+    @FXML private TextField resultField;
+    @FXML private Label resultLabel;
     @FXML private Label finalAmountLabel;
-    @FXML private ScrollPane billScrollPane;
-    @FXML public GridPane billGridPane;
+    @FXML private Label refundLabel;
+    @FXML private Label statusLabel;
+    @FXML private FlowPane keyFlowPaneFirst;
+    @FXML private FlowPane keyFlowPaneSecond;
+    @FXML private FlowPane keyFlowPaneThird;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -45,12 +50,22 @@ public class OrderPaymentFinalController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setDefaultInfo();
         try {
-            setInfo();
+            setFinalAmountInfoFromJSON();
             loadCuisine();
         } catch (FileNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setDefaultInfo() {
+        resultField.setText("0");
+        resultLabel.setText("0 VNĐ");
+        finalAmountLabel.setText("0 VNĐ");
+        refundLabel.setText("0 VNĐ");
+        statusLabel.setText("Khách chưa đưa đủ tiền");
+        statusLabel.setStyle("-fx-text-fill: red");
     }
 
     public void loadCuisine() throws FileNotFoundException {
@@ -69,13 +84,13 @@ public class OrderPaymentFinalController implements Initializable {
                     columns = 0;
                     ++rows;
                 }
-                billGridPane.add(paymentBillBox, columns++, rows);
+                cuisineGridPane.add(paymentBillBox, columns++, rows);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        billScrollPane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        billGridPane.prefWidthProperty().bind(billScrollPane.widthProperty());
+        cuisineScrollPane.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        cuisineGridPane.prefWidthProperty().bind(cuisineScrollPane.widthProperty());
     }
 
     public List<OrderDetail> readFromCuisineJSON() throws FileNotFoundException {
@@ -106,7 +121,7 @@ public class OrderPaymentFinalController implements Initializable {
         return readFromCuisineJSON();
     }
 
-    public void setInfo() throws FileNotFoundException, SQLException {
+    public void setFinalAmountInfoFromJSON() throws FileNotFoundException, SQLException {
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
@@ -145,6 +160,21 @@ public class OrderPaymentFinalController implements Initializable {
         double vat = cuisineAmount * 0.1;
         double finalAmount = tableAmount + cuisineAmount + vat - discountMoney;
         finalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
+    }
+
+    public void setFinalAmountInfo() {
+        double moneyFromCustomer = Double.parseDouble(resultField.getText().replace(".", "").replace(" VNĐ", ""));
+        double finalAmount = Double.parseDouble(finalAmountLabel.getText().replace(".", "").replace(" VNĐ", ""));
+        if(moneyFromCustomer > finalAmount) {
+            statusLabel.setText("Khách đưa đủ tiền");
+            statusLabel.setStyle("-fx-text-fill: green");
+            double refund = moneyFromCustomer - finalAmount;
+            refundLabel.setText(String.format("%,.0f VNĐ", refund));
+        } else {
+            statusLabel.setText("Khách chưa đưa đủ tiền");
+            statusLabel.setStyle("-fx-text-fill: red");
+            refundLabel.setText("0 VNĐ");
+        }
     }
 
     public void openCashMethod() {
@@ -188,5 +218,52 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML
     void onCompleteOrderPaymentFinalAction(ActionEvent event) {
         Utils.showAlert("Chức năng đang phát triển", "Thông báo gián đoạn");
+    }
+
+    //mini calculator
+    @FXML
+    void onNumberClicked(MouseEvent event) {
+        int value = Integer.parseInt(((Pane) event.getSource()).getId().replace("keyFlowPane", ""));
+        double currentResult = Double.parseDouble(resultField.getText().replace(".", ""));
+        double newResult = currentResult == 0 ? (double) value : currentResult * 10 + value;
+        String result = String.format("%,.0f", newResult);
+        resultField.setText(result);
+        resultLabel.setText(result + " VNĐ");
+        setFinalAmountInfo();
+    }
+    @FXML
+    void onSymbolClicked(MouseEvent event) {
+        String symbol = ((Pane) event.getSource()).getId().replace("keyFlowPane", "");
+        switch (symbol) {
+            case "Clear":
+                resultField.setText("0");
+                resultLabel.setText("0" + " VNĐ");
+                break;
+            case "Delete":
+                String currentText = resultField.getText().replace(".", "");
+                if (!currentText.isEmpty()) {
+                    currentText = currentText.substring(0, currentText.length() - 1);
+                    String result = currentText.isEmpty() ? "0" : String.format("%,.0f", Double.parseDouble(currentText));
+                    resultField.setText(result);
+                    resultLabel.setText(result + " VNĐ");
+                }
+                break;
+            case "First":
+                String firstValue = ((Label) keyFlowPaneFirst.getChildren().get(0)).getText();
+                resultField.setText(firstValue);
+                resultLabel.setText(firstValue + " VNĐ");
+                break;
+            case "Second":
+                String secondValue = ((Label) keyFlowPaneSecond.getChildren().get(0)).getText();
+                resultField.setText(secondValue);
+                resultLabel.setText(secondValue + " VNĐ");
+                break;
+            case "Third":
+                String thirdValue = ((Label) keyFlowPaneThird.getChildren().get(0)).getText();
+                resultField.setText(thirdValue);
+                resultLabel.setText(thirdValue + " VNĐ");
+                break;
+        }
+        setFinalAmountInfo();
     }
 }

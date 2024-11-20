@@ -107,8 +107,7 @@ public class TableManagementController implements Initializable {
         });
         tableFloorColumn.setCellValueFactory(cellData -> {
             int floor = cellData.getValue().getFloor();
-            String formattedFloor = "tầng " + (floor == 0 ? "trệt" : floor);
-            ;
+            String formattedFloor = "Tầng " + (floor == 0 ? "trệt" : floor);
             return new SimpleStringProperty(formattedFloor);
         });
     }
