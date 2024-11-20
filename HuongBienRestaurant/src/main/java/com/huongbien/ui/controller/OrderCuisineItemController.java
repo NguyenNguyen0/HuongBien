@@ -2,6 +2,7 @@ package com.huongbien.ui.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.CuisineDAO;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
@@ -22,18 +23,13 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class OrderCuisineItemController {
-    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
-    @FXML
-    private Circle cuisineImageCircle;
-    @FXML
-    private Label cuisineIdLabel;
-    @FXML
-    private Label cuisineNameLabel;
-    @FXML
-    private Label cuisineSalePriceLabel;
+    @FXML private Circle cuisineImageCircle;
+    @FXML private Label cuisineIdLabel;
+    @FXML private Label cuisineNameLabel;
+    @FXML private Label cuisineSalePriceLabel;
 
+    //Controller area
     private OrderCuisineController orderCuisineController;
-
     public void setOrderCuisineController(OrderCuisineController orderCuisineController) {
         this.orderCuisineController = orderCuisineController;
     }
@@ -61,7 +57,7 @@ public class OrderCuisineItemController {
         JsonArray jsonArray;
         //-----------------
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -90,7 +86,7 @@ public class OrderCuisineItemController {
             jsonObject.addProperty("Cuisine Money", cuisineMoney);
             jsonArray.add(jsonObject);
         }
-        Utils.writeJsonToFile(jsonArray, TEMPORARY_BILL_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
     }
 
     @FXML

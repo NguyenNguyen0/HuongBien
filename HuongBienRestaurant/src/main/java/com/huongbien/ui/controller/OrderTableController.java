@@ -33,25 +33,23 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderTableController implements Initializable {
-    @FXML
-    private ScrollPane orderTableScrollPane;
-    @FXML
-    private GridPane orderTableGridPane;
-    @FXML
-    public ComboBox<String> tableFloorComboBox;
-    @FXML
-    public ComboBox<String> tableStatusComboBox;
-    @FXML
-    public ComboBox<String> tableTypeComboBox;
-    @FXML
-    public TabPane tableInfoTabPane;
-    //---
+    @FXML private ScrollPane orderTableScrollPane;
+    @FXML private GridPane orderTableGridPane;
+    @FXML public ComboBox<String> tableFloorComboBox;
+    @FXML public ComboBox<String> tableStatusComboBox;
+    @FXML public ComboBox<String> tableTypeComboBox;
+    @FXML public TabPane tableInfoTabPane;
+    @FXML public Label tableQuantityLabel;
+    @FXML public Label seatTotalLabel;
+    @FXML public Label tableAmountLabel;
+
+    //Controller area
     public RestaurantMainController restaurantMainController;
-    //---
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
-    //---
+
+    //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadTablesToGridPane("0", "Tất cả trạng thái", "Tất cả loại bàn");
@@ -162,37 +160,37 @@ public class OrderTableController implements Initializable {
         newTab.setText(floorString);
 
         HBox tabContentHBox = new HBox(10);
-        tabContentHBox.setPadding(new Insets(20, 0, 0, 20));
+        tabContentHBox.setPadding(new Insets(10, 0, 0, 10));
         tabContentHBox.setAlignment(Pos.CENTER_LEFT);
         tabContentHBox.setStyle("-fx-background-color: white");
 
         HBox tableNameHBox = new HBox(10);
         Label tableNameValue = new Label(name);
-        tableNameValue.setFont(new Font("System Bold", 20));
+        tableNameValue.setFont(new Font("System Bold", 15));
         tableNameHBox.getChildren().addAll(tableNameValue);
 
         HBox tableseparator1 = new HBox(10);
         Label separator1 = new Label("-");
-        separator1.setFont(new Font("System Bold", 20));
+        separator1.setFont(new Font("System Bold", 15));
         tableseparator1.getChildren().addAll(separator1);
 
         HBox seatCountHBox = new HBox(10);
         Label seatCountLabel = new Label("Số chỗ:");
-        seatCountLabel.setFont(new Font("System Bold", 20));
+        seatCountLabel.setFont(new Font("System Bold", 15));
         Label seatCountValue = new Label(String.valueOf(seats));
-        seatCountValue.setFont(new Font("System Bold", 20));
+        seatCountValue.setFont(new Font("System Bold", 15));
         seatCountHBox.getChildren().addAll(seatCountLabel, seatCountValue);
 
         HBox tableseparator2 = new HBox(10);
         Label separator2 = new Label("-");
-        separator2.setFont(new Font("System Bold", 20));
+        separator2.setFont(new Font("System Bold", 15));
         tableseparator2.getChildren().addAll(separator2);
 
         HBox tableTypeHBox = new HBox(10);
         Label tableTypeLabel = new Label("Loại bàn:");
-        tableTypeLabel.setFont(new Font("System Bold", 20));
+        tableTypeLabel.setFont(new Font("System Bold", 15));
         Label tableTypeValue = new Label(typeName);
-        tableTypeValue.setFont(new Font("System Bold", 20));
+        tableTypeValue.setFont(new Font("System Bold", 15));
         tableTypeHBox.getChildren().addAll(tableTypeLabel, tableTypeValue);
 
         tabContentHBox.getChildren().addAll(tableNameHBox, tableseparator1, seatCountHBox, tableseparator2, tableTypeHBox);
@@ -203,13 +201,22 @@ public class OrderTableController implements Initializable {
 
     public void readTableDataFromJSON() throws FileNotFoundException, SQLException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+        int seatTotal = 0;
+        double tableAmount = 0;
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO tableDAO = TableDAO.getInstance();
             Table table = tableDAO.getById(id);
             setTableTabPane(table.getName(), table.getFloor(), table.getSeats(), table.getTableType().getName());
+            //calculate seat total
+            seatTotal += table.getSeats();
+            //calculate table amount
+            tableAmount += table.getTableType().getTableId().equals("LB002") ? 100000 : 0;
         }
+        tableQuantityLabel.setText(String.valueOf(jsonArray.size()));
+        seatTotalLabel.setText(seatTotal + " chỗ");
+        tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
     }
 
     public void handleLoadTableFromComboBoxSelection() throws SQLException {

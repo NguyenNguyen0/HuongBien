@@ -20,9 +20,9 @@
    <top>
       <HBox prefHeight="150.0" prefWidth="1584.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="1187.0">
+            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="1125.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="89.0" prefWidth="658.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="89.0" prefWidth="1149.0">
                      <children>
                         <ComboBox fx:id="tableFloorComboBox" onAction="#onTableFloorComboBoxSelected" prefHeight="70.0" prefWidth="270.0">
                            <HBox.margin>
@@ -49,9 +49,9 @@
                         <Insets />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="471.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="471.0">
                      <children>
-                        <Label text="Tổng quan nhà hàng đang trống:" textFill="WHITE">
+                        <Label text="Tổng quan nhà hàng:" textFill="WHITE">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -59,7 +59,7 @@
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
                         </Label>
-                        <Label text="21" textFill="WHITE">
+                        <Label text="Unknown" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>
@@ -75,7 +75,7 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <Label text="Tầng trệt đang trống:" textFill="WHITE">
+                        <Label text="Tầng trệt:" textFill="WHITE">
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
@@ -83,17 +83,23 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <Label text="7" textFill="WHITE">
+                        <Label text="Unknown" textFill="WHITE">
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>
+                        </Label>
+                        <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                        <Label text="Lưu ý: Dịch vụ bàn VIP là 100.000 VNĐ" textFill="RED">
+                           <font>
+                              <Font name="System Bold Italic" size="20.0" />
+                           </font>
                         </Label>
                      </children>
                      <VBox.margin>
-                        <Insets left="10.0" top="5.0" />
+                        <Insets left="20.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
                </children>
@@ -163,20 +169,80 @@
    <bottom>
       <HBox prefHeight="120.0" prefWidth="1692.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="120.0" prefWidth="500.0">
+            <VBox alignment="CENTER_LEFT">
                <children>
-                  <TabPane fx:id="tableInfoTabPane" prefHeight="200.0" prefWidth="1692.0" tabClosingPolicy="UNAVAILABLE">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="250.0" text="Số lượng bàn đã chọn:">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tableQuantityLabel" text="Unknown" textFill="RED">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="250.0" text="Số chỗ ngồi khả dụng:">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="seatTotalLabel" text="Unknown" textFill="RED">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="250.0" text="Phí chọn bàn (VNĐ):">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tableAmountLabel" text="Unknown" textFill="RED">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox prefHeight="120.0" prefWidth="632.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Danh sách bàn đã chọn:">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <TabPane fx:id="tableInfoTabPane" prefHeight="160.0" prefWidth="841.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></TabPane>
                </children>
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </HBox.margin>
             </VBox>
-            <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
-            <HBox alignment="CENTER">
+            <HBox alignment="BOTTOM_CENTER">
                <children>
                   <Button mnemonicParsing="false" onAction="#onPreOrderButtonClicked" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
                      <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                      <font>
                         <Font name="System Bold" size="30.0" />
@@ -187,12 +253,12 @@
                         <Font name="System Bold" size="30.0" />
                      </font>
                      <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>
                <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </HBox.margin>
             </HBox>
          </children>

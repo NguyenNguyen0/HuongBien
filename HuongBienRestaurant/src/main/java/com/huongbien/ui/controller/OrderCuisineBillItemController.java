@@ -3,65 +3,32 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.StageStyle;
 
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
-public class OrderCuisineBillItemController implements Initializable {
-    private final static String TEMPORARY_BILL_PATH = "src/main/resources/com/huongbien/temp/temporaryCuisine.json";
+public class OrderCuisineBillItemController {
+    @FXML private Label cuisineIdLabel;
+    @FXML private Label cuisineNameLabel;
+    @FXML private Label cuisineNoteLabel;
+    @FXML private Label cuisineQuantityLabel;
+    @FXML private Label cuisineSalePriceLabel;
+    @FXML private Label cuisineTotalPriceLabel;
 
-    @FXML
-    private Label cuisineIdLabel;
-
-    @FXML
-    private Button decreaseCuisineButton;
-
-    @FXML
-    private Button deleteCuisineButton;
-
-    @FXML
-    private Button increaseCuisineButton;
-
-    @FXML
-    private Button onNoteCuisineButtonClicked;
-
-    @FXML
-    private Label cuisineNameLabel;
-
-    @FXML
-    private Label cuisineNoteLabel;
-
-    @FXML
-    private Label cuisineQuantityLabel;
-
-    @FXML
-    private Label cuisineSalePriceLabel;
-
-    @FXML
-    private Label cuisineTotalPriceLabel;
-
+    //Controller area
     private OrderCuisineController orderCuisineController;
-
     public void setOrderBillController(OrderCuisineController orderCuisineController) {
         this.orderCuisineController = orderCuisineController;
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 
     public void setDataBill(OrderDetail orderDetail) {
@@ -76,7 +43,7 @@ public class OrderCuisineBillItemController implements Initializable {
     private void removeFromJson(String cuisineID) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to remove item.");
             return;
@@ -90,13 +57,13 @@ public class OrderCuisineBillItemController implements Initializable {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, TEMPORARY_BILL_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
     }
 
     private void increaseQuantityInJSON(String cuisineID) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to increase quantity.");
             return;
@@ -119,13 +86,13 @@ public class OrderCuisineBillItemController implements Initializable {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, TEMPORARY_BILL_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
     }
 
     private void decreaseQuantityInJSON(String cuisineID) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH); // Đọc file JSON
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH); // Đọc file JSON
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to decrease quantity.");
             return;
@@ -154,13 +121,13 @@ public class OrderCuisineBillItemController implements Initializable {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, TEMPORARY_BILL_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
     }
 
     private void updateNoteInJSON(String cuisineID, String newNote) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(TEMPORARY_BILL_PATH); // Đọc file JSON
+            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH); // Đọc file JSON
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to update note.");
             return;
@@ -176,7 +143,7 @@ public class OrderCuisineBillItemController implements Initializable {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, TEMPORARY_BILL_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
     }
 
 

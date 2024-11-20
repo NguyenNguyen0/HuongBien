@@ -14,21 +14,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class RestaurantLoginCarouselController implements Initializable {
-    @FXML
-    private AnchorPane slide01;
+    @FXML private AnchorPane slide01;
+    @FXML private AnchorPane slide02;
+    @FXML private AnchorPane slide03;
+    @FXML private AnchorPane slide04;
 
-    @FXML
-    private AnchorPane slide02;
-
-    @FXML
-    private AnchorPane slide03;
-
-    @FXML
-    private AnchorPane slide04;
-
-    @FXML
-    private Button nextButton;
-
+    //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         slide01.setTranslateY(0);

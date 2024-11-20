@@ -17,23 +17,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class EmployeeAddressDialogController implements Initializable {
-    @FXML
-    private TextField addressDetailField;
+    @FXML private TextField addressDetailField;
+    @FXML private ComboBox<String> cityComboBox;
+    @FXML private ComboBox<String> districtComboBox;
+    @FXML private ComboBox<String> wardComboBox;
 
-    @FXML
-    private Button clearFormButton;
-
-    @FXML
-    private Button saveAddressButton;
-
-    @FXML
-    private ComboBox<String> cityComboBox;
-
-    @FXML
-    private ComboBox<String> districtComboBox;
-
-    @FXML
-    private ComboBox<String> wardComboBox;
+    //Initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setWardComboBoxValue();
+        setDistrictComboBoxValue();
+        setCityComboBoxValue();
+    }
 
     public void setWardComboBoxValue() {
         //Status
@@ -98,13 +93,6 @@ public class EmployeeAddressDialogController implements Initializable {
         cityComboBox.getSelectionModel().selectFirst();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setWardComboBoxValue();
-        setDistrictComboBoxValue();
-        setCityComboBoxValue();
-    }
-
     private void closeWindow(MouseEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
@@ -130,7 +118,7 @@ public class EmployeeAddressDialogController implements Initializable {
 
     private EmployeeManagementController employeeManagementController;
 
-    public void setGUIManageEmployeeController(EmployeeManagementController employeeManagementController) {
+    public void setEmployeeManagementController(EmployeeManagementController employeeManagementController) {
         this.employeeManagementController = employeeManagementController;
     }
 

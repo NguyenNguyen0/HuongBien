@@ -17,24 +17,17 @@ import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 public class OrderTableItemController {
-    @FXML
-    private ImageView tableImageView;
-    @FXML
-    private ImageView checkedImageView;
-    @FXML
-    private Label tableIdLabel; // Table ID displayed in the table item, get from the database !important
-    @FXML
-    private Label tableNameLabel;
-    @FXML
-    private Label tableSeatLabel;
-    @FXML
-    private Label tableTypeLabel;
+    @FXML private ImageView tableImageView;
+    @FXML private ImageView checkedImageView;
+    @FXML private ImageView tableTypeImageView;
+    @FXML private Label tableIdLabel; // Table ID displayed in the table item, get from the database !important
+    @FXML private Label tableNameLabel;
+    @FXML private Label tableSeatLabel;
 
     private boolean isCheck = false;
 
+    //Controller area
     public OrderTableController orderTableController;
-
-    // Set the orderTableController
     public void setOrderTableController(OrderTableController orderTableController) {
         this.orderTableController = orderTableController;
     }
@@ -42,19 +35,22 @@ public class OrderTableItemController {
     public void setTableItemData(Table table) {
         tableIdLabel.setText(table.getId());
         tableNameLabel.setText(table.getName());
-        tableTypeLabel.setText(table.getTableType().getName());
         tableSeatLabel.setText("Số chỗ: " + table.getSeats());
-        setTableImage(table.getStatus());
+        setTableImage(table.getStatus(), table.getTableType().getTableId());
         setCheckedTableFromJSON();
     }
 
-    private void setTableImage(String tableStatus) {
-        switch (tableStatus) {
-            case "Bàn trống" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-empty-512px.png"));
-            case "Đặt trước" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-preOrder-512px.png"));
-            case "Phục vụ" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-ordered-512px.png"));
-            case "Bàn đóng" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-stop-512px.png"));
-        }
+    private void setTableImage(String tableStatus, String tableType) {
+        String imagePath = switch (tableStatus) {
+            case "Bàn trống" -> "/com/huongbien/icon/order/tab-empty-512px.png";
+            case "Đặt trước" -> "/com/huongbien/icon/order/tab-preOrder-512px.png";
+            case "Phục vụ" -> "/com/huongbien/icon/order/tab-ordered-512px.png";
+            case "Bàn đóng" -> "/com/huongbien/icon/order/tab-stop-512px.png";
+            default -> null;
+        };
+        assert imagePath != null;
+        tableImageView.setImage(new Image(imagePath));
+        tableTypeImageView.setImage(tableType.equals("LB002") ? new Image("/com/huongbien/icon/order/premium-128px.png") : null);
     }
 
     private void setCheckedTableFromJSON() {
@@ -136,7 +132,7 @@ public class OrderTableItemController {
     }
 
     @FXML
-    void onTableItemComponentClicked(MouseEvent event) throws FileNotFoundException, SQLException {
+    void onOrderTableItemVBoxClicked(MouseEvent event) throws FileNotFoundException, SQLException {
         //check status of table
         String tableId = tableIdLabel.getText();
         Table table = TableDAO.getInstance().getById(tableId);

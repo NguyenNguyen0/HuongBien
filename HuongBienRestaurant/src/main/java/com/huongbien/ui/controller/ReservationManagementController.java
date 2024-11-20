@@ -35,39 +35,36 @@ import java.util.ResourceBundle;
 
 public class ReservationManagementController implements Initializable {
     //Payment Queue
-    @FXML
-    private TableColumn<Map<String, Object>, Integer> paymentQueueNumericalOrderColumn;
-    @FXML
-    private TableColumn<Map<String, Object>, String> paymentQueueCustomerColumn;
-    @FXML
-    private TableColumn<Map<String, Object>, String> paymentQueuePromotionColumn;
-    @FXML
-    private TableColumn<Map<String, Object>, Integer> paymentQueueQuantityCuisineColumn;
-    @FXML
-    private TableColumn<Map<String, Object>, String> paymentQueueTotalAmountColumn;
-    @FXML
-    private TableView<Map<String, Object>> paymentQueueTableView;
-    @FXML
-    private Label customerNamePaymentQueueLabel;
-    @FXML
-    private Label tableAreaPaymentQueueLabel;
-    @FXML
-    private Label promotionNamePaymentQueueLabel;
-    @FXML
-    private Label cuisineQuantityPaymentQueueLabel;
-    @FXML
-    private Label totalAmountPaymentQueueLabel;
-    @FXML
-    private Button deletePaymentQueueButton;
-    @FXML
-    private Button orderPaymentButton;
-
+    @FXML private TableColumn<Map<String, Object>, Integer> paymentQueueNumericalOrderColumn;
+    @FXML private TableColumn<Map<String, Object>, String> paymentQueueCustomerColumn;
+    @FXML private TableColumn<Map<String, Object>, String> paymentQueuePromotionColumn;
+    @FXML private TableColumn<Map<String, Object>, Integer> paymentQueueQuantityCuisineColumn;
+    @FXML private TableColumn<Map<String, Object>, String> paymentQueueTotalAmountColumn;
+    @FXML private TableView<Map<String, Object>> paymentQueueTableView;
+    @FXML private Label customerNamePaymentQueueLabel;
+    @FXML private Label tableAreaPaymentQueueLabel;
+    @FXML private Label promotionNamePaymentQueueLabel;
+    @FXML private Label cuisineQuantityPaymentQueueLabel;
+    @FXML private Label totalAmountPaymentQueueLabel;
+    @FXML private Button deletePaymentQueueButton;
+    @FXML private Button orderPaymentButton;
     //Pre-Order
-    //
-    public RestaurantMainController restaurantMainController;
+    //TODO: Add Pre-Order UI components here
 
+    //Controller area
+    public RestaurantMainController restaurantMainController;
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
+    }
+
+    //initialize area
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Payment Queue
+        setUIDefault();
+        loadPaymentQueueDataFromJSON();
+        //Pre-Order
+        //TODO:
     }
 
     private void disablePayQueueButton() {
@@ -304,14 +301,5 @@ public class ReservationManagementController implements Initializable {
     @FXML
     void onPreOrderTableButtonAction(ActionEvent event) throws IOException {
         restaurantMainController.openPreOrderTable();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //Payment Queue
-        setUIDefault();
-        loadPaymentQueueDataFromJSON();
-        //Pre-Order
-        //...
     }
 }

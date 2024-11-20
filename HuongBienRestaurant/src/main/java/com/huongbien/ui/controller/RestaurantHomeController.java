@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.config.Constants;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.StatisticsDAO;
 import com.huongbien.entity.Employee;
@@ -29,32 +30,20 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class RestaurantHomeController implements Initializable {
-    private final static String TEMPORARY_USER_PATH = "src/main/resources/com/huongbien/temp/loginSession.json";
-    @FXML
-    private Label employeeNameField;
-
-    @FXML
-    private Label employeePositionField;
-
-    @FXML
-    private MediaView mediaView;
-    @FXML
-    private Label startTimeField;
-    @FXML
-    private Label timeWorksField;
-    @FXML
-    private Label totalCustomersField;
-    @FXML
-    private Label totalReservationField;
-    @FXML
-    private Label totalOrderField;
-    @FXML
-    private Label totalRevenuesField;
-
+    @FXML private Label employeeNameField;
+    @FXML private Label employeePositionField;
+    @FXML private MediaView mediaView;
+    @FXML private Label startTimeField;
+    @FXML private Label timeWorksField;
+    @FXML private Label totalCustomersField;
+    @FXML private Label totalReservationField;
+    @FXML private Label totalOrderField;
+    @FXML private Label totalRevenuesField;
 
     private LocalDateTime startTime;
     private ScheduledExecutorService scheduler;
 
+    //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         URL resource = getClass().getClassLoader().getResource("com/huongbien/img/banner/banner.mp4");
@@ -139,7 +128,7 @@ public class RestaurantHomeController implements Initializable {
     }
 
     private void loadEmployeeInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(TEMPORARY_USER_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();

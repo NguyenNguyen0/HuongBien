@@ -21,54 +21,30 @@ import java.time.Year;
 import java.util.stream.IntStream;
 
 public class RestaurantStatisticsController {
-    @FXML
-    private BarChart<String, Number> revenueBarChart;
-    @FXML
-    private LineChart<String, Number> orderLineChart;
-    @FXML
-    private ComboBox<String> statisticalComboBox;
-    @FXML
-    private ComboBox<Integer> yearComboBox;
-    @FXML
-    private Label totalRevenueLabel;
-    @FXML
-    private Label totalInvoiceLabel;
-    @FXML
-    private Label totalOrderLabel;
-    @FXML
-    private Label averageRevenueLabel;
-    @FXML
-    private Label totalCustomersField;
-    @FXML
-    private Label totalReservationField;
-    @FXML
-    private Label totalOrderField;
-    @FXML
-    private Label totalRevenuesField;
-    @FXML
-    private Label selectedYearLabel;
-    @FXML
-    private TableView<Order> newOrderTable;
-    @FXML
-    private TableColumn<?, ?> orderIdColumn;
-    @FXML
-    private TableColumn<?, ?> orderNoteColumn;
-    @FXML
-    private TableColumn<Order, String> orderTablesColumn;
-    @FXML
-    private TableColumn<?, ?> orderTotalAmountColumn;
-    @FXML
-    private TableView<Customer> newCustomerTable;
-    @FXML
-    private TableColumn<?, ?> customerAccumulatedPointColumn;
-    @FXML
-    private TableColumn<?, ?> customerPhoneNumberColumn;
-    @FXML
-    private TableColumn<?, ?> customerIdColumn;
-    @FXML
-    private TableColumn<?, ?> customerMembershipLevelColumn;
-    @FXML
-    private TableColumn<?, ?> customerNameColumn;
+    @FXML private BarChart<String, Number> revenueBarChart;
+    @FXML private LineChart<String, Number> orderLineChart;
+    @FXML private ComboBox<String> statisticalComboBox;
+    @FXML private ComboBox<Integer> yearComboBox;
+    @FXML private Label totalRevenueLabel;
+    @FXML private Label totalInvoiceLabel;
+    @FXML private Label totalOrderLabel;
+    @FXML private Label averageRevenueLabel;
+    @FXML private Label totalCustomersField;
+    @FXML private Label totalReservationField;
+    @FXML private Label totalOrderField;
+    @FXML private Label totalRevenuesField;
+    @FXML private Label selectedYearLabel;
+    @FXML private TableView<Order> newOrderTable;
+    @FXML private TableColumn<?, ?> orderIdColumn;
+    @FXML private TableColumn<?, ?> orderNoteColumn;
+    @FXML private TableColumn<Order, String> orderTablesColumn;
+    @FXML private TableColumn<?, ?> orderTotalAmountColumn;
+    @FXML private TableView<Customer> newCustomerTable;
+    @FXML private TableColumn<?, ?> customerAccumulatedPointColumn;
+    @FXML private TableColumn<?, ?> customerPhoneNumberColumn;
+    @FXML private TableColumn<?, ?> customerIdColumn;
+    @FXML private TableColumn<?, ?> customerMembershipLevelColumn;
+    @FXML private TableColumn<?, ?> customerNameColumn;
 
     @FXML
     public void initialize() {
