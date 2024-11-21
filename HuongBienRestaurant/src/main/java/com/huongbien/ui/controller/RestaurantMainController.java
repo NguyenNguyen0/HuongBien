@@ -42,19 +42,40 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RestaurantMainController implements Initializable {
-    @FXML public Label employeeNameLabel;
-    @FXML private Button hideMenuButton;
-    @FXML private Button showMenuButton;
-    @FXML private BorderPane menuBorderPane;
-    @FXML private HBox hidedMenuBarHBox;
-    @FXML private HBox mainOverlayHBox;
-    @FXML private VBox overlayMenubarVBox;
-    @FXML private Pane linePane;
-    @FXML private Label currentDateLabel;
-    @FXML private Label currentDayLabel;
-    @FXML private Label currentTimeLabel;
-    @FXML public Label featureTitleLabel;
-    @FXML private BorderPane mainBorderPane;
+    @FXML
+    public Label employeeNameLabel;
+    @FXML
+    private Button hideMenuButton;
+    @FXML
+    private Button showMenuButton;
+    @FXML
+    private HBox hidedMenuBarHBox;
+    @FXML
+    private HBox hideDetailUserHBox;
+    @FXML
+    private HBox menuOverlayHBox;
+    @FXML
+    private HBox detailUserOverlayHBox;
+    @FXML
+    private VBox menuBarOverlayHBox;
+    @FXML
+    private VBox detailUserBarOverlayHBox;
+    @FXML
+    private Pane linePane;
+    @FXML
+    private Label currentDateLabel;
+    @FXML
+    private Label currentDayLabel;
+    @FXML
+    private Label currentTimeLabel;
+    @FXML
+    public Label featureTitleLabel;
+    @FXML
+    private BorderPane mainBorderPane;
+    @FXML
+    private BorderPane menuBorderPane;
+    @FXML
+    private BorderPane detailUserBorderPane;
 
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
@@ -62,14 +83,15 @@ public class RestaurantMainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        menuBorderPane.setTranslateX(-250);
-        setTime();
         try {
             openHome();
-            loadEmployeeInfoFromJSON();
+            loadUserInfoFromJSON();
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
+        setTime();
+        menuBorderPane.setTranslateX(-250);
+        detailUserBorderPane.setTranslateX(250);
     }
 
     private void setTime() {
@@ -241,38 +263,15 @@ public class RestaurantMainController implements Initializable {
         managePromotion.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
-    private void hideMenu() {
-        disableButtons();
-        menuBorderPane.setVisible(false);
-        translateAnimation(0.3, menuBorderPane, -250);
-        hidedMenuBarHBox.setVisible(true);
-        //design
-        linePane.setOpacity(1);
-    }
-
-    private void openMenu() {
-        disableButtons();
-        menuBorderPane.setVisible(true);
-        translateAnimation(0.3, menuBorderPane, 250);
-        //mainOverlayHBox
-        FadeTransition fadeInOverlay_mainOverlayHBox = new FadeTransition(Duration.seconds(0.5), mainOverlayHBox);
-        fadeInOverlay_mainOverlayHBox.setFromValue(0);
-        fadeInOverlay_mainOverlayHBox.setToValue(0.6);
-        fadeInOverlay_mainOverlayHBox.play();
-        //overlayMenubarVBox
-        FadeTransition fadeInOverlay_overlayMenubarVBox = new FadeTransition(Duration.seconds(0.5), overlayMenubarVBox);
-        fadeInOverlay_overlayMenubarVBox.setFromValue(0);
-        fadeInOverlay_overlayMenubarVBox.setToValue(0.6);
-        fadeInOverlay_overlayMenubarVBox.play();
-        //
-        hidedMenuBarHBox.setVisible(false);
-        linePane.setOpacity(0);
-    }
-
     //navbar-hide
     @FXML
     void onHideMenuButtonClicked(ActionEvent event) {
         openMenu();
+    }
+
+    @FXML
+    void onOpenDetailUserHBoxClicked(MouseEvent event) {
+        openDetailUser();
     }
 
     @FXML
@@ -403,16 +402,6 @@ public class RestaurantMainController implements Initializable {
     }
 
     @FXML
-    void onMainOverlayHBoxClicked(MouseEvent event) {
-        disableButtons();
-        menuBorderPane.setVisible(false);
-        translateAnimation(0.5, menuBorderPane, -250);
-        hidedMenuBarHBox.setVisible(true);
-        //design
-        linePane.setOpacity(1);
-    }
-
-    @FXML
     void onExitButtonClicked(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initStyle(StageStyle.UNDECORATED);
@@ -444,20 +433,31 @@ public class RestaurantMainController implements Initializable {
         }
     }
 
-    public void translateAnimation(double duration, Node node, double toX) {
+    public void translateAnimationMenu(double duration, Node node, double toX) {
         TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(duration), node);
         translateTransition.setByX(toX);
-        translateTransition.setOnFinished(event -> enableButtons());
+        translateTransition.setOnFinished(event -> enableMenuButtons());
+        translateTransition.play();
+    }
+
+    public void translateAnimationDetailUser(double duration, Node node, double toX) {
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(duration), node);
+        translateTransition.setByX(toX);
+        translateTransition.setOnFinished(event -> enableDetailUserButtons());
         translateTransition.play();
     }
 
     //fix bug khi translate khong dung vi tri =)))
-    private void disableButtons() {
+    private void disableMenuButtons() {
         hideMenuButton.setDisable(true);
         showMenuButton.setDisable(true);
     }
 
-    private void enableButtons() {
+    private void disableDetailUserButtons() {
+        hideDetailUserHBox.setDisable(true);
+    }
+
+    private void enableMenuButtons() {
         javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(Duration.seconds(0.5));
         pause.setOnFinished(e -> {
             hideMenuButton.setDisable(false);
@@ -466,7 +466,15 @@ public class RestaurantMainController implements Initializable {
         pause.play();
     }
 
-    private void loadEmployeeInfoFromJSON() throws FileNotFoundException, SQLException {
+    private void enableDetailUserButtons() {
+        javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(e -> {
+            hideDetailUserHBox.setDisable(false);
+        });
+        pause.play();
+    }
+
+    private void loadUserInfoFromJSON() throws FileNotFoundException, SQLException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -477,5 +485,65 @@ public class RestaurantMainController implements Initializable {
             assert employee != null;
             employeeNameLabel.setText(employee.getName());
         }
+    }
+
+    private void openMenu() {
+        disableMenuButtons();
+        menuBorderPane.setVisible(true);
+        translateAnimationMenu(0.3, menuBorderPane, 250);
+        //menuOverlayHBox
+        FadeTransition fadeInOverlay_menuOverlayHBox = new FadeTransition(Duration.seconds(0.5), menuOverlayHBox);
+        fadeInOverlay_menuOverlayHBox.setFromValue(0);
+        fadeInOverlay_menuOverlayHBox.setToValue(0.6);
+        fadeInOverlay_menuOverlayHBox.play();
+        //menuBarOverlayHBox
+        FadeTransition fadeInOverlay_menuBarOverlayHBox = new FadeTransition(Duration.seconds(0.5), menuBarOverlayHBox);
+        fadeInOverlay_menuBarOverlayHBox.setFromValue(0);
+        fadeInOverlay_menuBarOverlayHBox.setToValue(0.6);
+        fadeInOverlay_menuBarOverlayHBox.play();
+        //
+        hidedMenuBarHBox.setVisible(false);
+        linePane.setOpacity(0);
+    }
+
+    private void openDetailUser() {
+        detailUserBorderPane.setVisible(true);
+        translateAnimationDetailUser(0.2, detailUserBorderPane, -250);
+        //detailUserOverlayHBox
+        FadeTransition fadeInOverlay_detailUserOverlayHBox = new FadeTransition(Duration.seconds(0.5), detailUserOverlayHBox);
+        fadeInOverlay_detailUserOverlayHBox.setFromValue(0);
+        fadeInOverlay_detailUserOverlayHBox.setToValue(0.6);
+        fadeInOverlay_detailUserOverlayHBox.play();
+        //detailUserBarOverlayHBox
+        FadeTransition fadeInOverlay_detailUserBarOverlayHBox = new FadeTransition(Duration.seconds(0.5), detailUserBarOverlayHBox);
+        fadeInOverlay_detailUserBarOverlayHBox.setFromValue(0);
+        fadeInOverlay_detailUserBarOverlayHBox.setToValue(0.6);
+        fadeInOverlay_detailUserBarOverlayHBox.play();
+    }
+
+    @FXML
+    void onMenuOverlayHBoxClicked(MouseEvent event) {
+        disableMenuButtons();
+        menuBorderPane.setVisible(false);
+        translateAnimationMenu(0.5, menuBorderPane, -250);
+        hidedMenuBarHBox.setVisible(true);
+        //design
+        linePane.setOpacity(1);
+    }
+
+    private void hideMenu() {
+        disableMenuButtons();
+        menuBorderPane.setVisible(false);
+        translateAnimationMenu(0.3, menuBorderPane, -250);
+        hidedMenuBarHBox.setVisible(true);
+        //design
+        linePane.setOpacity(1);
+    }
+
+    @FXML
+    void onDetailUserOverlayHBoxClicked(MouseEvent event) {
+        disableDetailUserButtons();
+        detailUserBorderPane.setVisible(false);
+        translateAnimationDetailUser(0.5, detailUserBorderPane, 250);
     }
 }
