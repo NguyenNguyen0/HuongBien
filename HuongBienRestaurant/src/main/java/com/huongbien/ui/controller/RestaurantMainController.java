@@ -282,6 +282,24 @@ public class RestaurantMainController implements Initializable {
         managePromotion.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
+    public void openRestaurantHelp() throws IOException {
+        featureTitleLabel.setText("Help");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantHelp.fxml"));
+        BorderPane help = loader.load();
+        mainBorderPane.setCenter(help);
+        help.prefWidthProperty().bind(mainBorderPane.widthProperty());
+        help.prefHeightProperty().bind(mainBorderPane.heightProperty());
+    }
+
+    public void openRestaurantAbout() throws IOException {
+        featureTitleLabel.setText("About");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantAbout.fxml"));
+        BorderPane help = loader.load();
+        mainBorderPane.setCenter(help);
+        help.prefWidthProperty().bind(mainBorderPane.widthProperty());
+        help.prefHeightProperty().bind(mainBorderPane.heightProperty());
+    }
+
     //navbar-hide
     @FXML
     void onHideMenuButtonClicked(ActionEvent event) {
@@ -418,6 +436,19 @@ public class RestaurantMainController implements Initializable {
     void onShowPromotionButtonClicked(MouseEvent event) throws IOException {
         hideMenu();
         openPromotionManagement();
+    }
+
+    //service button
+    @FXML
+    void onShowRestaurantHelpButtonAction(ActionEvent event) throws IOException {
+        hideMenu();
+        openRestaurantHelp();
+    }
+
+    @FXML
+    void onShowRestaurantAboutButtonAction(ActionEvent event) throws IOException {
+        hideMenu();
+        openRestaurantAbout();
     }
 
     @FXML

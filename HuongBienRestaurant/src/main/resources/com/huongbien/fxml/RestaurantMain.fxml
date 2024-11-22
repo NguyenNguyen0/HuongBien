@@ -383,7 +383,64 @@
       </BorderPane>
       <BorderPane fx:id="menuBorderPane" prefHeight="200.0" prefWidth="200.0" styleClass="border-radis-15" visible="false">
          <center>
-            <HBox fx:id="menuOverlayHBox" onMouseClicked="#onMenuOverlayHBoxClicked" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER" />
+            <HBox fx:id="menuOverlayHBox" onMouseClicked="#onMenuOverlayHBoxClicked" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER_RIGHT">
+                           <children>
+                              <Label text="Help" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Button mnemonicParsing="false" onAction="#onShowRestaurantHelpButtonAction" style="-fx-background-color: transparent;">
+                                 <font>
+                                    <Font size="30.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/dashboard/help-128px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT">
+                           <children>
+                              <Label text="About" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Button mnemonicParsing="false" onAction="#onShowRestaurantAboutButtonAction" style="-fx-background-color: transparent;">
+                                 <font>
+                                    <Font size="30.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/dashboard/info-128px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children></HBox>
          </center>
          <left>
             <StackPane prefHeight="617.0" prefWidth="250.0" BorderPane.alignment="CENTER">
@@ -630,7 +687,7 @@
             </StackPane>
          </left>
       </BorderPane>
-      <BorderPane fx:id="detailUserBorderPane" prefHeight="200.0" prefWidth="200.0" styleClass="border-radis-15">
+      <BorderPane fx:id="detailUserBorderPane" prefHeight="200.0" prefWidth="200.0" styleClass="border-radis-15" visible="false">
          <center>
             <HBox fx:id="detailUserOverlayHBox" onMouseClicked="#onDetailUserOverlayHBoxClicked" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER" />
          </center>
