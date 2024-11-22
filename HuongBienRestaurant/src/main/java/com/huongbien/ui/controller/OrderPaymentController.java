@@ -173,7 +173,7 @@ public class OrderPaymentController implements Initializable {
             String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
             tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append(") ").append(", ");
             //calc table amount
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? 100000 : 0;
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Constants.TABLE_PRICE : 0;
         }
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
@@ -279,7 +279,7 @@ public class OrderPaymentController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? 100000 : 0;
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Constants.TABLE_PRICE : 0;
         }
         double discountMoney = totalAmount * discount;
         double vat = totalAmount * 0.1;

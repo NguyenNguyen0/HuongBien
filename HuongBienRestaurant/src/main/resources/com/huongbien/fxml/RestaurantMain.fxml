@@ -26,7 +26,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="1159.0" styleClass="gradient-main">
          <left>
@@ -336,14 +336,11 @@
                         </VBox>
                         <HBox fx:id="hideDetailUserHBox" alignment="CENTER" onMouseClicked="#onOpenDetailUserHBoxClicked" prefHeight="70.0">
                            <children>
-                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/dashboard/avt-32px.png" />
-                                 </image>
+                              <Circle fx:id="avatarMainCircle" fill="WHITE" radius="25.0" stroke="BLACK" strokeType="INSIDE">
                                  <HBox.margin>
-                                    <Insets right="10.0" />
+                                    <Insets right="5.0" />
                                  </HBox.margin>
-                              </ImageView>
+                              </Circle>
                               <Label fx:id="employeeNameLabel" text="Unknown" textAlignment="CENTER" textFill="WHITE">
                                  <font>
                                     <Font name="Calibri Bold" size="17.0" />
@@ -633,7 +630,7 @@
             </StackPane>
          </left>
       </BorderPane>
-      <BorderPane fx:id="detailUserBorderPane" prefHeight="200.0" prefWidth="200.0" styleClass="border-radis-15" visible="false">
+      <BorderPane fx:id="detailUserBorderPane" prefHeight="200.0" prefWidth="200.0" styleClass="border-radis-15">
          <center>
             <HBox fx:id="detailUserOverlayHBox" onMouseClicked="#onDetailUserOverlayHBoxClicked" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER" />
          </center>
@@ -646,7 +643,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </StackPane.margin>
                      <children>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="780.0">
+                        <HBox alignment="CENTER" prefHeight="48.0" prefWidth="780.0">
                            <children>
                               <Label text="Thiết lập tài khoản">
                                  <font>
@@ -655,26 +652,29 @@
                               </Label>
                            </children>
                            <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
+                              <Insets bottom="20.0" top="30.0" />
                            </VBox.margin>
                         </HBox>
-                        <VBox prefHeight="250.0" prefWidth="780.0">
+                        <VBox prefHeight="333.0" prefWidth="780.0">
                            <children>
                               <HBox alignment="CENTER" prefHeight="135.0" prefWidth="780.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Circle fill="WHITE" radius="80.0" stroke="BLACK" strokeType="INSIDE" />
+                                    <Circle fx:id="avatarDetailUserCircle" fill="WHITE" radius="130.0" stroke="BLACK" strokeType="INSIDE" />
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="780.0">
+                              <HBox alignment="CENTER" prefWidth="780.0">
                                  <children>
                                     <Button mnemonicParsing="false" text="Chọn ảnh">
                                        <HBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                              <HBox alignment="CENTER" prefWidth="200.0">
                                  <children>
                                     <Label text="Nguyễn Văn Minh">
                                        <font>
@@ -694,10 +694,13 @@
                                        </tooltip>
                                     </Button>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
                               </HBox>
                            </children>
                         </VBox>
-                        <TabPane prefHeight="643.0" prefWidth="780.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                        <TabPane prefHeight="422.0" prefWidth="780.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                           <tabs>
                             <Tab text="Hồ sơ">
                                  <content>
@@ -709,12 +712,12 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Mã nhân sự:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <TextField text="22003405" HBox.hgrow="ALWAYS">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </TextField>
                                                    </children>
@@ -723,12 +726,12 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Tên nhân sự:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <TextField text="Nguyễn Văn Minh" HBox.hgrow="ALWAYS">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </TextField>
                                                    </children>
@@ -737,7 +740,7 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Ngày sinh:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <DatePicker prefHeight="52.0" prefWidth="412.0" HBox.hgrow="ALWAYS" />
@@ -747,12 +750,12 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Số điện thoại:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <TextField text="0353.999.999" HBox.hgrow="ALWAYS">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </TextField>
                                                    </children>
@@ -761,21 +764,21 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Email:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <TextField text="nvminh162@gmail.com" HBox.hgrow="ALWAYS">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </TextField>
                                                    </children>
                                                 </HBox>
-                                                <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="780.0">
+                                                <HBox alignment="TOP_RIGHT" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
                                                       <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-color: black;" text="Lưu thay đổi">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Button>
                                                    </children>
@@ -802,12 +805,12 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="280.0" text="Mật khẩu cũ:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <PasswordField text="xxxxxx" HBox.hgrow="ALWAYS">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </PasswordField>
                                                    </children>
@@ -816,12 +819,12 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="280.0" text="Mật khẩu mới:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <PasswordField text="xxxxxx" HBox.hgrow="ALWAYS">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </PasswordField>
                                                    </children>
@@ -830,12 +833,12 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="280.0" text="Nhập lại mật khẩu:">
                                                          <font>
-                                                            <Font name="System Bold" size="30.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Label>
                                                       <PasswordField text="xxxxxx" HBox.hgrow="ALWAYS">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </PasswordField>
                                                    </children>
@@ -844,7 +847,7 @@
                                                    <children>
                                                       <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-color: black;" text="Cập nhật">
                                                          <font>
-                                                            <Font size="30.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Button>
                                                    </children>

@@ -22,11 +22,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -42,6 +45,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RestaurantMainController implements Initializable {
+    @FXML
+    private Circle avatarDetailUserCircle;
+    @FXML
+    private Circle avatarMainCircle;
     @FXML
     public Label employeeNameLabel;
     @FXML
@@ -83,6 +90,7 @@ public class RestaurantMainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setAvatar();
         try {
             openHome();
             loadUserInfoFromJSON();
@@ -92,6 +100,17 @@ public class RestaurantMainController implements Initializable {
         setTime();
         menuBorderPane.setTranslateX(-250);
         detailUserBorderPane.setTranslateX(250);
+    }
+
+    public void setAvatar() {
+        try {
+            Image image = new Image("/com/huongbien/img/avatar/jack.jpeg", 100, 100, false, true);
+            avatarMainCircle.setFill(new ImagePattern(image));
+            avatarDetailUserCircle.setFill(new ImagePattern(image));
+        } catch (Exception e) {
+            avatarMainCircle.setFill(new ImagePattern(new Image("/com/huongbien/img/avatar/avatar-default-128px.png")));
+            avatarDetailUserCircle.setFill(new ImagePattern(new Image("/com/huongbien/img/avatar/avatar-default-128px.png")));
+        }
     }
 
     private void setTime() {

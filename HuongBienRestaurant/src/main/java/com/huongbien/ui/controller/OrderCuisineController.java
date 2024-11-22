@@ -168,7 +168,7 @@ public class OrderCuisineController implements Initializable {
                 String floorStr = (table.getFloor() == 0) ? "Tầng trệt" : "Tầng " + table.getFloor();
                 tableInfoBuilder.append(table.getName()).append(" (").append(floorStr).append("), ");
                 //set table amount : if type VIP -> 100.000 VNĐ
-                tableAmount += table.getTableType().getTableId().equals("LB002") ? 100000 : 0;
+                tableAmount += table.getTableType().getTableId().equals("LB002") ? Constants.TABLE_PRICE : 0;
             } else {
                 tableInfoBuilder.append("Thông tin bàn không xác định, ");
             }

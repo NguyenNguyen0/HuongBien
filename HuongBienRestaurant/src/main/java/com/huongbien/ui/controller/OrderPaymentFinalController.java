@@ -136,7 +136,7 @@ public class OrderPaymentFinalController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? 100000 : 0;
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Constants.TABLE_PRICE : 0;
         }
         //calc cuisine amount
         double cuisineAmount = 0.0;
