@@ -3,6 +3,7 @@ package com.huongbien.entity;
 import com.huongbien.utils.Utils;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Employee {
@@ -20,6 +21,7 @@ public class Employee {
     private double workHours;
     private double hourlyPay;
     private double salary;
+    private byte[] profileImage;
     private Employee manager;
 
     public Employee() {
@@ -28,7 +30,7 @@ public class Employee {
     public Employee(String employeeId, String name, String phoneNumber, String citizenIDNumber,
                     boolean gender, String address, LocalDate birthday, String email,
                     String status, LocalDate hireDate, String position, double workHours,
-                    double hourlyPay, double salary, Employee manager) {
+                    double hourlyPay, double salary, Employee manager, byte[] profileImage) {
         setEmployeeId(employeeId);
         setName(name);
         setAddress(address);
@@ -43,13 +45,14 @@ public class Employee {
         setWorkHours(workHours);
         setHourlyPay(hourlyPay);
         setSalary(salary);
+        setProfileImage(profileImage);
         setManager(manager);
     }
 
     public Employee(String name, String phoneNumber, String citizenIDNumber,
                     boolean gender, String address, LocalDate birthday, String email,
                     String position, double workHours, double hourlyPay, double salary,
-                    Employee manager) {
+                    Employee manager, byte[] profileImage) {
         setEmployeeId(null);
         setName(name);
         setPhoneNumber(phoneNumber);
@@ -64,6 +67,7 @@ public class Employee {
         setWorkHours(workHours);
         setHourlyPay(hourlyPay);
         setSalary(salary);
+        setProfileImage(profileImage);
         setManager(manager);
     }
 
@@ -165,6 +169,14 @@ public class Employee {
         this.hourlyPay = hourlyPay;
     }
 
+    public void setProfileImage(byte[] profileImage) {
+        if (profileImage == null) {
+            this.profileImage = new byte[0];
+            return;
+        }
+        this.profileImage = profileImage;
+    }
+
     public void setManager(Employee manager) {
         this.manager = manager;
     }
@@ -189,7 +201,7 @@ public class Employee {
         return citizenIDNumber;
     }
 
-    public boolean isGender() {
+    public boolean getGender() {
         return gender;
     }
 
@@ -229,6 +241,10 @@ public class Employee {
         return salary;
     }
 
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
     public Employee getManager() {
         return manager;
     }
@@ -250,7 +266,8 @@ public class Employee {
                 ", workHours=" + workHours +
                 ", hourlyPay=" + hourlyPay +
                 ", salary=" + salary +
-                ", manager=" + manager +
+                ", profileImage=" + Arrays.toString(profileImage) +
+                ", manager=" + (manager == null ? "Không có" : manager.getEmployeeId()) +
                 '}';
     }
 

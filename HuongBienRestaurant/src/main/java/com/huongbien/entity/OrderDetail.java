@@ -23,6 +23,10 @@ public class OrderDetail {
         setCuisine(cuisine);
     }
 
+    public double calculateSubTotal() {
+        return salePrice * quantity;
+    }
+
     public void setOrderDetailId(String orderDetailId) {
         if (orderDetailId != null && orderDetailId.length() == 17) {
             this.orderDetailId = String.format("%sCT%03d", orderDetailId, Utils.randomNumber(1, 999));

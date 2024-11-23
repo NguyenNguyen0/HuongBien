@@ -88,7 +88,6 @@ public class Customer {
         } else {
             throw new IllegalArgumentException("Invalid phone number");
         }
-        this.phoneNumber = phoneNumber;
     }
 
     public void setEmail(String email) {

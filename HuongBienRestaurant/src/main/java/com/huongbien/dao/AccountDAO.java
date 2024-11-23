@@ -27,7 +27,6 @@ public class AccountDAO extends GenericDAO<Account> {
         account.setRole(resultSet.getString("role"));
         account.setEmail(resultSet.getString("email"));
         account.setIsActive(resultSet.getBoolean("isActive"));
-        account.setAvatar(resultSet.getBytes("avatar"));
         List<Employee> employees = EmployeeDAO.getInstance().getById(account.getUsername());
         account.setEmployeeInfo(!employees.isEmpty() ? employees.getFirst() : null);
         return account;
@@ -48,15 +47,14 @@ public class AccountDAO extends GenericDAO<Account> {
     @Override
     public boolean add(Account object) {
         try {
-            String sql = "INSERT INTO Account (username, hashcode, role, email, isActive, avatar) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Account (username, hashcode, role, email, isActive) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = statementHelper.prepareStatement(
                     sql,
                     object.getUsername(),
                     object.getHashcode(),
                     object.getRole(),
                     object.getEmail(),
-                    object.getIsActive(),
-                    object.getAvatar()
+                    object.getIsActive()
             );
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

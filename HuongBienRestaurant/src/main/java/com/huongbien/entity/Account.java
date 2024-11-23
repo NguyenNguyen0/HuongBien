@@ -2,7 +2,6 @@ package com.huongbien.entity;
 
 import com.huongbien.utils.Utils;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Account {
@@ -10,7 +9,6 @@ public class Account {
     private String hashcode;
     private String role;
     private String email;
-    private byte[] avatar;
     private boolean isActive;
     private Employee employeeInfo;
 
@@ -20,17 +18,15 @@ public class Account {
         setEmail(email);
         setRole(role);
         setIsActive(true);
-        setAvatar(null);
         setEmployeeInfo(employeeInfo);
     }
 
-    public Account(String username, String hashcode, String role, String email, boolean isActive, Employee employeeInfo, byte[] avatar) {
+    public Account(String username, String hashcode, String role, String email, boolean isActive, Employee employeeInfo) {
         setUsername(username);
         setHashcode(hashcode);
         setEmail(email);
         setRole(role);
         setIsActive(isActive);
-        setAvatar(avatar);
         setEmployeeInfo(employeeInfo);
     }
 
@@ -75,14 +71,6 @@ public class Account {
         this.isActive = isActive;
     }
 
-    public void setAvatar(byte[] avatar) {
-        if (avatar == null) {
-            this.avatar = new byte[0];
-            return;
-        }
-        this.avatar = avatar;
-    }
-
     public void setEmployeeInfo(Employee employeeInfo) {
         this.employeeInfo = employeeInfo;
     }
@@ -107,10 +95,6 @@ public class Account {
         return isActive;
     }
 
-    public byte[] getAvatar() {
-        return avatar;
-    }
-
     public Employee getEmployeeInfo() {
         return employeeInfo;
     }
@@ -122,7 +106,6 @@ public class Account {
                 ", hashcode='" + hashcode + '\'' +
                 ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
-                ", avatar=" + Arrays.toString(avatar) +
                 ", isActive=" + isActive +
                 ", employeeInfo=" + employeeInfo +
                 '}';

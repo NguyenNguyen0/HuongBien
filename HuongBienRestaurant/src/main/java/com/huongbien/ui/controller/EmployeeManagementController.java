@@ -81,7 +81,7 @@ public class EmployeeManagementController implements Initializable {
         employeeIdColumn.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
         employeeNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeGenderColumn.setCellValueFactory(cellData -> {
-            boolean gender = cellData.getValue().isGender();
+            boolean gender = cellData.getValue().getGender();
             String genderText = gender ? "Nam" : "Nữ";
             return new SimpleStringProperty(genderText);
         });
@@ -186,7 +186,7 @@ public class EmployeeManagementController implements Initializable {
             if (employee.getBirthday() != null) {
                 employeeBirthdayDatePicker.setValue(employee.getBirthday());
             }
-            if (employee.isGender()) {
+            if (employee.getGender()) {
                 genderGroup.selectToggle(maleRadioButton);
             } else {
                 genderGroup.selectToggle(femaleRadioButton);
@@ -336,7 +336,7 @@ public class EmployeeManagementController implements Initializable {
                 EmployeeDAO employeeDao = EmployeeDAO.getInstance();
                 Employee employee = new Employee(
                         idSelect, name, phone, citizenId, gender, address,
-                        birthDate, email, status, hireDate, position, workHours, hourPay, salary, null
+                        birthDate, email, status, hireDate, position, workHours, hourPay, salary, null, null
                 );
                 if (employeeDao.updateEmployeeInfo(employee)) {
                     System.out.println("Đã câp nhạt thành công");
@@ -367,7 +367,7 @@ public class EmployeeManagementController implements Initializable {
             double workHours = 0;
             EmployeeDAO employeeDao = EmployeeDAO.getInstance();
             Employee employee = new Employee(name, phone, citizenId,
-                    gender, address, birthDate, email, position, workHours, hourPay, salary, null);
+                    gender, address, birthDate, email, position, workHours, hourPay, salary, null, null);
             if (employeeDao.add(employee)) {
                 System.out.println("Thêm nhan vien thành công");
             } else {
@@ -428,7 +428,7 @@ public class EmployeeManagementController implements Initializable {
         employeeIdColumn.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
         employeeNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeGenderColumn.setCellValueFactory(cellData -> {
-            boolean gender = cellData.getValue().isGender();
+            boolean gender = cellData.getValue().getGender();
             String genderText = gender ? "Nam" : "Nữ";
             return new SimpleStringProperty(genderText);
         });

@@ -35,6 +35,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
         employee.setWorkHours(resultSet.getDouble("workHours"));
         employee.setHourlyPay(resultSet.getDouble("hourlyPay"));
         employee.setSalary(resultSet.getDouble("salary"));
+        employee.setProfileImage(resultSet.getBytes("profileImage"));
         String managerId = resultSet.getString("managerId");
         employee.setManager(managerId == null ? null : getOne("SELECT * FROM Employee WHERE id = ?;", managerId));
         return employee;
@@ -103,14 +104,12 @@ public class EmployeeDAO extends GenericDAO<Employee> {
     }
 
     public boolean updateEmployeeInfo(Employee employee) {
-        String sql = "UPDATE Employee SET name = ?, phoneNumber = ?, citizenIDNumber = ?, gender = ?, address = ?, birthday = ?, email = ?, status = ?, hireDate = ?, position = ?, workHours = ?, hourlyPay = ?, salary = ?, managerId = ? WHERE id = ?";
+        String sql = "UPDATE Employee SET name = ?, phoneNumber = ?, citizenIDNumber = ?, gender = ?, address = ?, birthday = ?, email = ?, status = ?, hireDate = ?, position = ?, workHours = ?, hourlyPay = ?, salary = ?, profileImage = ?, managerId = ? WHERE id = ?";
         return update(sql,
-                employee.getStatus(),
-                employee.getEmployeeId(),
                 employee.getName(),
                 employee.getPhoneNumber(),
                 employee.getCitizenIDNumber(),
-                employee.isGender(),
+                employee.getGender(),
                 employee.getAddress(),
                 employee.getBirthday(),
                 employee.getEmail(),
@@ -120,13 +119,17 @@ public class EmployeeDAO extends GenericDAO<Employee> {
                 employee.getWorkHours(),
                 employee.getHourlyPay(),
                 employee.getSalary(),
-                employee.getManager() != null ? employee.getManager().getEmployeeId() : null);
+                employee.getProfileImage(),
+                employee.getManager() != null ? employee.getManager().getEmployeeId() : null,
+                employee.getEmployeeId());
     }
 
     @Override
     public boolean add(Employee object) {
         String sql = """
-                    INSERT INTO Employee (id, name, phoneNumber, citizenIDNumber, gender, address, birthday, email, status, hireDate, position, workHours, hourlyPay, salary, managerId)
+                    INSERT INTO Employee (
+                        id, name, phoneNumber, citizenIDNumber, gender, address, birthday, email,
+                        status, hireDate, position, workHours, hourlyPay, salary, profileImage, managerId)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         try {
@@ -136,7 +139,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
                     object.getName(),
                     object.getPhoneNumber(),
                     object.getCitizenIDNumber(),
-                    object.isGender(),
+                    object.getGender(),
                     object.getAddress(),
                     object.getBirthday(),
                     object.getEmail(),
@@ -146,6 +149,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
                     object.getWorkHours(),
                     object.getHourlyPay(),
                     object.getSalary(),
+                    object.getProfileImage(),
                     object.getManager() != null ? object.getManager().getEmployeeId() : null
             );
             int rowAffected = statement.executeUpdate();

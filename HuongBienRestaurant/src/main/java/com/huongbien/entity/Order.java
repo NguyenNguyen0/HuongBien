@@ -70,7 +70,7 @@ public class Order {
     public double calculateTotalAmount() {
         return Math.round(orderDetails
                 .stream()
-                .map((orderDetail -> orderDetail.getSalePrice() * orderDetail.getQuantity()))
+                .map((OrderDetail::calculateSubTotal))
                 .reduce(0.0, Double::sum));
     }
 
