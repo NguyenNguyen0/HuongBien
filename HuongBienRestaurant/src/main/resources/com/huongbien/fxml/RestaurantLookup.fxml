@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLookupController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLookupController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="1675.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -51,25 +51,25 @@
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
+            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox fx:id="tableDistinctFloorComboBox" prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                              <ComboBox fx:id="tableFloorComboBox" onAction="#onTableFloorComboBoxAction" prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField prefHeight="60.0" prefWidth="300.0" promptText="Tên bàn">
+                              <TextField fx:id="tabkeNameTextField" onKeyReleased="#onTableNameTextFieldKeyReleased" prefHeight="60.0" prefWidth="300.0" promptText="Tên bàn">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
                               </TextField>
                               <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="deleteNameButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteNameButtonMouseClicked" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -83,17 +83,17 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                              <ComboBox fx:id="tableSeatsComboBox" onAction="#onTableSeatsComboBoxAction" prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                              <ComboBox fx:id="tableTypesComboBox" onAction="#onTableTypesComboBoxAction" prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
+                              <ComboBox fx:id="tableStatusComboBox" onAction="#onTableStatusComboBoxAction" prefHeight="60.0" prefWidth="300.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                      </children>
@@ -101,13 +101,13 @@
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <TableView prefHeight="700.0" prefWidth="1675.0">
+                  <TableView fx:id="tablesTableView" prefHeight="700.0" prefWidth="1675.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="Khu vực tầng" />
-                      <TableColumn prefWidth="75.0" text="Bàn" />
-                        <TableColumn prefWidth="75.0" text="Số chỗ" />
-                        <TableColumn prefWidth="75.0" text="Loại bàn" />
-                        <TableColumn prefWidth="75.0" text="Trạng thái" />
+                      <TableColumn fx:id="tableFloorColumn" prefWidth="75.0" text="Khu vực tầng" />
+                      <TableColumn fx:id="tableIdColumn" prefWidth="75.0" text="Bàn" />
+                        <TableColumn fx:id="tableSeatColumn" prefWidth="75.0" text="Số chỗ" />
+                        <TableColumn fx:id="tableTypeColumn" prefWidth="75.0" text="Loại bàn" />
+                        <TableColumn fx:id="tableStatusColumn" prefWidth="75.0" text="Trạng thái" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -130,19 +130,19 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="350.0" promptText="Tất cả" />
+                              <ComboBox fx:id="cuisineTypeComboBox" onAction="#onCuisineTypeComboBoxAction" prefHeight="60.0" prefWidth="350.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField prefHeight="60.0" prefWidth="350.0" promptText="Tên món">
+                              <TextField fx:id="cuisineNameTextField" onKeyReleased="#onCuisineNameTextFieldKeyReleased" prefHeight="60.0" prefWidth="350.0" promptText="Tên món">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
                               </TextField>
                               <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="deleteCuisineNameButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteCuisineNameButtonMouseClicked" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -161,12 +161,12 @@
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <TableView prefHeight="700.0" prefWidth="1675.0">
+                  <TableView fx:id="cuisinesTableView" prefHeight="700.0" prefWidth="1675.0">
                      <columns>
-                        <TableColumn prefWidth="75.0" text="Loại món" />
-                        <TableColumn prefWidth="75.0" text="Tên món" />
-                        <TableColumn prefWidth="75.0" text="Giá món" />
-                        <TableColumn prefWidth="75.0" text="Lượt bán&lt;Thống kê bán chạy từ HĐ&gt;" />
+                        <TableColumn fx:id="cuisineTypeColumn" prefWidth="75.0" text="Loại món" />
+                        <TableColumn fx:id="cuisineNameColumn" prefWidth="75.0" text="Tên món" />
+                        <TableColumn fx:id="cuisinePriceColumn" prefWidth="75.0" text="Giá món" />
+                        <TableColumn fx:id="cuisineCountSaleColumn" prefWidth="75.0" text="Lượt bán&lt;Thống kê bán chạy từ HĐ&gt;" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -189,14 +189,14 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField prefHeight="60.0" prefWidth="250.0" promptText="Tên khuyến mãi">
+                              <TextField fx:id="promotionNameTextField" onKeyReleased="#onPromotionNameTextFieldKeyReleased" prefHeight="60.0" prefWidth="250.0" promptText="Tên khuyến mãi">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
                               </TextField>
                               <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="deletePromotionNameButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#deletePromotionNameButtonClicked" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -210,27 +210,27 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <DatePicker prefWidth="250.0" />
+                              <DatePicker fx:id="promotionStartDate" onAction="#onPromotionStartDateAction" prefWidth="250.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <DatePicker prefWidth="250.0" />
+                              <DatePicker fx:id="promotionEndDate" onAction="#onPromotionEndDateAction" prefWidth="250.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
+                              <ComboBox fx:id="promotionDiscountComboBox" onAction="#onPromotionDiscountComboBoxAction" prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
+                              <ComboBox fx:id="promotionMinimumOrderAmount" onAction="#onPromotionMinimumOrderAmountComboBoxAction" prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
+                              <ComboBox fx:id="promotionStatusComboBox" onAction="#onPromotionStatusComboBoxAction" prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                      </children>
@@ -238,14 +238,14 @@
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <TableView prefHeight="700.0" prefWidth="1675.0">
+                  <TableView fx:id="promotionsTableView" prefHeight="700.0" prefWidth="1675.0">
                      <columns>
-                        <TableColumn prefWidth="75.0" text="Khuyến mãi" />
-                        <TableColumn prefWidth="75.0" text="Ngày bắt đầu" />
-                        <TableColumn prefWidth="75.0" text="Ngày kết thúc" />
-                        <TableColumn prefWidth="75.0" text="Giảm giá (%)" />
-                        <TableColumn prefWidth="75.0" text="Áp dụng từ (VNĐ)" />
-                        <TableColumn prefWidth="75.0" text="Trạng thái" />
+                        <TableColumn fx:id="promotionNameColumn" prefWidth="75.0" text="Khuyến mãi" />
+                        <TableColumn fx:id="promotionStartDateColumn" prefWidth="75.0" text="Ngày bắt đầu" />
+                        <TableColumn fx:id="promotionEndDateColumn" prefWidth="75.0" text="Ngày kết thúc" />
+                        <TableColumn fx:id="promotionDiscountColumn" prefWidth="75.0" text="Giảm giá (%)" />
+                        <TableColumn fx:id="promotionMinimumOrderAmountColumn" prefWidth="75.0" text="Áp dụng từ (VNĐ)" />
+                        <TableColumn fx:id="promotionStatusColumn" prefWidth="75.0" text="Trạng thái" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -262,20 +262,20 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="restaurantLookupPreOrderTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
+            <VBox fx:id="restaurantLookupPreOrderTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField prefHeight="60.0" prefWidth="250.0" promptText="Mã đặt bàn">
+                              <TextField fx:id="reservationIdTextField" onKeyReleased="#onReservationIdTextFieldKeyReleased" prefHeight="60.0" prefWidth="250.0" promptText="Mã đặt bàn">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </TextField>
                               <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="deleteReservationIdButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteReservationIdButtonMouseClicked" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -289,14 +289,14 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField prefHeight="60.0" prefWidth="220.0" promptText="Tên khách hàng">
+                              <TextField fx:id="reservationCustomerNameTextField" onKeyReleased="#onReservationCustomerNameTextFieldKeyReleased" prefHeight="60.0" prefWidth="220.0" promptText="Tên khách hàng">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </TextField>
                               <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="deleteReservationCustomerName" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteReservationCustomerNameMouseClicked" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -310,13 +310,13 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <DatePicker prefHeight="60.0" prefWidth="250.0" />
+                              <DatePicker fx:id="reservationDate" onAction="#onReservationDateAction" prefHeight="60.0" prefWidth="250.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <DatePicker prefHeight="60.0" prefWidth="250.0" />
+                              <DatePicker fx:id="reservationReceiveDate" onAction="#onReservationReceiveDateAction" prefHeight="60.0" prefWidth="250.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -326,15 +326,15 @@
                         <Insets bottom="10.0" left="5.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <TableView prefHeight="700.0" prefWidth="1675.0">
+                  <TableView fx:id="reservationsTableView" prefHeight="700.0" prefWidth="1675.0">
                      <columns>
-                        <TableColumn prefWidth="75.0" text="Mã đặt bàn" />
-                        <TableColumn prefWidth="75.0" text="Khách hàng" />
-                        <TableColumn prefWidth="75.0" text="Ngày đặt" />
-                        <TableColumn prefWidth="75.0" text="Giờ đặt" />
-                        <TableColumn prefWidth="75.0" text="Ngày nhận" />
-                        <TableColumn prefWidth="75.0" text="Giờ nhận" />
-                        <TableColumn prefWidth="75.0" text="Tiền đặt cọc" />
+                        <TableColumn fx:id="reservationIdColumn" prefWidth="75.0" text="Mã đặt bàn" />
+                        <TableColumn fx:id="reservationCustomerNameColumn" prefWidth="75.0" text="Khách hàng" />
+                        <TableColumn fx:id="reservationDateColumn" prefWidth="75.0" text="Ngày đặt" />
+                        <TableColumn fx:id="reservationTimeColumn" prefWidth="75.0" text="Giờ đặt" />
+                        <TableColumn fx:id="reservationReceiveDateColumn" prefWidth="75.0" text="Ngày nhận" />
+                        <TableColumn fx:id="reservationReceiveTimeColumn" prefWidth="75.0" text="Giờ nhận" />
+                        <TableColumn fx:id="reservationDepositColumn" prefWidth="75.0" text="Tiền đặt cọc" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableDAO extends GenericDAO<Table> {
+public class    TableDAO extends GenericDAO<Table> {
     private final TableTypeDAO tableTypeDAO;
     private static final TableDAO instance = new TableDAO();
 
