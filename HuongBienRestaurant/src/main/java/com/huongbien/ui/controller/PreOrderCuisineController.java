@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class OrderCuisineController implements Initializable {
+public class PreOrderCuisineController implements Initializable {
     //cuisine
     @FXML private ScrollPane cuisineScrollPane;
     @FXML private GridPane cuisineGridPane;
     @FXML private ScrollPane billScrollPane;
     @FXML public GridPane billGridPane;
-    @FXML private Label tableInfoLabel;
+    @FXML private Label reservationIDLabel;
     @FXML private Label cuisineAmountLabel;
     @FXML private Label cuisineQuantityLabel;
     @FXML private Label tableAmountLabel;
@@ -66,11 +66,11 @@ public class OrderCuisineController implements Initializable {
         try {
             for (Cuisine cuisine : cuisines) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderCuisineItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/PreOrderCuisineItem.fxml"));
                 VBox cuisineBox = fxmlLoader.load();
-                OrderCuisineItemController orderCuisineItemController = fxmlLoader.getController();
-                orderCuisineItemController.setCuisineData(cuisine);
-                orderCuisineItemController.setOrderCuisineController(this);
+                PreOrderCuisineItemController preOrderCuisineItemController = fxmlLoader.getController();
+                preOrderCuisineItemController.setCuisineData(cuisine);
+                preOrderCuisineItemController.setPreOrderCuisineController(this);
                 if (columns == 3) {
                     columns = 0;
                     ++rows;
@@ -92,11 +92,11 @@ public class OrderCuisineController implements Initializable {
         try {
             for (OrderDetail orderDetail : orderDetails) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/OrderCuisineBillItem.fxml"));
+                fxmlLoader.setLocation(getClass().getResource("/com/huongbien/fxml/PreOrderCuisineBillItem.fxml"));
                 HBox billBox = fxmlLoader.load();
-                OrderCuisineBillItemController orderCuisineBillItemController = fxmlLoader.getController();
-                orderCuisineBillItemController.setDataBill(orderDetail);
-                orderCuisineBillItemController.setOrderBillController(this);
+                PreOrderCuisineBillItemController preOrderCuisineBillItemController = fxmlLoader.getController();
+                preOrderCuisineBillItemController.setDataBill(orderDetail);
+                preOrderCuisineBillItemController.setPreOrderBillController(this);
                 if (columns == 1) {
                     columns = 0;
                     ++rows;
@@ -157,27 +157,17 @@ public class OrderCuisineController implements Initializable {
         }
         //table
         double tableAmount = 0.0;
-        StringBuilder tableInfoBuilder = new StringBuilder();
         for (JsonElement element : jsonArrayTable) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
             if (table != null) {
-                //set table text
-                String floorStr = (table.getFloor() == 0) ? "Tầng trệt" : "Tầng " + table.getFloor();
-                tableInfoBuilder.append(table.getName()).append(" (").append(floorStr).append("), ");
-                //set table amount : if type VIP -> 100.000 VNĐ
                 tableAmount += table.getTableType().getTableId().equals("LB002") ? Constants.TABLE_PRICE : 0;
-            } else {
-                tableInfoBuilder.append("Thông tin bàn không xác định, ");
             }
         }
-        if (!tableInfoBuilder.isEmpty()) {
-            tableInfoBuilder.setLength(tableInfoBuilder.length() - 2);
-        }
         //setLabel
-        tableInfoLabel.setText(tableInfoBuilder.toString());
+        reservationIDLabel.setText("");
         cuisineQuantityLabel.setText(cuisineQuantity + " món");
         cuisineAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount));
         tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
@@ -185,18 +175,13 @@ public class OrderCuisineController implements Initializable {
     }
 
     @FXML
-    void onPayButtonClicked(ActionEvent event) throws IOException {
+    void onUpdateButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         if (!jsonArray.isEmpty()) {
-            restaurantMainController.openOrderPayment();
+            restaurantMainController.openPreOrder();
         } else {
             Utils.showAlert("Vui lòng chọn món", "Reminder");
         }
-    }
-
-    @FXML
-    void onBackButtonClicked(ActionEvent event) throws IOException {
-        restaurantMainController.openOrderTable();
     }
 
     @FXML

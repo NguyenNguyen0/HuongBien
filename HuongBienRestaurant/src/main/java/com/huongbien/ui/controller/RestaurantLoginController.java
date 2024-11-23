@@ -31,6 +31,7 @@ import javafx.util.Pair;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -166,11 +167,6 @@ public class RestaurantLoginController implements Initializable {
     }
 
     @FXML
-    void onRememberCheckBoxChecked(ActionEvent event) {
-
-    }
-
-    @FXML
     private boolean status = false;
 
     @FXML
@@ -207,7 +203,7 @@ public class RestaurantLoginController implements Initializable {
     }
 
     @FXML
-    void onLoginButtonClicked(ActionEvent event) {
+    void onLoginButtonClicked(ActionEvent event) throws SQLException, IOException {
         AccountDAO accountDAO = AccountDAO.getInstance();
 
         String username = employeeIdField.getText();
@@ -224,24 +220,21 @@ public class RestaurantLoginController implements Initializable {
         if (username.equals(account.getUsername().trim()) && passwordHash.equals(account.getHashcode().trim())) {
             loginMessageLabel.setText("Đăng nhập thành công");
             loginMessageLabel.setStyle("-fx-text-fill: green;");
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantMain.fxml"));
-                Parent root = loader.load();
-                //
-                Scene mainScene = new Scene(root);
-                //
-                Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                loginStage.close();
-                //
-                Stage mainStage = new Stage();
-                mainStage.setScene(mainScene);
-                mainStage.setMaximized(true);
-                mainStage.setTitle("Dashboard - Huong Bien Restaurant");
-                mainStage.initStyle(StageStyle.UNDECORATED);
-                mainStage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantMain.fxml"));
+            Parent root = loader.load();
+            // Ensure this is called after setting the controller
+            //
+            Scene mainScene = new Scene(root);
+            //
+            Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            loginStage.close();
+            //
+            Stage mainStage = new Stage();
+            mainStage.setScene(mainScene);
+            mainStage.setMaximized(true);
+            mainStage.setTitle("Dashboard - Huong Bien Restaurant");
+            mainStage.initStyle(StageStyle.UNDECORATED);
+            mainStage.show();
             //write JSON user current
             JsonArray jsonArray;
             try {
@@ -258,6 +251,8 @@ public class RestaurantLoginController implements Initializable {
             jsonObject.addProperty("Employee ID", id);
             jsonArray.add(jsonObject);
             Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
+            RestaurantMainController restaurantMainController = loader.getController();
+            restaurantMainController.loadUserInfoFromJSON();
         } else {
             loginMessageLabel.setText("Sai mã nhân viên và mật khẩu đăng nhập");
             loginMessageLabel.setStyle("-fx-text-fill: red;");

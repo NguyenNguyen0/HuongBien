@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PreOrderTableGUI extends Application {
+public class PreOrderCuisineGUI extends Application {
 
     @FXML
     public Label lbl_textMe;
@@ -24,7 +24,7 @@ public class PreOrderTableGUI extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/PreOrderCuisine.fxml"));
 //        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
-        primaryStage.setTitle("PreOrder Table - Huong Bien Restaurant");
+        primaryStage.setTitle("Order Cuisine - Huong Bien Restaurant");
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

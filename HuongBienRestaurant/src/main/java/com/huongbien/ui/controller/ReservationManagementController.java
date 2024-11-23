@@ -19,10 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.File;
@@ -92,6 +89,7 @@ public class ReservationManagementController implements Initializable {
 
     }
 
+    //TODO: Payment Queue
     //function area
     private void loadPaymentQueueDataFromJSON() {
         //cell
@@ -303,6 +301,11 @@ public class ReservationManagementController implements Initializable {
 
     @FXML
     void onPreOrderTableButtonAction(ActionEvent event) throws IOException {
-        restaurantMainController.openPreOrderTable();
+        restaurantMainController.openPreOrder();
+    }
+
+    @FXML
+    void onConfirmTableButtonAction(ActionEvent event) throws IOException {
+        restaurantMainController.openOrderPayment();
     }
 }
