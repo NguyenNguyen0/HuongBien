@@ -214,7 +214,7 @@
                                           <Insets bottom="20.0" right="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Nhận bàn">
+                                    <Button mnemonicParsing="false" onAction="#onConfirmTableButtonAction" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Nhận bàn">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
