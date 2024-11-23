@@ -2,9 +2,11 @@ package com.huongbien.ui.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.huongbien.config.AppConfig;
 import com.huongbien.config.Constants;
 import com.huongbien.dao.AccountDAO;
 import com.huongbien.entity.Account;
+import com.huongbien.service.EmailService;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,8 +23,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,8 +42,11 @@ public class RestaurantLoginController implements Initializable {
     @FXML private AnchorPane compoent_hide;
     @FXML private AnchorPane compoent_show;
     @FXML private ImageView toggleShowingPasswordButton;
+    @FXML private Label forgotPasswordLabel;
     @FXML private Label loginMessageLabel;
     @FXML private Button loginButton;
+    String emailUsername = AppConfig.getEmailUsername();
+    String emailPassword = AppConfig.getEmailPassword();
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -51,6 +58,7 @@ public class RestaurantLoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadCarousel();
+        forgotPasswordLabel.setOnMouseClicked(event -> onForgotPasswordLabelClicked());
     }
 
     private void loadCarousel() {
@@ -62,6 +70,80 @@ public class RestaurantLoginController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void onForgotPasswordLabelClicked() {
+        TextInputDialog emailDialog = new TextInputDialog();
+        emailDialog.setTitle("Quên mật khẩu");
+        emailDialog.setHeaderText("Nhập email của bạn");
+        emailDialog.setContentText("Email:");
+
+        Optional<String> emailResult = emailDialog.showAndWait();
+        if (emailResult.isPresent()) {
+            String email = emailResult.get().trim();
+
+            String otp = Utils.generateOTP();
+
+            boolean isEmailSent = EmailService.sendEmailWithOTP(email, otp, emailUsername, emailPassword);
+            if (!isEmailSent) {
+                Utils.showAlert(String.valueOf(Alert.AlertType.ERROR), "Không thể gửi OTP. Vui lòng thử lại sau!");
+                return;
+            }
+
+            TextInputDialog otpDialog = new TextInputDialog();
+            otpDialog.setTitle("Xác thực OTP");
+            otpDialog.setHeaderText("Nhập mã OTP đã gửi đến email của bạn");
+            otpDialog.setContentText("OTP:");
+
+            Optional<String> otpResult = otpDialog.showAndWait();
+            if (otpResult.isPresent() && otpResult.get().equals(otp)) {
+
+                Dialog<ButtonType> passwordDialog = new Dialog<>();
+                passwordDialog.setTitle("Thay đổi mật khẩu");
+                passwordDialog.setHeaderText("Nhập mật khẩu mới và xác nhận");
+
+                PasswordField newPasswordField = new PasswordField();
+                newPasswordField.setPromptText("Mật khẩu mới");
+                PasswordField confirmPasswordField = new PasswordField();
+                confirmPasswordField.setPromptText("Xác nhận mật khẩu");
+
+                GridPane gridPane = new GridPane();
+                gridPane.setHgap(10);
+                gridPane.setVgap(10);
+                gridPane.add(new Label("Mật khẩu mới:"), 0, 0);
+                gridPane.add(newPasswordField, 1, 0);
+                gridPane.add(new Label("Xác nhận mật khẩu:"), 0, 1);
+                gridPane.add(confirmPasswordField, 1, 1);
+
+                passwordDialog.getDialogPane().setContent(gridPane);
+                passwordDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+                Optional<ButtonType> result = passwordDialog.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    String newPassword = newPasswordField.getText();
+                    String confirmPassword = confirmPasswordField.getText();
+
+                    if (!newPassword.equals(confirmPassword)) {
+                        Utils.showAlert(String.valueOf(Alert.AlertType.ERROR), "Mật khẩu không khớp. Vui lòng thử lại!");
+                        return;
+                    }
+
+                    String hashedPassword = Utils.hashPassword(newPassword);
+
+                    boolean isPasswordUpdated = AccountDAO.getInstance().changePassword(email, hashedPassword);
+                    if (isPasswordUpdated) {
+                        Utils.showAlert(String.valueOf(Alert.AlertType.INFORMATION), "Mật khẩu đã được thay đổi thành công!");
+                    } else {
+                        Utils.showAlert(String.valueOf(Alert.AlertType.ERROR), "Đã xảy ra lỗi. Vui lòng thử lại sau!");
+                    }
+                }
+            } else {
+                Utils.showAlert(String.valueOf(Alert.AlertType.ERROR), "OTP không đúng hoặc đã hết hạn. Vui lòng thử lại!");
+            }
+        }
+    }
+
 
     @FXML
     void onExitButtonClicked(MouseEvent event) {

@@ -28,7 +28,7 @@ public class AccountDAO extends GenericDAO<Account> {
         account.setEmail(resultSet.getString("email"));
         account.setIsActive(resultSet.getBoolean("isActive"));
         List<Employee> employees = EmployeeDAO.getInstance().getById(account.getUsername());
-        account.setEmployeeInfo(!employees.isEmpty() ? employees.getFirst() : null);
+        account.setEmployeeInfo(!employees.isEmpty() ? employees.get(0) : null);
         return account;
     }
 
@@ -40,8 +40,8 @@ public class AccountDAO extends GenericDAO<Account> {
         return getOne("SELECT * FROM Account WHERE username LIKE ?;", username);
     }
 
-    public boolean changePassword(String username, String newPassword) {
-        return update("UPDATE Account SET hashcode = ? WHERE username = ?;", newPassword, username);
+    public boolean changePassword(String email, String newPassword) {
+        return update("UPDATE Account SET hashcode = ? WHERE email = ?;", newPassword, email);
     }
 
     @Override
