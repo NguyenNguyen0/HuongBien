@@ -33,12 +33,10 @@ public class StatementHelper {
         try {
             CallableStatement callStatement = connection.prepareCall(callProcedure);
             for (int i = 0; i < args.length; i++) {
-                if (args[i] instanceof LocalDate) {
-                    callStatement.setDate(i + 1, Date.valueOf((LocalDate) args[i]));
-                } else if (args[i] instanceof LocalTime) {
-                    callStatement.setObject(i + 1, Time.valueOf((LocalTime) args[i]));
-                } else {
-                    callStatement.setObject(i + 1, args[i]);
+                switch (args[i]) {
+                    case LocalDate localDate -> callStatement.setDate(i + 1, Date.valueOf(localDate));
+                    case LocalTime localTime -> callStatement.setTime(i + 1, Time.valueOf(localTime));
+                    case null, default -> callStatement.setObject(i + 1, args[i]);
                 }
             }
 
@@ -52,12 +50,10 @@ public class StatementHelper {
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             for (int i = 0; i < args.length; i++) {
-                if (args[i] instanceof LocalDate) {
-                    statement.setDate(i + 1, Date.valueOf((LocalDate) args[i]));
-                } else if (args[i] instanceof LocalTime) {
-                    statement.setObject(i + 1, Time.valueOf((LocalTime) args[i]));
-                } else {
-                    statement.setObject(i + 1, args[i]);
+                switch (args[i]) {
+                    case LocalDate localDate -> statement.setDate(i + 1, Date.valueOf(localDate));
+                    case LocalTime localTime -> statement.setTime(i + 1, Time.valueOf(localTime));
+                    case null, default -> statement.setObject(i + 1, args[i]);
                 }
             }
             return statement;

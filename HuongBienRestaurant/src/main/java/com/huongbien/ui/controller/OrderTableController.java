@@ -212,7 +212,7 @@ public class OrderTableController implements Initializable {
             //calculate seat total
             seatTotal += table.getSeats();
             //calculate table amount
-            tableAmount += table.getTableType().getTableId().equals("LB002") ? 100000 : 0;
+            tableAmount += table.getTableType().getTableId().equals("LB002") ? Constants.TABLE_PRICE : 0;
         }
         tableQuantityLabel.setText(String.valueOf(jsonArray.size()));
         seatTotalLabel.setText(seatTotal + " chỗ");

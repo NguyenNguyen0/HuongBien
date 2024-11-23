@@ -17,11 +17,11 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.TableManagementController">
    <right>
-      <VBox prefHeight="659.0" prefWidth="750.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="956.0" prefWidth="701.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="421.0" prefWidth="750.0">
+            <VBox alignment="CENTER" prefHeight="425.0" prefWidth="722.0">
                <children>
-                  <ImageView fx:id="tableImageView" fitHeight="300.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="tableImageView" fitHeight="333.0" fitWidth="372.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/all/gallery-512px.png" />
                      </image>
@@ -30,134 +30,123 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="123.0" prefWidth="750.0">
                <children>
-                  <VBox prefHeight="211.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
+                  <VBox prefHeight="126.0" prefWidth="642.0">
                      <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
-                           <children>
-                              <Label text="Tên bàn">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="tableNameField" disable="true" minHeight="50.0" styleClass="textField-line-bot">
-                                 <font>
-                                    <Font size="25.0" />
-                                 </font>
-                              </TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets left="40.0" right="40.0" />
-                           </VBox.margin>
-                        </VBox>
+                        <Label text="Tên bàn">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="tableNameField" disable="true" minHeight="50.0" prefHeight="51.0" prefWidth="670.0" styleClass="textField-line-bot">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </TextField>
                      </children>
                   </VBox>
                </children>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </VBox.margin>
             </HBox>
             <HBox alignment="CENTER" prefHeight="123.0" prefWidth="750.0">
                <children>
-                  <VBox prefHeight="211.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
+                  <VBox prefHeight="123.0" prefWidth="321.0">
                      <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
-                           <children>
-                              <Label text="Số chỗ">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="tableSeatsField" disable="true" minHeight="50.0" styleClass="textField-line-bot">
-                                 <font>
-                                    <Font size="25.0" />
-                                 </font>
-                              </TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets left="40.0" right="40.0" />
-                           </VBox.margin>
-                        </VBox>
+                        <Label text="Số chỗ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="tableSeatsField" disable="true" minHeight="50.0" prefHeight="54.0" prefWidth="290.0" styleClass="textField-line-bot">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </TextField>
                      </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                   </VBox>
-                  <VBox prefHeight="211.0" prefWidth="750.0">
+                  <VBox prefHeight="123.0" prefWidth="341.0">
                      <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
+                        <Label text="Loại bàn">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="96.0" prefWidth="388.0">
                            <children>
-                              <Label text="Loại bàn">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <ComboBox fx:id="tableTypeComboBox" disable="true" prefHeight="54.0" prefWidth="295.0" styleClass="textField-line-bot" />
-                                 </children>
-                              </HBox>
+                              <ComboBox fx:id="tableTypeComboBox" disable="true" prefHeight="54.0" prefWidth="338.0" styleClass="textField-line-bot" />
                            </children>
-                           <VBox.margin>
-                              <Insets left="40.0" right="40.0" />
-                           </VBox.margin>
-                        </VBox>
+                        </HBox>
                      </children>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
                   </VBox>
                </children>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </VBox.margin>
             </HBox>
             <HBox alignment="CENTER" prefHeight="123.0" prefWidth="750.0">
                <children>
-                  <VBox prefHeight="211.0" prefWidth="750.0">
+                  <VBox prefHeight="123.0" prefWidth="667.0">
                      <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
+                        <Label text="Trạng thái">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="96.0" prefWidth="279.0">
                            <children>
-                              <Label text="Trạng thái">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <ComboBox fx:id="tableStatusComboBox" disable="true" prefHeight="54.0" prefWidth="295.0" styleClass="textField-line-bot" />
-                                 </children>
-                              </HBox>
+                              <ComboBox fx:id="tableStatusComboBox" disable="true" prefHeight="54.0" prefWidth="327.0" styleClass="textField-line-bot" />
                            </children>
                            <VBox.margin>
-                              <Insets left="40.0" right="40.0" />
+                              <Insets />
                            </VBox.margin>
-                        </VBox>
+                        </HBox>
                      </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
                   </VBox>
-                  <VBox prefHeight="211.0" prefWidth="750.0">
+                  <VBox prefHeight="123.0" prefWidth="690.0">
                      <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
+                        <Label text="Khu vực tầng">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="83.0" prefWidth="312.0">
                            <children>
-                              <Label text="Khu vực tầng">
+                              <ComboBox fx:id="tableFloorComboBox" disable="true" prefHeight="54.0" prefWidth="260.0" styleClass="textField-line-bot" />
+                              <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="68.0" text="Edit">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font size="15.0" />
                                  </font>
-                              </Label>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <ComboBox fx:id="tableFloorComboBox" disable="true" prefHeight="54.0" prefWidth="232.0" styleClass="textField-line-bot" />
-                                    <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="57.0" text="Edit">
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
-                           <VBox.margin>
-                              <Insets left="40.0" right="40.0" />
-                           </VBox.margin>
-                        </VBox>
+                        </HBox>
                      </children>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
                   </VBox>
                </children>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </VBox.margin>
             </HBox>
             <VBox prefHeight="123.0" prefWidth="750.0">
                <children>
                   <HBox alignment="BOTTOM_CENTER" prefHeight="121.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="handleActionTableButton" mnemonicParsing="false" onAction="#onHandleActionTableButtonClicked" prefHeight="60.0" prefWidth="550.0" style="-fx-background-color: #761D7E;" text="Sửa bàn" textFill="WHITE">
+                        <Button fx:id="handleActionTableButton" mnemonicParsing="false" onMouseClicked="#onHandleActionTableButtonClicked" prefHeight="60.0" prefWidth="550.0" style="-fx-background-color: #761D7E;" text="Sửa bàn" textFill="WHITE">
                            <HBox.margin>
                               <Insets bottom="30.0" />
                            </HBox.margin>
@@ -178,10 +167,16 @@
                            </graphic>
                         </Button>
                      </children>
+                     <VBox.margin>
+                        <Insets left="30.0" right="30.0" />
+                     </VBox.margin>
                   </HBox>
                </children>
             </VBox>
          </children>
+         <BorderPane.margin>
+            <Insets right="10.0" />
+         </BorderPane.margin>
       </VBox>
    </right>
    <center>
@@ -189,24 +184,29 @@
          <children>
             <HBox alignment="CENTER" prefHeight="150.0" prefWidth="925.0" style="-fx-background-color: white;">
                <children>
-                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="807.0">
                      <children>
-                        <TextField fx:id="tableSearchField" prefHeight="60.0" prefWidth="344.0" promptText="Tìm kiếm món nhanh ..." styleClass="textField-line-bot" text="Tìm kiếm (No Action)" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="tableSearchField" onKeyReleased="#onSearchTableFieldKeyReleased" prefHeight="60.0" prefWidth="384.0" promptText="Nhập thông tin" styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                            <font>
-                              <Font size="18.0" />
+                              <Font size="25.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" right="10.0" />
+                              <Insets left="10.0" right="30.0" />
                            </HBox.margin>
                         </TextField>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onClearSearchClicked" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="clearSearchFieldButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onClearSearchButtonClicked" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icon/all/close-64px.png" />
                            </image>
                            <HBox.margin>
-                              <Insets left="-40.0" />
+                              <Insets left="-60.0" />
                            </HBox.margin>
                         </ImageView>
+                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="61.0" prefWidth="234.0" promptText="Tìm theo">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                      <HBox.margin>
                         <Insets />
@@ -214,13 +214,21 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
                      <children>
-                        <Button fx:id="swapModeTableButton" mnemonicParsing="false" onAction="#onSwapModeTableButtonClicked" prefHeight="60.0" prefWidth="201.0" style="-fx-background-color: #1D557E;" text="Thêm bàn" textFill="WHITE">
+                        <Button fx:id="searchTableButton" mnemonicParsing="false" onMouseClicked="#onSearchTableButtonClicked" prefHeight="60.0" prefWidth="201.0" style="-fx-background-color: #000;" text="Tìm kiếm" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>
                            <font>
                               <Font name="System Bold" size="25.0" />
                            </font>
+                        </Button>
+                        <Button fx:id="swapModeTableButton" mnemonicParsing="false" onMouseClicked="#onSwapModeTableButtonClicked" prefHeight="60.0" prefWidth="201.0" style="-fx-background-color: #1D557E;" text="Thêm bàn" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
                         </Button>
                      </children>
                   </HBox>
@@ -238,7 +246,7 @@
                         <TableColumn fx:id="tableTypeColumn" editable="false" prefWidth="172.33331298828125" text="Loại bàn" />
                         <TableColumn fx:id="tableSeatsColumn" editable="false" prefWidth="178.66668701171875" text="Số chỗ" />
                         <TableColumn fx:id="tableStatusColumn" editable="false" prefWidth="140.0" text="Trạng thái" />
-                        <TableColumn fx:id="tableFloorColumn" editable="false" prefWidth="172.33331298828125" text="Khu vực" />
+                        <TableColumn fx:id="tableFloorColumn" editable="false" prefWidth="172.33331298828125" text="Tầng" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -257,11 +265,11 @@
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
                <children>
-                  <Button mnemonicParsing="false" text="&lt;&lt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onFirstPageButtonClicked" text="&lt;&lt;">
                      <font>
                         <Font size="20.0" />
                      </font></Button>
-                  <Button mnemonicParsing="false" text="&lt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onPrevPageButtonClicked" text="&lt;">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -269,7 +277,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Label text="1/10">
+                  <Label fx:id="pageIndexLabel" alignment="CENTER" prefHeight="30.0" prefWidth="66.0" text="1/10">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -277,7 +285,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" text="&gt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onNextPageButtonClicked" text="&gt;">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -285,7 +293,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" text="&gt;&gt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onLastPageButtonClicked" text="&gt;&gt;">
                      <font>
                         <Font size="20.0" />
                      </font></Button>

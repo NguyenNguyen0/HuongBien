@@ -136,6 +136,44 @@ public class    TableDAO extends GenericDAO<Table> {
         }
     }
 
+    public List<Integer> getDistinctFloors() {
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT floor FROM [Table]");
+            ResultSet resultSet = statement.executeQuery();
+            List<Integer> floors = new ArrayList<>();
+            while (resultSet.next()) {
+                floors.add(resultSet.getInt("floor"));
+            }
+            return floors;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Table> getAllWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM [Table] ORDER BY floor OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", offset, limit);
+    }
+
+    public List<Table> getByNameWithPagination(String name, int offset, int limit) {
+        return getMany("SELECT * FROM [Table] WHERE name LIKE ? ORDER BY floor OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", "%" + name + "%", offset, limit);
+    }
+
+    public List<Table> getByFloorWithPagination(int offset, int limit, int floor) {
+        return getMany("SELECT * FROM [Table] WHERE floor = ? ORDER BY floor OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", floor, offset, limit);
+    }
+
+    public int countTotalTables() {
+        return count("SELECT COUNT(*) FROM [Table]");
+    }
+
+    public int countTotalTablesByFloor(int floor) {
+        return count("SELECT COUNT(*) FROM [Table] WHERE floor = ?", floor);
+    }
+
+    public int countTotalTablesByName(String name) {
+        return count("SELECT COUNT(*) FROM [Table] WHERE name LIKE ?", "%" + name + "%");
+    }
+
     public boolean updateStatus(String tableId, String status) {
         return update("UPDATE [Table] SET status = ? WHERE id = ?", status, tableId);
     }

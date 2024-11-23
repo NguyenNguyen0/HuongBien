@@ -137,7 +137,7 @@ public class Customer {
         return address;
     }
 
-    public boolean isGender() {
+    public boolean getGender() {
         return gender;
     }
 

@@ -65,6 +65,9 @@ public class ReservationManagementController implements Initializable {
         loadPaymentQueueDataFromJSON();
         //Pre-Order
         //TODO:
+
+        //
+
     }
 
     private void disablePayQueueButton() {
@@ -89,7 +92,7 @@ public class ReservationManagementController implements Initializable {
 
     }
 
-    //function area -------------------------------------------------------------------Payment Queue
+    //function area
     private void loadPaymentQueueDataFromJSON() {
         //cell
         paymentQueueNumericalOrderColumn.setCellValueFactory(cellData ->
@@ -226,7 +229,7 @@ public class ReservationManagementController implements Initializable {
         }
     }
 
-    //Event area -------------------------------------------------------------------Payment Queue
+    //Event area
     @FXML
     void onPaymentQueueTableViewClicked(MouseEvent event) throws FileNotFoundException {
         int selectedIndex = paymentQueueTableView.getSelectionModel().getSelectedIndex();

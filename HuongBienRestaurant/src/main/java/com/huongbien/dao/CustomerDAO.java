@@ -53,6 +53,38 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return getMany("SELECT * FROM Customer WHERE name LIKE ?", "%" + name + "%");
     }
 
+    public List<Customer> getAllWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM Customer ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", offset, limit);
+    }
+
+    public List<Customer> getAllWithPaginationByPhoneNumber(String phoneNumber, int offset, int limit) {
+        return getMany("SELECT * FROM Customer WHERE phoneNumber LIKE ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", phoneNumber + "%", offset, limit);
+    }
+
+    public List<Customer> getAllWithPaginationByName(String name, int offset, int limit) {
+        return getMany("SELECT * FROM Customer WHERE name LIKE ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", "%" + name + "%", offset, limit);
+    }
+
+    public List<Customer> getAllWithPaginationById(String id, int offset, int limit) {
+        return getMany("SELECT * FROM Customer WHERE id LIKE ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", id + "%", offset, limit);
+    }
+
+    public int countTotalById(String id) {
+        return count("SELECT COUNT(*) FROM Customer WHERE id LIKE ?", id + "%");
+    }
+
+    public int countTotal() {
+        return count("SELECT COUNT(*) FROM Customer");
+    }
+
+    public int countTotalByPhoneNumber(String phoneNumber) {
+        return count("SELECT COUNT(*) FROM Customer WHERE phoneNumber LIKE ?", phoneNumber + "%");
+    }
+
+    public int countTotalByName(String name) {
+        return count("SELECT COUNT(*) FROM Customer WHERE name LIKE ?", "%" + name + "%");
+    }
+
     //  TODO: update this method
     public List<String> getPhoneNumber() {
         List<String> customersPhone = new ArrayList<>();
@@ -78,8 +110,8 @@ public class CustomerDAO extends GenericDAO<Customer> {
 
     public boolean updateCustomerInfo(Customer customer) {
         String sql = "UPDATE Customer SET name = ?, address = " +
-                "?, phoneNumber = ?, email = ?, birthday = ?, accumulatedPoints = ?, membershipLevel = ? WHERE id = ?";
-        return update(sql, customer.getName(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getBirthday(), customer.getAccumulatedPoints(), customer.getMembershipLevel(), customer.getCustomerId());
+                "?, phoneNumber = ?, email = ?, birthday = ?, gender = ?, accumulatedPoints = ?, membershipLevel = ? WHERE id = ?";
+        return update(sql, customer.getName(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getBirthday(), customer.getGender(), customer.getAccumulatedPoints(), customer.getMembershipLevel(), customer.getCustomerId());
     }
 
     @Override
@@ -88,7 +120,7 @@ public class CustomerDAO extends GenericDAO<Customer> {
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement statement = statementHelper.prepareStatement(sql, customer.getCustomerId(), customer.getName(), customer.getAddress(),
-                    customer.isGender(), customer.getPhoneNumber(), customer.getEmail(), customer.getBirthday(), customer.getRegistrationDate(),
+                    customer.getGender(), customer.getPhoneNumber(), customer.getEmail(), customer.getBirthday(), customer.getRegistrationDate(),
                     customer.getAccumulatedPoints(), customer.getMembershipLevel());
             int rowAffected = statement.executeUpdate();
             return rowAffected > 0;
