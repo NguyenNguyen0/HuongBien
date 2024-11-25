@@ -156,8 +156,8 @@ public class Employee {
     }
 
     public void setWorkHours(double workHours) {
-        if (workHours <= 0) {
-            throw new IllegalArgumentException("workHour must greater than 0");
+        if (workHours < 0) {
+            throw new IllegalArgumentException("workHour must greater or equal 0");
         }
         this.workHours = workHours;
     }

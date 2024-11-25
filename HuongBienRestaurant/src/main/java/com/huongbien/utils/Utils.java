@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -93,6 +94,38 @@ public class Utils {
     //Read JSON
     public static JsonArray readJsonFromFile(String filePath) throws FileNotFoundException {
         return JsonParser.parseReader(new FileReader(filePath)).getAsJsonArray();
+    }
+
+    //  Gợi ý số tiền nhận
+    public static int[] suggestMoneyReceived(int totalAmount) {
+        if (totalAmount < 0) {
+            throw new IllegalArgumentException("Total Amount must be greater than 0 dong");
+        }
+
+        int[] denominations = {1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000};
+
+        ArrayList<Integer> suggestions = new ArrayList<>();
+
+        if (totalAmount >= 1000) {
+            suggestions.add((int) Math.ceil(totalAmount / 1000.0) * 1000);
+        }
+
+        int currentAmount = totalAmount;
+
+        for (int denomination : denominations) {
+            if (currentAmount < denomination) {
+                suggestions.add(denomination);
+                continue;
+            }
+
+            currentAmount = ((totalAmount + denomination - 1) / denomination) * denomination;
+
+            if (suggestions.contains(currentAmount)) continue;
+
+            suggestions.add(currentAmount);
+        }
+
+        return suggestions.stream().mapToInt(Integer::intValue).toArray();
     }
 
     // Chuyển danh sách Table về định dạng -> "Bàn 01, Bàn 02" Sài cho phần render

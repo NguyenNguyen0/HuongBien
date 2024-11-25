@@ -99,6 +99,46 @@ public class EmployeeDAO extends GenericDAO<Employee> {
         };
     }
 
+    public List<Employee> getAllWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM Employee ORDER BY position OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", offset, limit);
+    }
+
+    public List<Employee> getAllStillWorkingWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE status = N'Đang làm' ORDER BY position OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", offset, limit);
+    }
+
+    public List<Employee> getByPositionWithPagination(String position, int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE position LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", "%" + position, offset, limit);
+    }
+
+    public List<Employee> getByPhoneNumberWithPagination(String phoneNumber, int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE phoneNumber LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", phoneNumber + "%", offset, limit);
+    }
+
+    public List<Employee> getByNameWithPagination(String name, int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE name LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", "%" + name + "%", offset, limit);
+    }
+
+    public int countByPhoneNumber(String phoneNumber) {
+        return count("SELECT COUNT(*) FROM Employee WHERE phoneNumber LIKE ?;", phoneNumber + "%");
+    }
+
+    public int countByName(String name) {
+        return count("SELECT COUNT(*) FROM Employee WHERE name LIKE ?;", "%" + name + "%");
+    }
+
+    public int countByPosition(String position) {
+        return count("SELECT COUNT(*) FROM Employee WHERE position LIKE ?;", "%" + position);
+    }
+
+    public int countStillWorking() {
+        return count("SELECT COUNT(*) FROM Employee WHERE status = N'Đang làm';");
+    }
+
+    public int countAll() {
+        return count("SELECT COUNT(*) FROM Employee;");
+    }
+
     public boolean updateStatus(String id, String status) {
         return update("UPDATE Employee SET status = ? WHERE id = ?;", status, id);
     }
@@ -127,11 +167,11 @@ public class EmployeeDAO extends GenericDAO<Employee> {
     @Override
     public boolean add(Employee object) {
         String sql = """
-                    INSERT INTO Employee (
-                        id, name, phoneNumber, citizenIDNumber, gender, address, birthday, email,
-                        status, hireDate, position, workHours, hourlyPay, salary, profileImage, managerId)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """;
+            INSERT INTO Employee (
+                id, name, phoneNumber, citizenIDNumber, gender, address, birthday, email,
+                status, hireDate, position, workHours, hourlyPay, salary, profileImage, managerId)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
         try {
             PreparedStatement statement = statementHelper.prepareStatement(
                     sql,
