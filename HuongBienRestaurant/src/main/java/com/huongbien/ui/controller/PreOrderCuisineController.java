@@ -5,10 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
 import com.huongbien.dao.CuisineDAO;
-import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.OrderDetail;
-import com.huongbien.entity.Table;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,10 +33,9 @@ public class PreOrderCuisineController implements Initializable {
     @FXML private GridPane cuisineGridPane;
     @FXML private ScrollPane billScrollPane;
     @FXML public GridPane billGridPane;
-    @FXML private Label reservationIDLabel;
+    @FXML private Label reservationIDLabel; //use later
     @FXML private Label cuisineAmountLabel;
     @FXML private Label cuisineQuantityLabel;
-    @FXML private Label tableAmountLabel;
     @FXML private Label totalAmountLabel;
 
     //Controller area
@@ -145,37 +142,26 @@ public class PreOrderCuisineController implements Initializable {
 
     public void setCuisinesInfoFromJSON() throws FileNotFoundException, SQLException {
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
-        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
 
-        int cuisineQuantity = 0;
+        int totalQuantityCuisine = 0;
         double cuisineAmount = 0.0;
         for (JsonElement element : jsonArrayCuisine) {
             JsonObject jsonObject = element.getAsJsonObject();
-            cuisineQuantity++;
+            int cuisineQuantity = jsonObject.get("Cuisine Quantity").getAsInt();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
+            totalQuantityCuisine += cuisineQuantity;
             cuisineAmount += cuisineMoney;
         }
-        //table
-        double tableAmount = 0.0;
-        for (JsonElement element : jsonArrayTable) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            String id = jsonObject.get("Table ID").getAsString();
-            TableDAO dao_table = TableDAO.getInstance();
-            Table table = dao_table.getById(id);
-            if (table != null) {
-                tableAmount += table.getTableType().getTableId().equals("LB002") ? Constants.TABLE_PRICE : 0;
-            }
-        }
         //setLabel
-        reservationIDLabel.setText("");
-        cuisineQuantityLabel.setText(cuisineQuantity + " món");
+        //TODO: add ID here
+        //reservationIDLabel.setText("");
+        cuisineQuantityLabel.setText(totalQuantityCuisine + " món");
         cuisineAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount));
-        tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
-        totalAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount + tableAmount));
+        totalAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount));
     }
 
     @FXML
-    void onUpdateButtonAction(ActionEvent event) throws IOException {
+    void onUpdateCuisineButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         if (!jsonArray.isEmpty()) {
             restaurantMainController.openPreOrder();
@@ -185,7 +171,7 @@ public class PreOrderCuisineController implements Initializable {
     }
 
     @FXML
-    void onCancelButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
+    void onClearCuisineButtonAction(ActionEvent event) throws FileNotFoundException, SQLException {
         Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUISINE_PATH);
         billGridPane.getChildren().clear();
         loadBill();

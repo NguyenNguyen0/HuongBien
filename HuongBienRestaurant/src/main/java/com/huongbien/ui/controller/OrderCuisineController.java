@@ -147,12 +147,13 @@ public class OrderCuisineController implements Initializable {
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
 
-        int cuisineQuantity = 0;
+        int totalQuantityCuisine = 0;
         double cuisineAmount = 0.0;
         for (JsonElement element : jsonArrayCuisine) {
             JsonObject jsonObject = element.getAsJsonObject();
-            cuisineQuantity++;
+            int cuisineQuantity = jsonObject.get("Cuisine Quantity").getAsInt();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
+            totalQuantityCuisine += cuisineQuantity;
             cuisineAmount += cuisineMoney;
         }
         //table
@@ -178,14 +179,14 @@ public class OrderCuisineController implements Initializable {
         }
         //setLabel
         tableInfoLabel.setText(tableInfoBuilder.toString());
-        cuisineQuantityLabel.setText(cuisineQuantity + " món");
+        cuisineQuantityLabel.setText(totalQuantityCuisine + " món");
         cuisineAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount));
         tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
         totalAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount + tableAmount));
     }
 
     @FXML
-    void onPayButtonClicked(ActionEvent event) throws IOException {
+    void onOrderPaymentButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         if (!jsonArray.isEmpty()) {
             restaurantMainController.openOrderPayment();
@@ -200,7 +201,7 @@ public class OrderCuisineController implements Initializable {
     }
 
     @FXML
-    void onCancelButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
+    void onClearCuisineButtonAction(ActionEvent event) throws FileNotFoundException, SQLException {
         Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUISINE_PATH);
         billGridPane.getChildren().clear();
         loadBill();

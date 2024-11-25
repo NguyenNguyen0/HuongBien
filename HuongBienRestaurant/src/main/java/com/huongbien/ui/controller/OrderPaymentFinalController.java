@@ -12,11 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -265,5 +270,20 @@ public class OrderPaymentFinalController implements Initializable {
                 break;
         }
         setFinalAmountInfo();
+    }
+
+    @FXML
+    void showInvoiceButtonAction(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/InvoicePrinterDialog.fxml"));
+        Parent root = loader.load();
+        Stage primaryStage = new Stage();
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        Scene scene = new Scene(root, 1200, 700);
+        scene.setFill(Color.TRANSPARENT);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
+        InvoicePrinterDialogController invoicePrinterDialogController = loader.getController();
+        invoicePrinterDialogController.setOrderPaymentFinalController(this);
+        primaryStage.show();
     }
 }

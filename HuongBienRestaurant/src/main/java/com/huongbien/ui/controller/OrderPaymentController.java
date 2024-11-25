@@ -18,6 +18,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -28,6 +30,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -182,9 +187,10 @@ public class OrderPaymentController implements Initializable {
         int totalQuantityCuisine = 0;
         double cuisineAmount = 0.0;
         for (JsonElement element : jsonArrayCuisine) {
-            totalQuantityCuisine++;
             JsonObject jsonObject = element.getAsJsonObject();
+            int cuisineQuantity = jsonObject.get("Cuisine Quantity").getAsInt();
             double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
+            totalQuantityCuisine += cuisineQuantity;
             cuisineAmount += cuisineMoney;
         }
         //calc discount

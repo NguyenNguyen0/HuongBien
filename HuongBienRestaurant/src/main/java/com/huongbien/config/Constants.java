@@ -8,4 +8,6 @@ public class Constants {
     public final static String PAYMENT_QUEUE_PATH = "src/main/resources/com/huongbien/temp/paymentQueue.json";
     // Table price VIP
     public final static double TABLE_PRICE = 100000;
+    // VAT
+    public final static double VAT = 0.1;
 }
