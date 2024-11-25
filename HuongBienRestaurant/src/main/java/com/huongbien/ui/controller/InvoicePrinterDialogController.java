@@ -191,9 +191,9 @@ public class InvoicePrinterDialogController implements Initializable {
 
     @FXML
     void onOverlayClicked(MouseEvent event) {
-//        Node source = (Node) event.getSource();
-//        Stage stage = (Stage) source.getScene().getWindow();
-//        stage.close();
+        Node source = (Node) event.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
