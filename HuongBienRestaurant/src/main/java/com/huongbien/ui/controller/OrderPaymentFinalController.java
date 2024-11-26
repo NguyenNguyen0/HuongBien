@@ -7,6 +7,7 @@ import com.huongbien.config.Constants;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import jdk.jshell.execution.Util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -220,11 +222,6 @@ public class OrderPaymentFinalController implements Initializable {
         openEWalletMethod();
     }
 
-    @FXML
-    void onCompleteOrderPaymentFinalAction(ActionEvent event) {
-        Utils.showAlert("Chức năng đang phát triển", "Thông báo gián đoạn");
-    }
-
     //mini calculator
     @FXML
     void onNumberClicked(MouseEvent event) {
@@ -285,5 +282,10 @@ public class OrderPaymentFinalController implements Initializable {
         InvoicePrinterDialogController invoicePrinterDialogController = loader.getController();
         invoicePrinterDialogController.setOrderPaymentFinalController(this);
         primaryStage.show();
+    }
+
+    @FXML
+    void onCompleteOrderPaymentFinalAction(ActionEvent event) {
+        ToastsMessage.showToastsMessage("Thông báo gián đoạn", "Chức năng đang phát triển");
     }
 }
