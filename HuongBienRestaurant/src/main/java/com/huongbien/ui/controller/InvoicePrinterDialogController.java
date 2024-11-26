@@ -10,17 +10,31 @@ import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
 import com.huongbien.utils.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.print.*;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class InvoicePrinterDialogController implements Initializable {
@@ -28,6 +42,7 @@ public class InvoicePrinterDialogController implements Initializable {
     private TextArea content;
 
     public OrderPaymentFinalController orderPaymentFinalController;
+
     public void setOrderPaymentFinalController(OrderPaymentFinalController orderPaymentFinalController) {
         this.orderPaymentFinalController = orderPaymentFinalController;
     }
@@ -69,7 +84,7 @@ public class InvoicePrinterDialogController implements Initializable {
         content.setText(content.getText() + String.format("%-13s %37s", "Mã hoá đơn:", ""));
         newLine();
         //cashier
-        String currentLoginSession = "";
+        String currentLoginSession = "Không xác định";
         for (JsonElement element : jsonArraySession) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
@@ -150,7 +165,7 @@ public class InvoicePrinterDialogController implements Initializable {
             newLine();
         }
         newLine();
-        content.setText(content.getText() + String.format("%-20s %30s", "Tổng số lượng món:", totalQuantityCuisine+" Món"));
+        content.setText(content.getText() + String.format("%-20s %30s", "Tổng số lượng món:", totalQuantityCuisine + " Món"));
         newLine();
         content.setText(content.getText() + String.format("%-20s %30s", "Tổng tiền món:", String.format("%,.0f VNĐ", cuisineAmount)));
         newLine();
@@ -158,11 +173,11 @@ public class InvoicePrinterDialogController implements Initializable {
         newLine();
         double vatPercent = Constants.VAT * 100;
         double vatAmount = cuisineAmount * Constants.VAT;
-        content.setText(content.getText() + String.format("%-20s %30s", "Thuế VAT"+String.format("(+%.0f%%):", vatPercent), String.format("%,.0f VNĐ", vatAmount)));
+        content.setText(content.getText() + String.format("%-20s %30s", "Thuế VAT" + String.format("(+%.0f%%):", vatPercent), String.format("%,.0f VNĐ", vatAmount)));
         newLine();
         double discountPercent = discount * 100;
         double discountAmount = cuisineAmount * discount;
-        content.setText(content.getText() + String.format("%-20s %30s", "Khuyến mãi"+String.format("(-%.0f%%):", discountPercent), String.format("-%,.0f VNĐ", discountAmount)));
+        content.setText(content.getText() + String.format("%-20s %30s", "Khuyến mãi" + String.format("(-%.0f%%):", discountPercent), String.format("-%,.0f VNĐ", discountAmount)));
         newLine();
         double finalAmount = cuisineAmount + tableAmount + vatAmount - discountAmount;
         content.setText(content.getText() + String.format("%-20s %30s", "Thành tiền:", String.format("%,.0f VNĐ", finalAmount)));
@@ -175,15 +190,15 @@ public class InvoicePrinterDialogController implements Initializable {
         content.setText(content.getText() + String.format("%-20s %30s", "Hoàn trả dư:", String.format("%,.0f VNĐ", refund)));
         newLine();
         boolean status = false; // TODO: change to true if paid
-        content.setText(content.getText() + String.format("%-20s %30s", "Hoàn trả dư:", "Chưa thanh toán"));
+        content.setText(content.getText() + String.format("%-20s %30s", "Trạng thái:", "Chưa thanh toán"));
         newLine();
         //Other
         newLine();
         separator();
         newLine();
-        content.setText(content.getText() + "\n\t\tPASSWORD WIFI: 12345678");
+        content.setText(content.getText() + "\n\t\tPASSWORD WIFI: " + Constants.PASSWORD);
         newLine();
-        content.setText(content.getText() + "  Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!");
+        content.setText(content.getText() + " Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!");
         newLine();
         content.setText(content.getText() + "\t   Hân hạnh được phục vụ quý khách!");
         newLine();
@@ -200,4 +215,66 @@ public class InvoicePrinterDialogController implements Initializable {
     void preventEventClicked(MouseEvent event) {
         event.consume();
     }
+
+    @FXML
+    void onPrintButtonAction(ActionEvent event) {
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null && job.showPrintDialog(content.getScene().getWindow())) {
+            String fullText = content.getText();
+            double printableWidth = job.getJobSettings().getPageLayout().getPrintableWidth();
+            double printableHeight = job.getJobSettings().getPageLayout().getPrintableHeight();
+            List<TextFlow> pages = createPages(fullText, printableWidth, printableHeight);
+            boolean success = true;
+            for (TextFlow page : pages) {
+                success = job.printPage(page);
+                if (!success) break;
+            }
+            if (success) {
+                job.endJob();
+                System.out.println("In thành công!");
+            } else {
+                System.out.println("In thất bại.");
+            }
+        }
+    }
+
+    private List<TextFlow> createPages(String text, double width, double height) {
+        List<TextFlow> pages = new ArrayList<>();
+        int maxLinesPerPage = (int) (height / 14); // Giả định mỗi dòng cao 14px
+        String[] lines = text.split("\n");
+        StringBuilder currentPageContent = new StringBuilder();
+        int lineCount = 0;
+        for (String line : lines) {
+            currentPageContent.append(line).append("\n");
+            lineCount++;
+            if (lineCount >= maxLinesPerPage) {
+                // Tạo TextFlow cho trang hiện tại
+                Text textNode = new Text(currentPageContent.toString());
+                textNode.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 12));
+                TextFlow textFlow = new TextFlow(textNode);
+                textFlow.setPrefWidth(width);
+                textFlow.setPrefHeight(height);
+                pages.add(textFlow);
+                currentPageContent.setLength(0);
+                lineCount = 0;
+            }
+        }
+
+        if (!currentPageContent.isEmpty()) {
+            Text textNode = new Text(currentPageContent.toString());
+            textNode.setFont(Font.font("Courier New", FontWeight.BOLD, FontPosture.REGULAR, 12));
+            TextFlow textFlow = new TextFlow(textNode);
+            textFlow.setPrefWidth(width);
+            textFlow.setPrefHeight(height);
+
+            pages.add(textFlow);
+        }
+        return pages;
+    }
+
+    @FXML
+    void saveAsImageButtonAction(ActionEvent event) {
+
+    }
+
 }
