@@ -6,7 +6,11 @@ import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
-import com.huongbien.entity.*;
+import com.huongbien.entity.Cuisine;
+import com.huongbien.entity.OrderDetail;
+import com.huongbien.entity.Promotion;
+import com.huongbien.entity.Table;
+import com.huongbien.utils.Converter;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
@@ -15,15 +19,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import jdk.jshell.execution.Util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,22 +39,32 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderPaymentFinalController implements Initializable {
-    @FXML private VBox screenCashMethodVBox;
-    @FXML private VBox screenBankingMethodVBox;
-    @FXML private VBox screenEWalletMethodVBox;
-    @FXML private ScrollPane cuisineScrollPane;
-    @FXML public GridPane cuisineGridPane;
-    @FXML private TextField resultField;
-    @FXML private Label resultLabel;
-    @FXML private Label finalAmountLabel;
-    @FXML private Label refundLabel;
-    @FXML private Label statusLabel;
-    @FXML private FlowPane keyFlowPaneFirst;
-    @FXML private FlowPane keyFlowPaneSecond;
-    @FXML private FlowPane keyFlowPaneThird;
+    @FXML
+    public GridPane suggestMoneyButtonContainer;
+    @FXML
+    private VBox screenCashMethodVBox;
+    @FXML
+    private VBox screenBankingMethodVBox;
+    @FXML
+    private VBox screenEWalletMethodVBox;
+    @FXML
+    private ScrollPane cuisineScrollPane;
+    @FXML
+    public GridPane cuisineGridPane;
+    @FXML
+    private TextField resultField;
+    @FXML
+    private Label resultLabel;
+    @FXML
+    private Label finalAmountLabel;
+    @FXML
+    private Label refundLabel;
+    @FXML
+    private Label statusLabel;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
+
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
@@ -166,17 +181,50 @@ public class OrderPaymentFinalController implements Initializable {
         double discountMoney = cuisineAmount * discount;
         double vat = cuisineAmount * 0.1;
         double finalAmount = tableAmount + cuisineAmount + vat - discountMoney;
-        finalAmountLabel.setText(String.format("%,.0f VNĐ", finalAmount));
+        finalAmountLabel.setText(Converter.formatMoney((int) finalAmount) + " VNĐ");
+
+        renderSuggestMoneyButtons(finalAmount);
+    }
+
+    public Button createSuggestMoneyButton(String label) {
+        Button button = new Button(label);
+        button.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        button.setFont(javafx.scene.text.Font.font("System", FontWeight.BOLD, 30));
+        button.setStyle("-fx-background-color: #fff; -fx-text-fill: #000;");
+        button.setMinSize(200, 60);
+        return button;
+    }
+
+    public void renderSuggestMoneyButtons(double finalAmount) {
+        suggestMoneyButtonContainer.getChildren().clear();
+        int buttonsPerRow = 3;
+        int[] suggestedMoneys = Utils.suggestMoneyReceived((int) finalAmount);
+        int columns = 0;
+        int rows = 0;
+        for (int label : suggestedMoneys) {
+            Button button = createSuggestMoneyButton(Converter.formatMoney(label));
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED, _ -> {
+                resultField.setText(Converter.formatMoney(label));
+                resultLabel.setText(Converter.formatMoney(label) + " VNĐ");
+                setFinalAmountInfo();
+            });
+            suggestMoneyButtonContainer.add(button, columns, rows);
+            columns++;
+            if (columns == buttonsPerRow) {
+                columns = 0;
+                rows++;
+            }
+        }
     }
 
     public void setFinalAmountInfo() {
-        double moneyFromCustomer = Double.parseDouble(resultField.getText().replace(".", "").replace(" VNĐ", ""));
-        double finalAmount = Double.parseDouble(finalAmountLabel.getText().replace(".", "").replace(" VNĐ", ""));
-        if(moneyFromCustomer > finalAmount) {
+        double moneyFromCustomer = Converter.parseMoney(resultField.getText());
+        double finalAmount = Converter.parseMoney(finalAmountLabel.getText());
+        if (moneyFromCustomer > finalAmount) {
             statusLabel.setText("Khách đưa đủ tiền");
             statusLabel.setStyle("-fx-text-fill: green");
             double refund = moneyFromCustomer - finalAmount;
-            refundLabel.setText(String.format("%,.0f VNĐ", refund));
+            refundLabel.setText(Converter.formatMoney((int) refund) + " VNĐ");
         } else {
             statusLabel.setText("Khách chưa đưa đủ tiền");
             statusLabel.setStyle("-fx-text-fill: red");
@@ -226,13 +274,14 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML
     void onNumberClicked(MouseEvent event) {
         int value = Integer.parseInt(((Pane) event.getSource()).getId().replace("keyFlowPane", ""));
-        double currentResult = Double.parseDouble(resultField.getText().replace(".", ""));
+        double currentResult = Converter.parseMoney(resultField.getText());
         double newResult = currentResult == 0 ? (double) value : currentResult * 10 + value;
-        String result = String.format("%,.0f", newResult);
+        String result = Converter.formatMoney((int) newResult);
         resultField.setText(result);
         resultLabel.setText(result + " VNĐ");
         setFinalAmountInfo();
     }
+
     @FXML
     void onSymbolClicked(MouseEvent event) {
         String symbol = ((Pane) event.getSource()).getId().replace("keyFlowPane", "");
@@ -245,25 +294,10 @@ public class OrderPaymentFinalController implements Initializable {
                 String currentText = resultField.getText().replace(".", "");
                 if (!currentText.isEmpty()) {
                     currentText = currentText.substring(0, currentText.length() - 1);
-                    String result = currentText.isEmpty() ? "0" : String.format("%,.0f", Double.parseDouble(currentText));
+                    String result = currentText.isEmpty() ? "0" : Converter.formatMoney(Converter.parseMoney(currentText));
                     resultField.setText(result);
                     resultLabel.setText(result + " VNĐ");
                 }
-                break;
-            case "First":
-                String firstValue = ((Label) keyFlowPaneFirst.getChildren().get(0)).getText();
-                resultField.setText(firstValue);
-                resultLabel.setText(firstValue + " VNĐ");
-                break;
-            case "Second":
-                String secondValue = ((Label) keyFlowPaneSecond.getChildren().get(0)).getText();
-                resultField.setText(secondValue);
-                resultLabel.setText(secondValue + " VNĐ");
-                break;
-            case "Third":
-                String thirdValue = ((Label) keyFlowPaneThird.getChildren().get(0)).getText();
-                resultField.setText(thirdValue);
-                resultLabel.setText(thirdValue + " VNĐ");
                 break;
         }
         setFinalAmountInfo();
