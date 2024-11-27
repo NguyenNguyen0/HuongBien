@@ -65,4 +65,19 @@ public class OrderDetailDAO extends GenericDAO<OrderDetail> {
         }
         return true;
     }
+
+    public int getCountOfUnitsSold(String cuisineId){
+        int count = 0;
+        String sql = "SELECT SUM(quantity) AS TongSoLuong FROM OrderDetail WHERE cuisineId = ?";
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement(sql, cuisineId);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()){
+                count = rs.getInt("TongSoLuong");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
 }

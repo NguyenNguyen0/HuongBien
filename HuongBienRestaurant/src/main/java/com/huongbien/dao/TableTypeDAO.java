@@ -52,6 +52,11 @@ public class TableTypeDAO extends GenericDAO<TableType> {
         }
     }
 
+    public String getTypeName(String name) {
+        String query = "SELECT * FROM TableType WHERE name LIKE N'%" + name + "%'";
+        return getOne(query).getTableId();
+    }
+
     public List<String> getDistinctTableType() {
         List<String> typeList = new ArrayList<>();
         String sql = "SELECT DISTINCT name FROM [TableType]";

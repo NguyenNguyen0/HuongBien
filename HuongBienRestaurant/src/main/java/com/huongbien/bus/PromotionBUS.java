@@ -4,6 +4,7 @@ package com.huongbien.bus;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.entity.Promotion;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class PromotionBUS {
@@ -51,6 +52,19 @@ public class PromotionBUS {
     public List<Promotion> getAllPromotionById(String id) {
         if (id.isBlank()) return null;
         return promotionDao.getAllById(id);
+    }
+    public List<String> getDistinctPromotionDiscount(){ return promotionDao.getDistinctPromotionDiscount(); }
+
+    public List<String> getDistinctPromotionStatus(){ return promotionDao.getDistinctPromotionStatus(); }
+
+    public List<String> getDistinctPromotionMinimumOrderAmount(){ return promotionDao.getDistinctPromotionMinimumOrderAmount(); }
+
+    public List<Promotion> getLookUpPromotion(String promotionName, LocalDate startDate, LocalDate endDate, double discount, double minimumOrderAmount, String status, int pageIndex){
+        return promotionDao.getLookUpPromotion(promotionName, startDate, endDate,discount , minimumOrderAmount, status, pageIndex);
+    }
+
+    public int getCountLookUpPromotion(String promotionName, LocalDate startDate, LocalDate endDate, double discount, double minimumOrderAmount, String status){
+        return promotionDao.getCountLookUpPromotion(promotionName, startDate, endDate,discount , minimumOrderAmount, status);
     }
 
     public List<Promotion> getPromotionByStatusWithPagination(int offset, int limit, String status) {

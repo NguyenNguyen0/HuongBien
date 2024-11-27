@@ -25,4 +25,11 @@ public class CategoryBUS {
         if (categoryId.isBlank() || categoryId.isEmpty()) return null;
         return categoryDao.getById(categoryId);
     }
+
+    public String getCategoryId(String name){
+        if(name.equals("Tất cả")){
+            return "";
+        }
+        return categoryDao.getCategoryName(name).getCategoryId();
+    }
 }

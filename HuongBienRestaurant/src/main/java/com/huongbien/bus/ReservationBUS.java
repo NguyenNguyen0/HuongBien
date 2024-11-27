@@ -3,6 +3,7 @@ package com.huongbien.bus;
 import com.huongbien.dao.ReservationDAO;
 import com.huongbien.entity.Reservation;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ReservationBUS {
@@ -25,5 +26,13 @@ public class ReservationBUS {
     public boolean addReservation(Reservation reservation) {
         if (reservation == null) return false;
         return reservationDao.add(reservation);
+    }
+
+    public List<Reservation> getLookUpReservation(String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate, int pageIndex){
+        return reservationDao.getLookUpReservation(reservationId, reservationCusId, reservationDate, receiveDate, pageIndex);
+    }
+
+    public int getCountLookUpReservation (String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate){
+        return reservationDao.getCountLookUpReservation(reservationId, reservationCusId, reservationDate, receiveDate);
     }
 }

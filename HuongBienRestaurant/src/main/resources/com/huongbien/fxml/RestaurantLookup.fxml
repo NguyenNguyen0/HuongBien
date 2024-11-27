@@ -37,21 +37,13 @@
                </HBox.margin>
             </ComboBox>
             <Pane prefHeight="200.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-            <Label text="Lưu ý cho Dev: Tránh dữ liệu cũ, tất cả comboBox đều phải get dưới database set vào &lt;/Không set cứng&gt;" textFill="RED">
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold Italic" size="20.0" />
-               </font>
-            </Label>
          </children>
       </HBox>
    </top>
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
+            <VBox fx:id="restaurantLookupTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -62,14 +54,14 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField fx:id="tabkeNameTextField" onKeyReleased="#onTableNameTextFieldKeyReleased" prefHeight="60.0" prefWidth="300.0" promptText="Tên bàn">
+                              <TextField fx:id="tableNameTextField" onKeyReleased="#onTableNameTextFieldKeyReleased" prefHeight="60.0" prefWidth="300.0" promptText="Tên bàn">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
                               </TextField>
-                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                              <Button mnemonicParsing="false" onMouseClicked="#onClearTableNameMouseClicked" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fx:id="deleteNameButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteNameButtonMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -104,7 +96,7 @@
                   <TableView fx:id="tablesTableView" prefHeight="700.0" prefWidth="1675.0">
                     <columns>
                       <TableColumn fx:id="tableFloorColumn" prefWidth="75.0" text="Khu vực tầng" />
-                      <TableColumn fx:id="tableIdColumn" prefWidth="75.0" text="Bàn" />
+                      <TableColumn fx:id="tableNameColumn" prefWidth="75.0" text="Bàn" />
                         <TableColumn fx:id="tableSeatColumn" prefWidth="75.0" text="Số chỗ" />
                         <TableColumn fx:id="tableTypeColumn" prefWidth="75.0" text="Loại bàn" />
                         <TableColumn fx:id="tableStatusColumn" prefWidth="75.0" text="Trạng thái" />
@@ -115,7 +107,7 @@
                   </TableView>
                   <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
                      <children>
-                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                        <Pagination fx:id="tablePagination" prefHeight="20.0" prefWidth="200.0">
                            <HBox.margin>
                               <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>
@@ -130,7 +122,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox fx:id="cuisineTypeComboBox" onAction="#onCuisineTypeComboBoxAction" prefHeight="60.0" prefWidth="350.0" promptText="Tất cả" />
+                              <ComboBox fx:id="cuisineCategoryComboBox" onAction="#onCuisineCategoryComboBoxAction" prefHeight="60.0" prefWidth="350.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
@@ -140,9 +132,9 @@
                                     <Font size="25.0" />
                                  </font>
                               </TextField>
-                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                              <Button mnemonicParsing="false" onMouseClicked="#onClearCuisineNameMouseClicked" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fx:id="deleteCuisineNameButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteCuisineNameButtonMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -163,7 +155,7 @@
                   </HBox>
                   <TableView fx:id="cuisinesTableView" prefHeight="700.0" prefWidth="1675.0">
                      <columns>
-                        <TableColumn fx:id="cuisineTypeColumn" prefWidth="75.0" text="Loại món" />
+                        <TableColumn fx:id="cuisineCategoryColumn" prefWidth="75.0" text="Loại món" />
                         <TableColumn fx:id="cuisineNameColumn" prefWidth="75.0" text="Tên món" />
                         <TableColumn fx:id="cuisinePriceColumn" prefWidth="75.0" text="Giá món" />
                         <TableColumn fx:id="cuisineCountSaleColumn" prefWidth="75.0" text="Lượt bán&lt;Thống kê bán chạy từ HĐ&gt;" />
@@ -174,7 +166,7 @@
                   </TableView>
                   <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
                      <children>
-                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                        <Pagination fx:id="cuisinePagination" prefHeight="20.0" prefWidth="200.0">
                            <HBox.margin>
                               <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>
@@ -194,9 +186,9 @@
                                     <Font size="23.0" />
                                  </font>
                               </TextField>
-                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                              <Button mnemonicParsing="false" onMouseClicked="#onClearPromotionNameMouseClicked" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fx:id="deletePromotionNameButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#deletePromotionNameButtonClicked" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -210,12 +202,22 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <DatePicker fx:id="promotionStartDate" onAction="#onPromotionStartDateAction" prefWidth="250.0" />
+                              <DatePicker fx:id="promotionStartDate" onAction="#onPromotionStartDateAction" prefHeight="52.0" prefWidth="334.0" />
+                              <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#onCLearPromotionStartDateMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/all/reload.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
                               <DatePicker fx:id="promotionEndDate" onAction="#onPromotionEndDateAction" prefWidth="250.0" />
+                              <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#onCLearPromotionEndDateMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/all/reload.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
@@ -225,7 +227,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <ComboBox fx:id="promotionMinimumOrderAmount" onAction="#onPromotionMinimumOrderAmountComboBoxAction" prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
+                              <ComboBox fx:id="promotionMinimumOrderAmountComboBox" onAction="#onPromotionMinimumOrderAmountComboBoxAction" prefHeight="60.0" prefWidth="250.0" promptText="Tất cả" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
@@ -253,7 +255,7 @@
                   </TableView>
                   <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
                      <children>
-                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                        <Pagination fx:id="promotionPagination" prefHeight="20.0" prefWidth="200.0">
                            <HBox.margin>
                               <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>
@@ -262,7 +264,7 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox fx:id="restaurantLookupPreOrderTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
+            <VBox fx:id="restaurantLookupPreOrderTableVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" visible="false">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -273,9 +275,9 @@
                                     <Font size="20.0" />
                                  </font>
                               </TextField>
-                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                              <Button mnemonicParsing="false" onMouseClicked="#onClearReservationIdButtonMouseClicked" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fx:id="deleteReservationIdButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteReservationIdButtonMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="deleteReservationIdButton" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -289,14 +291,14 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField fx:id="reservationCustomerNameTextField" onKeyReleased="#onReservationCustomerNameTextFieldKeyReleased" prefHeight="60.0" prefWidth="220.0" promptText="Tên khách hàng">
+                              <TextField fx:id="reservationCustomerPhoneTextField" onKeyReleased="#onReservationCustomerPhoneTextFieldKeyReleased" prefHeight="60.0" prefWidth="220.0" promptText="Số điện thoại">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </TextField>
-                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                              <Button mnemonicParsing="false" onMouseClicked="#onCLearReservationCustomerPhoneMouseClicked" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fx:id="deleteReservationCustomerName" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onDeleteReservationCustomerNameMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../icon/all/close-64px.png" />
                                        </image>
@@ -311,12 +313,22 @@
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
                               <DatePicker fx:id="reservationDate" onAction="#onReservationDateAction" prefHeight="60.0" prefWidth="250.0" />
+                              <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#onReservationDateMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/all/reload.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
                               <DatePicker fx:id="reservationReceiveDate" onAction="#onReservationReceiveDateAction" prefHeight="60.0" prefWidth="250.0" />
+                              <ImageView fitHeight="45.0" fitWidth="45.0" onMouseClicked="#onClearReceiveDateMouseClicked" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/all/reload.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -329,7 +341,7 @@
                   <TableView fx:id="reservationsTableView" prefHeight="700.0" prefWidth="1675.0">
                      <columns>
                         <TableColumn fx:id="reservationIdColumn" prefWidth="75.0" text="Mã đặt bàn" />
-                        <TableColumn fx:id="reservationCustomerNameColumn" prefWidth="75.0" text="Khách hàng" />
+                        <TableColumn fx:id="reservationCustomerPhoneColumn" prefWidth="75.0" text="Khách hàng" />
                         <TableColumn fx:id="reservationDateColumn" prefWidth="75.0" text="Ngày đặt" />
                         <TableColumn fx:id="reservationTimeColumn" prefWidth="75.0" text="Giờ đặt" />
                         <TableColumn fx:id="reservationReceiveDateColumn" prefWidth="75.0" text="Ngày nhận" />
@@ -342,7 +354,7 @@
                   </TableView>
                   <HBox alignment="CENTER" prefHeight="120.0" prefWidth="1675.0">
                      <children>
-                        <Pagination prefHeight="20.0" prefWidth="200.0">
+                        <Pagination fx:id="reservationPagination" prefHeight="20.0" prefWidth="200.0">
                            <HBox.margin>
                               <Insets bottom="10.0" top="10.0" />
                            </HBox.margin>

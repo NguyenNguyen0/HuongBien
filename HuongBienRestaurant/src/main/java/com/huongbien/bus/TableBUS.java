@@ -3,6 +3,7 @@ package com.huongbien.bus;
 
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Table;
+import javafx.scene.control.Tab;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -70,6 +71,18 @@ public class TableBUS {
 
     public List<Integer> getDistinctFloors() {
         return tableDao.getDistinctFloors();
+    }
+
+    public List<Integer> getDistinctSeats(){ return tableDao.getDistinctSeats(); }
+
+    public  List<String> getDistinctTableTypes(){ return tableDao.getDistinctTableType(); }
+
+    public List<Table> getLookUpTable(int floor, String name, int seat, String type, String status, int pageIndex){
+        return tableDao.getLookUpTable(floor, name, seat, type, status, pageIndex);
+    }
+
+    public int getCountLookUpTable(int floor, String name, int seat, String type, String status){
+        return tableDao.getCountLookUpTable(floor, name, seat, type, status);
     }
 
     public boolean updateTableStatus(String tableId, String status) {

@@ -36,6 +36,9 @@ public class CategoryDAO extends GenericDAO<Category> {
         return getMany("SELECT id, name, description FROM category WHERE name LIKE ?", "%" + name + "%");
     }
 
+    public Category getCategoryName(String name) {
+        return getOne("SELECT * FROM category WHERE name LIKE ?", "%" + name + "%");
+    }
     public Category getById(String id) {
         return getOne("SELECT id, name, description FROM category WHERE id = ?", id);
     }

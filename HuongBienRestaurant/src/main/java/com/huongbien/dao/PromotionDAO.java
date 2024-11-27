@@ -5,6 +5,9 @@ import com.huongbien.entity.Promotion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PromotionDAO extends GenericDAO<Promotion> {
@@ -125,5 +128,90 @@ public class PromotionDAO extends GenericDAO<Promotion> {
         } catch (SQLException e) {
             return false;
         }
+    }
+    public List<String> getDistinctPromotionDiscount(){
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT discount FROM [Promotion]");
+            ResultSet resultSet = statement.executeQuery();
+            List<String> promotionDiscount = new ArrayList<>();
+            while (resultSet.next()) {
+                promotionDiscount.add(String.format("%.0f%%", resultSet.getDouble("discount") * 100));
+            }
+            return promotionDiscount;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public List<String> getDistinctPromotionStatus(){
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT status FROM [Promotion]");
+            ResultSet resultSet = statement.executeQuery();
+            List<String> promotionStatus = new ArrayList<>();
+            while (resultSet.next()) {
+                promotionStatus.add(resultSet.getString("status"));
+            }
+            return promotionStatus;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getDistinctPromotionMinimumOrderAmount(){
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT minimumOrderAmount FROM [Promotion]");
+            ResultSet resultSet = statement.executeQuery();
+            List<String> promotionStatus = new ArrayList<>();
+            DecimalFormat priceFormat = new DecimalFormat("#,###");
+            while (resultSet.next()) {
+                promotionStatus.add(priceFormat.format(resultSet.getDouble("minimumOrderAmount")));
+            }
+            return promotionStatus;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Promotion> getLookUpPromotion(String promotionName, LocalDate startDate, LocalDate endDate, double discount, double minimumOrderAmount, String status, int pageIndex){
+        String sqlQuery = "SELECT * FROM promotion WHERE name LIKE N'%" + promotionName + "%' AND status LIKE N'%" + status + "%'";
+        String startDateSQL = "";
+        String endDateSQL = "";
+        String discountSQL = "";
+        String minimumOrderAmountSQL = "";
+        if (startDate != null){
+            startDateSQL = "AND startDate = '" + startDate + "' ";
+        }
+        if (endDate != null){
+            endDateSQL = "AND endDate = '" + endDate + "' ";
+        }
+        if (discount != 0){
+            discountSQL = "AND discount = " + discount +" ";
+        }
+        if (minimumOrderAmount != 0){
+            minimumOrderAmountSQL = "AND minimumOrderAmount >= "+ minimumOrderAmount +" ";
+        }
+        sqlQuery += startDateSQL + endDateSQL + discountSQL + minimumOrderAmountSQL + "ORDER BY discount OFFSET " + pageIndex + " ROWS FETCH NEXT 7 ROWS ONLY";
+        return getMany(sqlQuery);
+    }
+
+    public int getCountLookUpPromotion(String promotionName, LocalDate startDate, LocalDate endDate, double discount, double minimumOrderAmount, String status){
+        String sqlQuery = "SELECT COUNT (*) AS countRow FROM promotion WHERE name LIKE N'%" + promotionName + "%' AND status LIKE N'%" + status + "%'";
+        String startDateSQL = "";
+        String endDateSQL = "";
+        String discountSQL = "";
+        String minimumOrderAmountSQL = "";
+        if (startDate != null){
+            startDateSQL = "AND startDate = '" + startDate + "' ";
+        }
+        if (endDate != null){
+            endDateSQL = "AND endDate = '" + endDate + "' ";
+        }
+        if (discount != 0){
+            discountSQL = "AND discount = " + discount +" ";
+        }
+        if (minimumOrderAmount != 0){
+            minimumOrderAmountSQL = "AND minimumOrderAmount >= "+ minimumOrderAmount +" ";
+        }
+        sqlQuery += startDateSQL + endDateSQL + discountSQL + minimumOrderAmountSQL;
+        return count(sqlQuery);
     }
 }

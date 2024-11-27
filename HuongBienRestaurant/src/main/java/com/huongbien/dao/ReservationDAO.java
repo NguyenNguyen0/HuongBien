@@ -7,6 +7,7 @@ import com.huongbien.entity.Table;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,36 @@ public class ReservationDAO extends GenericDAO<Reservation> {
 
     public Reservation getById(String id) {
         return getOne("SELECT * FROM reservation WHERE id = ?", id);
+    }
+
+    public List<Reservation> getLookUpReservation(String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate, int pageIndex){
+        String sqlQuery = "SELECT * FROM reservation WHERE id LIKE N'%" + reservationId + "%' AND customerId LIKE N'%" + reservationCusId + "%'";
+        String reserDate = "";
+        String receiDate = "";
+        if (reservationDate != null){
+            reserDate = " AND reservationDate = '" + reservationDate + "'";
+        }
+        if (receiveDate != null){
+            receiDate = " AND receiveDate = '" + receiveDate + "'";
+        }
+        sqlQuery += reserDate + receiDate + " ORDER BY receiveDate DESC OFFSET " + pageIndex + " ROWS FETCH NEXT 7 ROWS ONLY";
+        return getMany(sqlQuery);
+    }
+
+    public int getCountLookUpReservation(String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate){
+        String sqlQuery = "SELECT COUNT (*) AS countRow FROM reservation WHERE id LIKE N'%" + reservationId + "%' AND customerId LIKE N'%" + reservationCusId + "%'";
+        String reserDate = "";
+        String receiDate = "";
+        if (reservationDate != null){
+            reserDate = " AND reservationDate = '" + reservationDate + "'";
+        }
+        if (receiveDate != null){
+            receiDate = " AND receiveDate = '" + receiveDate + "'";
+        }
+        sqlQuery += reserDate + receiDate;
+        return count(sqlQuery);
+
+
     }
 
     @Override

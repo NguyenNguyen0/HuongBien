@@ -140,7 +140,7 @@ public class PromotionManagementController implements Initializable {
             return new SimpleStringProperty(memberShipLevel);
         });
         promotionDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
-        promotionDiscountColumn.setCellFactory(ceollData -> new TableCell<>() {
+        promotionDiscountColumn.setCellFactory(cellData -> new TableCell<>() {
             @Override
             public void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);

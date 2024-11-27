@@ -150,6 +150,62 @@ public class    TableDAO extends GenericDAO<Table> {
         }
     }
 
+    public List<Integer> getDistinctSeats() {
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT seats FROM [Table]");
+            ResultSet resultSet = statement.executeQuery();
+            List<Integer> seats = new ArrayList<>();
+            while (resultSet.next()) {
+                seats.add(resultSet.getInt("seats"));
+            }
+            return seats;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getDistinctTableType() {
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT tableTypeId FROM [Table]");
+            ResultSet resultSet = statement.executeQuery();
+            List<String> tableTypes = new ArrayList<>();
+            while (resultSet.next()) {
+                tableTypes.add(resultSet.getString("tableTypeId"));
+            }
+            return tableTypes;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Table> getLookUpTable(int floor, String name, int seat, String type, String status, int pageIndex){
+        String sqlQuery = "SELECT * FROM [Table] WHERE name LIKE N'%" + name + "%' AND tableTypeId LIKE N'%" + type + "%' AND status LIKE N'%" + status + "%'";
+        String seatQuery = "";
+        String floorQuery = "";
+        if(floor != -1) {
+            floorQuery = " AND floor = " + floor;
+        }
+        if(seat != -1){
+            seatQuery = " AND seats = " + seat;
+        }
+        sqlQuery += floorQuery + seatQuery + "ORDER BY floor OFFSET " + pageIndex + " ROWS FETCH NEXT 7 ROWS ONLY";
+        return getMany(sqlQuery);
+    }
+
+    public int getCountLookUpTable(int floor, String name, int seat, String type, String status){
+        String sqlQuery = "SELECT COUNT (*) AS countRow FROM [Table] WHERE name LIKE N'%" + name + "%' AND tableTypeId LIKE N'%" + type + "%' AND status LIKE N'%" + status + "%'";
+        String seatQuery = "";
+        String floorQuery = "";
+        if(floor != -1) {
+            floorQuery = " AND floor = " + floor;
+        }
+        if(seat != -1){
+            seatQuery = " AND seats = " + seat;
+        }
+        sqlQuery += floorQuery + seatQuery;
+        return count(sqlQuery);
+    }
+
     public List<Table> getAllWithPagination(int offset, int limit) {
         return getMany("SELECT * FROM [Table] ORDER BY floor OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", offset, limit);
     }

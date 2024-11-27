@@ -21,4 +21,8 @@ public class OrderDetailBUS {
         if (orderDetail == null) return false;
         return orderDetailDao.add(orderDetail);
     }
+
+   public int getCountOfUnitsSold(String cuisineId){
+        return orderDetailDao.getCountOfUnitsSold(cuisineId);
+   }
 }

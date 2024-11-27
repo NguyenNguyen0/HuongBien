@@ -1,16 +1,17 @@
 package com.huongbien.ui.controller;
 
-import com.huongbien.entity.Cuisine;
-import com.huongbien.entity.Promotion;
-import com.huongbien.entity.Reservation;
-import com.huongbien.entity.Table;
+import com.huongbien.bus.*;
+import com.huongbien.entity.*;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -18,70 +19,131 @@ import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Timer;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class RestaurantLookupController implements Initializable {
     //Vbox1
-    @FXML private ComboBox<String> tableFloorComboBox;
-    @FXML private TextField tabkeNameTextField;
-    @FXML private ImageView deleteNameButton;
-    @FXML private ComboBox<Integer> tableSeatsComboBox;
-    @FXML private ComboBox<String> tableTypesComboBox;
-    @FXML private ComboBox<String> tableStatusComboBox;
-    @FXML private TableView<Table> tablesTableView;
-    @FXML private TableColumn<Table, String> tableFloorColumn;
-    @FXML private TableColumn<Table, String> tableIdColumn;
-    @FXML private TableColumn<Table, Integer> tableSeatColumn;
-    @FXML private TableColumn<Table, String> tableTypeColumn;
-    @FXML private TableColumn<Table, String> tableStatusColumn;
+    @FXML
+    private ComboBox<String> tableFloorComboBox;
+    @FXML
+    private TextField tableNameTextField;
+    @FXML
+    private ComboBox<String> tableSeatsComboBox;
+    @FXML
+    private ComboBox<String> tableTypesComboBox;
+    @FXML
+    private ComboBox<String> tableStatusComboBox;
+    @FXML
+    private TableView<Table> tablesTableView;
+    @FXML
+    private TableColumn<Table, String> tableFloorColumn;
+    @FXML
+    private TableColumn<Table, String> tableNameColumn;
+    @FXML
+    private TableColumn<Table, Integer> tableSeatColumn;
+    @FXML
+    private TableColumn<Table, String> tableTypeColumn;
+    @FXML
+    private TableColumn<Table, String> tableStatusColumn;
+    @FXML
+    private Pagination tablePagination;
     //Vbox2
-    @FXML private ComboBox<String> cuisineTypeComboBox;
-    @FXML private TextField cuisineNameTextField;
-    @FXML private ImageView deleteCuisineNameButton;
-    @FXML private TableView<Cuisine> cuisinesTableView;
-    @FXML private TableColumn<Cuisine, String> cuisineTypeColumn;
-    @FXML private TableColumn<Cuisine, String> cuisineNameColumn;
-    @FXML private TableColumn<Cuisine, Double> cuisinePriceColumn;
-    @FXML private TableColumn<Cuisine, Integer> cuisineCountSaleColumn;
+    @FXML
+    private ComboBox<String> cuisineCategoryComboBox;
+    @FXML
+    private TextField cuisineNameTextField;
+    @FXML
+    private TableView<Cuisine> cuisinesTableView;
+    @FXML
+    private TableColumn<Cuisine, String> cuisineCategoryColumn;
+    @FXML
+    private TableColumn<Cuisine, String> cuisineNameColumn;
+    @FXML
+    private TableColumn<Cuisine, Double> cuisinePriceColumn;
+    @FXML
+    private TableColumn<Cuisine, Integer> cuisineCountSaleColumn;
+    @FXML
+    private Pagination cuisinePagination;
     //Vbox3
-    @FXML private TextField promotionNameTextField;
-    @FXML private ImageView deletePromotionNameButton;
-    @FXML private DatePicker promotionStartDate;
-    @FXML private DatePicker promotionEndDate;
-    @FXML private ComboBox<Double> promotionDiscountComboBox;
-    @FXML private ComboBox<Double> promotionMinimumOrderAmount;
-    @FXML private ComboBox<String> promotionStatusComboBox;
-    @FXML private TableView<Promotion> promotionsTableView;
-    @FXML private TableColumn<Promotion, String> promotionNameColumn;
-    @FXML private TableColumn<Promotion, Date> promotionStartDateColumn;
-    @FXML private TableColumn<Promotion, Date> promotionEndDateColumn;
-    @FXML private TableColumn<Promotion, Double> promotionDiscountColumn;
-    @FXML private TableColumn<Promotion, Double> promotionMinimumOrderAmountColumn;
-    @FXML private TableColumn<Promotion, String> promotionStatusColumn;
+    @FXML
+    private TextField promotionNameTextField;
+    @FXML
+    private DatePicker promotionStartDate;
+    @FXML
+    private DatePicker promotionEndDate;
+    @FXML
+    private ComboBox<String> promotionDiscountComboBox;
+    @FXML
+    private ComboBox<String> promotionMinimumOrderAmountComboBox;
+    @FXML
+    private ComboBox<String> promotionStatusComboBox;
+    @FXML
+    private TableView<Promotion> promotionsTableView;
+    @FXML
+    private TableColumn<Promotion, String> promotionNameColumn;
+    @FXML
+    private TableColumn<Promotion, LocalDate> promotionStartDateColumn;
+    @FXML
+    private TableColumn<Promotion, LocalDate> promotionEndDateColumn;
+    @FXML
+    private TableColumn<Promotion, Double> promotionDiscountColumn;
+    @FXML
+    private TableColumn<Promotion, Double> promotionMinimumOrderAmountColumn;
+    @FXML
+    private TableColumn<Promotion, String> promotionStatusColumn;
+    @FXML
+    private Pagination promotionPagination;
     //Vbox4
-    @FXML private TextField reservationIdTextField;
-    @FXML private ImageView deleteReservationIdButton;
-    @FXML private TextField reservationCustomerNameTextField;
-    @FXML private ImageView deleteReservationCustomerName;
-    @FXML private DatePicker reservationDate;
-    @FXML private DatePicker reservationReceiveDate;
-    @FXML private TableView<Reservation> reservationsTableView;
-    @FXML private TableColumn<Reservation, String> reservationIdColumn;
-    @FXML private TableColumn<Reservation, String> reservationCustomerNameColumn;
-    @FXML private TableColumn<Reservation, Date> reservationDateColumn;
-    @FXML private TableColumn<Reservation, Timer> reservationTimeColumn;
-    @FXML private TableColumn<Reservation, Date> reservationReceiveDateColumn;
-    @FXML private TableColumn<Reservation, Timer> reservationReceiveTimeColumn;
-    @FXML private TableColumn<Reservation, Double> reservationDepositColumn;
+    @FXML
+    private TextField reservationCustomerPhoneTextField;
+    @FXML
+    private TextField reservationIdTextField;
+    @FXML
+    private DatePicker reservationDate;
+    @FXML
+    private DatePicker reservationReceiveDate;
+    @FXML
+    private TableView<Reservation> reservationsTableView;
+    @FXML
+    private TableColumn<Reservation, String> reservationIdColumn;
+    @FXML
+    private TableColumn<Reservation, String> reservationCustomerPhoneColumn;
+    @FXML
+    private TableColumn<Reservation, LocalDate> reservationDateColumn;
+    @FXML
+    private TableColumn<Reservation, LocalTime> reservationTimeColumn;
+    @FXML
+    private TableColumn<Reservation, LocalDate> reservationReceiveDateColumn;
+    @FXML
+    private TableColumn<Reservation, LocalTime> reservationReceiveTimeColumn;
+    @FXML
+    private TableColumn<Reservation, Double> reservationDepositColumn;
+    @FXML
+    private Pagination reservationPagination;
     //All
-    @FXML private ComboBox<String> restaurantLookupComboBox;
-    @FXML private VBox restaurantLookupCuisineVBox;
-    @FXML private VBox restaurantLookupPreOrderTableVBox;
-    @FXML private VBox restaurantLookupPromotionVBox;
-    @FXML private VBox restaurantLookupTableVBox;
+    @FXML
+    private ComboBox<String> restaurantLookupComboBox;
+    @FXML
+    private VBox restaurantLookupCuisineVBox;
+    @FXML
+    private VBox restaurantLookupPreOrderTableVBox;
+    @FXML
+    private VBox restaurantLookupPromotionVBox;
+    @FXML
+    private VBox restaurantLookupTableVBox;
+
+    //BUS area
+    private final CuisineBUS cuisineBUS = new CuisineBUS();
+    private final CategoryBUS categoryBUS = new CategoryBUS();
+    private final OrderDetailBUS orderDetailBUS = new OrderDetailBUS();
+    private final PromotionBUS promotionBUS = new PromotionBUS();
+    private final TableBUS tableBUS = new TableBUS();
+    private final TableTypeBUS tableTypeBUS = new TableTypeBUS();
+    private final ReservationBUS reservationBUS = new ReservationBUS();
+    private final CustomerBUS customerBUS = new CustomerBUS();
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -95,36 +157,358 @@ public class RestaurantLookupController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setDefaultRestaurantLookupComboBox();
         setDefaultTableView(); //set default table view display table first
-
+        setEventForPagination();
+        setValueTableComboBox();
+        setValueCuisineComboBox();
+        setValuePromotionComboBox();
     }
 
-    private void setTableViewColumn(){
-        String selectedItem = restaurantLookupComboBox.getValue();
-        switch (selectedItem) {
-            case "Bàn":
+    //function area
+    private <T> void applyDateFormat(TableColumn<T, LocalDate> column) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        column.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(formatter.format(item));
+                }
+            }
+        });
+    }
 
+    private <T> void applyCurrencyFormat(TableColumn<T, Double> column) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        column.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(decimalFormat.format(item));
+                }
+            }
+        });
+    }
+
+    private void setValueCuisineComboBox() {
+        // Lấy danh sách tên loại món
+        List<String> cuisinCategoryIdList = cuisineBUS.getCuisineCategory();
+        ObservableList<String> cuisineCategoryList = FXCollections.observableArrayList();
+        cuisineCategoryList.add("Tất cả");
+        for (String s : cuisinCategoryIdList) {
+            cuisineCategoryList.add(categoryBUS.getCategoryById(s).getName());
+        }
+        cuisineCategoryComboBox.setItems(cuisineCategoryList);
+        selectFirstWithoutAction(cuisineCategoryComboBox);
+    }
+
+    private void setValueTableComboBox() {
+        // Lấy danh sách tầng
+        ObservableList<String> tableFloorList = FXCollections.observableArrayList();
+        tableFloorList.add("Tất cả");
+        for (int i = 0; i < tableBUS.getDistinctFloors().size(); i++) {
+            if (tableBUS.getDistinctFloors().get(i).equals(0)) {
+                tableFloorList.add("Tầng trệt");
+            } else {
+                tableFloorList.add("Tầng " + tableBUS.getDistinctFloors().get(i));
+            }
+        }
+        tableFloorComboBox.setItems(tableFloorList);
+
+        // Lấy danh sách chỗ ngồi
+        ObservableList<String> tableSeatList = FXCollections.observableArrayList();
+        tableSeatList.add("Tất cả");
+        for (int i = 0; i < tableBUS.getDistinctSeats().size(); i++) {
+            tableSeatList.add(tableBUS.getDistinctSeats().get(i) + "");
+        }
+        tableSeatsComboBox.setItems(tableSeatList);
+
+        // Lấy danh sách loại bàn
+        ObservableList<String> tableTypeList = FXCollections.observableArrayList();
+        tableTypeList.add("Tất cả");
+        List<String> getTypeListFromTable = tableBUS.getDistinctTableTypes();
+        for (String s : getTypeListFromTable) {
+            tableTypeList.add(tableTypeBUS.getTableTypeName(s).getName());
+        }
+        tableTypesComboBox.setItems(tableTypeList);
+
+        // Lấy danh sách trạng thái bàn
+        ObservableList<String> tableStatusesList = FXCollections.observableArrayList();
+        tableStatusesList.add("Tất cả");
+        tableStatusesList.addAll(tableBUS.getDistinctStatuses());
+        tableStatusComboBox.setItems(tableStatusesList);
+
+        // Cài đặt mặc định cho các combobox
+        selectFirstWithoutAction(tableFloorComboBox);
+        selectFirstWithoutAction(tableStatusComboBox);
+        selectFirstWithoutAction(tableSeatsComboBox);
+        selectFirstWithoutAction(tableTypesComboBox);
+    }
+
+    private void setValuePromotionComboBox() {
+        // Lấy danh sách giảm giá %
+        ObservableList<String> promotionDiscountList = FXCollections.observableArrayList();
+        promotionDiscountList.add("Tất cả");
+        List<String> discountList = promotionBUS.getDistinctPromotionDiscount();
+        promotionDiscountList.addAll(discountList);
+        promotionDiscountComboBox.setItems(promotionDiscountList);
+
+        // Lấy danh sách trạng thái
+        ObservableList<String> promotionStatusList = FXCollections.observableArrayList();
+        promotionStatusList.add("Tất cả");
+        List<String> statusList = promotionBUS.getDistinctPromotionStatus();
+        promotionStatusList.addAll(statusList);
+        promotionStatusComboBox.setItems(promotionStatusList);
+
+        // Lấy danh sách minimumOrderAmount
+        ObservableList<String> promotionMinimumOrderAmountList = FXCollections.observableArrayList();
+        promotionMinimumOrderAmountList.add("Tất cả");
+        List<String> minimumOrderAmountList = promotionBUS.getDistinctPromotionMinimumOrderAmount();
+        promotionMinimumOrderAmountList.addAll(minimumOrderAmountList);
+        promotionMinimumOrderAmountComboBox.setItems(promotionMinimumOrderAmountList);
+
+        //Đặt giá trị mặc đinh
+        selectFirstWithoutAction(promotionMinimumOrderAmountComboBox);
+        selectFirstWithoutAction(promotionStatusComboBox);
+        selectFirstWithoutAction(promotionDiscountComboBox);
+    }
+
+    private void setPaginationPageCount(Pagination pagination, int pageCount) {
+        pagination.setPageCount(pageCount / 7 + 1);
+    }
+
+    private void setEventForPagination() {
+        //TablePagination
+        tablePagination.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            setTableViewColumn();
+            event.consume();  // Ngừng sự kiện để không tiếp tục được xử lý
+        });
+        //CuisinePagination
+        cuisinePagination.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            setTableViewColumn();
+            event.consume();  // Ngừng sự kiện để không tiếp tục được xử lý
+        });
+        //PromotionPagination
+        promotionPagination.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            setTableViewColumn();
+            event.consume();  // Ngừng sự kiện để không tiếp tục được xử lý
+        });
+        //ReservationPagination
+        reservationPagination.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            setTableViewColumn();
+            event.consume();  // Ngừng sự kiện để không tiếp tục được xử lý
+        });
+    }
+
+    private void setTableViewColumn() {
+        String selectedItem = restaurantLookupComboBox.getValue();
+        int pageIndex = 0;
+        int pageCount = 0;
+        switch (selectedItem) {
+            // LOAD DANH SÁCH BÀN
+            case "Bàn":
+                tablesTableView.getItems().clear();
+                //Lấy dữ liệu để tra cứu
+                String tableName = tableNameTextField.getText();
+                String tableTypeId = "";
+                String tableTypeName = tableTypesComboBox.getValue();
+                if (!tableTypesComboBox.getSelectionModel().isSelected(0)) {
+                    tableTypeId = tableTypeBUS.getTableTypeId(tableTypeName);
+                }
+                int tableFloor = switch (tableFloorComboBox.getValue()) {
+                    case "Tầng trệt" -> 0;
+                    case "Tầng 1" -> 1;
+                    case "Tầng 2" -> 2;
+                    default -> -1;
+                };
+                int tableSeat = -1;
+                if (!tableSeatsComboBox.getSelectionModel().isSelected(0)) {
+                    tableSeat = Integer.parseInt(tableSeatsComboBox.getValue());
+                }
+                String tableStatus = "";
+                if (!tableStatusComboBox.getSelectionModel().isSelected(0)) {
+                    tableStatus = tableStatusComboBox.getValue();
+                }
+                //Cài đặt Pagination
+                pageCount = tableBUS.getCountLookUpTable(tableFloor, tableName, tableSeat, tableTypeId, tableStatus);
+                setPaginationPageCount(tablePagination, pageCount);
+                pageIndex = tablePagination.getCurrentPageIndex() * 7;
+                //Đổ dữ liệu vào bảng
+                List<Table> tableList = tableBUS.getLookUpTable(tableFloor, tableName, tableSeat, tableTypeId, tableStatus, pageIndex);
+                ObservableList<Table> tableObservableList = FXCollections.observableArrayList(tableList);
+                if (tableList.isEmpty()) {
+                    Label placeholder = new Label("Không có bàn");
+                    placeholder.setStyle("-fx-text-fill: #ccc; -fx-font-size: 24px; -fx-font-weight: bold;");
+                    tablesTableView.setPlaceholder(placeholder);
+                } else {
+                    tableFloorColumn.setCellValueFactory(cellData -> {
+                        String floor = switch (cellData.getValue().getFloor() + "") {
+                            case "1" -> "Tầng 1";
+                            case "2" -> "Tầng 2";
+                            default -> "Tầng trệt";
+                        };
+                        return new SimpleStringProperty(floor);
+                    });
+                    tableNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+                    tableSeatColumn.setCellValueFactory(new PropertyValueFactory<>("seats"));
+                    tableTypeColumn.setCellValueFactory(cellData -> {
+                        String type = tableTypeBUS.getTableTypeName(cellData.getValue().getTableType().getTableId()).getName();
+                        return new SimpleStringProperty(type);
+                    });
+                    tableStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+                }
+                tablesTableView.setItems(tableObservableList);
                 break;
+            // LOAD DANH SÁCH MÓN ĂN
             case "Món ăn":
-                restaurantMainController.featureTitleLabel.setText("Tra cứu món ăn");
-                restaurantLookupCuisineVBox.setVisible(true);
+                cuisinesTableView.getItems().clear();
+                //Lấy dữ liệu để tra cứu
+                String cuisineName = cuisineNameTextField.getText();
+                String categoryName = categoryBUS.getCategoryId(cuisineCategoryComboBox.getValue());
+                //Cài đặt Pagination
+                pageCount = cuisineBUS.getCountLookUpCuisine(cuisineName, categoryName);
+                setPaginationPageCount(cuisinePagination, pageCount);
+                pageIndex = cuisinePagination.getCurrentPageIndex() * 7;
+                //Đổ dữ liệu vào bảng
+                List<Cuisine> cuisineList = cuisineBUS.getLookUpCuisine(cuisineName, categoryName, pageIndex);
+                ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
+                if (cuisineList.isEmpty()) {
+                    Label placeholder = new Label("Không có món ăn");
+                    placeholder.setStyle("-fx-text-fill: #ccc; -fx-font-size: 24px; -fx-font-weight: bold;");
+                    cuisinesTableView.setPlaceholder(placeholder);
+                } else {
+                    cuisineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+                    cuisineCategoryColumn.setCellValueFactory(cellData -> {
+                        String category = categoryBUS.getCategoryById(cellData.getValue().getCategory().getCategoryId()).getName();
+                        return new SimpleStringProperty(category);
+                    });
+                    cuisinePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+                    applyCurrencyFormat(cuisinePriceColumn);
+                    cuisineCountSaleColumn.setCellValueFactory(cellData -> {
+                        int countOfUnitsSold = orderDetailBUS.getCountOfUnitsSold(cellData.getValue().getCuisineId());
+                        return new ReadOnlyObjectWrapper<>(countOfUnitsSold);
+                    });
+                    cuisinesTableView.setItems(listCuisine);
+                }
                 break;
+            // LOAD DANH SÁCH KHUYẾN MÃI
             case "Khuyến mãi":
-                restaurantMainController.featureTitleLabel.setText("Tra cứu khuyến mãi");
-                restaurantLookupPromotionVBox.setVisible(true);
+                promotionsTableView.getItems().clear();
+                //Lấy dữ liệu để tra cứu
+                String promotionName = promotionNameTextField.getText();
+                LocalDate promotionStart = promotionStartDate.getValue();
+                LocalDate promotionEnd = promotionEndDate.getValue();
+                double promotionDiscount = 0;
+
+                if (!promotionDiscountComboBox.getSelectionModel().isSelected(0)) {
+                    String discount = promotionDiscountComboBox.getValue().replace("%", "");
+                    promotionDiscount = Double.parseDouble(discount) / 100;
+                }
+                double promotionMinimumOrderAmount = 0;
+                if (!promotionMinimumOrderAmountComboBox.getSelectionModel().isSelected(0)) {
+                    String minimumOrderAmount = promotionMinimumOrderAmountComboBox.getValue().replace(",", "");
+                    promotionMinimumOrderAmount = Double.parseDouble(minimumOrderAmount);
+                }
+                String promotionStatus = "";
+                if (!promotionStatusComboBox.getSelectionModel().isSelected(0)) {
+                    promotionStatus = promotionStatusComboBox.getValue();
+                }
+                //Cài đặt Pagination
+                pageCount = promotionBUS.getCountLookUpPromotion(promotionName, promotionStart, promotionEnd, promotionDiscount, promotionMinimumOrderAmount, promotionStatus);
+                setPaginationPageCount(promotionPagination, pageCount);
+                pageIndex = promotionPagination.getCurrentPageIndex() * 7;
+                //Đổ dữ liệu vào bảng
+                List<Promotion> promotionList = promotionBUS.getLookUpPromotion(promotionName, promotionStart, promotionEnd, promotionDiscount, promotionMinimumOrderAmount, promotionStatus, pageIndex);
+                ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+                if (promotionList.isEmpty()) {
+                    Label placeholder = new Label("Không có món ăn");
+                    placeholder.setStyle("-fx-text-fill: #ccc; -fx-font-size: 24px; -fx-font-weight: bold;");
+                    promotionsTableView.setPlaceholder(placeholder);
+                } else {
+                    promotionNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+                    promotionStartDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+                    applyDateFormat(promotionStartDateColumn);
+                    promotionEndDateColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+                    applyDateFormat(promotionEndDateColumn);
+                    promotionDiscountColumn.setCellFactory(cellData -> new TableCell<>() {
+                        @Override
+                        public void updateItem(Double item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || item == null) {
+                                setText(null);
+                            } else {
+                                // Chuyển đổi và định dạng giá trị thành phần trăm
+                                setText(String.format("%.0f%%", item * 100));
+                            }
+                        }
+                    });
+                    promotionDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
+                    promotionMinimumOrderAmountColumn.setCellValueFactory(new PropertyValueFactory<>("minimumOrderAmount"));
+                    applyCurrencyFormat(promotionMinimumOrderAmountColumn);
+                    promotionStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+                    promotionsTableView.setItems(listPromotion);
+                }
                 break;
+            // LOAD DANH SÁCH ĐƠN ĐẶT TRƯỚC
             case "Đơn đặt trước":
-                restaurantMainController.featureTitleLabel.setText("Tra cứu đơn đặt trước");
-                restaurantLookupPreOrderTableVBox.setVisible(true);
+                reservationsTableView.getItems().clear();
+                //Lấy dữ diệu tra cứu
+                String reservationId = reservationIdTextField.getText();
+                String reservationCustomerPhone = reservationCustomerPhoneTextField.getText();
+                LocalDate getReservationDate = reservationDate.getValue();
+                LocalDate getReservationReceiveDate = reservationReceiveDate.getValue();
+                //Cài đặt Pagination
+                pageCount = reservationBUS.getCountLookUpReservation(reservationId, reservationCustomerPhone, getReservationDate, getReservationReceiveDate);
+                setPaginationPageCount(reservationPagination, pageCount);
+                pageIndex = (reservationPagination.getCurrentPageIndex()) * 7;
+                List<Reservation> reservationList = reservationBUS.getLookUpReservation(reservationId, reservationCustomerPhone, getReservationDate, getReservationReceiveDate, pageIndex);
+                //Đổ dữ liệu vào bảng
+                ObservableList<Reservation> listReservation = FXCollections.observableArrayList(reservationList);
+                if (reservationList.isEmpty()) {
+                    Label placeholder = new Label("Không có đơn đặt");
+                    placeholder.setStyle("-fx-text-fill: #ccc; -fx-font-size: 24px; -fx-font-weight: bold;");
+                    reservationsTableView.setPlaceholder(placeholder);
+                } else {
+                    reservationIdColumn.setCellValueFactory(new PropertyValueFactory<>("reservationId"));
+                    reservationCustomerPhoneColumn.setCellValueFactory(cellData -> {
+                        String phone = customerBUS.getCustomer(cellData.getValue().getCustomer().getCustomerId()).getPhoneNumber();
+                        return new SimpleStringProperty(phone);
+                    });
+                    reservationDateColumn.setCellValueFactory(new PropertyValueFactory<>("reservationDate"));
+                    applyDateFormat(reservationDateColumn);
+
+                    reservationReceiveDateColumn.setCellValueFactory(new PropertyValueFactory<>("receiveDate"));
+                    applyDateFormat(reservationReceiveDateColumn);
+
+                    reservationDepositColumn.setCellValueFactory(new PropertyValueFactory<>("deposit"));
+                    applyCurrencyFormat(reservationDepositColumn);
+
+                    reservationTimeColumn.setCellValueFactory(new PropertyValueFactory<>("reservationTime"));
+                    reservationReceiveTimeColumn.setCellValueFactory(new PropertyValueFactory<>("receiveTime"));
+                    reservationsTableView.setItems(listReservation);
+                }
                 break;
         }
     }
 
-    //function area
+    private void selectFirstWithoutAction(ComboBox<String> comboBox) {
+        EventHandler<ActionEvent> currentHandler = comboBox.getOnAction();
+        comboBox.setOnAction(null);
+        comboBox.getSelectionModel().selectFirst();
+        comboBox.setOnAction(currentHandler);
+    }
+
     private void setDefaultTableView() {
         restaurantLookupTableVBox.setVisible(true);
         restaurantLookupCuisineVBox.setVisible(false);
         restaurantLookupPromotionVBox.setVisible(false);
         restaurantLookupPreOrderTableVBox.setVisible(false);
+        setValueTableComboBox();
+        setTableViewColumn();
     }
 
     private void setDefaultRestaurantLookupComboBox() {
@@ -134,11 +518,12 @@ public class RestaurantLookupController implements Initializable {
         restaurantLookupList.add("Khuyến mãi");
         restaurantLookupList.add("Đơn đặt trước");
         restaurantLookupComboBox.setItems(restaurantLookupList);
-        restaurantLookupComboBox.setConverter(new StringConverter<String>() {
+        restaurantLookupComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String object) {
                 return object;
             }
+
             @Override
             public String fromString(String string) {
                 return string;
@@ -161,93 +546,185 @@ public class RestaurantLookupController implements Initializable {
             case "Bàn":
                 restaurantMainController.featureTitleLabel.setText("Tra cứu bàn");
                 restaurantLookupTableVBox.setVisible(true);
+                tableNameTextField.clear();
+                selectFirstWithoutAction(tableTypesComboBox);
+                selectFirstWithoutAction(tableStatusComboBox);
+                selectFirstWithoutAction(tableFloorComboBox);
+                selectFirstWithoutAction(tableSeatsComboBox);
                 setTableViewColumn();
                 break;
             case "Món ăn":
                 restaurantMainController.featureTitleLabel.setText("Tra cứu món ăn");
                 restaurantLookupCuisineVBox.setVisible(true);
+                cuisineNameTextField.clear();
+                selectFirstWithoutAction(cuisineCategoryComboBox);
                 setTableViewColumn();
                 break;
             case "Khuyến mãi":
                 restaurantMainController.featureTitleLabel.setText("Tra cứu khuyến mãi");
                 restaurantLookupPromotionVBox.setVisible(true);
+                promotionNameTextField.clear();
+                promotionEndDate.setValue(null);
+                promotionStartDate.setValue(null);
+                selectFirstWithoutAction(promotionMinimumOrderAmountComboBox);
+                selectFirstWithoutAction(promotionStatusComboBox);
+                selectFirstWithoutAction(promotionDiscountComboBox);
                 setTableViewColumn();
                 break;
             case "Đơn đặt trước":
                 restaurantMainController.featureTitleLabel.setText("Tra cứu đơn đặt trước");
                 restaurantLookupPreOrderTableVBox.setVisible(true);
+                reservationIdTextField.clear();
+                reservationCustomerPhoneTextField.clear();
                 setTableViewColumn();
                 break;
         }
     }
 
-    public void onTableFloorComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onTableNameTextFieldKeyReleased(KeyEvent keyEvent) {
+        setTableViewColumn();
     }
 
-    public void onTableNameTextFieldKeyReleased(KeyEvent keyEvent) {
+    @FXML
+    void onClearTableNameMouseClicked(MouseEvent mouseEvent) {
+        tableNameTextField.clear();
+        tableNameTextField.requestFocus();
+        setTableViewColumn();
     }
 
-    public void onDeleteNameButtonMouseClicked(MouseEvent mouseEvent) {
+    @FXML
+    void onTableFloorComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onTableSeatsComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onTableSeatsComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onTableTypesComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onTableTypesComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onTableStatusComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onTableStatusComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onCuisineTypeComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onCuisineCategoryComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onCuisineNameTextFieldKeyReleased(KeyEvent keyEvent) {
+    @FXML
+    void onCuisineNameTextFieldKeyReleased(KeyEvent keyEvent) {
+        setTableViewColumn();
     }
 
-    public void onDeleteCuisineNameButtonMouseClicked(MouseEvent mouseEvent) {
+    @FXML
+    void onClearCuisineNameMouseClicked(MouseEvent mouseEvent) {
+        cuisineNameTextField.setText("");
+        cuisineNameTextField.requestFocus();
+        setTableViewColumn();
     }
 
-    public void onPromotionNameTextFieldKeyReleased(KeyEvent keyEvent) {
+    @FXML
+    void onPromotionNameTextFieldKeyReleased(KeyEvent keyEvent) {
+        setTableViewColumn();
     }
 
-    public void deletePromotionNameButtonClicked(MouseEvent mouseEvent) {
+    @FXML
+    void onClearPromotionNameMouseClicked(MouseEvent mouseEvent) {
+        promotionNameTextField.clear();
+        promotionNameTextField.requestFocus();
+        setTableViewColumn();
     }
 
-    public void onPromotionStartDateAction(ActionEvent actionEvent) {
+    @FXML
+    void onPromotionStartDateAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onPromotionEndDateAction(ActionEvent actionEvent) {
+    @FXML
+    void onPromotionEndDateAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onPromotionDiscountComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onCLearPromotionStartDateMouseClicked(MouseEvent mouseEvent) {
+        promotionStartDate.setValue(null);
+        setTableViewColumn();
     }
 
-    public void onPromotionMinimumOrderAmountComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onCLearPromotionEndDateMouseClicked(MouseEvent mouseEvent) {
+        promotionEndDate.setValue(null);
+        setTableViewColumn();
     }
 
-    public void onPromotionStatusComboBoxAction(ActionEvent actionEvent) {
+    @FXML
+    void onPromotionDiscountComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onReservationIdTextFieldKeyReleased(KeyEvent keyEvent) {
+    @FXML
+    void onPromotionMinimumOrderAmountComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onDeleteReservationIdButtonMouseClicked(MouseEvent mouseEvent) {
+    @FXML
+    void onPromotionStatusComboBoxAction(ActionEvent actionEvent) {
+        setTableViewColumn();
     }
 
-    public void onReservationCustomerNameTextFieldKeyReleased(KeyEvent keyEvent) {
+    @FXML
+    void onReservationIdTextFieldKeyReleased(KeyEvent keyEvent) {
+        setTableViewColumn();
     }
 
-    public void onDeleteReservationCustomerNameMouseClicked(MouseEvent mouseEvent) {
+    @FXML
+    void onClearReservationIdButtonMouseClicked(MouseEvent mouseEvent) {
+        reservationIdTextField.clear();
+        reservationIdTextField.requestFocus();
+        setTableViewColumn();
     }
 
-    public void onReservationDateAction(ActionEvent actionEvent) {
+    @FXML
+    void onReservationCustomerPhoneTextFieldKeyReleased(KeyEvent keyEvent) {
+        setTableViewColumn();
     }
 
-    public void onReservationReceiveDateAction(ActionEvent actionEvent) {
+    @FXML
+    void onCLearReservationCustomerPhoneMouseClicked(MouseEvent mouseEvent) {
+        reservationCustomerPhoneTextField.clear();
+        reservationCustomerPhoneTextField.requestFocus();
+        setTableViewColumn();
+    }
+
+    @FXML
+    void onReservationDateAction(ActionEvent actionEvent) {
+        setTableViewColumn();
+    }
+
+    @FXML
+    void onReservationReceiveDateAction(ActionEvent actionEvent) {
+        setTableViewColumn();
+    }
+
+    @FXML
+    void onReservationDateMouseClicked(MouseEvent mouseEvent) {
+        reservationDate.setValue(null);
+        setTableViewColumn();
+    }
+
+    @FXML
+    void onClearReceiveDateMouseClicked(MouseEvent mouseEvent) {
+        reservationReceiveDate.setValue(null);
+        setTableViewColumn();
     }
 
     //---TODO: add more event
-
 
 }
