@@ -25,4 +25,14 @@ public class Converter {
     public static Image bytesToImage(byte[] bytes) {
         return new Image(bytesToInputStream(bytes));
     }
+
+    //  format tiền từ số nguyên thành chuỗi có dấu phẩy
+    public static String formatMoney(int money) {
+        return String.format("%,d", money);
+    }
+
+    //  chuyển chuỗi có dấu phẩy thành số nguyên
+    public static int parseMoney(String money) {
+        return Integer.parseInt(money.replaceAll("[^\\d]", ""));
+    }
 }

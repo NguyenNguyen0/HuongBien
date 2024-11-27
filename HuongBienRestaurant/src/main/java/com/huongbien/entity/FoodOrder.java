@@ -23,6 +23,10 @@ public class FoodOrder {
     public FoodOrder() {
     }
 
+    public double calculateSubTotal() {
+        return salePrice * quantity;
+    }
+
     public void setFoodOrderId(String foodOrderId) {
         if (foodOrderId != null && foodOrderId.length() == 17) {
             this.foodOrderId = String.format("%sDM%03d", foodOrderId, Utils.randomNumber(1, 999));

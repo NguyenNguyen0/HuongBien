@@ -102,21 +102,29 @@ public class ReservationDAO extends GenericDAO<Reservation> {
 
     @Override
     public boolean add(Reservation object) {
-        String sql = "INSERT INTO reservation (id, partyType, partySize, reservationDate, reservationTime, receiveDate, status, deposit, refundDeposit, employeeId, customerId, paymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = """
+               INSERT INTO reservation (
+               id, partyType, partySize, reservationDate, reservationTime, receiveDate, receiveTime, status,
+               deposit, refundDeposit, employeeId, customerId, paymentId)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
         try {
-            PreparedStatement statement = statementHelper.prepareStatement(sql);
-            statement.setString(1, object.getReservationId());
-            statement.setString(2, object.getPartyType());
-            statement.setInt(3, object.getPartySize());
-            statement.setDate(4, java.sql.Date.valueOf(object.getReservationDate()));
-            statement.setTime(5, java.sql.Time.valueOf(object.getReservationTime()));
-            statement.setDate(6, java.sql.Date.valueOf(object.getReceiveDate()));
-            statement.setString(7, object.getStatus());
-            statement.setDouble(8, object.getDeposit());
-            statement.setDouble(9, object.getRefundDeposit());
-            statement.setString(10, object.getEmployee().getEmployeeId());
-            statement.setString(11, object.getCustomer().getCustomerId());
-            statement.setString(12, object.getPayment() == null ? null : object.getPayment().getPaymentId());
+            PreparedStatement statement = statementHelper.prepareStatement(
+                    sql,
+                    object.getReservationId(),
+                    object.getPartyType(),
+                    object.getPartySize(),
+                    object.getReservationDate(),
+                    object.getReservationTime(),
+                    object.getReceiveDate(),
+                    object.getReceiveTime(),
+                    object.getStatus(),
+                    object.getDeposit(),
+                    object.getRefundDeposit(),
+                    object.getEmployee().getEmployeeId(),
+                    object.getCustomer().getCustomerId(),
+                    object.getPayment() == null ? null : object.getPayment().getPaymentId()
+            );
 
             if (object.getPayment() != null) paymentDao.add(object.getPayment());
 

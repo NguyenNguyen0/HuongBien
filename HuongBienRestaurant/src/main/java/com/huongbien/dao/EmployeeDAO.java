@@ -35,6 +35,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
         employee.setWorkHours(resultSet.getDouble("workHours"));
         employee.setHourlyPay(resultSet.getDouble("hourlyPay"));
         employee.setSalary(resultSet.getDouble("salary"));
+        employee.setProfileImage(resultSet.getBytes("profileImage"));
         String managerId = resultSet.getString("managerId");
         employee.setManager(managerId == null ? null : getOne("SELECT * FROM Employee WHERE id = ?;", managerId));
         return employee;
@@ -98,19 +99,57 @@ public class EmployeeDAO extends GenericDAO<Employee> {
         };
     }
 
+    public List<Employee> getAllWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM Employee ORDER BY position OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", offset, limit);
+    }
+
+    public List<Employee> getAllStillWorkingWithPagination(int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE status = N'Đang làm' ORDER BY position OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", offset, limit);
+    }
+
+    public List<Employee> getByPositionWithPagination(String position, int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE position LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", "%" + position, offset, limit);
+    }
+
+    public List<Employee> getByPhoneNumberWithPagination(String phoneNumber, int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE phoneNumber LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", phoneNumber + "%", offset, limit);
+    }
+
+    public List<Employee> getByNameWithPagination(String name, int offset, int limit) {
+        return getMany("SELECT * FROM Employee WHERE name LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", "%" + name + "%", offset, limit);
+    }
+
+    public int countByPhoneNumber(String phoneNumber) {
+        return count("SELECT COUNT(*) FROM Employee WHERE phoneNumber LIKE ?;", phoneNumber + "%");
+    }
+
+    public int countByName(String name) {
+        return count("SELECT COUNT(*) FROM Employee WHERE name LIKE ?;", "%" + name + "%");
+    }
+
+    public int countByPosition(String position) {
+        return count("SELECT COUNT(*) FROM Employee WHERE position LIKE ?;", "%" + position);
+    }
+
+    public int countStillWorking() {
+        return count("SELECT COUNT(*) FROM Employee WHERE status = N'Đang làm';");
+    }
+
+    public int countAll() {
+        return count("SELECT COUNT(*) FROM Employee;");
+    }
+
     public boolean updateStatus(String id, String status) {
         return update("UPDATE Employee SET status = ? WHERE id = ?;", status, id);
     }
 
     public boolean updateEmployeeInfo(Employee employee) {
-        String sql = "UPDATE Employee SET name = ?, phoneNumber = ?, citizenIDNumber = ?, gender = ?, address = ?, birthday = ?, email = ?, status = ?, hireDate = ?, position = ?, workHours = ?, hourlyPay = ?, salary = ?, managerId = ? WHERE id = ?";
+        String sql = "UPDATE Employee SET name = ?, phoneNumber = ?, citizenIDNumber = ?, gender = ?, address = ?, birthday = ?, email = ?, status = ?, hireDate = ?, position = ?, workHours = ?, hourlyPay = ?, salary = ?, profileImage = ?, managerId = ? WHERE id = ?";
         return update(sql,
-                employee.getStatus(),
-                employee.getEmployeeId(),
                 employee.getName(),
                 employee.getPhoneNumber(),
                 employee.getCitizenIDNumber(),
-                employee.isGender(),
+                employee.getGender(),
                 employee.getAddress(),
                 employee.getBirthday(),
                 employee.getEmail(),
@@ -120,15 +159,19 @@ public class EmployeeDAO extends GenericDAO<Employee> {
                 employee.getWorkHours(),
                 employee.getHourlyPay(),
                 employee.getSalary(),
-                employee.getManager() != null ? employee.getManager().getEmployeeId() : null);
+                employee.getProfileImage(),
+                employee.getManager() != null ? employee.getManager().getEmployeeId() : null,
+                employee.getEmployeeId());
     }
 
     @Override
     public boolean add(Employee object) {
         String sql = """
-                    INSERT INTO Employee (id, name, phoneNumber, citizenIDNumber, gender, address, birthday, email, status, hireDate, position, workHours, hourlyPay, salary, managerId)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """;
+            INSERT INTO Employee (
+                id, name, phoneNumber, citizenIDNumber, gender, address, birthday, email,
+                status, hireDate, position, workHours, hourlyPay, salary, profileImage, managerId)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
         try {
             PreparedStatement statement = statementHelper.prepareStatement(
                     sql,
@@ -136,7 +179,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
                     object.getName(),
                     object.getPhoneNumber(),
                     object.getCitizenIDNumber(),
-                    object.isGender(),
+                    object.getGender(),
                     object.getAddress(),
                     object.getBirthday(),
                     object.getEmail(),
@@ -146,6 +189,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
                     object.getWorkHours(),
                     object.getHourlyPay(),
                     object.getSalary(),
+                    object.getProfileImage(),
                     object.getManager() != null ? object.getManager().getEmployeeId() : null
             );
             int rowAffected = statement.executeUpdate();

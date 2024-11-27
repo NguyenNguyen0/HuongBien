@@ -106,21 +106,29 @@ public class OrderDAO extends GenericDAO<Order> {
 
     @Override
     public boolean add(Order object) {
-        String sql = "INSERT INTO [Order] (id, orderDate, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount, customerId, employeeId, promotionId, paymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = """
+            INSERT INTO [Order] (
+                id, orderDate, orderTime, notes, vatTax, paymentAmount, dispensedAmount, totalAmount, discount,
+                customerId, employeeId, promotionId, paymentId)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
         try {
-            PreparedStatement statement = statementHelper.prepareStatement(sql);
-            statement.setString(1, object.getOrderId());
-            statement.setDate(2, java.sql.Date.valueOf(object.getOrderDate()));
-            statement.setString(3, object.getNotes());
-            statement.setDouble(4, object.getVatTax());
-            statement.setDouble(5, object.getPaymentAmount());
-            statement.setDouble(6, object.getDispensedAmount());
-            statement.setDouble(7, object.getTotalAmount());
-            statement.setDouble(8, object.getDiscount());
-            statement.setString(9, object.getCustomer().getCustomerId());
-            statement.setString(10, object.getEmployee().getEmployeeId());
-            statement.setString(11, object.getPromotion() != null ? object.getPromotion().getPromotionId() : null);
-            statement.setString(12, object.getPayment() != null ? object.getPayment().getPaymentId() : null);
+            PreparedStatement statement = statementHelper.prepareStatement(
+                    sql,
+                    object.getOrderId(),
+                    object.getOrderDate(),
+                    object.getOrderTime(),
+                    object.getNotes(),
+                    object.getVatTax(),
+                    object.getPaymentAmount(),
+                    object.getDispensedAmount(),
+                    object.getTotalAmount(),
+                    object.getDiscount(),
+                    object.getCustomer().getCustomerId(),
+                    object.getEmployee().getEmployeeId(),
+                    object.getPromotion() != null ? object.getPromotion().getPromotionId() : null,
+                    object.getPayment() != null ? object.getPayment().getPaymentId() : null
+            );
             paymentDao.add(object.getPayment());
 
             int rowAffected = statement.executeUpdate();

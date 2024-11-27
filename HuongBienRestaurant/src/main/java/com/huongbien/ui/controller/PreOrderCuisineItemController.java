@@ -8,7 +8,6 @@ import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -18,20 +17,18 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
-public class OrderCuisineItemController {
+public class PreOrderCuisineItemController {
     @FXML private Circle cuisineImageCircle;
     @FXML private Label cuisineIdLabel;
     @FXML private Label cuisineNameLabel;
     @FXML private Label cuisineSalePriceLabel;
 
     //Controller area
-    public OrderCuisineController orderCuisineController;
-    public void setOrderCuisineController(OrderCuisineController orderCuisineController) {
-        this.orderCuisineController = orderCuisineController;
+    public PreOrderCuisineController preOrderCuisineController;
+    public void setPreOrderCuisineController(PreOrderCuisineController preOrderCuisineController) {
+        this.preOrderCuisineController = preOrderCuisineController;
     }
 
     public void setCuisineData(Cuisine cuisine) {
@@ -95,9 +92,9 @@ public class OrderCuisineItemController {
         CuisineDAO cuisineDAO = CuisineDAO.getInstance();
         Cuisine cuisine = cuisineDAO.getById(id);
         writeDataToJSONFile(cuisine.getCuisineId(), cuisine.getName(), cuisine.getPrice(), "", 1);
-        orderCuisineController.billGridPane.getChildren().clear();
-        orderCuisineController.loadBill();
+        preOrderCuisineController.billGridPane.getChildren().clear();
+        preOrderCuisineController.loadBill();
         //update lbl
-        orderCuisineController.setCuisinesInfoFromJSON();
+        preOrderCuisineController.setCuisinesInfoFromJSON();
     }
 }

@@ -17,7 +17,7 @@ import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class OrderCuisineBillItemController {
+public class PreOrderCuisineBillItemController {
     @FXML
     private Label cuisineIdLabel;
     @FXML
@@ -32,9 +32,9 @@ public class OrderCuisineBillItemController {
     private Label cuisineTotalPriceLabel;
 
     //Controller area
-    public OrderCuisineController orderCuisineController;
-    public void setOrderBillController(OrderCuisineController orderCuisineController) {
-        this.orderCuisineController = orderCuisineController;
+    public PreOrderCuisineController preOrderCuisineController;
+    public void setPreOrderBillController(PreOrderCuisineController preOrderCuisineController) {
+        this.preOrderCuisineController = preOrderCuisineController;
     }
 
 
@@ -158,30 +158,30 @@ public class OrderCuisineBillItemController {
     void onDecreaseCuisineButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
         String cuisineID = cuisineIdLabel.getText();
         decreaseQuantityInJSON(cuisineID);
-        orderCuisineController.billGridPane.getChildren().clear();
-        orderCuisineController.loadBill();
+        preOrderCuisineController.billGridPane.getChildren().clear();
+        preOrderCuisineController.loadBill();
         //update lbl
-        orderCuisineController.setCuisinesInfoFromJSON();
+        preOrderCuisineController.setCuisinesInfoFromJSON();
     }
 
     @FXML
     void onDeleteCuisineButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
         String cuisineID = cuisineIdLabel.getText();
         removeFromJson(cuisineID);
-        orderCuisineController.billGridPane.getChildren().clear();
-        orderCuisineController.loadBill();
+        preOrderCuisineController.billGridPane.getChildren().clear();
+        preOrderCuisineController.loadBill();
         //update lbl
-        orderCuisineController.setCuisinesInfoFromJSON();
+        preOrderCuisineController.setCuisinesInfoFromJSON();
     }
 
     @FXML
     void onIncreaseCuisineButtonClicked(ActionEvent event) throws FileNotFoundException, SQLException {
         String cuisineID = cuisineIdLabel.getText();
         increaseQuantityInJSON(cuisineID);
-        orderCuisineController.billGridPane.getChildren().clear();
-        orderCuisineController.loadBill();
+        preOrderCuisineController.billGridPane.getChildren().clear();
+        preOrderCuisineController.loadBill();
         //update lbl
-        orderCuisineController.setCuisinesInfoFromJSON();
+        preOrderCuisineController.setCuisinesInfoFromJSON();
     }
 
     @FXML
@@ -197,8 +197,8 @@ public class OrderCuisineBillItemController {
             String cuisineID = cuisineIdLabel.getText();
             try {
                 updateNoteInJSON(cuisineID, newNote);
-                orderCuisineController.billGridPane.getChildren().clear();
-                orderCuisineController.loadBill();
+                preOrderCuisineController.billGridPane.getChildren().clear();
+                preOrderCuisineController.loadBill();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);

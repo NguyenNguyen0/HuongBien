@@ -38,6 +38,7 @@ CREATE TABLE Employee (
 	workHours REAL NOT NULL,
     hourlyPay REAL, -- CHO NHÂN VIÊN BỒI BÀN
     salary REAL, -- CHO QUẢN LÝ, ĐẦU BẾP, TIẾP TÂN
+    profileImage VARBINARY(MAX),
 
     managerId CHAR(11) NULL,
     FOREIGN KEY (managerId) REFERENCES Employee(id),
@@ -75,7 +76,6 @@ CREATE TABLE Account (
     hashcode CHAR(64) NOT NULL,
     role NVARCHAR(20) NOT NULL,
     email NVARCHAR(40) NOT NULL,
-    avatar VARBINARY(MAX),
     isActive BIT DEFAULT 1 NOT NULL,
 
     FOREIGN KEY (username) REFERENCES Employee(id),

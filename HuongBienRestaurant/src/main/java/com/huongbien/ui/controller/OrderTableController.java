@@ -89,8 +89,7 @@ public class OrderTableController implements Initializable {
 
     private List<Table> getTableDataByCriteria(String floor, String status, String type) {
         TableDAO tableDAO = TableDAO.getInstance();
-        List<Table> ls = tableDAO.getByCriteria(floor, status, type);
-        return ls;
+        return tableDAO.getByCriteria(floor, status, type);
     }
 
     private void setComboBoxValue() {
@@ -263,7 +262,7 @@ public class OrderTableController implements Initializable {
     }
 
     @FXML
-    void onPreOrderButtonClicked(ActionEvent event) throws IOException {
+    void onPreOrderButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
             jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
@@ -275,6 +274,6 @@ public class OrderTableController implements Initializable {
             Utils.showAlert("Vui lòng chọn bàn", "Reminder");
             return;
         }
-        restaurantMainController.openPreOrderTable();
+        restaurantMainController.openPreOrder();
     }
 }

@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1445.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderCuisineController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1445.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderCuisineController">
    <right>
       <StackPane prefWidth="700.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -32,7 +32,7 @@
             </VBox>
             <BorderPane fx:id="compoent_orderBill">
                <center>
-                  <ScrollPane fx:id="billScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" styleClass="textField-line-bot" BorderPane.alignment="CENTER">
+                  <ScrollPane fx:id="billScrollPane" hbarPolicy="NEVER" prefHeight="391.0" prefWidth="700.0" styleClass="textField-line-bot" BorderPane.alignment="CENTER">
                      <content>
                         <GridPane fx:id="billGridPane">
                            <columnConstraints>
@@ -43,9 +43,9 @@
                   </ScrollPane>
                </center>
                <bottom>
-                  <VBox prefHeight="280.0" prefWidth="680.0" BorderPane.alignment="BOTTOM_CENTER">
+                  <VBox prefHeight="240.0" prefWidth="680.0" BorderPane.alignment="BOTTOM_CENTER">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="60.0" prefWidth="202.0" VBox.vgrow="ALWAYS">
+                        <VBox alignment="CENTER" prefHeight="170.0" prefWidth="680.0" VBox.vgrow="ALWAYS">
                            <children>
                               <HBox alignment="CENTER_RIGHT" prefWidth="178.0" VBox.vgrow="ALWAYS">
                                  <children>
@@ -77,21 +77,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
-                                 <children>
-                                    <Label text="Tiền bàn:">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                    <Pane prefHeight="200.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                                    <Label fx:id="tableAmountLabel" text="0" textFill="#1a9030">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" prefWidth="200.0" />
                               <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
                                  <children>
                                     <Label text="Tổng tiền:">
@@ -109,7 +95,7 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox prefHeight="79.0" prefWidth="700.0">
+                        <HBox alignment="CENTER" prefHeight="79.0" prefWidth="700.0">
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
@@ -128,7 +114,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#onOrderPaymentButtonAction" prefHeight="60.0" prefWidth="340.0" style="-fx-background-color: #1D557E;" text="Tính tiền" textFill="WHITE">
+                                    <Button mnemonicParsing="false" onAction="#onUpdateCuisineButtonAction" prefHeight="60.0" prefWidth="340.0" style="-fx-background-color: #1D557E;" text="Cập nhật" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -142,6 +128,9 @@
                                  </HBox.margin>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
                         </HBox>
                      </children>
                      <BorderPane.margin>
@@ -179,24 +168,11 @@
    <top>
       <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1386.0" style="-fx-background-color: white;" styleClass="textField-line-bot" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="70.0" prefWidth="70.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: white;">
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icon/all/back-128px.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
             <HBox prefHeight="100.0" prefWidth="668.0" HBox.hgrow="ALWAYS">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="411.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField prefHeight="70.0" prefWidth="303.0" promptText="Tìm kiếm món nhanh ..." style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
+                        <TextField prefHeight="70.0" promptText="Tìm kiếm món nhanh ..." style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -215,14 +191,14 @@
                         </Button>
                      </children>
                      <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets left="20.0" right="20.0" />
                      </HBox.margin>
                   </HBox>
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="700.0" style="-fx-border-color: black;">
                <children>
-                  <Label fx:id="tableInfoLabel" text="Unknow">
+                  <Label fx:id="reservationIDLabel" text="Unknow">
                      <font>
                         <Font name="System Bold" size="25.0" />
                      </font>

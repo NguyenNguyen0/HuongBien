@@ -85,7 +85,6 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return count("SELECT COUNT(*) FROM Customer WHERE name LIKE ?", "%" + name + "%");
     }
 
-    //  TODO: update this method
     public List<String> getPhoneNumber() {
         List<String> customersPhone = new ArrayList<>();
         String sql = "SELECT phoneNumber FROM Customer";
@@ -96,12 +95,10 @@ public class CustomerDAO extends GenericDAO<Customer> {
                 String phone = rs.getString("phoneNumber");
                 customersPhone.add(phone);
             }
-
+            return customersPhone;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return customersPhone;
     }
 
     public Customer getById(String customerId) {

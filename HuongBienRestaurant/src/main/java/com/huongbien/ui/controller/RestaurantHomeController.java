@@ -30,11 +30,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class RestaurantHomeController implements Initializable {
-    @FXML private Label employeeNameField;
-    @FXML private Label employeePositionField;
     @FXML private MediaView mediaView;
-    @FXML private Label startTimeField;
-    @FXML private Label timeWorksField;
     @FXML private Label totalCustomersField;
     @FXML private Label totalReservationField;
     @FXML private Label totalOrderField;
@@ -55,6 +51,7 @@ public class RestaurantHomeController implements Initializable {
         } else {
             System.out.println("Tệp video không tìm thấy.");
         }
+        assert media != null;
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaView.setMediaPlayer(mediaPlayer);
 
@@ -68,45 +65,12 @@ public class RestaurantHomeController implements Initializable {
         mediaView.setPreserveRatio(false);
 
         startTime = LocalDateTime.now();
-        displayStartTime();
-        updateTimeWorks();
         setStatistics();
 
         Platform.runLater(() -> {
             Stage stage = (Stage) mediaView.getScene().getWindow();
             stage.setOnCloseRequest(event -> stopScheduler());
         });
-
-        //set emp
-        try {
-            loadEmployeeInfoFromJSON();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void displayStartTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss");
-        startTimeField.setText(startTime.format(formatter));
-    }
-
-    private void updateTimeWorks() {
-        LocalDateTime now = LocalDateTime.now();
-        long secondsWorked = java.time.Duration.between(startTime, now).getSeconds();
-        long hours = secondsWorked / 3600;
-        long minutes = (secondsWorked % 3600) / 60;
-        long seconds = secondsWorked % 60;
-
-        Platform.runLater(() -> {
-            timeWorksField.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-        });
-
-        if (scheduler == null) {
-            scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.scheduleAtFixedRate(this::updateTimeWorks, 0, 1, TimeUnit.SECONDS);
-        }
     }
 
     private void setStatistics() {
@@ -126,17 +90,4 @@ public class RestaurantHomeController implements Initializable {
             System.out.println("Scheduler stopped.");
         }
     }
-
-    private void loadEmployeeInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
-        for (JsonElement element : jsonArray) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            String id = jsonObject.get("Employee ID").getAsString();
-            EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
-            Employee employee = employeeDAO.getById(id).getFirst();
-            employeeNameField.setText(employee.getName());
-            employeePositionField.setText(employee.getPosition());
-        }
-    }
-
 }

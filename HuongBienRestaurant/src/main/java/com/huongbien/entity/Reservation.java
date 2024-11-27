@@ -71,10 +71,14 @@ public class Reservation {
         setRefundDeposit(0);
         setReservationId(null);
 
-//        TODO: cập nhận lại phí bàn
-        setDeposit(100_000 * tables.stream()
+        setDeposit(calculateTotalDeposit());
+    }
+
+    public double calculateTotalDeposit() {
+        double tableFee = 100_000;
+        return tableFee * tables.stream()
                 .filter(table -> table.getTableType().getTableId().equals("LB002"))
-                .count());
+                .count();
     }
 
     public void setReservationId(String reservationId) {

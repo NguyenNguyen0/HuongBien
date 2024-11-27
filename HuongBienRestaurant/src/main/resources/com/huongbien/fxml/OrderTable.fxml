@@ -240,7 +240,7 @@
             </VBox>
             <HBox alignment="BOTTOM_CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onPreOrderButtonClicked" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
+                  <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>

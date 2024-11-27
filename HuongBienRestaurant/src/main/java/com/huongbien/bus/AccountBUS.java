@@ -17,8 +17,8 @@ public class AccountBUS {
         return accountDao.getByUsername(username);
     }
 
-    public boolean changePassword(String username, String newPassword) {
-        if (username.isBlank() || username.isEmpty() || newPassword.isBlank() || newPassword.isEmpty()) return false;
-        return accountDao.changePassword(username, newPassword);
+    public boolean changePassword(String email, String newPassword) {
+        if (email.isBlank() || email.isEmpty() || newPassword.isBlank() || newPassword.isEmpty()) return false;
+        return accountDao.changePassword(email, newPassword);
     }
 }

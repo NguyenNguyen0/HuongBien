@@ -27,9 +27,8 @@ public class AccountDAO extends GenericDAO<Account> {
         account.setRole(resultSet.getString("role"));
         account.setEmail(resultSet.getString("email"));
         account.setIsActive(resultSet.getBoolean("isActive"));
-        account.setAvatar(resultSet.getBytes("avatar"));
         List<Employee> employees = EmployeeDAO.getInstance().getById(account.getUsername());
-        account.setEmployeeInfo(!employees.isEmpty() ? employees.getFirst() : null);
+        account.setEmployeeInfo(!employees.isEmpty() ? employees.get(0) : null);
         return account;
     }
 
@@ -41,22 +40,21 @@ public class AccountDAO extends GenericDAO<Account> {
         return getOne("SELECT * FROM Account WHERE username LIKE ?;", username);
     }
 
-    public boolean changePassword(String username, String newPassword) {
-        return update("UPDATE Account SET hashcode = ? WHERE username = ?;", newPassword, username);
+    public boolean changePassword(String email, String newPassword) {
+        return update("UPDATE Account SET hashcode = ? WHERE email = ?;", newPassword, email);
     }
 
     @Override
     public boolean add(Account object) {
         try {
-            String sql = "INSERT INTO Account (username, hashcode, role, email, isActive, avatar) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Account (username, hashcode, role, email, isActive) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = statementHelper.prepareStatement(
                     sql,
                     object.getUsername(),
                     object.getHashcode(),
                     object.getRole(),
                     object.getEmail(),
-                    object.getIsActive(),
-                    object.getAvatar()
+                    object.getIsActive()
             );
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

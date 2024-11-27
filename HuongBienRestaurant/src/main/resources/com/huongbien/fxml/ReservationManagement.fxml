@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" style="-fx-background-color: white;" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" style="-fx-background-color: white;" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -214,7 +214,7 @@
                                           <Insets bottom="20.0" right="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Nhận bàn">
+                                    <Button mnemonicParsing="false" onAction="#onConfirmTableButtonAction" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Nhận bàn">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
