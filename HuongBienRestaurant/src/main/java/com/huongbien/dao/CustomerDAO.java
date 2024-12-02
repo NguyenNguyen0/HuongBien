@@ -27,13 +27,15 @@ public class CustomerDAO extends GenericDAO<Customer> {
         customer.setCustomerId(resultSet.getString("id"));
         customer.setName(resultSet.getString("name"));
         customer.setAddress(resultSet.getString("address"));
-        customer.setGender(resultSet.getBoolean("gender"));
+
         customer.setPhoneNumber(resultSet.getString("phoneNumber"));
         customer.setEmail(resultSet.getString("email"));
-        customer.setBirthday(resultSet.getDate("birthday").toLocalDate());
+        customer.setBirthday(resultSet.getDate("birthday") == null ? null : resultSet.getDate("birthday").toLocalDate());
         customer.setRegistrationDate(resultSet.getDate("registrationDate").toLocalDate());
         customer.setAccumulatedPoints(resultSet.getInt("accumulatedPoints"));
         customer.setMembershipLevel(resultSet.getInt("membershipLevel"));
+
+        customer.setGender(resultSet.getInt("gender"));
         return customer;
     }
 
@@ -108,7 +110,11 @@ public class CustomerDAO extends GenericDAO<Customer> {
     public boolean updateCustomerInfo(Customer customer) {
         String sql = "UPDATE Customer SET name = ?, address = " +
                 "?, phoneNumber = ?, email = ?, birthday = ?, gender = ?, accumulatedPoints = ?, membershipLevel = ? WHERE id = ?";
-        return update(sql, customer.getName(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getBirthday(), customer.getGender(), customer.getAccumulatedPoints(), customer.getMembershipLevel(), customer.getCustomerId());
+        return update(sql,
+                customer.getName(), customer.getAddress(),
+                customer.getPhoneNumber(), customer.getEmail(),
+                customer.getBirthday(), customer.getGender(),
+                customer.getAccumulatedPoints(), customer.getMembershipLevel(), customer.getCustomerId());
     }
 
     @Override

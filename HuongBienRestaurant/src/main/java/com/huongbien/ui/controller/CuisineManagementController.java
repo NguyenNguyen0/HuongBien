@@ -85,9 +85,6 @@ public class CuisineManagementController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ToastsMessage.showMessage("thêm món ăn thành công ", "success");
-        ToastsMessage.showMessage("thêm món ăn thất bại", "error");
-        ToastsMessage.showMessage("thông tin không hợp lệ", "warning");
         clearCuisineSearchButton.setVisible(false);
 
         setSearchMethodComboBoxValue();

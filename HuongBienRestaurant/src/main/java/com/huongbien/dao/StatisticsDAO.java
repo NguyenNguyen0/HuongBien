@@ -195,7 +195,7 @@ public class StatisticsDAO {
                 customer.setCustomerId(rs.getString("id"));
                 customer.setName(rs.getString("name"));
                 customer.setAddress(rs.getString("address"));
-                customer.setGender(rs.getBoolean("gender"));
+                customer.setGender(rs.getInt("gender"));
                 customer.setPhoneNumber(rs.getString("phoneNumber"));
                 customer.setEmail(rs.getString("email"));
                 customer.setBirthday(rs.getDate("birthday").toLocalDate());

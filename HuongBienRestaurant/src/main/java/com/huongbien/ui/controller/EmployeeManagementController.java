@@ -6,6 +6,7 @@ import com.huongbien.entity.Employee;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Pagination;
 import com.huongbien.utils.ToastsMessage;
+import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -198,7 +199,7 @@ public class EmployeeManagementController implements Initializable {
 
         employeeIdColumn.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
         employeeNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        employeeGenderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGender() ? "Nam" : "Nữ"));
+        employeeGenderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(Utils.toStringGender(cellData.getValue().getGender())));
         employeePhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         employeePositionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
         employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -406,7 +407,10 @@ public class EmployeeManagementController implements Initializable {
         employeeStatusComboBox.getSelectionModel().select(employee.getStatus());
         employeePositionComboBox.getSelectionModel().select(employee);
         employeeBirthdayDatePicker.setValue(employee.getBirthday());
-        genderGroup.selectToggle(employee.getGender() ? maleRadioButton : femaleRadioButton);
+        switch (employee.getGender()) {
+            case 1 -> genderGroup.selectToggle(maleRadioButton);
+            case 2 -> genderGroup.selectToggle(femaleRadioButton);
+        }
     }
 
     public boolean validateEmployeeInfo() {
@@ -471,7 +475,6 @@ public class EmployeeManagementController implements Initializable {
         String citizenId = employeeCitizenIdField.getText();
         String phone = employeePhoneField.getText();
         String email = employeeEmailField.getText();
-        boolean gender = maleRadioButton.isSelected();
         LocalDate birthDate = employeeBirthdayDatePicker.getValue();
         double hourPay = Converter.parseMoney(employeeHourlyPayField.getText());
         double salary = Converter.parseMoney(employeeSalaryField.getText());
@@ -479,6 +482,12 @@ public class EmployeeManagementController implements Initializable {
         String address = employeeAddressField.getText();
         String status = employeeStatusComboBox.getValue();
         String position = employeePositionComboBox.getValue() != null ? employeePositionComboBox.getValue().getPosition() : employeePositionComboBox.getEditor().getText();
+        int gender = 0;
+        if (maleRadioButton.isSelected()) {
+            gender = 1;
+        } else if (femaleRadioButton.isSelected()) {
+            gender = 2;
+        }
         return new Employee(employeeId, name, phone, citizenId, gender, address, birthDate, email, status, hireDate, position, workHours, hourPay, salary, managerId, profileImage);
     }
 

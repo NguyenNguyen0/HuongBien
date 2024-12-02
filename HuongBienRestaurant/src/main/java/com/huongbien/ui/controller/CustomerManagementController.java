@@ -114,8 +114,8 @@ public class CustomerManagementController implements Initializable {
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         customerGenderColumn.setCellValueFactory(cellData -> {
-            boolean gender = cellData.getValue().getGender();
-            String genderText = gender ? "Nam" : "Nữ";
+            int gender = cellData.getValue().getGender();
+            String genderText = Utils.toStringGender(gender);
             return new SimpleStringProperty(genderText);
         });
         customerMembershipLevelColumn.setCellValueFactory(cellData -> {
@@ -204,7 +204,12 @@ public class CustomerManagementController implements Initializable {
         String email = customerEmailField.getText();
         String address = customerAddressField.getText();
         LocalDate birthday = customerBirthdayDatePicker.getValue();
-        boolean gender = maleRadioButton.isSelected();
+        int gender = 0;
+        if (maleRadioButton.isSelected()) {
+            gender = 1;
+        } else if (femaleRadioButton.isSelected()) {
+            gender = 2;
+        }
         return new Customer(id, name, address, gender, phone, email, birthday, registrationDate, accumulatedPoints, membershipLevel);
     }
 
@@ -350,9 +355,9 @@ public class CustomerManagementController implements Initializable {
             customerAccumulatedPointsField.setText(selectedItem.getAccumulatedPoints() + "");
             customerMembershipLevelField.setText(Utils.toStringMembershipLevel(selectedItem.getMembershipLevel()));
 
-            if (selectedItem.getGender()) {
+            if (selectedItem.getGender() == 1) {
                 genderGroup.selectToggle(maleRadioButton);
-            } else {
+            } else if (selectedItem.getGender() == 2) {
                 genderGroup.selectToggle(femaleRadioButton);
             }
         }

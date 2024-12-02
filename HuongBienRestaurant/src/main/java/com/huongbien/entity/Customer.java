@@ -1,6 +1,7 @@
 package com.huongbien.entity;
 
 import com.huongbien.utils.Utils;
+import jdk.jshell.execution.Util;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -9,7 +10,7 @@ public class Customer {
     private String customerId;
     private String name;
     private String address;
-    private boolean gender;
+    private int gender;
     private String phoneNumber;
     private String email;
     private LocalDate birthday;
@@ -20,7 +21,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String customerId, String name, String address, boolean gender,
+    public Customer(String customerId, String name, String address, int gender,
                     String phoneNumber, String email, LocalDate birthday,
                     LocalDate registrationDate, int accumulatedPoints, int memberShip) {
         setCustomerId(customerId);
@@ -35,7 +36,7 @@ public class Customer {
         setMembershipLevel(memberShip);
     }
 
-    public Customer(String name, String address, boolean gender,
+    public Customer(String name, String address, int gender,
                     String phoneNumber, String email, LocalDate birthday) {
         setCustomerId(null);
         setName(name);
@@ -78,7 +79,7 @@ public class Customer {
         this.address = address;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
@@ -136,7 +137,7 @@ public class Customer {
         return address;
     }
 
-    public boolean getGender() {
+    public int getGender() {
         return gender;
     }
 
@@ -170,7 +171,7 @@ public class Customer {
                 "customerId='" + customerId + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", gender=" + gender +
+                ", gender=" + Utils.toStringGender(gender) +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +

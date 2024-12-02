@@ -10,7 +10,7 @@ public class Employee {
     private String employeeId;
     private String name;
     private String address;
-    private boolean gender;
+    private int gender;
     private LocalDate birthday;
     private String citizenIDNumber;
     private String status;
@@ -28,7 +28,7 @@ public class Employee {
     }
 
     public Employee(String employeeId, String name, String phoneNumber, String citizenIDNumber,
-                    boolean gender, String address, LocalDate birthday, String email,
+                    int gender, String address, LocalDate birthday, String email,
                     String status, LocalDate hireDate, String position, double workHours,
                     double hourlyPay, double salary, Employee manager, byte[] profileImage) {
         setEmployeeId(employeeId);
@@ -50,7 +50,7 @@ public class Employee {
     }
 
     public Employee(String name, String phoneNumber, String citizenIDNumber,
-                    boolean gender, String address, LocalDate birthday, String email,
+                    int gender, String address, LocalDate birthday, String email,
                     String position, double workHours, double hourlyPay, double salary,
                     Employee manager, byte[] profileImage) {
         setEmployeeId(null);
@@ -110,7 +110,7 @@ public class Employee {
         this.citizenIDNumber = citizenIDNumber;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
@@ -201,7 +201,7 @@ public class Employee {
         return citizenIDNumber;
     }
 
-    public boolean getGender() {
+    public int getGender() {
         return gender;
     }
 
@@ -255,7 +255,7 @@ public class Employee {
                 "employeeId='" + employeeId + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", gender=" + gender +
+                ", gender=" + Utils.toStringGender(gender) +
                 ", birthday=" + birthday +
                 ", citizenIDNumber='" + citizenIDNumber + '\'' +
                 ", status='" + status + '\'' +

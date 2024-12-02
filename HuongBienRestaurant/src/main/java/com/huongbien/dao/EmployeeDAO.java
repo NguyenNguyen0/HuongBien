@@ -25,7 +25,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
         employee.setName(resultSet.getString("name"));
         employee.setPhoneNumber(resultSet.getString("phoneNumber"));
         employee.setCitizenIDNumber(resultSet.getString("citizenIDNumber"));
-        employee.setGender(resultSet.getBoolean("gender"));
+        employee.setGender(resultSet.getInt("gender"));
         employee.setAddress(resultSet.getString("address"));
         employee.setBirthday(resultSet.getDate("birthday").toLocalDate());
         employee.setEmail(resultSet.getString("email"));

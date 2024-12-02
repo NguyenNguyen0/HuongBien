@@ -167,5 +167,13 @@ public class Utils {
         }
         return otp.toString();
     }
+
+    public static String toStringGender(int gender)  {
+        return switch (gender) {
+            case 1 -> "Nam";
+            case 2 -> "Nữ";
+            default -> "Khác";
+        };
+    }
 }
 
