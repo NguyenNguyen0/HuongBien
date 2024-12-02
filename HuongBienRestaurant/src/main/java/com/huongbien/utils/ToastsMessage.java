@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
+
 public class ToastsMessage {
     public static void showToastsMessage(String title, String message) {
         Notifications notifications = Notifications.create();
@@ -17,4 +18,18 @@ public class ToastsMessage {
     }
 
     //TODO: Có thể thêm nhiều hàm khác để tùy chỉnh thông báo theo chủ đề cụ thể gọi để dùng
+    public static void showMessage(String message, String type) {
+        // Tạo thông báo
+        Notifications notifications = Notifications.create()
+                .title("Thông báo")
+                .text(message)
+                .hideAfter(Duration.seconds(3))
+                .position(Pos.TOP_RIGHT);
+        switch (type) {
+            case "error" -> notifications.showError();
+            case "warning" -> notifications.showWarning();
+            case "success" -> notifications.showInformation();
+            default -> notifications.show();
+        }
+    }
 }

@@ -68,6 +68,30 @@ public class CuisineDAO extends GenericDAO<Cuisine> {
         return categoryList;
     }
 
+    public List<Cuisine> getByCategoryWithPagination(int offset, int limit, String category) {
+        return getMany("SELECT id, name, price, description, image, categoryID FROM cuisine WHERE categoryId LIKE ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", "%" + category + "%", offset, limit);
+    }
+
+    public List<Cuisine> getByNameWithPagination(int offset, int limit, String name) {
+        return getMany("SELECT id, name, price, description, image, categoryID FROM cuisine WHERE name LIKE ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", "%" + name + "%", offset, limit);
+    }
+
+    public List<Cuisine> getAllWithPagination(int offset, int limit) {
+        return getMany("SELECT id, name, price, description, image, categoryID FROM cuisine ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", offset, limit);
+    }
+
+    public int countCuisinesByName(String name) {
+        return count("SELECT COUNT(*) AS countRow FROM cuisine WHERE name LIKE ?", "%" + name + "%");
+    }
+
+    public int countCuisinesByCategory(String category) {
+        return count("SELECT COUNT(*) AS countRow FROM cuisine WHERE categoryId LIKE ?", "%" + category + "%");
+    }
+
+    public int countTotal() {
+        return count("SELECT COUNT(*) AS countRow FROM cuisine");
+    }
+
     public boolean updateCuisineInfo(Cuisine cuisine) {
         String sql = "UPDATE cuisine SET name = ?, price = ?, description = ?, image = ?, categoryID = ? WHERE id = ?";
         return update(sql, cuisine.getName(), cuisine.getPrice(), cuisine.getDescription(), cuisine.getImage(), cuisine.getCategory().getCategoryId(), cuisine.getCuisineId());

@@ -21,7 +21,7 @@
    <right>
       <VBox prefHeight="659.0" prefWidth="750.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="361.0" prefWidth="750.0">
+            <VBox alignment="CENTER" prefHeight="414.0" prefWidth="670.0" spacing="20.0">
                <children>
                   <VBox prefHeight="81.0" prefWidth="750.0">
                      <children>
@@ -40,12 +40,12 @@
                         </TextField>
                      </children>
                      <VBox.margin>
-                        <Insets left="40.0" top="-50.0" />
+                        <Insets />
                      </VBox.margin>
                   </VBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <VBox prefHeight="80.0" prefWidth="326.0">
+                        <VBox prefHeight="87.0" prefWidth="380.0">
                            <children>
                               <Label text="Ngày bắt đầu">
                                  <font>
@@ -55,13 +55,13 @@
                                     <Insets bottom="15.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker fx:id="startedDateDatePicker" minHeight="45.0" prefHeight="45.0" prefWidth="295.0" promptText="Ngày bắt đầu" />
+                              <DatePicker fx:id="startedDateDatePicker" minHeight="45.0" prefHeight="45.0" prefWidth="335.0" promptText="Ngày bắt đầu" />
                            </children>
                            <HBox.margin>
-                              <Insets left="40.0" top="20.0" />
+                              <Insets top="20.0" />
                            </HBox.margin>
                         </VBox>
-                        <VBox prefHeight="80.0" prefWidth="346.0">
+                        <VBox prefHeight="87.0" prefWidth="415.0">
                            <children>
                               <Label text="Ngày kết thúc">
                                  <font>
@@ -71,24 +71,24 @@
                                     <Insets bottom="15.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker fx:id="endedDateDatePicker" minHeight="45.0" prefHeight="46.0" prefWidth="295.0" promptText="Ngày kết thúc">
+                              <DatePicker fx:id="endedDateDatePicker" minHeight="45.0" prefHeight="45.0" prefWidth="350.0" promptText="Ngày kết thúc">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
                               </DatePicker>
                            </children>
                            <HBox.margin>
-                              <Insets left="60.0" top="20.0" />
+                              <Insets top="20.0" />
                            </HBox.margin>
                         </VBox>
                      </children>
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="259.0" prefWidth="707.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="137.0" prefWidth="750.0" spacing="20.0">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox prefHeight="87.0" prefWidth="357.0">
                            <children>
                               <Label text="Giảm giá">
                                  <font>
@@ -102,89 +102,68 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="27.0" text="\%" textAlignment="CENTER" textFill="#cccccc">
-                           <font>
-                              <Font size="28.0" />
-                           </font>
-                        </Label>
-                        <VBox prefHeight="100.0" prefWidth="297.0">
+                        <VBox prefHeight="129.0" prefWidth="391.0">
                            <children>
                               <Label text="Trạng thái">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="promotionStatusComboBox" prefHeight="45.0" prefWidth="295.0" promptText="Còn hiệu lực" />
+                              <ComboBox fx:id="promotionStatusComboBox" prefHeight="52.0" prefWidth="358.0" promptText="Còn hiệu lực" />
                            </children>
                            <HBox.margin>
-                              <Insets left="85.0" />
+                              <Insets />
                            </HBox.margin>
                         </VBox>
                      </children>
                      <VBox.margin>
-                        <Insets left="43.0" top="20.0" />
+                        <Insets />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="209.0" prefWidth="750.0">
+                  <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="132.0" prefWidth="750.0" spacing="20.0">
                      <children>
-                        <VBox prefHeight="88.0" prefWidth="262.0">
+                        <VBox prefHeight="83.0" prefWidth="375.0">
                            <children>
-                              <VBox prefHeight="123.0" prefWidth="344.0">
-                                 <children>
-                                    <Label prefHeight="62.0" prefWidth="127.0" text="Số tiền tối thiểu">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="minimumOrderField" disable="true" minHeight="50.0" onKeyReleased="#onMinimumOrderFieldKeyReleased" prefHeight="50.0" prefWidth="260.0" promptText="0" styleClass="textField-line-bot">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </TextField>
-                                 </children>
-                              </VBox>
+                              <Label prefHeight="62.0" prefWidth="127.0" text="Số tiền tối thiểu">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="minimumOrderField" disable="true" minHeight="50.0" onKeyReleased="#onMinimumOrderFieldKeyReleased" prefHeight="50.0" prefWidth="260.0" promptText="0" styleClass="textField-line-bot">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </TextField>
                            </children>
                         </VBox>
-                        <Label prefHeight="38.0" prefWidth="77.0" text="Đồng" textFill="#cccccc">
-                           <font>
-                              <Font size="22.0" />
-                           </font>
-                        </Label>
-                        <VBox alignment="TOP_RIGHT" prefHeight="88.0" prefWidth="319.0">
+                        <VBox prefHeight="132.0" prefWidth="405.0">
                            <children>
-                              <VBox prefHeight="88.0" prefWidth="243.0">
+                              <Label prefHeight="96.0" prefWidth="205.0" text="Hạng thành viên giảm giá">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="54.0" prefWidth="337.0">
                                  <children>
-                                    <Label prefHeight="96.0" prefWidth="205.0" text="Hạng thành viên giảm giá">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox prefHeight="83.0" prefWidth="535.0">
-                                       <children>
-                                          <ComboBox fx:id="memberShipLevelComboBox" disable="true" prefHeight="54.0" prefWidth="262.0" promptText="Đồng" styleClass="textField-line-bot" />
-                                       </children>
-                                    </HBox>
+                                    <ComboBox fx:id="memberShipLevelComboBox" disable="true" prefHeight="54.0" prefWidth="355.0" promptText="Đồng" styleClass="textField-line-bot" />
                                  </children>
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" />
-                                 </VBox.margin>
-                              </VBox>
+                              </HBox>
                            </children>
                         </VBox>
                      </children>
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets />
                      </VBox.margin>
                   </HBox>
                </children>
                <VBox.margin>
-                  <Insets top="120.0" />
+                  <Insets left="40.0" right="40.0" top="120.0" />
                </VBox.margin>
             </VBox>
-            <VBox prefHeight="288.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
+            <VBox prefHeight="388.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox prefHeight="242.0" prefWidth="670.0">
                      <children>
@@ -243,7 +222,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="150.0" prefWidth="925.0" style="-fx-background-color: white;">
                <children>
-                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="414.0">
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="580.0">
                      <children>
                         <TextField fx:id="promotionSearchField" maxWidth="446.0" onKeyReleased="#onPromotionSearchFieldKeyReleased" prefHeight="60.0" prefWidth="446.0" promptText="Nhập mã khuyến mãi" styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                            <font>
@@ -263,11 +242,15 @@
                         </ImageView>
                      </children>
                      <HBox.margin>
-                        <Insets right="15.0" />
+                        <Insets left="10.0" />
                      </HBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="414.0">
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="495.0">
                      <children>
+                        <ComboBox fx:id="filterPromotionStatusComboBox" onAction="#onFilterPromotionStatusComboBoxSelected" prefHeight="62.0" prefWidth="207.0" promptText="Trạng thái">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin></ComboBox>
                         <Button fx:id="swapModePromotionButton" mnemonicParsing="false" onAction="#onSwapModePromotionButtonClicked" prefHeight="60.0" prefWidth="180.0" style="-fx-background-color: #1D557E;" text="Thêm" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
@@ -276,13 +259,9 @@
                               <Font name="System Bold" size="25.0" />
                            </font>
                         </Button>
-                        <ComboBox fx:id="filterPromotionStatusComboBox" onAction="#onFilterPromotionStatusComboBoxSelected" prefHeight="62.0" prefWidth="257.0" promptText="Trạng thái">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin></ComboBox>
                      </children>
                      <HBox.margin>
-                        <Insets />
+                        <Insets left="10.0" right="10.0" />
                      </HBox.margin>
                   </HBox>
                </children>

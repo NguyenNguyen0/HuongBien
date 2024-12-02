@@ -5,6 +5,7 @@ import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.entity.Employee;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Pagination;
+import com.huongbien.utils.ToastsMessage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -222,24 +223,24 @@ public class EmployeeManagementController implements Initializable {
     }
 
     public void setEmployeeManagerIdComboBox() {
-    List<Employee> managers = employeeBUS.getEmployeeByPosition("Quản lý");
-    employeeManagerIdComboBox.getItems().add(null);
-    employeeManagerIdComboBox.getItems().addAll(managers);
-    employeeManagerIdComboBox.setConverter(new StringConverter<>() {
-        @Override
-        public String toString(Employee employee) {
-            return employee != null ? employee.getEmployeeId() : "Không có";
-        }
+        List<Employee> managers = employeeBUS.getEmployeeByPosition("Quản lý");
+        employeeManagerIdComboBox.getItems().add(null);
+        employeeManagerIdComboBox.getItems().addAll(managers);
+        employeeManagerIdComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Employee employee) {
+                return employee != null ? employee.getEmployeeId() : "Không có";
+            }
 
-        @Override
-        public Employee fromString(String string) {
-            return employeeManagerIdComboBox.getItems().stream()
-                    .filter(item -> item.getEmployeeId().equals(string))
-                    .findFirst()
-                    .orElse(null);
-        }
-    });
-}
+            @Override
+            public Employee fromString(String string) {
+                return employeeManagerIdComboBox.getItems().stream()
+                        .filter(item -> item.getEmployeeId().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+    }
 
     public void setSearchMethodComboBox() {
         ObservableList<String> searchMethodList = FXCollections.observableArrayList(SEARCH_METHODS);
@@ -364,13 +365,24 @@ public class EmployeeManagementController implements Initializable {
         handleActionEmployeeButton.setStyle("-fx-background-color: " + handleActionColor);
     }
 
-    @FXML
-    public void onEmployeeTableClicked(MouseEvent event) {
-        Employee selectedItem = employeeTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            enableInput();
-            populateEmployeeForm(selectedItem);
-            changeHandleActionButtonToUpdateEmployee();
+    public void formatMoneyField(TextField moneyField) {
+        String input = moneyField.getText().replace(".", "").replace(",", "");
+        if (input.isEmpty()) {
+            return;
+        }
+        if (input.matches("\\d*")) {
+            String formattedText = NumberFormat.getInstance().format(Long.parseLong(input));
+            moneyField.setText(formattedText);
+            moneyField.positionCaret(formattedText.length());
+        } else {
+            StringBuilder validInput = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                if (Character.isDigit(ch)) {
+                    validInput.append(ch);
+                }
+            }
+            moneyField.setText(validInput.toString());
+            moneyField.positionCaret(validInput.length());
         }
     }
 
@@ -395,45 +407,6 @@ public class EmployeeManagementController implements Initializable {
         employeePositionComboBox.getSelectionModel().select(employee);
         employeeBirthdayDatePicker.setValue(employee.getBirthday());
         genderGroup.selectToggle(employee.getGender() ? maleRadioButton : femaleRadioButton);
-    }
-
-    public String formatMoney(double amount) {
-        return new DecimalFormat("#,###").format(amount);
-    }
-
-    @FXML
-    public void onClearSearchButtonClicked(MouseEvent event) {
-        clearSearchField(employeeSearchField);
-        clearSearchButton.setVisible(false);
-    }
-
-    public void clearSearchField(TextField searchField) {
-        searchField.clear();
-        searchField.requestFocus();
-    }
-
-    @FXML
-    public void onSwapModeEmployeeButtonClicked(MouseEvent event) {
-        if (swapModeEmployeeButton.getText().equals(EDIT_MODE)) {
-            disableInput();
-            clearChooserImage();
-            changeHandleActionButtonToUpdateEmployee();
-        } else if (swapModeEmployeeButton.getText().equals(ADD_MODE)) {
-            enableInput();
-            clearChooserImage();
-            clearEmployeeForm();
-            changeHandleActionButtonToAddEmployee();
-        }
-    }
-
-    @FXML
-    public void onHandleActionEmployeeButtonClicked(ActionEvent event) {
-        if (handleActionEmployeeButton.getText().equals(EDIT_MODE)) {
-            updateEmployee();
-        } else if (handleActionEmployeeButton.getText().equals(ADD_MODE)) {
-            addEmployee();
-        }
-        clearEmployeeForm();
     }
 
     public boolean validateEmployeeInfo() {
@@ -476,9 +449,9 @@ public class EmployeeManagementController implements Initializable {
         Employee updatedEmployee = createEmployeeFromForm(selectedEmployee.getEmployeeId(), selectedEmployee.getWorkHours(), selectedEmployee.getHireDate(), employeeImageBytes);
         if (employeeBUS.updateEmployeeInfo(updatedEmployee)) {
             setEmployeeTableValue();
-            System.out.println("Đã câp nhạt thành công");
+            ToastsMessage.showMessage("Cập nhật nhân viên thành công", "success");
         } else {
-            System.out.println("Cập nhật nhân viên không thành công");
+            ToastsMessage.showMessage("Cập nhật nhân viên thất bại", "error");
         }
     }
 
@@ -487,9 +460,9 @@ public class EmployeeManagementController implements Initializable {
         if (employeeBUS.addEmployee(newEmployee)) {
             clearEmployeeForm();
             setEmployeeTableValue();
-            System.out.println("Thêm nhan vien thành công");
+            ToastsMessage.showMessage("Thêm nhân viên thành công", "success");
         } else {
-            System.out.println("Thêm nhan vien không thành công");
+            ToastsMessage.showMessage("Thêm nhân viên thất bại", "error");
         }
     }
 
@@ -500,8 +473,8 @@ public class EmployeeManagementController implements Initializable {
         String email = employeeEmailField.getText();
         boolean gender = maleRadioButton.isSelected();
         LocalDate birthDate = employeeBirthdayDatePicker.getValue();
-        double hourPay = parseMoney(employeeHourlyPayField.getText());
-        double salary = parseMoney(employeeSalaryField.getText());
+        double hourPay = Converter.parseMoney(employeeHourlyPayField.getText());
+        double salary = Converter.parseMoney(employeeSalaryField.getText());
         Employee managerId = employeeManagerIdComboBox.getValue();
         String address = employeeAddressField.getText();
         String status = employeeStatusComboBox.getValue();
@@ -509,9 +482,54 @@ public class EmployeeManagementController implements Initializable {
         return new Employee(employeeId, name, phone, citizenId, gender, address, birthDate, email, status, hireDate, position, workHours, hourPay, salary, managerId, profileImage);
     }
 
-//    TODO move to Utils
-    public double parseMoney(String text) {
-        return text.isEmpty() ? 0.0 : Double.parseDouble(text.replace(",", ""));
+    public void clearSearchField(TextField searchField) {
+        searchField.clear();
+        searchField.requestFocus();
+    }
+
+    public String formatMoney(double amount) {
+        return new DecimalFormat("#,###").format(amount);
+    }
+
+    @FXML
+    public void onEmployeeTableClicked(MouseEvent event) {
+        Employee selectedItem = employeeTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            enableInput();
+            populateEmployeeForm(selectedItem);
+            changeHandleActionButtonToUpdateEmployee();
+        }
+    }
+
+    @FXML
+    public void onClearSearchButtonClicked(MouseEvent event) {
+        clearSearchField(employeeSearchField);
+        clearSearchButton.setVisible(false);
+    }
+
+
+    @FXML
+    public void onSwapModeEmployeeButtonClicked(MouseEvent event) {
+        if (swapModeEmployeeButton.getText().equals(EDIT_MODE)) {
+            disableInput();
+            clearChooserImage();
+            changeHandleActionButtonToUpdateEmployee();
+        } else if (swapModeEmployeeButton.getText().equals(ADD_MODE)) {
+            enableInput();
+            clearChooserImage();
+            clearEmployeeForm();
+            changeHandleActionButtonToAddEmployee();
+        }
+    }
+
+    @FXML
+    public void onHandleActionEmployeeButtonClicked(ActionEvent event) {
+        if (handleActionEmployeeButton.getText().equals(EDIT_MODE)) {
+            updateEmployee();
+        } else if (handleActionEmployeeButton.getText().equals(ADD_MODE)) {
+            addEmployee();
+        }
+        clearEmployeeForm();
     }
 
     @FXML
@@ -525,9 +543,9 @@ public class EmployeeManagementController implements Initializable {
         if (selectedItem == null) return;
 
         if (employeeBUS.updateEmployeeStatus(selectedItem.getEmployeeId(), "Nghỉ việc")) {
-            System.out.println("Sa thải nhan vien thanh cong");
+            ToastsMessage.showMessage("Sa thải nhân viên thành công", "success");
         } else {
-            System.out.println("Sa thải nhan vien khong thanh cong");
+            ToastsMessage.showMessage("Sa thải nhân viên thất bại", "error");
         }
         setEmployeeTableValue();
         clearEmployeeForm();
@@ -571,27 +589,6 @@ public class EmployeeManagementController implements Initializable {
         formatMoneyField(employeeSalaryField);
     }
 
-    public void formatMoneyField(TextField moneyField) {
-        String input = moneyField.getText().replace(".", "").replace(",", "");
-        if (input.isEmpty()) {
-            return;
-        }
-        if (input.matches("\\d*")) {
-            String formattedText = NumberFormat.getInstance().format(Long.parseLong(input));
-            moneyField.setText(formattedText);
-            moneyField.positionCaret(formattedText.length());
-        } else {
-            StringBuilder validInput = new StringBuilder();
-            for (char ch : input.toCharArray()) {
-                if (Character.isDigit(ch)) {
-                    validInput.append(ch);
-                }
-            }
-            moneyField.setText(validInput.toString());
-            moneyField.positionCaret(validInput.length());
-        }
-    }
-
     @FXML
     public void onImageChooserButtonClicked(MouseEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -603,7 +600,7 @@ public class EmployeeManagementController implements Initializable {
                 Image image = new Image(Converter.bytesToInputStream(employeeImageBytes));
                 employeeAvatar.setImage(image);
             } catch (IOException e) {
-                e.printStackTrace();
+                ToastsMessage.showToastsMessage("Lỗi", "Không thể mở ảnh");
             }
         }
     }

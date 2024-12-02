@@ -27,12 +27,13 @@ public class Converter {
     }
 
     //  format tiền từ số nguyên thành chuỗi có dấu phẩy
-    public static String formatMoney(int money) {
-        return String.format("%,d", money);
+    public static String formatMoney(double money) {
+        int roundedMoney = (int) Math.ceil(money);
+        return String.format("%,d", roundedMoney);
     }
 
     //  chuyển chuỗi có dấu phẩy thành số nguyên
-    public static int parseMoney(String money) {
-        return Integer.parseInt(money.replaceAll("[^\\d]", ""));
+    public static double parseMoney(String money) {
+        return Integer.parseInt(money.replaceAll("\\D", ""));
     }
 }

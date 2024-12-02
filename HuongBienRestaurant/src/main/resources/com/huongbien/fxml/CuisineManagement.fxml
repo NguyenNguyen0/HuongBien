@@ -18,11 +18,11 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.CuisineManagementController">
    <right>
-      <VBox prefHeight="659.0" prefWidth="750.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="956.0" prefWidth="670.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" prefHeight="421.0" prefWidth="750.0">
                <children>
-                  <ImageView fx:id="cuisineImageView" fitHeight="300.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="cuisineImageView" fitHeight="333.0" fitWidth="346.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/all/gallery-512px.png" />
                      </image>
@@ -32,7 +32,7 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                      <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="44.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icon/all/add-image-64px.png" />
                            </image>
@@ -41,124 +41,113 @@
                   </Button>
                </children>
             </VBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <VBox prefHeight="110.0" prefWidth="670.0">
+               <children>
+                  <Label text="Tên món">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="cuisineNameField" disable="true" minHeight="50.0" styleClass="textField-line-bot">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="123.0" prefWidth="750.0" spacing="20.0">
                <children>
                   <VBox prefHeight="110.0" prefWidth="670.0">
                      <children>
-                        <Label text="Tên món">
+                        <Label text="Giá tiền (VNĐ)">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="cuisineNameField" disable="true" minHeight="50.0" styleClass="textField-line-bot">
+                        <TextField fx:id="cuisinePriceField" disable="true" minHeight="50.0" onKeyReleased="#onCuisinePriceTextFieldKeyReleased" styleClass="textField-line-bot">
                            <font>
                               <Font size="25.0" />
                            </font>
                         </TextField>
                      </children>
                   </VBox>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="123.0" prefWidth="750.0">
-               <children>
-                  <VBox prefHeight="211.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
+                  <VBox prefHeight="110.0" prefWidth="670.0">
                      <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
-                           <children>
-                              <Label text="Giá tiền (VNĐ)">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="cuisinePriceField" disable="true" minHeight="50.0" onKeyReleased="#onCuisinePriceTextFieldKeyReleased" styleClass="textField-line-bot">
-                                 <font>
-                                    <Font size="25.0" />
-                                 </font>
-                              </TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets left="40.0" right="40.0" />
-                           </VBox.margin>
-                        </VBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="211.0" prefWidth="750.0">
-                     <children>
-                        <VBox prefHeight="110.0" prefWidth="670.0">
-                           <children>
-                              <Label text="Loại món">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <ComboBox fx:id="cuisineCategoryComboBox" disable="true" prefHeight="54.0" prefWidth="232.0" styleClass="textField-line-bot" />
-                                    <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="57.0" text="Edit">
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <VBox.margin>
-                              <Insets left="40.0" right="40.0" />
-                           </VBox.margin>
-                        </VBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <VBox prefHeight="288.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox prefHeight="185.0" prefWidth="670.0">
-                     <children>
-                        <Label text="Mô tả">
+                        <Label text="Loại món">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="cuisineDescriptionTextArea" disable="true" prefHeight="152.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </TextArea>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <ComboBox fx:id="cuisineCategoryComboBox" disable="true" prefHeight="54.0" prefWidth="279.0" styleClass="textField-line-bot" />
+                              <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="104.0" text="Edit">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
-                     <VBox.margin>
-                        <Insets left="40.0" right="40.0" />
-                     </VBox.margin>
                   </VBox>
-                  <HBox alignment="TOP_CENTER" prefHeight="96.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Button fx:id="handleActionCuisineButton" mnemonicParsing="false" onAction="#onHandleActionButtonClicked" prefHeight="60.0" prefWidth="550.0" style="-fx-background-color: #761D7E;" text="Sửa món" textFill="WHITE" visible="false">
-                           <HBox.margin>
-                              <Insets top="30.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="System Bold" size="25.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="clearCuisineButton" mnemonicParsing="false" onAction="#onClearCuisineClicked" prefHeight="58.0" prefWidth="100.0" visible="false">
-                           <HBox.margin>
-                              <Insets left="20.0" top="30.0" />
-                           </HBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icon/all/clear-64px.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </HBox>
                </children>
+            </HBox>
+            <VBox prefHeight="179.0" prefWidth="635.0">
+               <children>
+                  <Label text="Mô tả">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="cuisineDescriptionTextArea" disable="true" prefHeight="152.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </TextArea>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </VBox>
+            <HBox alignment="CENTER" prefHeight="147.0" prefWidth="706.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="handleActionCuisineButton" mnemonicParsing="false" onAction="#onHandleActionButtonClicked" prefHeight="60.0" prefWidth="370.0" style="-fx-background-color: #761D7E;" text="Sửa món" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="deleteCuisineButton" mnemonicParsing="false" onAction="#onDeleteCuisineButtonClicked" prefHeight="60.0" prefWidth="180.0" style="-fx-background-color: #7E1D1D;" text="Xoá món" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="clearCuisineButton" mnemonicParsing="false" onAction="#onClearCuisineClicked" prefHeight="58.0" prefWidth="100.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/all/clear-64px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
          </children>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
    </right>
    <center>
@@ -166,32 +155,37 @@
          <children>
             <HBox alignment="CENTER" prefHeight="150.0" prefWidth="925.0" style="-fx-background-color: white;">
                <children>
-                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="150.0" prefWidth="657.0" spacing="10.0">
                      <children>
-                        <TextField fx:id="cuisineSearchField" onKeyReleased="#onCuisineSearchTextFieldKeyReleased" onMouseClicked="#onCuisineSearchTextFieldClicked" prefHeight="60.0" prefWidth="344.0" promptText="Tìm kiếm món nhanh ..." styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="cuisineSearchField" disable="true" minWidth="-Infinity" onKeyReleased="#onCuisineSearchTextFieldKeyReleased" onMouseClicked="#onCuisineSearchTextFieldClicked" prefHeight="62.0" prefWidth="281.0" promptText="Nhập thông tin" styleClass="textField-line-bot" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="25.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" right="10.0" />
+                              <Insets left="20.0" right="20.0" />
                            </HBox.margin>
                         </TextField>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onClearSearchClicked" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="clearCuisineSearchButton" fitHeight="20.0" fitWidth="34.0" onMouseClicked="#onClearSearchClicked" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icon/all/close-64px.png" />
                            </image>
                            <HBox.margin>
-                              <Insets left="-40.0" />
+                              <Insets left="-50.0" />
                            </HBox.margin>
                         </ImageView>
+                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="52.0" prefWidth="239.0" promptText="Tìm theo">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </ComboBox>
                      </children>
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="382.0">
                      <children>
-                        <Button fx:id="swapModeCuisineButton" mnemonicParsing="false" onAction="#onSwapModeButtonClicked" prefHeight="60.0" prefWidth="180.0" style="-fx-background-color: #1D557E;" text="Thêm món" textFill="WHITE">
+                        <Button fx:id="searchCuisineButton" mnemonicParsing="false" onMouseClicked="#onSearchCuisineButtonClicked" prefHeight="60.0" prefWidth="180.0" style="-fx-background-color: #000;" text="Tìm kiếm" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" />
                            </HBox.margin>
@@ -199,15 +193,15 @@
                               <Font name="System Bold" size="25.0" />
                            </font>
                         </Button>
-                        <Button fx:id="deleteCuisineButton" mnemonicParsing="false" onAction="#onDeleteCuisineButtonClicked" prefHeight="60.0" prefWidth="180.0" style="-fx-background-color: #7E1D1D;" text="Xoá món" textFill="WHITE" visible="false">
-                           <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
-                           </HBox.margin>
+                        <Button fx:id="swapModeCuisineButton" mnemonicParsing="false" onAction="#onSwapModeButtonClicked" prefHeight="60.0" prefWidth="180.0" style="-fx-background-color: #1D557E;" text="Thêm món" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="25.0" />
                            </font>
                         </Button>
                      </children>
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
                   </HBox>
                </children>
                <VBox.margin>
@@ -216,7 +210,7 @@
             </HBox>
             <HBox prefHeight="649.0" prefWidth="925.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TableView fx:id="cuisineTable" onMouseClicked="#onCuisineTableViewClicked" prefHeight="701.0" prefWidth="905.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="cuisineTable" onMouseClicked="#onCuisineTableViewClicked" prefHeight="712.0" prefWidth="928.0" HBox.hgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="cuisineIdColumn" editable="false" prefWidth="50.0" text="Mã món">
                            <graphic>
@@ -243,11 +237,11 @@
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
                <children>
-                  <Button mnemonicParsing="false" text="&lt;&lt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onFirstPageButtonClicked" text="&lt;&lt;">
                      <font>
                         <Font size="20.0" />
                      </font></Button>
-                  <Button mnemonicParsing="false" text="&lt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onPrevPageButtonClicked" text="&lt;">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -255,7 +249,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Label text="1/10">
+                  <Label fx:id="pageIndexLabel" alignment="CENTER" prefHeight="30.0" prefWidth="66.0" text="1/10">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -263,7 +257,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" text="&gt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onNextPageButtonClicked" text="&gt;">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -271,7 +265,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" text="&gt;&gt;">
+                  <Button mnemonicParsing="false" onMouseClicked="#onLastPageButtonClicked" text="&gt;&gt;">
                      <font>
                         <Font size="20.0" />
                      </font></Button>

@@ -24,7 +24,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -181,7 +184,7 @@ public class OrderPaymentFinalController implements Initializable {
         double discountMoney = cuisineAmount * discount;
         double vat = cuisineAmount * 0.1;
         double finalAmount = tableAmount + cuisineAmount + vat - discountMoney;
-        finalAmountLabel.setText(Converter.formatMoney((int) finalAmount) + " VNĐ");
+        finalAmountLabel.setText(Converter.formatMoney(finalAmount) + " VNĐ");
 
         renderSuggestMoneyButtons(finalAmount);
     }
@@ -224,7 +227,7 @@ public class OrderPaymentFinalController implements Initializable {
             statusLabel.setText("Khách đưa đủ tiền");
             statusLabel.setStyle("-fx-text-fill: green");
             double refund = moneyFromCustomer - finalAmount;
-            refundLabel.setText(Converter.formatMoney((int) refund) + " VNĐ");
+            refundLabel.setText(Converter.formatMoney(refund) + " VNĐ");
         } else {
             statusLabel.setText("Khách chưa đưa đủ tiền");
             statusLabel.setStyle("-fx-text-fill: red");
@@ -276,7 +279,7 @@ public class OrderPaymentFinalController implements Initializable {
         int value = Integer.parseInt(((Pane) event.getSource()).getId().replace("keyFlowPane", ""));
         double currentResult = Converter.parseMoney(resultField.getText());
         double newResult = currentResult == 0 ? (double) value : currentResult * 10 + value;
-        String result = Converter.formatMoney((int) newResult);
+        String result = Converter.formatMoney(newResult);
         resultField.setText(result);
         resultLabel.setText(result + " VNĐ");
         setFinalAmountInfo();

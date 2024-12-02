@@ -1,12 +1,13 @@
 package com.huongbien.ui.controller;
 
+import com.huongbien.bus.CuisineBUS;
 import com.huongbien.dao.CategoryDAO;
 import com.huongbien.dao.CuisineDAO;
 import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import com.huongbien.utils.Pagination;
+import com.huongbien.utils.ToastsMessage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import java.io.File;
@@ -30,70 +30,106 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class CuisineManagementController implements Initializable {
-    @FXML private TableColumn<Cuisine, String> cuisineCategoryColumn;
-    @FXML private TableColumn<Cuisine, String> cuisineIdColumn;
-    @FXML private TableColumn<Cuisine, String> cuisineNameColumn;
-    @FXML private TableColumn<Cuisine, Double> cuisinePriceColumn;
-    @FXML private TableView<Cuisine> cuisineTable;
-    @FXML private TextField cuisineNameField;
-    @FXML private TextField cuisinePriceField;
-    @FXML private ComboBox<Category> cuisineCategoryComboBox;
-    @FXML private TextArea cuisineDescriptionTextArea;
-    @FXML private TextField cuisineSearchField;
-    @FXML private Button swapModeCuisineButton;
-    @FXML private Button handleActionCuisineButton;
-    @FXML private Button deleteCuisineButton;
-    @FXML private Button clearCuisineButton;
-    @FXML private Button chooseImageButton;
-    @FXML private ImageView cuisineImageView;
+    @FXML
+    public Label pageIndexLabel;
+    @FXML
+    public ComboBox<String> searchMethodComboBox;
+    @FXML
+    public Button searchCuisineButton;
+    @FXML
+    public ImageView clearCuisineSearchButton;
+    @FXML
+    private TableColumn<Cuisine, String> cuisineCategoryColumn;
+    @FXML
+    private TableColumn<Cuisine, String> cuisineIdColumn;
+    @FXML
+    private TableColumn<Cuisine, String> cuisineNameColumn;
+    @FXML
+    private TableColumn<Cuisine, Double> cuisinePriceColumn;
+    @FXML
+    private TableView<Cuisine> cuisineTable;
+    @FXML
+    private TextField cuisineNameField;
+    @FXML
+    private TextField cuisinePriceField;
+    @FXML
+    private ComboBox<Category> cuisineCategoryComboBox;
+    @FXML
+    private TextArea cuisineDescriptionTextArea;
+    @FXML
+    private TextField cuisineSearchField;
+    @FXML
+    private Button swapModeCuisineButton;
+    @FXML
+    private Button handleActionCuisineButton;
+    @FXML
+    private Button deleteCuisineButton;
+    @FXML
+    private Button clearCuisineButton;
+    @FXML
+    private Button chooseImageButton;
+    @FXML
+    private ImageView cuisineImageView;
 
-    public byte[] imageCuisineByte = null;
+    private byte[] imageCuisineByte = null;
+
+    private final CuisineBUS cuisineBUS = new CuisineBUS();
+
+    private final Image DEFAULT_IMAGE = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png")));
+
+    private Pagination<Cuisine> cuisinePagination;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ToastsMessage.showMessage("thêm món ăn thành công ", "success");
+        ToastsMessage.showMessage("thêm món ăn thất bại", "error");
+        ToastsMessage.showMessage("thông tin không hợp lệ", "warning");
+        clearCuisineSearchButton.setVisible(false);
+
+        setSearchMethodComboBoxValue();
+        setCuisinePaginationGetAll();
+        setCuisineTableColumns();
         setCuisineTableValues();
-        setValueComboBox();
+        setCategoryComboBoxValue();
+    }
+
+    public void setCuisineTableColumns() {
+        cuisineTable.setPlaceholder(new Label("Không có món ăn nào"));
+        cuisineIdColumn.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
+        cuisineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        cuisinePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        cuisinePriceColumn.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+            private final DecimalFormat priceFormat = new DecimalFormat("#,###");
+
+            @Override
+            public String toString(Double price) {
+                return price != null ? priceFormat.format(price) : "";
+            }
+
+            @Override
+            public Double fromString(String string) {
+                try {
+                    return priceFormat.parse(string).doubleValue();
+                } catch (Exception e) {
+                    return 0.0;
+                }
+            }
+        }));
+        cuisineCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategory().getName()));
     }
 
     private void setCuisineTableValues() {
-        CuisineDAO cuisineDao = CuisineDAO.getInstance();
-        List<Cuisine> cuisineList = cuisineDao.getAll();
-
+        List<Cuisine> cuisineList = cuisinePagination.getCurrentPage();
         ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
-        cuisineIdColumn.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
-        cuisineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        DecimalFormat priceFormat = new DecimalFormat("#,###");
-        cuisinePriceColumn.setCellFactory(column -> {
-            return new TextFieldTableCell<>(new StringConverter<Double>() {
-                @Override
-                public String toString(Double price) {
-                    return price != null ? priceFormat.format(price) : "";
-                }
-
-                @Override
-                public Double fromString(String string) {
-                    try {
-                        return priceFormat.parse(string).doubleValue();
-                    } catch (Exception e) {
-                        return 0.0;
-                    }
-                }
-            });
-        });
-        cuisinePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        cuisineCategoryColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getCategory().getName())
-        );
-
         cuisineTable.setItems(listCuisine);
+        setPageIndexLabel();
     }
 
-    private void setValueComboBox() {
+    private void setCategoryComboBoxValue() {
         CategoryDAO categoryDAO = CategoryDAO.getInstance();
         List<Category> categoryList = categoryDAO.getAll();
         ObservableList<Category> categories = FXCollections.observableArrayList(categoryList);
@@ -114,73 +150,84 @@ public class CuisineManagementController implements Initializable {
         });
     }
 
-    public void clearChooserImage() {
-        imageCuisineByte = null;
-        Image image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png"));
-        cuisineImageView.setImage(image);
+    public void setSearchMethodComboBoxValue() {
+        ObservableList<String> searchMethods = FXCollections.observableArrayList("Tất cả", "Tìm theo tên", "Tìm theo loại món");
+        searchMethodComboBox.setItems(searchMethods);
+        searchMethodComboBox.getSelectionModel().selectFirst();
     }
 
-    public void clearCuisineForm() {
-        cuisineNameField.setText("");
-        cuisinePriceField.setText("");
-        cuisineDescriptionTextArea.setText("");
+    public void setCuisinePaginationGetAll() {
+        int itemPerPage = 10;
+        int totalItem = cuisineBUS.countTotalCuisine();
+        boolean isRollBack = false;
+        cuisinePagination = new Pagination<>(
+                cuisineBUS::getAllCuisineWithPagination,
+                itemPerPage,
+                totalItem,
+                isRollBack
+        );
+    }
+
+    public void setCuisinePaginationGetByName(String name) {
+        int itemPerPage = 10;
+        int totalItem = cuisineBUS.countCuisinesByName(name);
+        boolean isRollBack = false;
+        cuisinePagination = new Pagination<>(
+                (offset, limit) -> cuisineBUS.getCuisinesByNameWithPagination(offset, limit, name),
+                itemPerPage,
+                totalItem,
+                isRollBack
+        );
+    }
+
+    public void setCuisinePaginationGetByCategory(String categoryName) {
+        int itemPerPage = 10;
+        int totalItem = cuisineBUS.countCuisinesByCategory(categoryName);
+        boolean isRollBack = false;
+        cuisinePagination = new Pagination<>(
+                (offset, limit) -> cuisineBUS.getCuisinesByCategoryWithPagination(offset, limit, categoryName),
+                itemPerPage,
+                totalItem,
+                isRollBack
+        );
+    }
+
+    public void setPageIndexLabel() {
+        int currentPageIndex = cuisinePagination.getCurrentPageIndex();
+        int totalPage = cuisinePagination.getTotalPages();
+        pageIndexLabel.setText(currentPageIndex + "/" + totalPage);
+    }
+
+    private void clearChooserImage() {
+        imageCuisineByte = null;
+        cuisineImageView.setImage(DEFAULT_IMAGE);
+    }
+
+    private void clearCuisineForm() {
+        cuisineNameField.clear();
+        cuisinePriceField.clear();
+        cuisineDescriptionTextArea.clear();
         cuisineCategoryComboBox.getSelectionModel().clearSelection();
         cuisineTable.getSelectionModel().clearSelection();
         deleteCuisineButton.setVisible(false);
         clearChooserImage();
     }
 
-    private void searchCuisine() {
-        cuisineTable.getItems().clear();
-        String input = cuisineSearchField.getText();
-        CuisineDAO cuisineDao = CuisineDAO.getInstance();
-        List<Cuisine> cuisineList = cuisineDao.getByName(input);
-
-        ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
-        cuisineIdColumn.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
-        cuisineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        DecimalFormat priceFormat = new DecimalFormat("#,###");
-        cuisinePriceColumn.setCellFactory(column -> {
-            return new TextFieldTableCell<>(new StringConverter<Double>() {
-                @Override
-                public String toString(Double price) {
-                    return price != null ? priceFormat.format(price) : "";
-                }
-
-                @Override
-                public Double fromString(String string) {
-                    try {
-                        return priceFormat.parse(string).doubleValue();
-                    } catch (Exception e) {
-                        return 0.0;
-                    }
-                }
-            });
-        });
-        cuisinePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        cuisineCategoryColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getCategory().getName())
-        );
-        cuisineTable.setItems(listCuisine);
-    }
-    
-    public void setHandleActionButtonToEditCuisine() {
+    private void setHandleActionButtonToEditCuisine() {
         swapModeCuisineButton.setText("Thêm món");
         handleActionCuisineButton.setText("Sửa món");
-        swapModeCuisineButton.setStyle("-fx-background-color:   #1D557E");
-        handleActionCuisineButton.setStyle("-fx-background-color:  #761D7E");
+        swapModeCuisineButton.setStyle("-fx-background-color: #1D557E");
+        handleActionCuisineButton.setStyle("-fx-background-color: #761D7E");
     }
 
-    public void setHandleActionButtonToAddCuisine() {
+    private void setHandleActionButtonToAddCuisine() {
         swapModeCuisineButton.setText("Sửa món");
         handleActionCuisineButton.setText("Thêm món");
-        swapModeCuisineButton.setStyle("-fx-background-color:   #761D7E");
-        handleActionCuisineButton.setStyle("-fx-background-color:  #1D557E");
+        swapModeCuisineButton.setStyle("-fx-background-color: #761D7E");
+        handleActionCuisineButton.setStyle("-fx-background-color: #1D557E");
     }
 
-    public void disableInput() {
+    private void disableInput() {
         cuisineNameField.setDisable(true);
         cuisinePriceField.setDisable(true);
         cuisineCategoryComboBox.setDisable(true);
@@ -188,7 +235,7 @@ public class CuisineManagementController implements Initializable {
         chooseImageButton.setDisable(true);
     }
 
-    public void enableInput() {
+    private void enableInput() {
         cuisineNameField.setDisable(false);
         cuisinePriceField.setDisable(false);
         cuisineCategoryComboBox.setDisable(false);
@@ -197,148 +244,127 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    public void onCuisineTableViewClicked(MouseEvent event) {
+    private void onCuisineTableViewClicked(MouseEvent event) {
         Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            String idSelect = selectedItem.getCuisineId();
-            CuisineDAO cuisineDao = CuisineDAO.getInstance();
-            Cuisine cuisine = cuisineDao.getById(idSelect);
-            //load img------
-            byte[] imageBytes = cuisine.getImage();
-            imageCuisineByte = imageBytes;
-            Image image;
-            if (imageBytes != null) {
-                image = Converter.bytesToImage(imageBytes);
-            } else {
-                image = new Image(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png"));
-            }
-            cuisineImageView.setImage(image);
-            //---------------
-            cuisineNameField.setText(cuisine.getName());
-            //--Format Price
-            DecimalFormat priceFormat = new DecimalFormat("#,###");
-            String formattedPrice = priceFormat.format(cuisine.getPrice());
-            cuisinePriceField.setText(formattedPrice);
-            //---------------
-            cuisineCategoryComboBox.getSelectionModel().select(cuisine.getCategory());
-            cuisineDescriptionTextArea.setText(cuisine.getDescription());
-            deleteCuisineButton.setVisible(true);
-            clearCuisineButton.setVisible(true);
-            swapModeCuisineButton.setVisible(true);
-            handleActionCuisineButton.setVisible(true);
+            loadCuisineDetails(selectedItem);
             enableInput();
             setHandleActionButtonToEditCuisine();
         }
     }
 
-    @FXML
-    public void onClearCuisineClicked(ActionEvent event) {
-        clearCuisineButton.setVisible(false);
-        deleteCuisineButton.setVisible(false);
+    private void loadCuisineDetails(Cuisine cuisine) {
+        cuisineNameField.setText(cuisine.getName());
+        cuisinePriceField.setText(new DecimalFormat("#,###").format(cuisine.getPrice()));
+        cuisineCategoryComboBox.getSelectionModel().select(cuisine.getCategory());
+        cuisineDescriptionTextArea.setText(cuisine.getDescription());
+        loadImage(cuisine.getImage());
+        deleteCuisineButton.setVisible(true);
+        clearCuisineButton.setVisible(true);
         swapModeCuisineButton.setVisible(true);
-        handleActionCuisineButton.setVisible(false);
-        cuisineTable.getSelectionModel().clearSelection();
-        setHandleActionButtonToEditCuisine();
-        disableInput();
-        clearCuisineForm();
+        handleActionCuisineButton.setVisible(true);
+    }
+
+    private void loadImage(byte[] imageBytes) {
+        imageCuisineByte = imageBytes;
+        Image image = (imageBytes != null) ? Converter.bytesToImage(imageBytes) : DEFAULT_IMAGE;
+        cuisineImageView.setImage(image);
     }
 
     @FXML
-    public void onClearSearchClicked(MouseEvent event) {
-        cuisineSearchField.setText("");
+    private void onClearCuisineClicked(ActionEvent event) {
+        clearCuisineForm();
+        disableInput();
+        setHandleActionButtonToEditCuisine();
+    }
+
+    @FXML
+    private void onClearSearchClicked(MouseEvent event) {
+        cuisineSearchField.clear();
         cuisineSearchField.requestFocus();
-        cuisineTable.getItems().clear();
         setCuisineTableValues();
     }
 
     @FXML
-    public void onSwapModeButtonClicked(ActionEvent event) {
+    private void onSwapModeButtonClicked(ActionEvent event) {
         if (swapModeCuisineButton.getText().equals("Sửa món")) {
             clearChooserImage();
             setHandleActionButtonToEditCuisine();
-        } else if (swapModeCuisineButton.getText().equals("Thêm món")) {
-            clearCuisineButton.setVisible(true);
-            deleteCuisineButton.setVisible(false);
-            swapModeCuisineButton.setVisible(false);
-            handleActionCuisineButton.setVisible(true);
-            enableInput();
+        } else {
             clearCuisineForm();
+            enableInput();
             setHandleActionButtonToAddCuisine();
         }
     }
 
     @FXML
-    public void onHandleActionButtonClicked(ActionEvent event) {
+    private void onHandleActionButtonClicked(ActionEvent event) {
         if (handleActionCuisineButton.getText().equals("Sửa món")) {
-            //Lay ID cua table thuc hien chinh sua
-            Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
-                String idSelect = selectedItem.getCuisineId();
-                String name = cuisineNameField.getText();
-                double price = cuisinePriceField.getText().isEmpty() ? 0.0 : Double.parseDouble(cuisinePriceField.getText().replace(".", ""));
-                String description = cuisineDescriptionTextArea.getText();
-                String categoryId = cuisineCategoryComboBox.getValue().getCategoryId();
-                String categoryName = cuisineCategoryComboBox.getValue().getName();
-                String categoryDescription = cuisineCategoryComboBox.getValue().getDescription();
-                CuisineDAO cuisineDao = CuisineDAO.getInstance();
-                Cuisine cuisine = new Cuisine(idSelect, name, price, description, imageCuisineByte,
-                        new Category(categoryId, categoryName, categoryDescription)
-                );
-                if (cuisineDao.updateCuisineInfo(cuisine)) {
-                    System.out.println("Đã sửa món thành công");
-                } else {
-                    System.out.println("Sửa món không thành công");
-                }
-            }
-        } else if (handleActionCuisineButton.getText().equals("Thêm món")) {
-            String name = cuisineNameField.getText();
-            double price = cuisinePriceField.getText().isEmpty() ? 0.0 : Double.parseDouble(cuisinePriceField.getText().replace(".", ""));
-            String description = cuisineDescriptionTextArea.getText();
-            String categoryId = cuisineCategoryComboBox.getValue().getCategoryId();
-            String categoryName = cuisineCategoryComboBox.getValue().getName();
-            String categoryDescription = cuisineCategoryComboBox.getValue().getDescription();
-
-            CuisineDAO cuisineDao = CuisineDAO.getInstance();
-            Cuisine cuisine = new Cuisine(name, price, description, imageCuisineByte,
-                    new Category(categoryId, categoryName, categoryDescription)
-            );
-            if (cuisineDao.add(cuisine)) {
-                System.out.println("Thêm món thành công");
-            } else {
-                System.out.println("Thêm món không thành công");
-            }
-            clearCuisineForm();
+            updateCuisine();
+        } else {
+            addCuisine();
         }
         disableInput();
-        cuisineTable.getItems().clear();
-        setCuisineTableValues();
-        clearCuisineButton.setVisible(false);
-        deleteCuisineButton.setVisible(false);
-        swapModeCuisineButton.setVisible(true);
-        handleActionCuisineButton.setVisible(false);
+        refreshCuisineTable();
         setHandleActionButtonToEditCuisine();
     }
 
-    @FXML
-    public void onDeleteCuisineButtonClicked(ActionEvent event) throws SQLException {
+    private void updateCuisine() {
         Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            String idSelect = selectedItem.getCuisineId();
-            CuisineDAO cuisineDao = CuisineDAO.getInstance();
-            if (cuisineDao.delete(idSelect)) {
+            Cuisine cuisine = createCuisineFromForm(selectedItem.getCuisineId());
+            if (CuisineDAO.getInstance().updateCuisineInfo(cuisine)) {
+                System.out.println("Đã sửa món thành công");
+            } else {
+                System.out.println("Sửa món không thành công");
+            }
+        }
+    }
+
+    private void addCuisine() {
+        Cuisine cuisine = createCuisineFromForm(null);
+        if (CuisineDAO.getInstance().add(cuisine)) {
+            System.out.println("Thêm món thành công");
+        } else {
+            System.out.println("Thêm món không thành công");
+        }
+        clearCuisineForm();
+    }
+
+    private Cuisine createCuisineFromForm(String cuisineId) {
+        String name = cuisineNameField.getText();
+        double price = cuisinePriceField.getText().isEmpty() ? 0.0 : Converter.parseMoney(cuisinePriceField.getText());
+        String description = cuisineDescriptionTextArea.getText();
+        Category category = cuisineCategoryComboBox.getValue();
+        return new Cuisine(cuisineId, name, price, description, imageCuisineByte, category);
+    }
+
+    private void refreshCuisineTable() {
+        cuisineTable.getItems().clear();
+        setCuisineTableValues();
+    }
+
+    @FXML
+    private void onDeleteCuisineButtonClicked(ActionEvent event) throws SQLException {
+        Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            if (CuisineDAO.getInstance().delete(selectedItem.getCuisineId())) {
                 System.out.println("Xoá món thành công");
             } else {
                 System.out.println("Xoá món không thành công");
             }
         }
-        cuisineTable.getItems().clear();
-        setCuisineTableValues();
-        clearCuisineButton.fire();
+        refreshCuisineTable();
+        clearCuisineForm();
         disableInput();
     }
 
     @FXML
-    public void onCuisinePriceTextFieldKeyReleased(KeyEvent event) {
+    private void onCuisinePriceTextFieldKeyReleased(KeyEvent event) {
+        formatPriceField();
+    }
+
+    private void formatPriceField() {
         String input = cuisinePriceField.getText().replace(".", "").replace(",", "");
         if (input.isEmpty()) {
             return;
@@ -360,73 +386,89 @@ public class CuisineManagementController implements Initializable {
         }
     }
 
-    //search cuisine area
     @FXML
-    public void onCuisineSearchTextFieldClicked(MouseEvent event) {
-        cuisineTable.getItems().clear();
-        String input = cuisineSearchField.getText();
-        CuisineDAO cuisineDao = CuisineDAO.getInstance();
-        List<Cuisine> cuisineList = cuisineDao.getByName(input);
-        //
-        ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
-        cuisineIdColumn.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
-        cuisineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        //
-        DecimalFormat priceFormat = new DecimalFormat("#,###");
-        cuisinePriceColumn.setCellFactory(column -> {
-            return new TextFieldTableCell<>(new StringConverter<Double>() {
-                @Override
-                public String toString(Double price) {
-                    return price != null ? priceFormat.format(price) : "";
-                }
-
-                @Override
-                public Double fromString(String string) {
-                    try {
-                        return priceFormat.parse(string).doubleValue();
-                    } catch (Exception e) {
-                        return 0.0;
-                    }
-                }
-            });
-        });
-        cuisinePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        cuisineCategoryColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getCategory().getName())
-        );
-        cuisineTable.setItems(listCuisine);
-    }
-
-    private Timeline searchDelay;
-
-    @FXML
-    public void onCuisineSearchTextFieldKeyReleased(KeyEvent event) {
-        if (searchDelay != null) {
-            searchDelay.stop();
+    public void onSearchMethodComboBoxSelected(ActionEvent actionEvent) {
+        String selectedMethod = searchMethodComboBox.getValue();
+        if (selectedMethod == null) return;
+        cuisineSearchField.setDisable(false);
+        switch (selectedMethod) {
+            case "Tìm theo tên":
+                cuisineSearchField.setPromptText("Nhập tên món ăn");
+                cuisineSearchField.clear();
+                cuisineSearchField.requestFocus();
+                break;
+            case "Tìm theo loại món":
+                cuisineSearchField.setPromptText("Nhập loại món ăn");
+                cuisineSearchField.clear();
+                cuisineSearchField.requestFocus();
+                break;
+            default:
+                cuisineSearchField.setPromptText("Thông tin món ăn");
+                cuisineSearchField.clear();
+                cuisineSearchField.setDisable(true);
+                break;
         }
-        searchDelay = new Timeline(new KeyFrame(Duration.millis(500), ae -> {
-            searchCuisine();
-        }));
-        searchDelay.setCycleCount(1);
-        searchDelay.play();
     }
 
     @FXML
-    public void onImageChooserButtonClicked(ActionEvent event) {
+    public void onSearchCuisineButtonClicked(MouseEvent mouseEvent) {
+        String selectedMethod = searchMethodComboBox.getValue();
+        String searchValue = cuisineSearchField.getText();
+        if (selectedMethod == null) return;
+        switch (selectedMethod) {
+            case "Tìm theo tên" -> setCuisinePaginationGetByName(searchValue);
+            case "Tìm theo loại món" -> setCuisinePaginationGetByCategory(searchValue);
+            default -> setCuisinePaginationGetAll();
+        }
+        setCuisineTableValues();
+    }
+
+    @FXML
+    private void onCuisineSearchTextFieldClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void onCuisineSearchTextFieldKeyReleased(KeyEvent event) {
+        clearCuisineSearchButton.setVisible(!cuisineSearchField.getText().isEmpty());
+    }
+
+    @FXML
+    private void onImageChooserButtonClicked(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
-                "Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
-        );
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             Image image = new Image(file.toURI().toString());
             cuisineImageView.setImage(image);
-            //convert
             try {
                 imageCuisineByte = Converter.fileToBytes(file);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @FXML
+    public void onFirstPageButtonClicked(MouseEvent mouseEvent) {
+        cuisinePagination.goToFirstPage();
+        setCuisineTableValues();
+    }
+
+    @FXML
+    public void onPrevPageButtonClicked(MouseEvent mouseEvent) {
+        cuisinePagination.goToPreviousPage();
+        setCuisineTableValues();
+    }
+
+    @FXML
+    public void onNextPageButtonClicked(MouseEvent mouseEvent) {
+        cuisinePagination.goToNextPage();
+        setCuisineTableValues();
+    }
+
+    @FXML
+    public void onLastPageButtonClicked(MouseEvent mouseEvent) {
+        cuisinePagination.goToLastPage();
+        setCuisineTableValues();
     }
 }
