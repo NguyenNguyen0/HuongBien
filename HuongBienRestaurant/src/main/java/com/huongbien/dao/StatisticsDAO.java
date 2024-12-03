@@ -240,7 +240,7 @@ public class StatisticsDAO {
                 order.setTotalAmount(rs.getDouble("totalAmount"));
                 order.setDiscount(rs.getDouble("discount"));
                 order.setCustomer(customerDao.getById(rs.getString("customerId")));
-                order.setEmployee(employeeDao.getById(rs.getString("employeeId")).getFirst());
+                order.setEmployee(employeeDao.getManyById(rs.getString("employeeId")).getFirst());
                 order.setPromotion(promotionDao.getById(rs.getString("promotionId")));
                 order.setPayment(paymentDao.getById(rs.getString("paymentId")));
 

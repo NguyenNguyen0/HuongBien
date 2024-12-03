@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" style="-fx-background-color: white;" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" style="-fx-background-color: white;" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -55,7 +55,7 @@
                                           <Insets right="20.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <ComboBox prefHeight="60.0" prefWidth="250.0" promptText="Thành công hay thất bại" />
+                                    <ComboBox prefHeight="60.0" prefWidth="250.0" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="20.0" />
@@ -371,7 +371,7 @@
                   </VBox>
                </content>
                <graphic>
-                  <Label alignment="CENTER_RIGHT" text="(Unknown)" textFill="WHITE">
+                  <Label fx:id="countPaymentQueueLabel" alignment="CENTER_RIGHT" text="(Unknown)" textFill="WHITE">
                      <padding>
                         <Insets right="10.0" />
                      </padding>

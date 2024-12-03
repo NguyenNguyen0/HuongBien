@@ -81,7 +81,7 @@ public class InvoicePrinterDialogController implements Initializable {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
             EmployeeDAO dao_employee = EmployeeDAO.getInstance();
-            Employee employee = dao_employee.getById(id).get(0);
+            Employee employee = dao_employee.getManyById(id).get(0);
             currentLoginSession = (employee.getName() != null ? employee.getName() : "Không xác định");
         }
         content.setText(content.getText() + String.format("%-13s %37s", "Thu ngân:", currentLoginSession));

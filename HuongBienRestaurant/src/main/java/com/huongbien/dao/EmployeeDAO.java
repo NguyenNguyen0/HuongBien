@@ -45,7 +45,11 @@ public class EmployeeDAO extends GenericDAO<Employee> {
         return getMany("SELECT * FROM Employee;");
     }
 
-    public List<Employee> getById(String id) {
+    public Employee getOneById(String id) {
+        return getOne("SELECT * FROM [Employee] WHERE id = ?", id);
+    }
+
+    public List<Employee> getManyById(String id) {
         return getMany("SELECT * FROM Employee WHERE id LIKE ?;", id + "%");
     }
 

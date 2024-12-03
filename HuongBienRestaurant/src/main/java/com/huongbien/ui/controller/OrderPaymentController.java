@@ -159,7 +159,7 @@ public class OrderPaymentController implements Initializable {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
             EmployeeDAO dao_employee = EmployeeDAO.getInstance();
-            Employee employee = dao_employee.getById(id).get(0);
+            Employee employee = dao_employee.getManyById(id).get(0);
             currentUser  = (employee.getName() != null ? employee.getName() : "Không xác định");
         }
         //get info table and calc table amout

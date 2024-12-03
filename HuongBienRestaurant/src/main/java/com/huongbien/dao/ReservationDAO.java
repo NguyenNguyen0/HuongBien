@@ -47,7 +47,7 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         reservation.setRefundDeposit(resultSet.getDouble("refundDeposit"));
         reservation.setNote(resultSet.getString("note"));
         reservation.setCustomer(customerDao.getById(resultSet.getString("customerId")));
-        reservation.setEmployee(employeeDao.getById(resultSet.getString("employeeId")).getFirst());
+        reservation.setEmployee(employeeDao.getManyById(resultSet.getString("employeeId")).getFirst());
         reservation.setPayment(paymentDao.getById(resultSet.getString("paymentId")));
         reservation.setTables((ArrayList<Table>) tableDao.getAllByReservationId(reservation.getReservationId()));
         reservation.setFoodOrders((ArrayList<FoodOrder>) foodOrderDao.getAllByReservationId(reservation.getReservationId()));

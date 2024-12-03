@@ -45,6 +45,7 @@ public class ReservationManagementController implements Initializable {
     @FXML private Label totalAmountPaymentQueueLabel;
     @FXML private Button deletePaymentQueueButton;
     @FXML private Button orderPaymentButton;
+    @FXML private Label countPaymentQueueLabel;
     //Pre-Order
     //TODO: Add Pre-Order UI components here
 
@@ -58,7 +59,11 @@ public class ReservationManagementController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Payment Queue
-        setUIDefault();
+        try {
+            setUIDefault();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         loadPaymentQueueDataFromJSON();
         //Pre-Order
         //TODO:
@@ -77,13 +82,14 @@ public class ReservationManagementController implements Initializable {
         orderPaymentButton.setVisible(true);
     }
 
-    private void setUIDefault() {
+    private void setUIDefault() throws FileNotFoundException {
         //Payment Queue
         customerNamePaymentQueueLabel.setText("");
         tableAreaPaymentQueueLabel.setText("");
         cuisineQuantityPaymentQueueLabel.setText("");
         promotionNamePaymentQueueLabel.setText("");
         totalAmountPaymentQueueLabel.setText("");
+        countPaymentQueueLabel.setText("( "+Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH).size()+" )");
         disablePayQueueButton();
         //Pre-Order
 

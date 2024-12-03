@@ -46,7 +46,7 @@ public class OrderDAO extends GenericDAO<Order> {
         order.setDiscount(resultSet.getDouble("discount"));
 
         order.setCustomer(customerDao.getById(resultSet.getString("customerId")));
-        order.setEmployee(employeeDao.getById(resultSet.getString("employeeId")).getFirst());
+        order.setEmployee(employeeDao.getManyById(resultSet.getString("employeeId")).getFirst());
         order.setPromotion(promotionDao.getById(resultSet.getString("promotionId")));
         order.setPayment(paymentDao.getById(resultSet.getString("paymentId")));
 

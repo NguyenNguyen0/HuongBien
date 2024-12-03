@@ -26,9 +26,9 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="1159.0" styleClass="gradient-main">
+      <BorderPane fx:id="mainBorderPane" prefHeight="200.0" prefWidth="1159.0" styleClass="gradient-main">
          <left>
             <HBox fx:id="hidedMenuBarHBox" prefHeight="553.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
@@ -743,7 +743,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefWidth="780.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Chọn ảnh">
+                                    <Button mnemonicParsing="false" onAction="#onImageChooserButtonAction" text="Chọn ảnh">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -755,7 +755,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefWidth="200.0">
                                  <children>
-                                    <Label text="Nguyễn Văn Minh">
+                                    <Label fx:id="nameDetailUserLabel" text="Unknown">
                                        <font>
                                           <Font name="System Bold" size="30.0" />
                                        </font>
@@ -781,57 +781,6 @@
                         </VBox>
                         <TabPane prefHeight="422.0" prefWidth="780.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                           <tabs>
-                              <Tab text="Ca làm">
-                                 <content>
-                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
-                                       <center>
-                                          <VBox alignment="CENTER" prefHeight="299.0" prefWidth="780.0" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
-                                                   <children>
-                                                      <Label prefHeight="36.0" prefWidth="365.0" text="Số giờ đã làm hôm nay: 0">
-                                                         <font>
-                                                            <Font name="System Bold" size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
-                                                   <children>
-                                                      <Label prefHeight="36.0" prefWidth="351.0" text="Tổng giờ làm tháng qua: 0">
-                                                         <font>
-                                                            <Font name="System Bold" size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
-                                                   <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Lương theo giờ: 0">
-                                                         <font>
-                                                            <Font name="System Bold" size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
-                                                   <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Lương cứng: 0">
-                                                         <font>
-                                                            <Font name="System Bold" size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets left="60.0" right="60.0" />
-                                             </padding>
-                                          </VBox>
-                                       </center>
-                                    </BorderPane>
-                                 </content>
-                              </Tab>
                             <Tab text="Hồ sơ">
                                  <content>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
@@ -842,10 +791,10 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Mã nhân sự:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <TextField text="22003405" HBox.hgrow="ALWAYS">
+                                                      <TextField fx:id="idDetailUserField" disable="true" editable="false" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -856,10 +805,10 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Tên nhân sự:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <TextField text="Nguyễn Văn Minh" HBox.hgrow="ALWAYS">
+                                                      <TextField fx:id="nameDetailUserField" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -870,20 +819,20 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Ngày sinh:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <DatePicker prefHeight="52.0" prefWidth="412.0" HBox.hgrow="ALWAYS" />
+                                                      <DatePicker fx:id="birthDateDetailUserDatePicker" prefHeight="52.0" prefWidth="412.0" HBox.hgrow="ALWAYS" />
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Số điện thoại:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <TextField text="0353.999.999" HBox.hgrow="ALWAYS">
+                                                      <TextField fx:id="phoneDetailUserField" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -894,10 +843,10 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="250.0" text="Email:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <TextField text="nvminh162@gmail.com" HBox.hgrow="ALWAYS">
+                                                      <TextField fx:id="emailDetailUserField" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -906,9 +855,9 @@
                                                 </HBox>
                                                 <HBox alignment="TOP_RIGHT" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
-                                                      <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-color: black;" text="Lưu thay đổi">
+                                                      <Button mnemonicParsing="false" onAction="#saveInfoDetailUserButtonAction" style="-fx-background-color: white; -fx-border-color: black;" text="Lưu thay đổi">
                                                          <font>
-                                                            <Font size="25.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Button>
                                                    </children>
@@ -920,6 +869,9 @@
                                              <padding>
                                                 <Insets left="60.0" right="60.0" />
                                              </padding>
+                                             <BorderPane.margin>
+                                                <Insets top="10.0" />
+                                             </BorderPane.margin>
                                           </VBox>
                                        </center>
                                     </BorderPane>
@@ -933,12 +885,12 @@
                                              <children>
                                                 <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Mật khẩu cũ:">
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Mật khẩu hiện tại:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <PasswordField text="xxxxxx" HBox.hgrow="ALWAYS">
+                                                      <PasswordField fx:id="currentPwdField" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -949,10 +901,10 @@
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="280.0" text="Mật khẩu mới:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <PasswordField text="xxxxxx" HBox.hgrow="ALWAYS">
+                                                      <PasswordField fx:id="newPwdField" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -961,12 +913,12 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Nhập lại mật khẩu:">
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Nhập lại mật khẩu mới:">
                                                          <font>
-                                                            <Font name="System Bold" size="25.0" />
+                                                            <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <PasswordField text="xxxxxx" HBox.hgrow="ALWAYS">
+                                                      <PasswordField fx:id="new2PwdField" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -975,15 +927,86 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
-                                                      <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-color: black;" text="Cập nhật">
+                                                      <Button mnemonicParsing="false" onAction="#updatePwdDetailUserButtonAction" style="-fx-background-color: white; -fx-border-color: black;" text="Cập nhật">
                                                          <font>
-                                                            <Font size="25.0" />
+                                                            <Font name="System Bold" size="25.0" />
                                                          </font>
                                                       </Button>
                                                    </children>
                                                    <VBox.margin>
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
+                                                </HBox>
+                                             </children>
+                                             <padding>
+                                                <Insets left="60.0" right="60.0" />
+                                             </padding>
+                                          </VBox>
+                                       </center>
+                                    </BorderPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="Chấm công">
+                                 <content>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                       <center>
+                                          <VBox alignment="CENTER" prefHeight="299.0" prefWidth="780.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
+                                                   <children>
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Số giờ đã làm hôm nay:">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
+                                                   <children>
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Tổng giờ làm tháng qua:">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
+                                                   <children>
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Lương theo giờ:">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
+                                                   <children>
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Lương cứng:">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
                                                 </HBox>
                                              </children>
                                              <padding>

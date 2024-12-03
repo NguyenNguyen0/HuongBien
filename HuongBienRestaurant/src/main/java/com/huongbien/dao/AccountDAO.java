@@ -27,7 +27,7 @@ public class AccountDAO extends GenericDAO<Account> {
         account.setRole(resultSet.getString("role"));
         account.setEmail(resultSet.getString("email"));
         account.setIsActive(resultSet.getBoolean("isActive"));
-        List<Employee> employees = EmployeeDAO.getInstance().getById(account.getUsername());
+        List<Employee> employees = EmployeeDAO.getInstance().getManyById(account.getUsername());
         account.setEmployeeInfo(!employees.isEmpty() ? employees.get(0) : null);
         return account;
     }
