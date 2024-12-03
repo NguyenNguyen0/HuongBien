@@ -1,6 +1,9 @@
 package com.huongbien.dao;
 
+import com.huongbien.config.Variable;
+import com.huongbien.entity.Customer;
 import com.huongbien.entity.Table;
+import javafx.scene.control.Tab;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -55,24 +58,29 @@ public class    TableDAO extends GenericDAO<Table> {
         return getMany("SELECT * FROM [Table] WHERE id IN (SELECT tableId FROM Order_Table WHERE orderId = ?)", orderId);
     }
 
-    public List<Table> getByCriteria(String floor, String status, String typeID) {
+    public List<Table> getByCriteria(String floor, String status, String typeID, String seat) {
         List<Table> tables = new ArrayList<>();
         StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM [Table] WHERE status != N'Bàn đóng'");
         List<String> parameters = new ArrayList<>();
 
-        if (floor != null && !floor.isEmpty()) {
+        if (!floor.isEmpty()) {
             sqlBuilder.append(" AND floor = ?");
             parameters.add(floor);
         }
 
-        if (status != null && !status.equals("Tất cả trạng thái") && !status.isEmpty()) {
+        if (!status.equals(Variable.status) && !status.isEmpty()) {
             sqlBuilder.append(" AND status = ?");
             parameters.add(status);
         }
 
-        if (typeID != null && !typeID.equals("Tất cả loại bàn") && !typeID.isEmpty()) {
+        if (!typeID.equals(Variable.tableTypeName) && !typeID.isEmpty()) {
             sqlBuilder.append(" AND tableTypeId = ?");
             parameters.add(typeID);
+        }
+
+        if (!seat.equals(Variable.seats) && !seat.isEmpty()) {
+            sqlBuilder.append(" AND seats = ?");
+            parameters.add(seat);
         }
 
         String sql = sqlBuilder.toString();
@@ -107,6 +115,41 @@ public class    TableDAO extends GenericDAO<Table> {
             throw new RuntimeException(e);
         }
     }
+
+    public List<String> getDistinctSeat() {
+        List<String> seats = new ArrayList<>();
+        String sql = "SELECT DISTINCT seats FROM [Table]";
+
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                seats.add(resultSet.getString("seats"));
+            }
+            return seats;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //TODO: Tối ưu cho gọn giúp t (Minh)
+    public Table getTopFloor() {
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT TOP 1 floor FROM [Table] ORDER BY floor ASC");
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int floor = resultSet.getInt("floor");
+                Table table = new Table();
+                table.setFloor(floor);
+                return table;
+            }
+            return null; // Nếu không tìm thấy floor nào
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public List<Table> getReservedTables(LocalDate receiveDate) {
         try {

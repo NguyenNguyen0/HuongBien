@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1445.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderCuisineController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1445.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderCuisineController">
    <right>
       <StackPane prefWidth="700.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -196,18 +196,7 @@
                   </HBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="700.0" style="-fx-border-color: black;">
-               <children>
-                  <Label fx:id="reservationIDLabel" text="Unknow">
-                     <font>
-                        <Font name="System Bold" size="25.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="700.0" style="-fx-border-color: black;" />
          </children></HBox>
    </top>
    <left>

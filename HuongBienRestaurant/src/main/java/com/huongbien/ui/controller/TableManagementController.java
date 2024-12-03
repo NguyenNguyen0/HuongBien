@@ -114,10 +114,10 @@ public class TableManagementController implements Initializable {
 
     private void setTableImage(String tableStatus) {
         switch (tableStatus) {
-            case "Bàn trống" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-empty-512px.png"));
-            case "Đặt trước" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-preOrder-512px.png"));
-            case "Phục vụ" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-ordered-512px.png"));
-            case "Bàn đóng" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tab-stop-512px.png"));
+            case "Bàn trống" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tableEmpty-512px.png"));
+            case "Đặt trước" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tableReserved-512px.png"));
+            case "Phục vụ" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tableOpen-512px.png"));
+            case "Bàn đóng" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tableClosed-512px.png"));
         }
     }
 

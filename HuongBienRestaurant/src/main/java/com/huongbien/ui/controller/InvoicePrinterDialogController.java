@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
@@ -18,18 +19,9 @@ import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.*;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -133,7 +125,7 @@ public class InvoicePrinterDialogController implements Initializable {
                     content.setText(content.getText() + String.format("%-13s %37s", "", table.getName() + " " + (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor()) + " - " + table.getTableType().getName() + ")"));
                 }
                 newLine();
-                tableAmount += (table.getTableType().getTableId().equals("LB002") ? Constants.TABLE_PRICE : 0);
+                tableAmount += (table.getTableType().getTableId().equals("LB002") ? Variable.tablePrice : 0);
             }
         }
         content.setText(content.getText() + String.format("%-20s %30s", "Mã khuyến mãi:", promotionId));
@@ -196,7 +188,7 @@ public class InvoicePrinterDialogController implements Initializable {
         newLine();
         separator();
         newLine();
-        content.setText(content.getText() + "\n\t\tPASSWORD WIFI: " + Constants.PASSWORD);
+        content.setText(content.getText() + "\n\t\tPASSWORD WIFI: " + Variable.PASSWORD_WIFI);
         newLine();
         content.setText(content.getText() + " Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!");
         newLine();

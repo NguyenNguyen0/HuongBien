@@ -4,10 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.config.Variable;
+import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.dao.TableTypeDAO;
+import com.huongbien.entity.Customer;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +26,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.io.FileNotFoundException;
@@ -30,6 +35,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OrderTableController implements Initializable {
@@ -38,6 +44,7 @@ public class OrderTableController implements Initializable {
     @FXML public ComboBox<String> tableFloorComboBox;
     @FXML public ComboBox<String> tableStatusComboBox;
     @FXML public ComboBox<String> tableTypeComboBox;
+    @FXML private ComboBox<String> tableSeatsComboBox;
     @FXML public TabPane tableInfoTabPane;
     @FXML public Label tableQuantityLabel;
     @FXML public Label seatTotalLabel;
@@ -52,7 +59,7 @@ public class OrderTableController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadTablesToGridPane("0", "Tất cả trạng thái", "Tất cả loại bàn");
+        loadTablesToGridPane(Variable.floor , Variable.status, Variable.tableTypeName, Variable.seats); //value mặc định
         setComboBoxValue();
         try {
             readTableDataFromJSON();
@@ -61,8 +68,8 @@ public class OrderTableController implements Initializable {
         }
     }
     //---
-    private void loadTablesToGridPane(String floor, String status, String type) {
-        List<Table> tables = new ArrayList<>(getTableDataByCriteria(floor, status, type));
+    private void loadTablesToGridPane(int floor, String status, String type, String seat) {
+        List<Table> tables = new ArrayList<>(getTableDataByCriteria(floor, status, type, seat));
         int columns = 0;
         int rows = 1;
         try {
@@ -87,9 +94,9 @@ public class OrderTableController implements Initializable {
         orderTableGridPane.prefWidthProperty().bind(orderTableScrollPane.widthProperty());
     }
 
-    private List<Table> getTableDataByCriteria(String floor, String status, String type) {
+    private List<Table> getTableDataByCriteria(int floor, String status, String type, String seat) {
         TableDAO tableDAO = TableDAO.getInstance();
-        return tableDAO.getByCriteria(floor, status, type);
+        return tableDAO.getByCriteria(String.valueOf(floor), status, type, seat); //Ép kiểu floor => string để dùng nối chuỗi SQL query đơn giản hơn
     }
 
     private void setComboBoxValue() {
@@ -113,7 +120,7 @@ public class OrderTableController implements Initializable {
         tableFloorComboBox.getSelectionModel().selectFirst();
         //Status
         List<String> statuses = tableDAO.getDistinctStatuses();
-        ObservableList<String> statusOptions = FXCollections.observableArrayList("Tất cả trạng thái");
+        ObservableList<String> statusOptions = FXCollections.observableArrayList("Trạng thái");
         statusOptions.addAll(statuses);
         tableStatusComboBox.setItems(statusOptions);
         tableStatusComboBox.setConverter(new StringConverter<String>() {
@@ -130,7 +137,7 @@ public class OrderTableController implements Initializable {
         tableStatusComboBox.getSelectionModel().selectFirst();
         //Type
         List<String> tableTypes = tableTypeDAO.getDistinctTableType();
-        ObservableList<String> typeOptions = FXCollections.observableArrayList("Tất cả loại bàn");
+        ObservableList<String> typeOptions = FXCollections.observableArrayList("Loại bàn");
         typeOptions.addAll(tableTypes);
         tableTypeComboBox.setItems(typeOptions);
         tableTypeComboBox.setConverter(new StringConverter<String>() {
@@ -145,6 +152,23 @@ public class OrderTableController implements Initializable {
             }
         });
         tableTypeComboBox.getSelectionModel().selectFirst();
+        //Seats
+        List<String> seats = tableDAO.getDistinctSeat();
+        ObservableList<String> seatOptions = FXCollections.observableArrayList("Số chỗ");
+        seatOptions.addAll(seats);
+        tableSeatsComboBox.setItems(seatOptions);
+        tableSeatsComboBox.setConverter(new StringConverter<String>() {
+            @Override
+            public String toString(String seat) {
+                return seat.equals("Số chỗ") ? seat : seat + " chỗ";
+            }
+
+            @Override
+            public String fromString(String string) {
+                return string;
+            }
+        });
+        tableSeatsComboBox.getSelectionModel().selectFirst();
     }
 
     public void setTableTabPane(String name, int floor, int seats, String typeName) {
@@ -211,7 +235,7 @@ public class OrderTableController implements Initializable {
             //calculate seat total
             seatTotal += table.getSeats();
             //calculate table amount
-            tableAmount += table.getTableType().getTableId().equals("LB002") ? Constants.TABLE_PRICE : 0;
+            tableAmount += table.getTableType().getTableId().equals(Variable.tableVipID) ? Variable.tablePrice : 0;
         }
         tableQuantityLabel.setText(String.valueOf(jsonArray.size()));
         seatTotalLabel.setText(seatTotal + " chỗ");
@@ -219,14 +243,15 @@ public class OrderTableController implements Initializable {
     }
 
     public void handleLoadTableFromComboBoxSelection() throws SQLException {
-        String floor = tableFloorComboBox.getValue();
+        int floor = Integer.parseInt(tableFloorComboBox.getValue());
         String status = tableStatusComboBox.getValue();
         String tableTypeName = tableTypeComboBox.getValue();
+        String seat = tableSeatsComboBox.getValue(); //Để kiểu string hiên thị trên comboBox
         TableTypeDAO tableTypeDAO = TableTypeDAO.getInstance();
         TableType tableType = tableTypeDAO.getByName(tableTypeName);
         String tableTypeId = (tableType != null) ? tableType.getTableId() : "";
         orderTableGridPane.getChildren().clear();
-        loadTablesToGridPane(floor, status, tableTypeId);
+        loadTablesToGridPane(floor, status, tableTypeId, seat);
     }
 
     //comboBox
@@ -246,16 +271,20 @@ public class OrderTableController implements Initializable {
     }
 
     @FXML
+    void onTableSeatsComboBoxSelected(ActionEvent event) throws SQLException {
+        handleLoadTableFromComboBoxSelection();
+    }
+
+    @FXML
     void onChooseCuisineButtonClicked(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
             jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         } catch (FileNotFoundException e) {
-            System.out.println("File không tồn tại.");
             return;
         }
         if (jsonArray.isEmpty()) {
-            Utils.showAlert("Vui lòng chọn bàn", "Reminder");
+            ToastsMessage.showToastsMessage("Nhắc nhở","Vui lòng chọn bàn");
             return;
         }
         restaurantMainController.openOrderCuisine();
@@ -271,9 +300,32 @@ public class OrderTableController implements Initializable {
             return;
         }
         if (jsonArray.isEmpty()) {
-            Utils.showAlert("Vui lòng chọn bàn", "Reminder");
+            ToastsMessage.showToastsMessage("Nhắc nhở","Vui lòng chọn bàn");
             return;
         }
         restaurantMainController.openPreOrder();
+    }
+
+    @FXML
+    void onClearChooserTableButtonAction(ActionEvent event) throws IOException {
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+        if (jsonArray.isEmpty()) {
+            ToastsMessage.showToastsMessage("Nhắc nhở","Vui lòng chọn bàn");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.setHeaderText("Thông báo");
+        alert.setContentText("Bạn có chắc chắn muốn xóa tất cả bàn đã chọn?");
+        ButtonType btn_ok = new ButtonType("Xoá tất cả");
+        ButtonType btn_cancel = new ButtonType("Không xoá");
+        alert.getButtonTypes().setAll(btn_ok, btn_cancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == btn_ok) {
+            Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_TABLE_PATH);
+            restaurantMainController.openOrderTable();
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
@@ -18,8 +19,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -30,9 +29,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -178,7 +174,7 @@ public class OrderPaymentController implements Initializable {
             String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
             tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append(") ").append(", ");
             //calc table amount
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Constants.TABLE_PRICE : 0;
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Variable.tablePrice : 0;
         }
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
@@ -285,7 +281,7 @@ public class OrderPaymentController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Constants.TABLE_PRICE : 0;
+            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Variable.tablePrice : 0;
         }
         double discountMoney = totalAmount * discount;
         double vat = totalAmount * 0.1;

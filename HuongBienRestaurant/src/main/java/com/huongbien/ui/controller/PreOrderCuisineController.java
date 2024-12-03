@@ -162,12 +162,7 @@ public class PreOrderCuisineController implements Initializable {
 
     @FXML
     void onUpdateCuisineButtonAction(ActionEvent event) throws IOException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
-        if (!jsonArray.isEmpty()) {
-            restaurantMainController.openPreOrder();
-        } else {
-            Utils.showAlert("Vui lòng chọn món", "Reminder");
-        }
+        restaurantMainController.openPreOrder();
     }
 
     @FXML

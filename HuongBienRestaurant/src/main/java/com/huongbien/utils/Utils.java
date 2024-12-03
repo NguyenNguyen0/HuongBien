@@ -96,7 +96,7 @@ public class Utils {
         return JsonParser.parseReader(new FileReader(filePath)).getAsJsonArray();
     }
 
-    //  Gợi ý số tiền nhận
+    //  Suggest money refund
     public static int[] suggestMoneyReceived(int totalAmount) {
         if (totalAmount < 0) {
             throw new IllegalArgumentException("Total Amount must be greater than 0 dong");
@@ -150,7 +150,7 @@ public class Utils {
         }
     }
 
-    //Alert
+    //Alert dùng tạm thời khi chưa có Toast Message
     public static void showAlert(String message, String title) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(title);
@@ -168,6 +168,7 @@ public class Utils {
         return otp.toString();
     }
 
+    // Chuyển giới tính từ int sang String
     public static String toStringGender(int gender)  {
         return switch (gender) {
             case 1 -> "Nam";

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.config.Variable;
 import com.huongbien.dao.CuisineDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Cuisine;
@@ -168,8 +169,8 @@ public class OrderCuisineController implements Initializable {
                 //set table text
                 String floorStr = (table.getFloor() == 0) ? "Tầng trệt" : "Tầng " + table.getFloor();
                 tableInfoBuilder.append(table.getName()).append(" (").append(floorStr).append("), ");
-                //set table amount : if type VIP -> 100.000 VNĐ
-                tableAmount += table.getTableType().getTableId().equals("LB002") ? Constants.TABLE_PRICE : 0;
+                //calculator table amount
+                tableAmount += table.getTableType().getTableId().equals(Variable.tableVipID) ? Variable.tablePrice : 0;
             } else {
                 tableInfoBuilder.append("Thông tin bàn không xác định, ");
             }

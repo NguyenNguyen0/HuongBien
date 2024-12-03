@@ -4,8 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.config.Variable;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Table;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -42,15 +44,15 @@ public class OrderTableItemController {
 
     private void setTableImage(String tableStatus, String tableType) {
         String imagePath = switch (tableStatus) {
-            case "Bàn trống" -> "/com/huongbien/icon/order/tab-empty-512px.png";
-            case "Đặt trước" -> "/com/huongbien/icon/order/tab-preOrder-512px.png";
-            case "Phục vụ" -> "/com/huongbien/icon/order/tab-ordered-512px.png";
-            case "Bàn đóng" -> "/com/huongbien/icon/order/tab-stop-512px.png";
+            case Constants.tableReserved -> "/com/huongbien/icon/order/tableReserved-512px.png";
+            case Constants.tableOpen -> "/com/huongbien/icon/order/tableOpen-512px.png";
+            case Constants.tableClosed -> "/com/huongbien/icon/order/tableClosed-512px.png";
+            case Constants.tableEmpty -> "/com/huongbien/icon/order/tableEmpty-512px.png";
             default -> null;
         };
         assert imagePath != null;
         tableImageView.setImage(new Image(imagePath));
-        tableTypeImageView.setImage(tableType.equals("LB002") ? new Image("/com/huongbien/icon/order/premium-128px.png") : null);
+        tableTypeImageView.setImage(tableType.equals(Variable.tableVipID) ? new Image("/com/huongbien/icon/order/vip-128px.png") : null);
     }
 
     private void setCheckedTableFromJSON() {
@@ -69,7 +71,7 @@ public class OrderTableItemController {
             }
         }
         if (tableExists) {
-            checkedImageView.setImage(new Image("/com/huongbien/icon/order/check-mark-128px.png"));
+            checkedImageView.setImage(new Image("/com/huongbien/icon/order/check-128px.png"));
             isCheck = true;
         } else {
             checkedImageView.setImage(null);
@@ -93,7 +95,7 @@ public class OrderTableItemController {
             }
         }
         if (tableExists) {
-            checkedImageView.setImage(new Image("/com/huongbien/icon/order/check-mark-128px.png"));
+            checkedImageView.setImage(new Image("/com/huongbien/icon/order/check-128px.png"));
             isCheck = true;
         } else {
             checkedImageView.setImage(null);
@@ -137,10 +139,10 @@ public class OrderTableItemController {
         String tableId = tableIdLabel.getText();
         Table table = TableDAO.getInstance().getById(tableId);
         switch (table.getStatus()) {
-            case "Đặt trước" -> Utils.showAlert("Bàn đang được đặt trước, không thể chọn bàn này.", "Đặt trước");
-            case "Phục vụ" -> Utils.showAlert("Bàn đang được phục vụ, không thể chọn bàn này.", "Phục vụ");
-            case "Bàn đóng" -> Utils.showAlert("Bàn đã đóng, không thể chọn bàn này.", "Bàn đóng");
-            case "Bàn trống" -> {
+            case Constants.tableReserved -> ToastsMessage.showToastsMessage("Trạng thái bàn", "Bàn đang được đặt trước, không thể chọn bàn này.");
+            case Constants.tableOpen -> ToastsMessage.showToastsMessage("Trạng thái bàn", "Bàn đang được phục vụ, không thể chọn bàn này.");
+            case Constants.tableClosed -> ToastsMessage.showToastsMessage("Trạng thái bàn", "Bàn đã đóng, không thể chọn bàn này.");
+            case Constants.tableEmpty -> {
                 writeDataToJSONFile(tableId);
                 orderTableController.tableInfoTabPane.getTabs().clear();
                 orderTableController.readTableDataFromJSON();

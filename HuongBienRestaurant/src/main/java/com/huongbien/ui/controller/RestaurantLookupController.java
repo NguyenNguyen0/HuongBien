@@ -724,7 +724,6 @@ public class RestaurantLookupController implements Initializable {
         reservationReceiveDate.setValue(null);
         setTableViewColumn();
     }
-
     //---TODO: add more event
 
 }

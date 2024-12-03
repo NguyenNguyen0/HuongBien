@@ -39,7 +39,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <ComboBox fx:id="tableTypeComboBox1" onAction="#onTableTypeComboBoxSelected" prefHeight="70.0" prefWidth="270.0" promptText="Số người">
+                        <ComboBox fx:id="tableSeatsComboBox" onAction="#onTableSeatsComboBoxSelected" prefHeight="70.0" prefWidth="270.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -111,7 +111,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icon/order/tab-empty-512px.png" />
+                              <Image url="@../icon/order/tableEmpty-512px.png" />
                            </image>
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -128,7 +128,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icon/order/tab-preOrder-512px.png" />
+                              <Image url="@../icon/order/tableReserved-512px.png" />
                            </image>
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -145,7 +145,7 @@
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icon/order/tab-ordered-512px.png" />
+                              <Image url="@../icon/order/tableOpen-512px.png" />
                            </image>
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -178,7 +178,7 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="tableQuantityLabel" text="Unknown" textFill="RED">
+                        <Label fx:id="tableQuantityLabel" prefWidth="150.0" text="Unknown" textFill="RED">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -192,7 +192,7 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="seatTotalLabel" text="Unknown" textFill="RED">
+                        <Label fx:id="seatTotalLabel" prefWidth="150.0" text="Unknown" textFill="RED">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -206,7 +206,7 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="tableAmountLabel" text="Unknown" textFill="RED">
+                        <Label fx:id="tableAmountLabel" prefHeight="30.0" prefWidth="150.0" text="Unknown" textFill="RED">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -235,11 +235,26 @@
                      </VBox.margin></TabPane>
                </children>
                <HBox.margin>
-                  <Insets left="20.0" right="20.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
                </HBox.margin>
             </VBox>
             <HBox alignment="BOTTOM_CENTER">
                <children>
+                  <Button mnemonicParsing="false" onAction="#onClearChooserTableButtonAction" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: white;">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/all/bin-128px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                   <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
