@@ -12,11 +12,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPaneCarousel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="957.0" styleClass="all-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLoginController">
+<BorderPane fx:id="borderPaneCarousel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="957.0" styleClass="all-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantLoginController">
    <right>
       <VBox alignment="CENTER" prefHeight="504.0" prefWidth="700.0" BorderPane.alignment="TOP_CENTER">
          <children>
@@ -118,22 +117,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="700.0">
                            <children>
-                              <Pane prefHeight="18.0" prefWidth="130.0" HBox.hgrow="ALWAYS">
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                                 <children>
-                                    <Label fx:id="loginMessageLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="-54.0" layoutY="10.0" prefHeight="21.0" prefWidth="208.0" textAlignment="RIGHT">
-                                       <cursor>
-                                          <Cursor fx:constant="DEFAULT" />
-                                       </cursor>
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </Pane>
-                              <Label fx:id="forgotPasswordLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="296.0" text="Bạn quên mật khẩu ?" textAlignment="RIGHT">
+                              <Label fx:id="forgotPasswordLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" onMouseClicked="#onForgotPasswordLabelClicked" prefHeight="21.0" text="Bạn quên mật khẩu ?" textAlignment="RIGHT">
                                  <cursor>
                                     <Cursor fx:constant="DEFAULT" />
                                  </cursor>

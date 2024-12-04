@@ -29,7 +29,7 @@
                      <children>
                         <VBox alignment="CENTER" prefHeight="293.0" prefWidth="214.0">
                            <children>
-                              <Circle fx:id="employeeAvatar" fill="WHITE" radius="100.0" stroke="BLACK" strokeType="INSIDE">
+                              <Circle fx:id="employeeAvatarCircle" fill="WHITE" radius="100.0" stroke="BLACK" strokeType="INSIDE">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>

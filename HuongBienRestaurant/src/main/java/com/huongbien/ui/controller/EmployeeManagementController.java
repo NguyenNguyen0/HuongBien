@@ -45,81 +45,43 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class EmployeeManagementController implements Initializable {
-    @FXML
-    private TableColumn<Employee, String> employeeGenderColumn;
-    @FXML
-    private TableColumn<Employee, String> employeeIdColumn;
-    @FXML
-    private TableColumn<Employee, String> employeeNameColumn;
-    @FXML
-    private TableColumn<Employee, String> employeePhoneColumn;
-    @FXML
-    private TableColumn<Employee, String> employeePositionColumn;
-    @FXML
-    private TableColumn<Employee, String> employeeStatusColumn;
-    @FXML
-    private TableView<Employee> employeeTable;
-    @FXML
-    private ComboBox<String> employeeStatusComboBox;
-    @FXML
-    private ComboBox<Employee> employeePositionComboBox;
-    @FXML
-    private DatePicker employeeBirthdayDatePicker;
-    @FXML
-    private DatePicker employeeHiredateDatePicker;
-    @FXML
-    private RadioButton femaleRadioButton;
-    @FXML
-    private RadioButton maleRadioButton;
-    @FXML
-    public TextField employeeAddressField;
-    @FXML
-    private TextField employeeCitizenIdField;
-    @FXML
-    private ComboBox<Employee> employeeManagerIdComboBox;
-    @FXML
-    private TextField employeeEmailField;
-    @FXML
-    private TextField employeeNameField;
-    @FXML
-    private TextField employeeIdField;
-    @FXML
-    private TextField employeePhoneField;
-    @FXML
-    private TextField employeeSalaryField;
-    @FXML
-    private TextField employeeHourlyPayField;
-    @FXML
-    private ImageView clearSearchButton;
-    @FXML
-    private ComboBox<String> searchMethodComboBox;
-    @FXML
-    private TextField employeeSearchField;
-    @FXML
-    public Label pageIndexLabel;
-    @FXML
-    private Button searchEmployeeButton;
-    @FXML
-    private ToggleGroup genderGroup;
-    @FXML
-    private Button employeeClearFormButton;
-    @FXML
-    private Button fireEmployeeButton;
-    @FXML
-    private Button handleActionEmployeeButton;
-    @FXML
-    private Button swapModeEmployeeButton;
-    @FXML
-    private Button chooseImageButton;
-    @FXML
-    private Circle employeeAvatar;
-
+    @FXML private TableColumn<Employee, String> employeeGenderColumn;
+    @FXML private TableColumn<Employee, String> employeeIdColumn;
+    @FXML private TableColumn<Employee, String> employeeNameColumn;
+    @FXML private TableColumn<Employee, String> employeePhoneColumn;
+    @FXML private TableColumn<Employee, String> employeePositionColumn;
+    @FXML private TableColumn<Employee, String> employeeStatusColumn;
+    @FXML private TableView<Employee> employeeTable;
+    @FXML private ComboBox<String> employeeStatusComboBox;
+    @FXML private ComboBox<Employee> employeePositionComboBox;
+    @FXML private DatePicker employeeBirthdayDatePicker;
+    @FXML private DatePicker employeeHiredateDatePicker;
+    @FXML private RadioButton femaleRadioButton;
+    @FXML private RadioButton maleRadioButton;
+    @FXML public TextField employeeAddressField;
+    @FXML private TextField employeeCitizenIdField;
+    @FXML private ComboBox<Employee> employeeManagerIdComboBox;
+    @FXML private TextField employeeEmailField;
+    @FXML private TextField employeeNameField;
+    @FXML private TextField employeeIdField;
+    @FXML private TextField employeePhoneField;
+    @FXML private TextField employeeSalaryField;
+    @FXML private TextField employeeHourlyPayField;
+    @FXML private ImageView clearSearchButton;
+    @FXML private ComboBox<String> searchMethodComboBox;
+    @FXML private TextField employeeSearchField;
+    @FXML public Label pageIndexLabel;
+    @FXML private Button searchEmployeeButton;
+    @FXML private ToggleGroup genderGroup;
+    @FXML private Button employeeClearFormButton;
+    @FXML private Button fireEmployeeButton;
+    @FXML private Button handleActionEmployeeButton;
+    @FXML private Button swapModeEmployeeButton;
+    @FXML private Button chooseImageButton;
+    @FXML private Circle employeeAvatarCircle;
     public TextField employeeWorkingHourField;
-
     private byte[] employeeImageBytes = null;
-
     private Pagination<Employee> employeePagination;
-
     private final EmployeeBUS employeeBUS = new EmployeeBUS();
 
     public RestaurantMainController restaurantMainController;
@@ -136,7 +98,7 @@ public class EmployeeManagementController implements Initializable {
         setEmployeePaginationGetStillWorking();
         setEmployeeTable();
         setEmployeeTableValue();
-        employeeAvatar.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
+        employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
     }
 
     public void setEmployeePaginationGetAll() {
@@ -302,7 +264,7 @@ public class EmployeeManagementController implements Initializable {
 
     public void clearChooserImage() {
         employeeImageBytes = null;
-        employeeAvatar.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
+        employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
     }
 
     public void clearEmployeeForm() {
@@ -394,9 +356,9 @@ public class EmployeeManagementController implements Initializable {
 
     public void populateEmployeeForm(Employee employee) {
         if (employee.getProfileImage() == null || employee.getProfileImage().length == 0) {
-            employeeAvatar.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
+            employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
         } else {
-            employeeAvatar.setFill(new ImagePattern(new Image(Converter.bytesToInputStream(employee.getProfileImage()))));
+            employeeAvatarCircle.setFill(new ImagePattern(new Image(Converter.bytesToInputStream(employee.getProfileImage()))));
         }
         employeeIdField.setText(employee.getEmployeeId());
         employeeNameField.setText(employee.getName());
@@ -613,7 +575,7 @@ public class EmployeeManagementController implements Initializable {
             try {
                 employeeImageBytes = Converter.fileToBytes(selectedFile);
                 Image image = new Image(Converter.bytesToInputStream(employeeImageBytes));
-                employeeAvatar.setFill(new ImagePattern(image));
+                employeeAvatarCircle.setFill(new ImagePattern(image));
             } catch (IOException e) {
                 ToastsMessage.showToastsMessage("Lỗi", "Không thể mở ảnh");
             }

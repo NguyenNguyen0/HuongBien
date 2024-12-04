@@ -13,7 +13,7 @@
    <center>
       <FlowPane alignment="TOP_CENTER" onMouseClicked="#onOverlayClicked" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="990.0" prefWidth="580.0">
+            <VBox alignment="CENTER" prefHeight="990.0" prefWidth="550.0">
                <children>
                   <TextArea fx:id="content" onMouseClicked="#preventEventClicked" prefHeight="930.0" prefWidth="580.0">
                      <font>

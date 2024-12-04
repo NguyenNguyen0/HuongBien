@@ -50,6 +50,8 @@ import java.util.ResourceBundle;
 
 public class RestaurantMainController implements Initializable {
     @FXML
+    private Label userNameDetailUserLabel;
+    @FXML
     private Circle avatarDetailUserCircle;
     @FXML
     private Circle avatarMainCircle;
@@ -105,6 +107,16 @@ public class RestaurantMainController implements Initializable {
     private PasswordField newPwdField;
     @FXML
     private PasswordField new2PwdField;
+    @FXML
+    private Label roleDetailUserLabel;
+    @FXML
+    private Label hourPayDetailUserLabel;
+    @FXML
+    private Label salaryDetailUserLabel;
+    @FXML
+    private Label countHourWorkDetailUserLabel;
+    @FXML
+    private Label worksHourDetailUserLabel;
 
 
     //timer
@@ -145,6 +157,7 @@ public class RestaurantMainController implements Initializable {
             EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
             Employee employee = employeeDAO.getOneById(id);
             nameDetailUserLabel.setText(employee.getName());
+            userNameDetailUserLabel.setText("@"+employee.getEmployeeId());
             setAvatar(employee.getProfileImage());
             //table Pane
             idDetailUserField.setText(employee.getEmployeeId());
@@ -152,6 +165,10 @@ public class RestaurantMainController implements Initializable {
             birthDateDetailUserDatePicker.setValue(employee.getBirthday());
             phoneDetailUserField.setText(employee.getPhoneNumber());
             emailDetailUserField.setText(employee.getEmail());
+            roleDetailUserLabel.setText(employee.getPosition());
+            hourPayDetailUserLabel.setText(Converter.formatMoney(employee.getHourlyPay())+" VNĐ/h");
+            salaryDetailUserLabel.setText(Converter.formatMoney(employee.getSalary())+" VNĐ");
+            worksHourDetailUserLabel.setText((int)(employee.getWorkHours())+" Giờ");
         }
     }
 
@@ -178,6 +195,27 @@ public class RestaurantMainController implements Initializable {
             currentDayLabel.setText(day);
             String date = dateFormat.format(Calendar.getInstance().getTime());
             currentDateLabel.setText(date);
+            //count hour work
+            try {
+                String[] timeParts = countHourWorkDetailUserLabel.getText().split(":");
+                int hours = Integer.parseInt(timeParts[0]);
+                int minutes = Integer.parseInt(timeParts[1]);
+                int seconds = Integer.parseInt(timeParts[2]);
+
+                seconds++;
+                if (seconds == 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes == 60) {
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+                countHourWorkDetailUserLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            } catch (Exception e) {
+                // Khởi tạo lại khi nhãn không hợp lệ
+                countHourWorkDetailUserLabel.setText("00:00:00");
+            }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -521,38 +559,6 @@ public class RestaurantMainController implements Initializable {
         openRestaurantAbout();
     }
 
-    @FXML
-    void onExitButtonClicked(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initStyle(StageStyle.UNDECORATED);
-        alert.setTitle("Exit");
-        alert.setHeaderText("Bạn có muốn kết thúc phiên làm việc?");
-        ButtonType btn_ok = new ButtonType("Ok");
-        ButtonType onCancelButtonClicked = new ButtonType("Cancel");
-        alert.getButtonTypes().setAll(btn_ok, onCancelButtonClicked);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == btn_ok) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantLogin.fxml"));
-                Parent root = loader.load();
-                Scene mainScene = new Scene(root);
-                Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                loginStage.close();
-                Stage mainStage = new Stage();
-                mainStage.setScene(mainScene);
-                mainStage.setMaximized(true);
-                mainStage.setTitle("Login - Huong Bien Restaurant");
-                mainStage.initStyle(StageStyle.UNDECORATED);
-                mainStage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            JsonArray jsonArray = new JsonArray();
-            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
-        }
-    }
-
     public void translateAnimationMenu(double duration, Node node, double toX) {
         TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(duration), node);
         translateTransition.setByX(toX);
@@ -697,7 +703,7 @@ public class RestaurantMainController implements Initializable {
         System.out.println(profileImage + " " + name + " " + birthDate + " " + phone + " " + email);
         ToastsMessage.showMessage("Chức năng đang phát triển (Chưa update vào database)", "warning");
         //---write here
-
+//
 
         //update info
         setDetailUserInfo();
@@ -713,5 +719,43 @@ public class RestaurantMainController implements Initializable {
         //TODO: update password to database
 
         ToastsMessage.showMessage("Chức năng đang phát triển (Chưa update vào database)", "warning");
+    }
+
+    @FXML
+    void onExitButtonClicked(MouseEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.setTitle("Exit");
+        //TODO: lấy ra số giờ đã làm trong phiên làm việc => Chưa cộng vào tổng số giờ làm việc xuống database!
+        String currentEmpID = idDetailUserField.getText();
+        int hours = Integer.parseInt(countHourWorkDetailUserLabel.getText().split(":")[0]);
+        System.out.println("Employee ID: " + currentEmpID + " - Hours: " + hours);
+        //---Write here...........
+
+        alert.setHeaderText("Bạn có muốn kết thúc phiên làm việc, với số giờ đã ghi nhận là " + hours + " giờ?");
+        ButtonType btn_ok = new ButtonType("Ok");
+        ButtonType onCancelButtonClicked = new ButtonType("Cancel");
+        alert.getButtonTypes().setAll(btn_ok, onCancelButtonClicked);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == btn_ok) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantLogin.fxml"));
+                Parent root = loader.load();
+                Scene mainScene = new Scene(root);
+                Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                loginStage.close();
+                Stage mainStage = new Stage();
+                mainStage.setScene(mainScene);
+                mainStage.setMaximized(true);
+                mainStage.setTitle("Login - Huong Bien Restaurant");
+                mainStage.initStyle(StageStyle.UNDECORATED);
+                mainStage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            JsonArray jsonArray = new JsonArray();
+            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
+        }
     }
 }

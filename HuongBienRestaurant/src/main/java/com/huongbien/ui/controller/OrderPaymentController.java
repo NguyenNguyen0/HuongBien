@@ -11,6 +11,7 @@ import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
 import com.huongbien.service.QRCodeHandler;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -56,6 +57,7 @@ public class OrderPaymentController implements Initializable {
     @FXML private Label tableAmountLabel;
     @FXML private Label cuisineAmountLabel;
     @FXML private Label vATLabel;
+    @FXML private Label vatNameLabel;
     @FXML private Label promotionDiscountLabel;
     @FXML private Label finalAmountLabel;
     @FXML private ScrollPane billScrollPane;
@@ -93,6 +95,7 @@ public class OrderPaymentController implements Initializable {
         }
         searchCustomerButton.fire();
         promotionTableView.setMouseTransparent(true);
+        vatNameLabel.setText(vatNameLabel.getText()+"("+(int)(Constants.VAT * 100)+"%):");
     }
 
     public void loadCuisine() throws FileNotFoundException {
@@ -152,7 +155,6 @@ public class OrderPaymentController implements Initializable {
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
         JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         JsonArray jsonArraySession = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
-        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
         //Emp Session
         String currentUser = "";
         for (JsonElement element : jsonArraySession) {
@@ -174,7 +176,7 @@ public class OrderPaymentController implements Initializable {
             String floorStr = (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor());
             tabInfoBuilder.append(table.getName()).append(" (").append(floorStr).append(") ").append(", ");
             //calc table amount
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Variable.tablePrice : 0;
+            tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tablePrice : 0;
         }
         if (!tabInfoBuilder.isEmpty()) {
             tabInfoBuilder.setLength(tabInfoBuilder.length() - 2);
@@ -281,7 +283,7 @@ public class OrderPaymentController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Variable.tablePrice : 0;
+            tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tablePrice : 0;
         }
         double discountMoney = totalAmount * discount;
         double vat = totalAmount * 0.1;
@@ -358,7 +360,7 @@ public class OrderPaymentController implements Initializable {
     private void readQRCode(JLabel cameraLabel, JFrame frame) {
         capture = new VideoCapture(0);
         if (!capture.isOpened()) {
-            Utils.showAlert("Không thể mở camera!", "Lỗi");
+            ToastsMessage.showMessage("Không thể mở camera!", "error");
             return;
         }
 
@@ -386,7 +388,7 @@ public class OrderPaymentController implements Initializable {
                     }
                 }
             } else {
-                System.err.println("Không thể đọc frame từ camera.");
+                ToastsMessage.showMessage("Không thể đọc frame từ camera.", "error");
             }
         });
 
