@@ -22,6 +22,10 @@ public class Variable {
     public static String addMode = "Thêm";
     public static String editMode = "Sửa";
 
+    //ReservationManagementController.java
+    //---
+    public static String[] statusReservation = {"Chưa nhận", "Hoàn thành", "Đã hủy"};
+
     //Password WIFI
     public static String PASSWORD_WIFI = "12345678";
 }

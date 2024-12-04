@@ -1,5 +1,6 @@
 package com.huongbien.dao;
 
+import com.huongbien.config.Variable;
 import com.huongbien.entity.FoodOrder;
 import com.huongbien.entity.Reservation;
 import com.huongbien.entity.Table;
@@ -66,6 +67,15 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         return getMany("SELECT * FROM reservation");
     }
 
+    //get bàn chưa nhận theo ngày chỉ định
+    public List<Reservation> getReservationNotReceiveByDate(LocalDate date) {
+        return getMany("SELECT * FROM reservation WHERE status = ? AND receiveDate = ?", Variable.statusReservation[0], date);
+    }
+
+    public int getCountReservationNotReceiveByDate(LocalDate date){
+        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND reservationDate = ?", Variable.statusReservation[0], date);
+    }
+
     public Reservation getById(String id) {
         return getOne("SELECT * FROM reservation WHERE id = ?", id);
     }
@@ -96,8 +106,6 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         }
         sqlQuery += reserDate + receiDate;
         return count(sqlQuery);
-
-
     }
 
     @Override

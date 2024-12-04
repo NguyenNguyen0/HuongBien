@@ -132,7 +132,6 @@ public class TableManagementController implements Initializable {
         List<TableType> tableTypeList = tableTypeBUS.getAllTableType();
         ObservableList<TableType> tableTypes = FXCollections.observableArrayList(tableTypeList);
         tableTypeComboBox.setItems(tableTypes);
-        tableTypeComboBox.setItems(tableTypes);
         tableTypeComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(TableType tableType) {
