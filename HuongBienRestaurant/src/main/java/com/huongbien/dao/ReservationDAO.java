@@ -105,8 +105,8 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         String sql = """
                INSERT INTO reservation (
                id, partyType, partySize, reservationDate, reservationTime, receiveDate, receiveTime, status,
-               deposit, refundDeposit, employeeId, customerId, paymentId)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               deposit, refundDeposit, note, employeeId, customerId, paymentId)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
         try {
             PreparedStatement statement = statementHelper.prepareStatement(
@@ -121,6 +121,7 @@ public class ReservationDAO extends GenericDAO<Reservation> {
                     object.getStatus(),
                     object.getDeposit(),
                     object.getRefundDeposit(),
+                    object.getNote(),
                     object.getEmployee().getEmployeeId(),
                     object.getCustomer().getCustomerId(),
                     object.getPayment() == null ? null : object.getPayment().getPaymentId()
