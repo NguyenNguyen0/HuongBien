@@ -9,6 +9,7 @@ import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.Employee;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.utils.Converter;
+import com.huongbien.utils.RefreshJSON;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.animation.FadeTransition;
@@ -610,6 +611,7 @@ public class RestaurantMainController implements Initializable {
             Employee employee = (employees.isEmpty() ? null : employees.get(0));
             assert employee != null;
             employeeNameLabel.setText(employee.getName());
+            setAvatar(employee.getProfileImage());
         }
     }
 
@@ -754,8 +756,7 @@ public class RestaurantMainController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            JsonArray jsonArray = new JsonArray();
-            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
+            RefreshJSON.clearAllJSON();
         }
     }
 }

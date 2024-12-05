@@ -58,7 +58,7 @@ public class OrderTableItemController {
     private void setCheckedTableFromJSON() {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -82,7 +82,7 @@ public class OrderTableItemController {
     public void updateCheckedIcon(String tableId) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -108,7 +108,7 @@ public class OrderTableItemController {
         if (table != null) {
             JsonArray jsonArray;
             try {
-                jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+                jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
             } catch (FileNotFoundException e) {
                 jsonArray = new JsonArray();
             }
@@ -126,7 +126,7 @@ public class OrderTableItemController {
                 jsonObject.addProperty("Table ID", table.getId());
                 jsonArray.add(jsonObject);
             }
-            Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_TABLE_PATH);
+            Utils.writeJsonToFile(jsonArray, Constants.TABLE_PATH);
             updateCheckedIcon(tableId);
         } else {
             System.out.println("Table with ID " + tableId + " not found in the database.");

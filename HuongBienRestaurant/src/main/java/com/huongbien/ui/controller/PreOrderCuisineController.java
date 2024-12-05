@@ -109,7 +109,7 @@ public class PreOrderCuisineController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -141,7 +141,7 @@ public class PreOrderCuisineController implements Initializable {
     }
 
     public void setCuisinesInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
 
         int totalQuantityCuisine = 0;
         double cuisineAmount = 0.0;
@@ -167,7 +167,7 @@ public class PreOrderCuisineController implements Initializable {
 
     @FXML
     void onClearCuisineButtonAction(ActionEvent event) throws FileNotFoundException, SQLException {
-        Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.CUISINE_PATH);
         billGridPane.getChildren().clear();
         loadBill();
         setCuisinesInfoFromJSON();

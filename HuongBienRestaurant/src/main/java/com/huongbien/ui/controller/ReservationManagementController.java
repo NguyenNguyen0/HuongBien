@@ -11,6 +11,8 @@ import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.ReservationDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
+import com.huongbien.utils.RefreshJSON;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,40 +37,71 @@ import java.util.ResourceBundle;
 
 public class ReservationManagementController implements Initializable {
     //Payment-Queue
-    @FXML private TableView<Map<String, Object>> paymentQueueTableView;
-    @FXML private TableColumn<Map<String, Object>, Integer> numericalPaymentQueueOrderColumn;
-    @FXML private TableColumn<Map<String, Object>, String> customerPaymentQueueColumn;
-    @FXML private TableColumn<Map<String, Object>, Integer> quantityCuisinePaymentQueueColumn;
-    @FXML private TableColumn<Map<String, Object>, String> promotionPaymentQueueColumn;
-    @FXML private TableColumn<Map<String, Object>, String> totalAmountPaymentQueueColumn;
-    @FXML private Button toOrderPaymentButton;
-    @FXML private Button deletePaymentQueueButton;
-    @FXML private Label countPaymentQueueLabel;
-    @FXML private Label customerNamePaymentQueueLabel;
-    @FXML private Label tableAreaPaymentQueueLabel;
-    @FXML private Label promotionNamePaymentQueueLabel;
-    @FXML private Label cuisineQuantityPaymentQueueLabel;
-    @FXML private Label totalAmountPaymentQueueLabel;
+    @FXML
+    private TableView<Map<String, Object>> paymentQueueTableView;
+    @FXML
+    private TableColumn<Map<String, Object>, Integer> numericalPaymentQueueOrderColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, String> customerPaymentQueueColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, Integer> quantityCuisinePaymentQueueColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, String> promotionPaymentQueueColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, String> totalAmountPaymentQueueColumn;
+    @FXML
+    private Button toOrderPaymentButton;
+    @FXML
+    private Button deletePaymentQueueButton;
+    @FXML
+    private Label countPaymentQueueLabel;
+    @FXML
+    private Label customerNamePaymentQueueLabel;
+    @FXML
+    private Label tableAreaPaymentQueueLabel;
+    @FXML
+    private Label promotionNamePaymentQueueLabel;
+    @FXML
+    private Label cuisineQuantityPaymentQueueLabel;
+    @FXML
+    private Label totalAmountPaymentQueueLabel;
     //Pre-Order
-    @FXML private TableView<Reservation> preOrderTableView;
-    @FXML private TableColumn<Reservation, String> idPreOrderColumn;
-    @FXML private TableColumn<Reservation, String> customerPreOrderColumn;
-    @FXML private TableColumn<Reservation, Integer> partySizePreOrderColumn;
-    @FXML private TableColumn<Reservation, LocalTime> receiveTimePreOrderColumn;
-    @FXML private TableColumn<Reservation, String> partyTypePreOrderColumn;
-    @FXML private DatePicker receivePreOrderDatePicker;
-    @FXML private Button editPreOrderButton;
-    @FXML private Button confirmTablePreOrderButton;
-    @FXML private Button deletePreOrderButton;
-    @FXML private Label countPreOrderLabel;
-    @FXML private Label customerPreOrderLabel;
-    @FXML private Label tablePreOrderLabel;
-    @FXML private Label cuisinePreOrderLabel;
-    @FXML private Label depositPreOrderLabel;
-    @FXML private Label notePreOrderLabel;
+    @FXML
+    private TableView<Reservation> preOrderTableView;
+    @FXML
+    private TableColumn<Reservation, String> idPreOrderColumn;
+    @FXML
+    private TableColumn<Reservation, String> customerPreOrderColumn;
+    @FXML
+    private TableColumn<Reservation, Integer> partySizePreOrderColumn;
+    @FXML
+    private TableColumn<Reservation, LocalTime> receiveTimePreOrderColumn;
+    @FXML
+    private TableColumn<Reservation, String> partyTypePreOrderColumn;
+    @FXML
+    private DatePicker receivePreOrderDatePicker;
+    @FXML
+    private Button editPreOrderButton;
+    @FXML
+    private Button confirmTablePreOrderButton;
+    @FXML
+    private Button deletePreOrderButton;
+    @FXML
+    private Label countPreOrderLabel;
+    @FXML
+    private Label customerPreOrderLabel;
+    @FXML
+    private Label tablePreOrderLabel;
+    @FXML
+    private Label cuisinePreOrderLabel;
+    @FXML
+    private Label depositPreOrderLabel;
+    @FXML
+    private Label notePreOrderLabel;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
+
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
@@ -117,7 +150,7 @@ public class ReservationManagementController implements Initializable {
         cuisineQuantityPaymentQueueLabel.setText("");
         promotionNamePaymentQueueLabel.setText("");
         totalAmountPaymentQueueLabel.setText("");
-        countPaymentQueueLabel.setText("( "+Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH).size()+" )");
+        countPaymentQueueLabel.setText("( " + Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH).size() + " )");
         disablePayQueueButton();
         //Pre-Order
         receivePreOrderDatePicker.setValue(LocalDate.now());
@@ -198,7 +231,7 @@ public class ReservationManagementController implements Initializable {
             //cuisine JSON
             assert selectedPaymentQueue != null;
             JsonArray cuisineOrderArray = selectedPaymentQueue.getAsJsonArray("Cuisine Order");
-            Utils.writeJsonToFile(cuisineOrderArray, Constants.TEMPORARY_CUISINE_PATH);
+            Utils.writeJsonToFile(cuisineOrderArray, Constants.CUISINE_PATH);
             //Table JSON
             JsonArray tableIDArray = selectedPaymentQueue.getAsJsonArray("Table ID");
             JsonArray tableArray = new JsonArray();
@@ -207,16 +240,16 @@ public class ReservationManagementController implements Initializable {
                 tableObject.addProperty("Table ID", tableIDArray.get(i).getAsString());
                 tableArray.add(tableObject);
             }
-            Utils.writeJsonToFile(tableArray, Constants.TEMPORARY_TABLE_PATH);
+            Utils.writeJsonToFile(tableArray, Constants.TABLE_PATH);
             // Customer JSON
             JsonArray customerArray = new JsonArray();
             JsonObject customerObject = new JsonObject();
             customerObject.addProperty("Customer ID", selectedPaymentQueue.get("Customer ID").getAsString());
             customerObject.addProperty("Promotion ID", selectedPaymentQueue.get("Promotion ID").getAsString());
             customerArray.add(customerObject);
-            Utils.writeJsonToFile(customerArray, Constants.TEMPORARY_CUSTOMER_PATH);
+            Utils.writeJsonToFile(customerArray, Constants.CUSTOMER_PATH);
             //
-            //remove after write tempBill.json and tempTab.json
+            //remove after write CUISINE.json and TABLE.json
             paymentQueueArray.remove(selectedPaymentQueueIndex);
             Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
             restaurantMainController.openOrderPayment();
@@ -230,9 +263,7 @@ public class ReservationManagementController implements Initializable {
         if (selectedIndex != -1) {
             Integer numericalOrder = numericalPaymentQueueOrderColumn.getCellData(selectedIndex);
             System.out.println("Xóa Numerical Order: " + numericalOrder);
-
             JsonArray paymentQueueArray = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
-
             int selectedPaymentQueueIndex = -1;
             for (int i = 0; i < paymentQueueArray.size(); i++) {
                 JsonObject paymentQueue = paymentQueueArray.get(i).getAsJsonObject();
@@ -241,7 +272,6 @@ public class ReservationManagementController implements Initializable {
                     break;
                 }
             }
-
             if (selectedPaymentQueueIndex != -1) {
                 paymentQueueArray.remove(selectedPaymentQueueIndex);
                 Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
@@ -303,7 +333,7 @@ public class ReservationManagementController implements Initializable {
                     //setLabel
                     customerNamePaymentQueueLabel.setText(customerName);
                     tableAreaPaymentQueueLabel.setText(tableArea.toString());
-                    cuisineQuantityPaymentQueueLabel.setText(cuisineQuantity+" món");
+                    cuisineQuantityPaymentQueueLabel.setText(cuisineQuantity + " món");
                     promotionNamePaymentQueueLabel.setText(promotionName);
                     totalAmountPaymentQueueLabel.setText(String.format("%,.0f VNĐ", totalAmount));
                     break;
@@ -338,8 +368,8 @@ public class ReservationManagementController implements Initializable {
         List<Reservation> reservationList = reservationDAO.getReservationNotReceiveByDate(receivePreOrderDatePicker.getValue());
         idPreOrderColumn.setCellValueFactory(new PropertyValueFactory<>("reservationId"));
         customerPreOrderColumn.setCellValueFactory(cellData -> {
-            Employee employee = cellData.getValue().getEmployee();
-            return new SimpleStringProperty(employee.getName());
+            Customer customer = cellData.getValue().getCustomer();
+            return new SimpleStringProperty(customer.getName());
         });
         partySizePreOrderColumn.setCellValueFactory(new PropertyValueFactory<>("partySize"));
         receiveTimePreOrderColumn.setCellValueFactory(new PropertyValueFactory<>("receiveTime"));
@@ -358,7 +388,7 @@ public class ReservationManagementController implements Initializable {
         int selectedIndex = preOrderTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
-            customerPreOrderLabel.setText(reservation.getEmployee().getName());
+            customerPreOrderLabel.setText(reservation.getCustomer().getName());
             //Format Table label
             List<Table> tables = reservation.getTables();
             StringBuilder tableInfo = new StringBuilder();
@@ -384,18 +414,64 @@ public class ReservationManagementController implements Initializable {
 
     @FXML
     void onPreOrderButtonAction(ActionEvent event) throws IOException {
-        //TODO: Pre-Order add new Reservation
+        RefreshJSON.clearAllJSONWithoutLoginSession();
         restaurantMainController.openPreOrder();
     }
 
     @FXML
     void onEditPreOrderButtonAction(ActionEvent event) throws IOException {
-        //TODO: Pre-Order edit Reservation
+        int selectedIndex = preOrderTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex != -1) {
+            Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
+            String id = reservation.getReservationId();
+            ToastsMessage.showMessage("Đang cập nhật bàn cho đơn hàng đặt trước " + id, "success");
+
+            //reservation
+            JsonArray jsonArrayReservation = new JsonArray();
+            JsonObject jsonObjectReservation = new JsonObject();
+            jsonObjectReservation.addProperty("Reservation ID", id);
+            jsonArrayReservation.add(jsonObjectReservation);
+            Utils.writeJsonToFile(jsonArrayReservation, Constants.RESERVATION_PATH);
+
+            //Convert Reservation Database to JSON
+            //cuisine
+            List<FoodOrder> foodOrders = reservation.getFoodOrders();
+            JsonArray jsonArrayCuisine = new JsonArray();
+            for (FoodOrder foodOrder : foodOrders) {
+                JsonObject jsonObjectCuisine = new JsonObject();
+                jsonObjectCuisine.addProperty("Cuisine ID", foodOrder.getCuisine().getCuisineId());
+                jsonObjectCuisine.addProperty("Cuisine Name", foodOrder.getCuisine().getName());
+                jsonObjectCuisine.addProperty("Cuisine Price", foodOrder.getCuisine().getPrice());
+                jsonObjectCuisine.addProperty("Cuisine Note", foodOrder.getNote());
+                jsonObjectCuisine.addProperty("Cuisine Quantity", foodOrder.getQuantity());
+                jsonObjectCuisine.addProperty("Cuisine Money", foodOrder.getQuantity() * foodOrder.getCuisine().getPrice());
+                jsonArrayCuisine.add(jsonObjectCuisine);
+            }
+            Utils.writeJsonToFile(jsonArrayCuisine, Constants.CUISINE_PATH);
+
+            //table
+            List<Table> tables = reservation.getTables();
+            JsonArray jsonArrayTable = new JsonArray();
+            for (Table table : tables) {
+                JsonObject jsonObjectTable = new JsonObject();
+                jsonObjectTable.addProperty("Table ID", table.getId());
+                jsonArrayTable.add(jsonObjectTable);
+            }
+            Utils.writeJsonToFile(jsonArrayTable, Constants.TABLE_PATH);
+
+            //customer
+            JsonArray jsonArrayCustomer = new JsonArray();
+            JsonObject jsonObjectCustomer = new JsonObject();
+            jsonObjectCustomer.addProperty("Customer ID", reservation.getCustomer().getCustomerId());
+            jsonArrayCustomer.add(jsonObjectCustomer);
+            Utils.writeJsonToFile(jsonArrayCustomer, Constants.CUSTOMER_PATH);
+        }
         restaurantMainController.openPreOrder();
     }
 
     @FXML
     void onConfirmTablePreOrderButtonAction(ActionEvent event) throws IOException {
+        //TODO: Receive Pre-Order
         restaurantMainController.openOrderPayment();
     }
 

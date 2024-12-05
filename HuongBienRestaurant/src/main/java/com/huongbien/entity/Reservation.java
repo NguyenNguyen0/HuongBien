@@ -1,5 +1,6 @@
 package com.huongbien.entity;
 
+import com.huongbien.config.Variable;
 import com.huongbien.utils.Utils;
 
 import java.time.LocalDate;
@@ -25,8 +26,7 @@ public class Reservation {
     private ArrayList<Table> tables;
     private ArrayList<FoodOrder> foodOrders;
 
-    public Reservation() {
-    }
+    public Reservation() {}
 
     public Reservation(String reservationId, String partyType, int partySize, LocalDate reservationDate,
                        LocalTime reservationTime, LocalDate receiveDate, LocalTime receiveTime, String status,
@@ -52,39 +52,33 @@ public class Reservation {
 
     //    constructor tạo mới 1 đơn đạt bàn
     public Reservation(String partyType, int partySize, LocalDate receiveDate,
-                       String note, Payment payment, Employee employee,
-                       ArrayList<Table> tables, Customer customer,
-                       ArrayList<FoodOrder> foodOrders) {
+                       LocalTime receiveTime, double deposit, String note, Payment payment,
+                       Employee employee, Customer customer,
+                       ArrayList<Table> tables, ArrayList<FoodOrder> foodOrders) {
+        setReservationId(null);
         setPartyType(partyType);
         setPartySize(partySize);
+        setReservationDate(LocalDate.now());
+        setReservationTime(LocalTime.now());
         setReceiveDate(receiveDate);
+        setReceiveTime(receiveTime);
+        setStatus(Variable.statusReservation[0]);
+        setDeposit(deposit);
+        setRefundDeposit(0);
+        setNote(note);
         setPayment(payment);
         setEmployee(employee);
         setTables(tables);
         setCustomer(customer);
         setFoodOrders(foodOrders);
-        setNote(note);
-
-        setReservationDate(LocalDate.now());
-        setReservationTime(LocalTime.now());
-        setStatus("Chưa xác nhận");
-        setRefundDeposit(0);
-        setReservationId(null);
-
-        setDeposit(calculateTotalDeposit());
-    }
-
-    public double calculateTotalDeposit() {
-        double tableFee = 100_000;
-        return tableFee * tables.stream()
-                .filter(table -> table.getTableType().getTableId().equals("LB002"))
-                .count();
     }
 
     public void setReservationId(String reservationId) {
         if (reservationId == null) {
-            LocalDate currentDate = getReservationDate();
-            LocalTime currentTime = getReservationTime();
+//            LocalDate currentDate = getReservationDate();
+//            LocalTime currentTime = getReservationTime();
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
             this.reservationId = String.format("DB%02d%02d%02d%02d%02d%02d%03d",
                     currentDate.getYear() % 100,
                     currentDate.getMonthValue(),
@@ -111,9 +105,9 @@ public class Reservation {
     }
 
     public void setPartySize(int partySize) {
-        if (partySize <= 1) {
-            throw new IllegalArgumentException("Party size must be greater than 1");
-        }
+//        if (partySize <= 1) {
+//            throw new IllegalArgumentException("Party size must be greater than 1");
+//        }
         this.partySize = partySize;
     }
 
@@ -126,9 +120,9 @@ public class Reservation {
     }
 
     public void setReceiveDate(LocalDate receiveDate) {
-        if (receiveDate == null || receiveDate.isBefore(getReservationDate())) {
-            throw new IllegalArgumentException("Receive date must be today or later");
-        }
+//        if (receiveDate == null || receiveDate.isBefore(getReservationDate())) {
+//            throw new IllegalArgumentException("Receive date must be today or later");
+//        }
         this.receiveDate = receiveDate;
     }
 

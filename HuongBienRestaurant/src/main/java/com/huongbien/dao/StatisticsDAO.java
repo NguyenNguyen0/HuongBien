@@ -198,7 +198,7 @@ public class StatisticsDAO {
                 customer.setGender(rs.getInt("gender"));
                 customer.setPhoneNumber(rs.getString("phoneNumber"));
                 customer.setEmail(rs.getString("email"));
-                customer.setBirthday(rs.getDate("birthday").toLocalDate());
+                customer.setBirthday(rs.getDate("birthday") == null ? null : rs.getDate("birthday").toLocalDate());
                 customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
                 customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
                 customer.setMembershipLevel(rs.getInt("membershipLevel"));

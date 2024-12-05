@@ -73,7 +73,7 @@ public class ReservationDAO extends GenericDAO<Reservation> {
     }
 
     public int getCountReservationNotReceiveByDate(LocalDate date){
-        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND reservationDate = ?", Variable.statusReservation[0], date);
+        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND receiveDate = ?", Variable.statusReservation[0], date);
     }
 
     public Reservation getById(String id) {

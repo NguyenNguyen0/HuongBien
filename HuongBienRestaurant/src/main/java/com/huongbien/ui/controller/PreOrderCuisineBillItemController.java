@@ -50,7 +50,7 @@ public class PreOrderCuisineBillItemController {
     private void removeFromJson(String cuisineID) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to remove item.");
             return;
@@ -64,13 +64,13 @@ public class PreOrderCuisineBillItemController {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.CUISINE_PATH);
     }
 
     private void increaseQuantityInJSON(String cuisineID) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to increase quantity.");
             return;
@@ -93,13 +93,13 @@ public class PreOrderCuisineBillItemController {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.CUISINE_PATH);
     }
 
     private void decreaseQuantityInJSON(String cuisineID) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH); // Đọc file JSON
+            jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH); // Đọc file JSON
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to decrease quantity.");
             return;
@@ -128,13 +128,13 @@ public class PreOrderCuisineBillItemController {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.CUISINE_PATH);
     }
 
     private void updateNoteInJSON(String cuisineID, String newNote) {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH); // Đọc file JSON
+            jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH); // Đọc file JSON
         } catch (FileNotFoundException e) {
             System.out.println("File not found. Unable to update note.");
             return;
@@ -150,7 +150,7 @@ public class PreOrderCuisineBillItemController {
                 break;
             }
         }
-        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.CUISINE_PATH);
     }
 
 

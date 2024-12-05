@@ -20,12 +20,7 @@ public class FoodOrder {
         setCuisine(cuisine);
     }
 
-    public FoodOrder() {
-    }
-
-    public double calculateSubTotal() {
-        return salePrice * quantity;
-    }
+    public FoodOrder() {}
 
     public void setFoodOrderId(String foodOrderId) {
         if (foodOrderId != null && foodOrderId.length() == 17) {

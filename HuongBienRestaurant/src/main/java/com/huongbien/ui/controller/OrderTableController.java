@@ -5,10 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
-import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.dao.TableTypeDAO;
-import com.huongbien.entity.Customer;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
 import com.huongbien.utils.Converter;
@@ -62,7 +60,7 @@ public class OrderTableController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        noteTableFeeLabel.setText(noteTableFeeLabel.getText()+Converter.formatMoney(Variable.tablePrice)+" VNĐ");
+        noteTableFeeLabel.setText(noteTableFeeLabel.getText()+Converter.formatMoney(Variable.tableVipPrice)+" VNĐ");
         loadTablesToGridPane(Variable.floor , Variable.status, Variable.tableTypeName, Variable.seats); //value mặc định
         setComboBoxValue();
         try {
@@ -227,7 +225,7 @@ public class OrderTableController implements Initializable {
     }
 
     public void readTableDataFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         int seatTotal = 0;
         double tableAmount = 0;
         for (JsonElement element : jsonArray) {
@@ -239,7 +237,7 @@ public class OrderTableController implements Initializable {
             //calculate seat total
             seatTotal += table.getSeats();
             //calculate table amount
-            tableAmount += table.getTableType().getTableId().equals(Variable.tableVipID) ? Variable.tablePrice : 0;
+            tableAmount += table.getTableType().getTableId().equals(Variable.tableVipID) ? Variable.tableVipPrice : 0;
         }
         tableQuantityLabel.setText(String.valueOf(jsonArray.size()));
         seatTotalLabel.setText(seatTotal + " chỗ");
@@ -283,7 +281,7 @@ public class OrderTableController implements Initializable {
     void onChooseCuisineButtonClicked(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         } catch (FileNotFoundException e) {
             return;
         }
@@ -298,7 +296,7 @@ public class OrderTableController implements Initializable {
     void onPreOrderButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         } catch (FileNotFoundException e) {
             System.out.println("File không tồn tại.");
             return;
@@ -312,7 +310,7 @@ public class OrderTableController implements Initializable {
 
     @FXML
     void onClearChooserTableButtonAction(ActionEvent event) throws IOException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         if (jsonArray.isEmpty()) {
             ToastsMessage.showToastsMessage("Nhắc nhở","Vui lòng chọn bàn");
             return;
@@ -328,7 +326,7 @@ public class OrderTableController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == btn_ok) {
-            Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_TABLE_PATH);
+            Utils.writeJsonToFile(new JsonArray(), Constants.TABLE_PATH);
             restaurantMainController.openOrderTable();
         }
     }

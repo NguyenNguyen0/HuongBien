@@ -3,12 +3,14 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.ReservationBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
+import com.huongbien.dao.EmployeeDAO;
+import com.huongbien.dao.ReservationDAO;
 import com.huongbien.dao.TableDAO;
-import com.huongbien.entity.Customer;
-import com.huongbien.entity.Table;
+import com.huongbien.entity.*;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.animation.PauseTransition;
@@ -26,10 +28,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PreOrderController implements Initializable {
+    @FXML private Label reservationIDLabel;
     @FXML private TextField numOfAttendeesField;
     @FXML private ComboBox<String> hourComboBox;
     @FXML private ComboBox<String> minuteComboBox;
@@ -38,11 +44,11 @@ public class PreOrderController implements Initializable {
     @FXML private Label cuisineAmountLabel;
     @FXML private Label totalAmoutLabel;
     @FXML private Label preOrderCuisineLabel;
-    @FXML private DatePicker preOrderDatePicker;
-    @FXML private ComboBox<String> preOrderPartyTypeComboBox;
+    @FXML private DatePicker receiveDatePicker;
+    @FXML private ComboBox<String> partyTypeComboBox;
     @FXML private TextField phoneNumField;
     @FXML private TextField emailField;
-    @FXML private TextField cusIDField;
+    @FXML private TextField customerIDField;
     @FXML private TextField nameField;
     @FXML private TextField noteField;
 
@@ -54,9 +60,8 @@ public class PreOrderController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setTimeComboBox();
         try {
-            setInfoFromJSON();
+            setInfoPreOrder();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -68,21 +73,26 @@ public class PreOrderController implements Initializable {
         for (int i = 0; i < 24; i++) {
             hourComboBox.getItems().add(String.format("%02d", i));
         }
-        hourComboBox.setValue("23");
         minuteComboBox.getItems().clear();
-        for (int i = 0; i < 60; i+=5) {
+        for (int i = 0; i < 60; i++) {
             minuteComboBox.getItems().add(String.format("%02d", i));
         }
-        minuteComboBox.setValue("55");
+        hourComboBox.setValue(String.format("%02d", LocalTime.now().getHour()));
+        minuteComboBox.setValue(String.format("%02d", LocalTime.now().getMinute()));
     }
 
-    private void setInfoFromJSON() throws FileNotFoundException {
-        //Set Current date
-        preOrderDatePicker.setValue(LocalDate.now());
+    private void setInfoPreOrder() throws FileNotFoundException {
+        receiveDatePicker.setValue(LocalDate.now());
+        setTimeComboBox();
+        ObservableList<String> partyTypes = FXCollections.observableArrayList(Variable.partyTypesArray);
+        partyTypeComboBox.setItems(partyTypes);
+        partyTypeComboBox.getSelectionModel().selectLast();
         //get table info from json file
-        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
-        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
-        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
+        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TABLE_PATH);
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
+        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.CUSTOMER_PATH);
+        JsonArray jsonArrayReservation = Utils.readJsonFromFile(Constants.RESERVATION_PATH);
+        //table
         StringBuilder tableInfoBuilder = new StringBuilder();
         double tableAmount = 0;
         for (JsonElement element : jsonArrayTable) {
@@ -99,11 +109,12 @@ public class PreOrderController implements Initializable {
             }
             //calculate table fee
             assert table != null;
-            tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tablePrice : 0;
+            tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tableVipPrice : 0;
         }
         if (!tableInfoBuilder.isEmpty()) {
             tableInfoBuilder.setLength(tableInfoBuilder.length() - 2);
         }
+        //Cuisine
         int cuisineQuantity = 0;
         double cuisineAmount = 0;
         for (JsonElement element : jsonArrayCuisine) {
@@ -113,29 +124,39 @@ public class PreOrderController implements Initializable {
             cuisineQuantity += quantity;
             cuisineAmount += money;
         }
+        //customer
         for (JsonElement element : jsonArrayCustomer) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Customer ID").getAsString();
             Customer customer = CustomerDAO.getInstance().getById(id);
             if (customer != null) {
-                cusIDField.setText(customer.getCustomerId());
+                customerIDField.setText(customer.getCustomerId());
                 nameField.setText(customer.getName());
                 phoneNumField.setText(customer.getPhoneNumber());
                 emailField.setText(customer.getEmail() == null ? "" : customer.getEmail());
             } else {
-                cusIDField.setText("");
+                customerIDField.setText("");
                 nameField.setText("");
                 phoneNumField.setText("");
                 emailField.setText("");
             }
         }
+        for (JsonElement element : jsonArrayReservation) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String id = jsonObject.has("Reservation ID") ? jsonObject.get("Reservation ID").getAsString() : "";
+            reservationIDLabel.setText("Mã đặt bàn: "+id);
+            Reservation reservation = ReservationDAO.getInstance().getById(id);
+            hourComboBox.setValue((reservation.getReceiveTime() != null) ? String.format("%02d", reservation.getReceiveTime().getHour()) : "23");
+            minuteComboBox.setValue((reservation.getReceiveTime() != null) ? String.format("%02d", reservation.getReceiveTime().getMinute()) : "55");
+            numOfAttendeesField.setText((reservation.getPartySize() != 0) ? String.valueOf(reservation.getPartySize()) : "1");
+            receiveDatePicker.setValue((reservation.getReceiveDate() != null) ? reservation.getReceiveDate() : LocalDate.now());
+            noteField.setText((reservation.getNote() != null) ? reservation.getNote() : "");
+            partyTypeComboBox.getSelectionModel().select(reservation.getPartyType() != null ? reservation.getPartyType() : "Khác...");
+            break;
+        }
+        //set info to reservation
         tableInfoField.setText(tableInfoBuilder.toString());
         preOrderCuisineLabel.setText(cuisineQuantity + " món");
-        //Set Type Party
-        ObservableList<String> partyTypes = FXCollections.observableArrayList(Variable.partyTypesArray);
-        preOrderPartyTypeComboBox.setItems(partyTypes);
-        preOrderPartyTypeComboBox.getSelectionModel().selectLast();
-        //setLabel
         tableAmountLabel.setText(String.format("%,.0f VNĐ", tableAmount));
         cuisineAmountLabel.setText(String.format("%,.0f VNĐ", cuisineAmount));
         totalAmoutLabel.setText(String.format("%,.0f VNĐ", tableAmount + cuisineAmount));
@@ -193,15 +214,21 @@ public class PreOrderController implements Initializable {
         }
 
         if (phone.length() < 10) {
-            cusIDField.setText("");
+            customerIDField.setText("");
             nameField.setText("");
             emailField.setText("");
         } else {
             Customer customer = CustomerDAO.getInstance().getByOnePhoneNumber(phone);
             if(customer != null) {
-                cusIDField.setText(customer.getCustomerId());
+                customerIDField.setText(customer.getCustomerId());
                 nameField.setText(customer.getName());
                 emailField.setText(customer.getEmail() == null ? "" : customer.getEmail());
+                //Write JSON
+                JsonArray jsonArray = new JsonArray();
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("Customer ID", customer.getCustomerId());
+                jsonArray.add(jsonObject);
+                Utils.writeJsonToFile(jsonArray, Constants.CUSTOMER_PATH);
             } else {
                 ToastsMessage.showToastsMessage("Thông báo", "(VN +84) Không tìm thấy khách hàng, nhập tên khách hàng để đăng ký mới");
             }
@@ -210,6 +237,10 @@ public class PreOrderController implements Initializable {
 
     @FXML
     void onSavePreOrderTableButtonAction(ActionEvent event) throws IOException {
+        JsonArray jsonArrayReservation = Utils.readJsonFromFile(Constants.RESERVATION_PATH);
+        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TABLE_PATH);
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
+        JsonArray jsonArrayEmployee = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         //TODO: chưa ràng buộc regex (biểu thức chính quy) cho số điện thoại và email
         if(phoneNumField.getText().isEmpty()) {
             ToastsMessage.showToastsMessage("Thông báo", "(VN +84) Vui lòng nhập số điện thoại để kiểm tra khách hàng");
@@ -225,7 +256,7 @@ public class PreOrderController implements Initializable {
             ToastsMessage.showToastsMessage("Thông báo", "Vui lòng nhập đầy đủ thông tin khách hàng để thực hiện đăng ký");
             return;
         }
-        if(cusIDField.getText().isEmpty()) {
+        if(customerIDField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initStyle(StageStyle.UNDECORATED);
             alert.setHeaderText("Thông báo");
@@ -242,21 +273,88 @@ public class PreOrderController implements Initializable {
                 CustomerDAO customerDAO = CustomerDAO.getInstance();
                 customerDAO.add(new Customer(name, null, 0, phone, email, null));
                 Customer customer = customerDAO.getByOnePhoneNumber(phone);
-                cusIDField.setText(customer.getCustomerId());
+                customerIDField.setText(customer.getCustomerId());
                 ToastsMessage.showToastsMessage("Thông báo", "Đăng ký khách hàng mới thành công, nhấn LƯU để tạo đơn đặt mới");
                 return;
             }
         }
-        //TODO: Xử lý database ghi đơn đặt taị đây
-        //---write here---
 
+        if(jsonArrayTable.isEmpty()) {
+            ToastsMessage.showMessage("Vui lòng chọn ít nhất 1 bàn", "warning");
+            return;
+        }
+
+        //TODO: Xử lý database ghi đơn đặt taị đây
+        String reservationID = "";
+        for (JsonElement element : jsonArrayReservation) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            reservationID = jsonObject.has("Reservation ID") ? jsonObject.get("Reservation ID").getAsString() : "";
+            break;
+        }
+
+        String employeeID = null;
+        String customerID = customerIDField.getText();
+        LocalDate receiveDate = receiveDatePicker.getValue();
+        LocalTime receiveTime = LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()));
+        int partySize = Integer.parseInt(numOfAttendeesField.getText());
+        String note = noteField.getText();
+        String partyType = partyTypeComboBox.getValue();
+
+        for(JsonElement element : jsonArrayEmployee) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            employeeID = jsonObject.get("Employee ID").getAsString();
+            break;
+        }
+
+        ArrayList<Table> tables = new ArrayList<>();
+        for(JsonElement element : jsonArrayTable) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String tableID = jsonObject.get("Table ID").getAsString();
+            Table table = new Table();
+            table.setId(tableID);
+            tables.add(table);
+        }
+
+        ArrayList<FoodOrder> foodOrders = new ArrayList<>();
+        for(JsonElement element : jsonArrayCuisine) {
+            JsonObject jsonObject = element.getAsJsonObject();
+
+            String cuisineID = jsonObject.get("Cuisine ID").getAsString();
+            double cuisinePrice = jsonObject.get("Cuisine Price").getAsDouble();
+            String cuisineNote = jsonObject.get("Cuisine Note").getAsString();
+            int cuisineQuantity = jsonObject.get("Cuisine Quantity").getAsInt();
+
+            FoodOrder foodOrder = new FoodOrder();
+            foodOrder.setFoodOrderId(null);
+            foodOrder.setQuantity(cuisineQuantity);
+            foodOrder.setNote(cuisineNote);
+            foodOrder.setSalePrice(cuisinePrice);
+
+            Cuisine cuisine = new Cuisine();
+            cuisine.setCuisineId(cuisineID);
+
+            foodOrder.setCuisine(cuisine);
+            foodOrders.add(foodOrder);
+        }
+
+        Customer customer = CustomerDAO.getInstance().getById(customerID);
+        Employee employee = EmployeeDAO.getInstance().getOneById(employeeID);
+
+        double deposit = Double.parseDouble(totalAmoutLabel.getText().replaceAll("\\.", "").replaceAll(" VNĐ", ""));
+
+        if(reservationID.isEmpty()) {
+            Reservation reservation = new Reservation(partyType, partySize, receiveDate, receiveTime, deposit, note, null, employee, customer, tables, foodOrders);
+            ReservationBUS reservationBUS = new ReservationBUS();
+            reservationBUS.addReservation(reservation);
+            System.out.println(reservation.getReservationId());
+            ToastsMessage.showMessage("Tạo đơn đặt trước thành công, trang quản lý đặt bàn sẽ mở sau 3 giây", "success");
+        } else {
+            //TODO: update reservation
+
+            ToastsMessage.showMessage("Cập nhật đơn đặt trước: "+reservationID+" thành công, trang quản lý đặt bàn sẽ mở sau 3 giây", "success");
+        }
 
         //Delay để thông báo thao tác hợp lệ rồi mới chuyển trang
-        ToastsMessage.showToastsMessage("Thông báo)", "Tạo đơn đặt trước thành công, hệ thống sẽ chuyển đến trang quản lý đặt bàn sau 3 giây");
-
-        //TODO: Xoá Alert này đi khi đã ghi database
-        Utils.showAlert("Chưa có sự kiện ghi đơn dặt trước vào database", "Lưu Ý");
-
         PauseTransition pause = new PauseTransition(Duration.seconds(3));
         pause.setOnFinished(e -> {
             try {
@@ -280,5 +378,9 @@ public class PreOrderController implements Initializable {
     @FXML
     void onClearPhoneNumFieldButton(ActionEvent event) {
         phoneNumField.setText("");
+        emailField.setText("");
+        customerIDField.setText("");
+        nameField.setText("");
+        noteField.setText("");
     }
 }

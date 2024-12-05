@@ -8,7 +8,6 @@ import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -18,9 +17,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class OrderCuisineItemController {
     @FXML private Circle cuisineImageCircle;
@@ -57,7 +54,7 @@ public class OrderCuisineItemController {
         JsonArray jsonArray;
         //-----------------
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -86,7 +83,7 @@ public class OrderCuisineItemController {
             jsonObject.addProperty("Cuisine Money", cuisineMoney);
             jsonArray.add(jsonObject);
         }
-        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.CUISINE_PATH);
     }
 
     @FXML

@@ -54,7 +54,7 @@ public class PreOrderCuisineItemController {
         JsonArray jsonArray;
         //-----------------
         try {
-            jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+            jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
         }
@@ -83,7 +83,7 @@ public class PreOrderCuisineItemController {
             jsonObject.addProperty("Cuisine Money", cuisineMoney);
             jsonArray.add(jsonObject);
         }
-        Utils.writeJsonToFile(jsonArray, Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(jsonArray, Constants.CUISINE_PATH);
     }
 
     @FXML

@@ -58,8 +58,8 @@ public class InvoicePrinterDialogController implements Initializable {
     }
 
     public void printer() throws FileNotFoundException {
-        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
-        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
+        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TABLE_PATH);
+        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.CUSTOMER_PATH);
         JsonArray jsonArraySession = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
         content.setText("\n\t\tHuong Bien Restaurant");
         newLine();
@@ -125,7 +125,7 @@ public class InvoicePrinterDialogController implements Initializable {
                     content.setText(content.getText() + String.format("%-13s %37s", "", table.getName() + " " + (table.getFloor() == 0 ? "Tầng trệt" : "Tầng " + table.getFloor()) + " - " + table.getTableType().getName() + ")"));
                 }
                 newLine();
-                tableAmount += (table.getTableType().getTableId().equals("LB002") ? Variable.tablePrice : 0);
+                tableAmount += (table.getTableType().getTableId().equals("LB002") ? Variable.tableVipPrice : 0);
             }
         }
         content.setText(content.getText() + String.format("%-20s %30s", "Mã khuyến mãi:", promotionId));
@@ -138,7 +138,7 @@ public class InvoicePrinterDialogController implements Initializable {
         newLine();
         int totalQuantityCuisine = 0;
         double cuisineAmount = 0;
-        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
         for (JsonElement element : jsonArrayCuisine) {
             JsonObject jsonObject = element.getAsJsonObject();
             String name = jsonObject.get("Cuisine Name").getAsString();

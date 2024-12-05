@@ -113,7 +113,7 @@ public class OrderCuisineController implements Initializable {
 
     public List<OrderDetail> readFromBillJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -145,8 +145,8 @@ public class OrderCuisineController implements Initializable {
     }
 
     public void setCuisinesInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
-        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
+        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TABLE_PATH);
 
         int totalQuantityCuisine = 0;
         double cuisineAmount = 0.0;
@@ -170,7 +170,7 @@ public class OrderCuisineController implements Initializable {
                 String floorStr = (table.getFloor() == 0) ? "Tầng trệt" : "Tầng " + table.getFloor();
                 tableInfoBuilder.append(table.getName()).append(" (").append(floorStr).append("), ");
                 //calculator table amount
-                tableAmount += table.getTableType().getTableId().equals(Variable.tableVipID) ? Variable.tablePrice : 0;
+                tableAmount += table.getTableType().getTableId().equals(Variable.tableVipID) ? Variable.tableVipPrice : 0;
             } else {
                 tableInfoBuilder.append("Thông tin bàn không xác định, ");
             }
@@ -188,7 +188,7 @@ public class OrderCuisineController implements Initializable {
 
     @FXML
     void onOrderPaymentButtonAction(ActionEvent event) throws IOException {
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
         if (!jsonArray.isEmpty()) {
             restaurantMainController.openOrderPayment();
         } else {
@@ -203,7 +203,7 @@ public class OrderCuisineController implements Initializable {
 
     @FXML
     void onClearCuisineButtonAction(ActionEvent event) throws FileNotFoundException, SQLException {
-        Utils.writeJsonToFile(new JsonArray(), Constants.TEMPORARY_CUISINE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.CUISINE_PATH);
         billGridPane.getChildren().clear();
         loadBill();
         setCuisinesInfoFromJSON();

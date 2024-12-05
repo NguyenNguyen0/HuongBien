@@ -123,7 +123,7 @@ public class OrderPaymentFinalController implements Initializable {
 
     public List<OrderDetail> readFromCuisineJSON() throws FileNotFoundException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
-        JsonArray jsonArray = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
 
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
@@ -150,9 +150,9 @@ public class OrderPaymentFinalController implements Initializable {
     }
 
     public void setFinalAmountInfoFromJSON() throws FileNotFoundException, SQLException {
-        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
-        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
-        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
+        JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TABLE_PATH);
+        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.CUSTOMER_PATH);
         //Set screen method default
         screenCashMethodVBox.setVisible(true);
         screenBankingMethodVBox.setVisible(false);
@@ -164,7 +164,7 @@ public class OrderPaymentFinalController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tablePrice : 0;
+            tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tableVipPrice : 0;
         }
         //calc cuisine amount
         double cuisineAmount = 0.0;
