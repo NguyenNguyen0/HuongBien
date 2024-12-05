@@ -11,6 +11,7 @@ import com.huongbien.dao.TableTypeDAO;
 import com.huongbien.entity.Customer;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
+import com.huongbien.utils.Converter;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.collections.FXCollections;
@@ -49,6 +50,8 @@ public class OrderTableController implements Initializable {
     @FXML public Label tableQuantityLabel;
     @FXML public Label seatTotalLabel;
     @FXML public Label tableAmountLabel;
+    @FXML public Label noteTableFeeLabel;
+
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -59,6 +62,7 @@ public class OrderTableController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        noteTableFeeLabel.setText(noteTableFeeLabel.getText()+Converter.formatMoney(Variable.tablePrice)+" VNĐ");
         loadTablesToGridPane(Variable.floor , Variable.status, Variable.tableTypeName, Variable.seats); //value mặc định
         setComboBoxValue();
         try {

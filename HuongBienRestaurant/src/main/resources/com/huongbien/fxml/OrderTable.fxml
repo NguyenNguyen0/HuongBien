@@ -51,12 +51,6 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="471.0">
                      <children>
-                        <Label text="Lưu ý: Dịch vụ bàn VIP là 100.000 VNĐ" textFill="RED">
-                           <font>
-                              <Font name="System Bold Italic" size="20.0" />
-                           </font>
-                        </Label>
-                        <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
                         <Label text="Tổng quan nhà hàng:" textFill="WHITE">
                            <HBox.margin>
                               <Insets />
@@ -97,9 +91,15 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
+                        <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="noteTableFeeLabel" text="Lưu ý: Dịch vụ bàn VIP là: " textFill="RED">
+                           <font>
+                              <Font name="System Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
                      </children>
                      <VBox.margin>
-                        <Insets left="20.0" top="10.0" />
+                        <Insets left="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
                </children>
@@ -201,7 +201,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0">
                      <children>
-                        <Label prefHeight="36.0" prefWidth="250.0" text="Phí chọn bàn (VNĐ):">
+                        <Label prefHeight="36.0" prefWidth="250.0" text="Phí chọn bàn:">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -215,7 +215,7 @@
                   </HBox>
                </children>
                <HBox.margin>
-                  <Insets left="20.0" right="20.0" />
+                  <Insets left="10.0" right="10.0" />
                </HBox.margin>
             </VBox>
             <VBox prefHeight="120.0" prefWidth="632.0" HBox.hgrow="ALWAYS">

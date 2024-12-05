@@ -7,6 +7,7 @@ import com.huongbien.config.Constants;
 import com.huongbien.dao.AccountDAO;
 import com.huongbien.entity.Account;
 import com.huongbien.service.EmailService;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,11 +44,11 @@ public class RestaurantLoginController implements Initializable {
     @FXML private AnchorPane compoent_hide;
     @FXML private AnchorPane compoent_show;
     @FXML private ImageView toggleShowingPasswordButton;
-    @FXML private Label forgotPasswordLabel;
-    @FXML private Label loginMessageLabel;
     @FXML private Button loginButton;
-    String emailUsername = AppConfig.getEmailUsername();
-    String emailPassword = AppConfig.getEmailPassword();
+    private final String emailUsername = AppConfig.getEmailUsername();
+    private final String emailPassword = AppConfig.getEmailPassword();
+    @FXML
+    private boolean status = false;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -59,7 +60,6 @@ public class RestaurantLoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadCarousel();
-        forgotPasswordLabel.setOnMouseClicked(event -> onForgotPasswordLabelClicked());
     }
 
     private void loadCarousel() {
@@ -68,12 +68,12 @@ public class RestaurantLoginController implements Initializable {
             Parent carousel = loader.load();
             borderPaneCarousel.setCenter(carousel);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
     @FXML
-    void onForgotPasswordLabelClicked() {
+    void onForgotPasswordLabelClicked(MouseEvent event) {
         TextInputDialog emailDialog = new TextInputDialog();
         emailDialog.setTitle("Quên mật khẩu");
         emailDialog.setHeaderText("Nhập email của bạn");
@@ -145,7 +145,6 @@ public class RestaurantLoginController implements Initializable {
         }
     }
 
-
     @FXML
     void onExitButtonClicked(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -165,9 +164,6 @@ public class RestaurantLoginController implements Initializable {
             employeeIdField.requestFocus();
         }
     }
-
-    @FXML
-    private boolean status = false;
 
     @FXML
     void onToggleShowingPasswordButtonClicked(MouseEvent event) {
@@ -213,13 +209,11 @@ public class RestaurantLoginController implements Initializable {
         Account account = accountDAO.getByUsername(username);
 
         if (account == null) {
-            loginMessageLabel.setText("Tài khoản không tồn tại.");
-            loginMessageLabel.setStyle("-fx-text-fill: red;");
+            ToastsMessage.showMessage("Tài khoản không tồn tại.", "warning");
             return;
         }
         if (username.equals(account.getUsername().trim()) && passwordHash.equals(account.getHashcode().trim())) {
-            loginMessageLabel.setText("Đăng nhập thành công");
-            loginMessageLabel.setStyle("-fx-text-fill: green;");
+            ToastsMessage.showMessage("Đăng nhập thành công", "success");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantMain.fxml"));
             Parent root = loader.load();
             // Ensure this is called after setting the controller
@@ -234,6 +228,7 @@ public class RestaurantLoginController implements Initializable {
             mainStage.setMaximized(true);
             mainStage.setTitle("Dashboard - Huong Bien Restaurant");
             mainStage.initStyle(StageStyle.UNDECORATED);
+            mainStage.getIcons().add(new Image("/com/huongbien/icon/favicon/favicon-logo-restaurant-128px.png"));
             mainStage.show();
             //write JSON user current
             JsonArray jsonArray;
@@ -254,8 +249,7 @@ public class RestaurantLoginController implements Initializable {
             RestaurantMainController restaurantMainController = loader.getController();
             restaurantMainController.loadUserInfoFromJSON();
         } else {
-            loginMessageLabel.setText("Sai mã nhân viên và mật khẩu đăng nhập");
-            loginMessageLabel.setStyle("-fx-text-fill: red;");
+            ToastsMessage.showMessage("Sai mã nhân viên và mật khẩu đăng nhập", "warning");
         }
     }
 

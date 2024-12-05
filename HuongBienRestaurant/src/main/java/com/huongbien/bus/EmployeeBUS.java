@@ -59,7 +59,7 @@ public class EmployeeBUS {
 
     public List<Employee> getEmployeeById(String id) {
         if (id.isBlank()) return null;
-        return employeeDao.getById(id);
+        return employeeDao.getManyById(id);
     }
 
     public List<Employee> getEmployeeByPosition(String position) {

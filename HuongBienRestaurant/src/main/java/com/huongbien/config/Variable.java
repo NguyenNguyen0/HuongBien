@@ -15,6 +15,17 @@ public class Variable {
     //---
     public static String[] partyTypesArray = {"Gia đình", "Sinh nhật", "Đám cưới", "Đám dỗ", "Đám hỏi", "Kỷ niệm", "Hội nghị", "Hẹn hò", "Khác..."};
 
+    //EmployeeManagementController.java
+    //---
+    public static String[] statusOptions = {"Đang làm", "Nghỉ phép", "Nghỉ việc"};
+    public static String[] searchMethods = {"Còn làm việc", "Tất cả", "Tìm theo tên", "Tìm theo số điện thoại", "Tìm theo chức vụ"};
+    public static String addMode = "Thêm";
+    public static String editMode = "Sửa";
+
+    //ReservationManagementController.java
+    //---
+    public static String[] statusReservation = {"Chưa nhận", "Hoàn thành", "Đã hủy"};
+
     //Password WIFI
     public static String PASSWORD_WIFI = "12345678";
 }

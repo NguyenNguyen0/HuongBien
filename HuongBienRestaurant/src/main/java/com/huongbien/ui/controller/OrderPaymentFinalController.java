@@ -66,6 +66,8 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML
     private Label statusLabel;
 
+    private boolean statusFlags = false;
+
     //Controller area
     public RestaurantMainController restaurantMainController;
 
@@ -90,7 +92,7 @@ public class OrderPaymentFinalController implements Initializable {
         resultLabel.setText("0 VNĐ");
         finalAmountLabel.setText("0 VNĐ");
         refundLabel.setText("0 VNĐ");
-        statusLabel.setText("Khách chưa đưa đủ tiền");
+        statusLabel.setText("Chưa thu tiền khách");
         statusLabel.setStyle("-fx-text-fill: red");
     }
 
@@ -162,7 +164,7 @@ public class OrderPaymentFinalController implements Initializable {
             String id = jsonObject.get("Table ID").getAsString();
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
-            tableAmount += (table.getTableType().getTableId().equals("LB002")) ? Variable.tablePrice : 0;
+            tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tablePrice : 0;
         }
         //calc cuisine amount
         double cuisineAmount = 0.0;
@@ -224,15 +226,17 @@ public class OrderPaymentFinalController implements Initializable {
     public void setFinalAmountInfo() {
         double moneyFromCustomer = Converter.parseMoney(resultField.getText());
         double finalAmount = Converter.parseMoney(finalAmountLabel.getText());
-        if (moneyFromCustomer > finalAmount) {
+        if (moneyFromCustomer >= finalAmount) {
             statusLabel.setText("Khách đưa đủ tiền");
-            statusLabel.setStyle("-fx-text-fill: green");
+            statusLabel.setStyle("-fx-text-fill: white");
             double refund = moneyFromCustomer - finalAmount;
             refundLabel.setText(Converter.formatMoney((int) refund) + " VNĐ");
+            statusFlags = true;
         } else {
-            statusLabel.setText("Khách chưa đưa đủ tiền");
+            statusLabel.setText("Khách đưa thiếu tiền");
             statusLabel.setStyle("-fx-text-fill: red");
             refundLabel.setText("0 VNĐ");
+            statusFlags = false;
         }
     }
 
@@ -324,6 +328,10 @@ public class OrderPaymentFinalController implements Initializable {
 
     @FXML
     void onCompleteOrderPaymentFinalAction(ActionEvent event) {
+        if(!statusFlags) {
+            ToastsMessage.showToastsMessage("Thông báo", "Vui lòng thu tiền thanh toán");
+            return;
+        }
         ToastsMessage.showToastsMessage("Thông báo gián đoạn", "Chức năng đang phát triển");
     }
 }

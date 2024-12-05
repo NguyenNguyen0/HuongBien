@@ -5,7 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
 import com.huongbien.dao.EmployeeDAO;
+import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.Employee;
+import com.huongbien.entity.OrderDetail;
+import com.huongbien.utils.Converter;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -18,10 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -30,21 +31,26 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RestaurantMainController implements Initializable {
+    @FXML
+    private Label userNameDetailUserLabel;
     @FXML
     private Circle avatarDetailUserCircle;
     @FXML
@@ -83,27 +89,96 @@ public class RestaurantMainController implements Initializable {
     private BorderPane menuBorderPane;
     @FXML
     private BorderPane detailUserBorderPane;
+    @FXML
+    private Label nameDetailUserLabel;
+    @FXML
+    private TextField idDetailUserField;
+    @FXML
+    private TextField nameDetailUserField;
+    @FXML
+    private DatePicker birthDateDetailUserDatePicker;
+    @FXML
+    private TextField phoneDetailUserField;
+    @FXML
+    private TextField emailDetailUserField;
+    @FXML
+    private PasswordField currentPwdField;
+    @FXML
+    private PasswordField newPwdField;
+    @FXML
+    private PasswordField new2PwdField;
+    @FXML
+    private Label roleDetailUserLabel;
+    @FXML
+    private Label hourPayDetailUserLabel;
+    @FXML
+    private Label salaryDetailUserLabel;
+    @FXML
+    private Label countHourWorkDetailUserLabel;
+    @FXML
+    private Label worksHourDetailUserLabel;
+
+
+    //timer
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    private byte[] employeeImageBytes = null;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setDefault();
         try {
             loadUserInfoFromJSON();
             openHome();
+            setDetailUserInfo();
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
-        setAvatar();
         setTime();
         menuBorderPane.setTranslateX(-250);
         detailUserBorderPane.setTranslateX(250);
+
     }
 
-    public void setAvatar() {
+    public void setDefault() {
+        mainBorderPane.setVisible(true);
+        menuBorderPane.setVisible(false);
+        detailUserBorderPane.setVisible(false);
+    }
+
+    public void setDetailUserInfo() throws FileNotFoundException {
+        employeeImageBytes = null; //reset byte image
+        JsonArray jsonArray = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
+        for (JsonElement element : jsonArray) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String id = jsonObject.get("Employee ID").getAsString();
+            EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
+            Employee employee = employeeDAO.getOneById(id);
+            nameDetailUserLabel.setText(employee.getName());
+            userNameDetailUserLabel.setText("@"+employee.getEmployeeId());
+            setAvatar(employee.getProfileImage());
+            //table Pane
+            idDetailUserField.setText(employee.getEmployeeId());
+            nameDetailUserField.setText(employee.getName());
+            birthDateDetailUserDatePicker.setValue(employee.getBirthday());
+            phoneDetailUserField.setText(employee.getPhoneNumber());
+            emailDetailUserField.setText(employee.getEmail());
+            roleDetailUserLabel.setText(employee.getPosition());
+            hourPayDetailUserLabel.setText(Converter.formatMoney(employee.getHourlyPay())+" VNĐ/h");
+            salaryDetailUserLabel.setText(Converter.formatMoney(employee.getSalary())+" VNĐ");
+            worksHourDetailUserLabel.setText((int)(employee.getWorkHours())+" Giờ");
+        }
+    }
+
+    //TODO: chưa xử lý độ phân giải của ảnh
+    public void setAvatar(byte[] profileImage) {
         try {
-            Image image = new Image("/com/huongbien/img/avatar/jack.jpeg", 100, 100, false, true);
+            if (profileImage == null || profileImage.length == 0) {
+                throw new IllegalArgumentException("Profile image is null or empty");
+            }
+            Image image = new Image(Converter.bytesToInputStream(profileImage)); //fix here
             avatarMainCircle.setFill(new ImagePattern(image));
             avatarDetailUserCircle.setFill(new ImagePattern(image));
         } catch (Exception e) {
@@ -120,6 +195,27 @@ public class RestaurantMainController implements Initializable {
             currentDayLabel.setText(day);
             String date = dateFormat.format(Calendar.getInstance().getTime());
             currentDateLabel.setText(date);
+            //count hour work
+            try {
+                String[] timeParts = countHourWorkDetailUserLabel.getText().split(":");
+                int hours = Integer.parseInt(timeParts[0]);
+                int minutes = Integer.parseInt(timeParts[1]);
+                int seconds = Integer.parseInt(timeParts[2]);
+
+                seconds++;
+                if (seconds == 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes == 60) {
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+                countHourWorkDetailUserLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            } catch (Exception e) {
+                // Khởi tạo lại khi nhãn không hợp lệ
+                countHourWorkDetailUserLabel.setText("00:00:00");
+            }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -282,6 +378,9 @@ public class RestaurantMainController implements Initializable {
         mainBorderPane.setCenter(manageEmployee);
         manageEmployee.prefWidthProperty().bind(mainBorderPane.widthProperty());
         manageEmployee.prefHeightProperty().bind(mainBorderPane.heightProperty());
+        //setController
+        EmployeeManagementController employeeManagementController = loader.getController();
+        employeeManagementController.setRestaurantMainController(this);
     }
 
     public void openPromotionManagement() throws IOException {
@@ -460,38 +559,6 @@ public class RestaurantMainController implements Initializable {
         openRestaurantAbout();
     }
 
-    @FXML
-    void onExitButtonClicked(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initStyle(StageStyle.UNDECORATED);
-        alert.setTitle("Exit");
-        alert.setHeaderText("Bạn có muốn kết thúc phiên làm việc?");
-        ButtonType btn_ok = new ButtonType("Ok");
-        ButtonType onCancelButtonClicked = new ButtonType("Cancel");
-        alert.getButtonTypes().setAll(btn_ok, onCancelButtonClicked);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == btn_ok) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantLogin.fxml"));
-                Parent root = loader.load();
-                Scene mainScene = new Scene(root);
-                Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                loginStage.close();
-                Stage mainStage = new Stage();
-                mainStage.setScene(mainScene);
-                mainStage.setMaximized(true);
-                mainStage.setTitle("Login - Huong Bien Restaurant");
-                mainStage.initStyle(StageStyle.UNDECORATED);
-                mainStage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            JsonArray jsonArray = new JsonArray();
-            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
-        }
-    }
-
     public void translateAnimationMenu(double duration, Node node, double toX) {
         TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(duration), node);
         translateTransition.setByX(toX);
@@ -539,7 +606,7 @@ public class RestaurantMainController implements Initializable {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Employee ID").getAsString();
             EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
-            List<Employee> employees = employeeDAO.getById(id);
+            List<Employee> employees = employeeDAO.getManyById(id);
             Employee employee = (employees.isEmpty() ? null : employees.get(0));
             assert employee != null;
             employeeNameLabel.setText(employee.getName());
@@ -600,9 +667,95 @@ public class RestaurantMainController implements Initializable {
     }
 
     @FXML
-    void onDetailUserOverlayHBoxClicked(MouseEvent event) {
+    void onDetailUserOverlayHBoxClicked(MouseEvent event) throws FileNotFoundException {
         disableDetailUserButtons();
         detailUserBorderPane.setVisible(false);
         translateAnimationDetailUser(0.5, detailUserBorderPane, 250);
+        //reset detail User Info
+        setDetailUserInfo();
+    }
+
+    @FXML
+    public void onImageChooserButtonAction(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            try {
+                employeeImageBytes = Converter.fileToBytes(selectedFile);
+                Image image = new Image(Converter.bytesToInputStream(employeeImageBytes));
+                avatarMainCircle.setFill(new ImagePattern(image));
+                avatarDetailUserCircle.setFill(new ImagePattern(image));
+            } catch (IOException e) {
+                ToastsMessage.showToastsMessage("Lỗi", "Không thể mở ảnh");
+            }
+        }
+    }
+
+    @FXML
+    void saveInfoDetailUserButtonAction(ActionEvent event) throws FileNotFoundException {
+        byte[] profileImage = employeeImageBytes;
+        String name = nameDetailUserField.getText();
+        LocalDate birthDate = birthDateDetailUserDatePicker.getValue();
+        String phone = phoneDetailUserField.getText();
+        String email = emailDetailUserField.getText();
+        //TODO: update info to database
+        System.out.println(profileImage + " " + name + " " + birthDate + " " + phone + " " + email);
+        ToastsMessage.showMessage("Chức năng đang phát triển (Chưa update vào database)", "warning");
+        //---write here
+//
+
+        //update info
+        setDetailUserInfo();
+    }
+
+    @FXML
+    void updatePwdDetailUserButtonAction(ActionEvent event) {
+        //TODO: regex valid form change password
+        String currentPwd = currentPwdField.getText();
+        String newPwd = newPwdField.getText();
+        String new2Pwd = new2PwdField.getText();
+        System.out.println(currentPwd + " " + newPwd + " " + new2Pwd);
+        //TODO: update password to database
+
+        ToastsMessage.showMessage("Chức năng đang phát triển (Chưa update vào database)", "warning");
+    }
+
+    @FXML
+    void onExitButtonClicked(MouseEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.setTitle("Exit");
+        //TODO: lấy ra số giờ đã làm trong phiên làm việc => Chưa cộng vào tổng số giờ làm việc xuống database!
+        String currentEmpID = idDetailUserField.getText();
+        int hours = Integer.parseInt(countHourWorkDetailUserLabel.getText().split(":")[0]);
+        System.out.println("Employee ID: " + currentEmpID + " - Hours: " + hours);
+        //---Write here...........
+
+        alert.setHeaderText("Bạn có muốn kết thúc phiên làm việc, với số giờ đã ghi nhận là " + hours + " giờ?");
+        ButtonType btn_ok = new ButtonType("Ok");
+        ButtonType onCancelButtonClicked = new ButtonType("Cancel");
+        alert.getButtonTypes().setAll(btn_ok, onCancelButtonClicked);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == btn_ok) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantLogin.fxml"));
+                Parent root = loader.load();
+                Scene mainScene = new Scene(root);
+                Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                loginStage.close();
+                Stage mainStage = new Stage();
+                mainStage.setScene(mainScene);
+                mainStage.setMaximized(true);
+                mainStage.setTitle("Login - Huong Bien Restaurant");
+                mainStage.initStyle(StageStyle.UNDECORATED);
+                mainStage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            JsonArray jsonArray = new JsonArray();
+            Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
+        }
     }
 }

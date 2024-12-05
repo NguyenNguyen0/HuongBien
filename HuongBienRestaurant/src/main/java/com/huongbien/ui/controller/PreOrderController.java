@@ -82,6 +82,7 @@ public class PreOrderController implements Initializable {
         //get table info from json file
         JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TEMPORARY_TABLE_PATH);
         JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.TEMPORARY_CUISINE_PATH);
+        JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.TEMPORARY_CUSTOMER_PATH);
         StringBuilder tableInfoBuilder = new StringBuilder();
         double tableAmount = 0;
         for (JsonElement element : jsonArrayTable) {
@@ -100,6 +101,9 @@ public class PreOrderController implements Initializable {
             assert table != null;
             tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tablePrice : 0;
         }
+        if (!tableInfoBuilder.isEmpty()) {
+            tableInfoBuilder.setLength(tableInfoBuilder.length() - 2);
+        }
         int cuisineQuantity = 0;
         double cuisineAmount = 0;
         for (JsonElement element : jsonArrayCuisine) {
@@ -109,13 +113,24 @@ public class PreOrderController implements Initializable {
             cuisineQuantity += quantity;
             cuisineAmount += money;
         }
-        if (!tableInfoBuilder.isEmpty()) {
-            tableInfoBuilder.setLength(tableInfoBuilder.length() - 2);
+        for (JsonElement element : jsonArrayCustomer) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            String id = jsonObject.get("Customer ID").getAsString();
+            Customer customer = CustomerDAO.getInstance().getById(id);
+            if (customer != null) {
+                cusIDField.setText(customer.getCustomerId());
+                nameField.setText(customer.getName());
+                phoneNumField.setText(customer.getPhoneNumber());
+                emailField.setText(customer.getEmail() == null ? "" : customer.getEmail());
+            } else {
+                cusIDField.setText("");
+                nameField.setText("");
+                phoneNumField.setText("");
+                emailField.setText("");
+            }
         }
         tableInfoField.setText(tableInfoBuilder.toString());
-        //SetQuantityCuisine
         preOrderCuisineLabel.setText(cuisineQuantity + " món");
-        //Set Type Party
         //Set Type Party
         ObservableList<String> partyTypes = FXCollections.observableArrayList(Variable.partyTypesArray);
         preOrderPartyTypeComboBox.setItems(partyTypes);

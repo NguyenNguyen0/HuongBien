@@ -1,5 +1,6 @@
 package com.huongbien.dao;
 
+import com.huongbien.config.Variable;
 import com.huongbien.entity.FoodOrder;
 import com.huongbien.entity.Reservation;
 import com.huongbien.entity.Table;
@@ -47,7 +48,7 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         reservation.setRefundDeposit(resultSet.getDouble("refundDeposit"));
         reservation.setNote(resultSet.getString("note"));
         reservation.setCustomer(customerDao.getById(resultSet.getString("customerId")));
-        reservation.setEmployee(employeeDao.getById(resultSet.getString("employeeId")).getFirst());
+        reservation.setEmployee(employeeDao.getManyById(resultSet.getString("employeeId")).getFirst());
         reservation.setPayment(paymentDao.getById(resultSet.getString("paymentId")));
         reservation.setTables((ArrayList<Table>) tableDao.getAllByReservationId(reservation.getReservationId()));
         reservation.setFoodOrders((ArrayList<FoodOrder>) foodOrderDao.getAllByReservationId(reservation.getReservationId()));
@@ -64,6 +65,15 @@ public class ReservationDAO extends GenericDAO<Reservation> {
 
     public List<Reservation> getAll() {
         return getMany("SELECT * FROM reservation");
+    }
+
+    //get bàn chưa nhận theo ngày chỉ định
+    public List<Reservation> getReservationNotReceiveByDate(LocalDate date) {
+        return getMany("SELECT * FROM reservation WHERE status = ? AND receiveDate = ?", Variable.statusReservation[0], date);
+    }
+
+    public int getCountReservationNotReceiveByDate(LocalDate date){
+        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND reservationDate = ?", Variable.statusReservation[0], date);
     }
 
     public Reservation getById(String id) {
@@ -96,8 +106,6 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         }
         sqlQuery += reserDate + receiDate;
         return count(sqlQuery);
-
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.huongbien.ui.controller;
 
 import com.huongbien.bus.EmployeeBUS;
+import com.huongbien.config.Variable;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.entity.Employee;
 import com.huongbien.utils.Converter;
@@ -23,12 +24,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -41,87 +45,49 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class EmployeeManagementController implements Initializable {
-    private static final String DEFAULT_IMAGE_PATH = "/com/huongbien/icon/mg_employee/user-256px.png";
-    private static final String[] STATUS_OPTIONS = {"Đang làm", "Nghỉ phép", "Nghỉ việc"};
-    private static final String[] SEARCH_METHODS = {"Còn làm việc", "Tất cả", "Tìm theo tên", "Tìm theo số điện thoại", "Tìm theo chức vụ"};
-    private static final String ADD_MODE = "Thêm";
-    private static final String EDIT_MODE = "Sửa";
+    @FXML private TableColumn<Employee, String> employeeGenderColumn;
+    @FXML private TableColumn<Employee, String> employeeIdColumn;
+    @FXML private TableColumn<Employee, String> employeeNameColumn;
+    @FXML private TableColumn<Employee, String> employeePhoneColumn;
+    @FXML private TableColumn<Employee, String> employeePositionColumn;
+    @FXML private TableColumn<Employee, String> employeeStatusColumn;
+    @FXML private TableView<Employee> employeeTable;
+    @FXML private ComboBox<String> employeeStatusComboBox;
+    @FXML private ComboBox<Employee> employeePositionComboBox;
+    @FXML private DatePicker employeeBirthdayDatePicker;
+    @FXML private DatePicker employeeHiredateDatePicker;
+    @FXML private RadioButton femaleRadioButton;
+    @FXML private RadioButton maleRadioButton;
+    @FXML public TextField employeeAddressField;
+    @FXML private TextField employeeCitizenIdField;
+    @FXML private ComboBox<Employee> employeeManagerIdComboBox;
+    @FXML private TextField employeeEmailField;
+    @FXML private TextField employeeNameField;
+    @FXML private TextField employeeIdField;
+    @FXML private TextField employeePhoneField;
+    @FXML private TextField employeeSalaryField;
+    @FXML private TextField employeeHourlyPayField;
+    @FXML private ImageView clearSearchButton;
+    @FXML private ComboBox<String> searchMethodComboBox;
+    @FXML private TextField employeeSearchField;
+    @FXML public Label pageIndexLabel;
+    @FXML private Button searchEmployeeButton;
+    @FXML private ToggleGroup genderGroup;
+    @FXML private Button employeeClearFormButton;
+    @FXML private Button fireEmployeeButton;
+    @FXML private Button handleActionEmployeeButton;
+    @FXML private Button swapModeEmployeeButton;
+    @FXML private Button chooseImageButton;
+    @FXML private Circle employeeAvatarCircle;
     public TextField employeeWorkingHourField;
-
-    @FXML
-    private TableColumn<Employee, String> employeeGenderColumn;
-    @FXML
-    private TableColumn<Employee, String> employeeIdColumn;
-    @FXML
-    private TableColumn<Employee, String> employeeNameColumn;
-    @FXML
-    private TableColumn<Employee, String> employeePhoneColumn;
-    @FXML
-    private TableColumn<Employee, String> employeePositionColumn;
-    @FXML
-    private TableColumn<Employee, String> employeeStatusColumn;
-    @FXML
-    private TableView<Employee> employeeTable;
-    @FXML
-    private ComboBox<String> employeeStatusComboBox;
-    @FXML
-    private ComboBox<Employee> employeePositionComboBox;
-    @FXML
-    private DatePicker employeeBirthdayDatePicker;
-    @FXML
-    private DatePicker employeeHiredateDatePicker;
-    @FXML
-    private RadioButton femaleRadioButton;
-    @FXML
-    private RadioButton maleRadioButton;
-    @FXML
-    public TextField employeeAddressField;
-    @FXML
-    private TextField employeeCitizenIdField;
-    @FXML
-    private ComboBox<Employee> employeeManagerIdComboBox;
-    @FXML
-    private TextField employeeEmailField;
-    @FXML
-    private TextField employeeNameField;
-    @FXML
-    private TextField employeeIdField;
-    @FXML
-    private TextField employeePhoneField;
-    @FXML
-    private TextField employeeSalaryField;
-    @FXML
-    private TextField employeeHourlyPayField;
-    @FXML
-    private ImageView clearSearchButton;
-    @FXML
-    private ComboBox<String> searchMethodComboBox;
-    @FXML
-    private TextField employeeSearchField;
-    @FXML
-    public Label pageIndexLabel;
-    @FXML
-    private Button searchEmployeeButton;
-    @FXML
-    private ToggleGroup genderGroup;
-    @FXML
-    private Button employeeClearFormButton;
-    @FXML
-    private Button fireEmployeeButton;
-    @FXML
-    private Button handleActionEmployeeButton;
-    @FXML
-    private Button swapModeEmployeeButton;
-    @FXML
-    private Button chooseImageButton;
-    @FXML
-    private ImageView employeeAvatar;
-
     private byte[] employeeImageBytes = null;
-
     private Pagination<Employee> employeePagination;
-
     private final EmployeeBUS employeeBUS = new EmployeeBUS();
+
+    public RestaurantMainController restaurantMainController;
+    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
+        this.restaurantMainController = restaurantMainController;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -132,6 +98,7 @@ public class EmployeeManagementController implements Initializable {
         setEmployeePaginationGetStillWorking();
         setEmployeeTable();
         setEmployeeTableValue();
+        employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
     }
 
     public void setEmployeePaginationGetAll() {
@@ -244,13 +211,13 @@ public class EmployeeManagementController implements Initializable {
     }
 
     public void setSearchMethodComboBox() {
-        ObservableList<String> searchMethodList = FXCollections.observableArrayList(SEARCH_METHODS);
+        ObservableList<String> searchMethodList = FXCollections.observableArrayList(Variable.searchMethods);
         searchMethodComboBox.setItems(searchMethodList);
-        searchMethodComboBox.setValue(SEARCH_METHODS[0]);
+        searchMethodComboBox.setValue(Variable.searchMethods[0]);
     }
 
     public void setStatusComboBox() {
-        ObservableList<String> statusList = FXCollections.observableArrayList(STATUS_OPTIONS);
+        ObservableList<String> statusList = FXCollections.observableArrayList(Variable.statusOptions);
         employeeStatusComboBox.setItems(statusList);
         employeeStatusComboBox.setConverter(new StringConverter<>() {
             @Override
@@ -297,7 +264,7 @@ public class EmployeeManagementController implements Initializable {
 
     public void clearChooserImage() {
         employeeImageBytes = null;
-        employeeAvatar.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(DEFAULT_IMAGE_PATH))));
+        employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
     }
 
     public void clearEmployeeForm() {
@@ -351,12 +318,12 @@ public class EmployeeManagementController implements Initializable {
 
     public void changeHandleActionButtonToUpdateEmployee() {
         fireEmployeeButton.setVisible(true);
-        setButtonMode(ADD_MODE, EDIT_MODE, "#1D557E", "#761D7E");
+        setButtonMode(Variable.addMode, Variable.editMode, "#1D557E", "#761D7E");
     }
 
     public void changeHandleActionButtonToAddEmployee() {
         fireEmployeeButton.setVisible(false);
-        setButtonMode(EDIT_MODE, ADD_MODE, "#761D7E", "#1D557E");
+        setButtonMode(Variable.editMode, Variable.addMode, "#761D7E", "#1D557E");
     }
 
     public void setButtonMode(String swapModeText, String handleActionText, String swapModeColor, String handleActionColor) {
@@ -389,9 +356,9 @@ public class EmployeeManagementController implements Initializable {
 
     public void populateEmployeeForm(Employee employee) {
         if (employee.getProfileImage() == null || employee.getProfileImage().length == 0) {
-            employeeAvatar.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(DEFAULT_IMAGE_PATH))));
+            employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
         } else {
-            employeeAvatar.setImage(new Image(Converter.bytesToInputStream(employee.getProfileImage())));
+            employeeAvatarCircle.setFill(new ImagePattern(new Image(Converter.bytesToInputStream(employee.getProfileImage()))));
         }
         employeeIdField.setText(employee.getEmployeeId());
         employeeNameField.setText(employee.getName());
@@ -519,11 +486,11 @@ public class EmployeeManagementController implements Initializable {
 
     @FXML
     public void onSwapModeEmployeeButtonClicked(MouseEvent event) {
-        if (swapModeEmployeeButton.getText().equals(EDIT_MODE)) {
+        if (swapModeEmployeeButton.getText().equals(Variable.editMode)) {
             disableInput();
             clearChooserImage();
             changeHandleActionButtonToUpdateEmployee();
-        } else if (swapModeEmployeeButton.getText().equals(ADD_MODE)) {
+        } else if (swapModeEmployeeButton.getText().equals(Variable.addMode)) {
             enableInput();
             clearChooserImage();
             clearEmployeeForm();
@@ -532,13 +499,14 @@ public class EmployeeManagementController implements Initializable {
     }
 
     @FXML
-    public void onHandleActionEmployeeButtonClicked(ActionEvent event) {
-        if (handleActionEmployeeButton.getText().equals(EDIT_MODE)) {
+    public void onHandleActionEmployeeButtonClicked(ActionEvent event) throws FileNotFoundException {
+        if (handleActionEmployeeButton.getText().equals(Variable.editMode)) {
             updateEmployee();
-        } else if (handleActionEmployeeButton.getText().equals(ADD_MODE)) {
+        } else if (handleActionEmployeeButton.getText().equals(Variable.addMode)) {
             addEmployee();
         }
         clearEmployeeForm();
+        restaurantMainController.setDetailUserInfo();
     }
 
     @FXML
@@ -607,7 +575,7 @@ public class EmployeeManagementController implements Initializable {
             try {
                 employeeImageBytes = Converter.fileToBytes(selectedFile);
                 Image image = new Image(Converter.bytesToInputStream(employeeImageBytes));
-                employeeAvatar.setImage(image);
+                employeeAvatarCircle.setFill(new ImagePattern(image));
             } catch (IOException e) {
                 ToastsMessage.showToastsMessage("Lỗi", "Không thể mở ảnh");
             }
