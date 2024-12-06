@@ -5,22 +5,33 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
+import com.huongbien.dao.CategoryDAO;
 import com.huongbien.dao.CuisineDAO;
 import com.huongbien.dao.TableDAO;
+import com.huongbien.dao.TableTypeDAO;
+import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.OrderDetail;
 import com.huongbien.entity.Table;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
+import javafx.animation.PauseTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
+import javafx.util.Pair;
+import javafx.util.StringConverter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,10 +39,10 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OrderCuisineController implements Initializable {
-    //cuisine
     @FXML private ScrollPane cuisineScrollPane;
     @FXML private GridPane cuisineGridPane;
     @FXML private ScrollPane billScrollPane;
@@ -41,6 +52,8 @@ public class OrderCuisineController implements Initializable {
     @FXML private Label cuisineQuantityLabel;
     @FXML private Label tableAmountLabel;
     @FXML private Label totalAmountLabel;
+    @FXML public TextField cuisineNameTextField;
+    @FXML public ComboBox<Pair<String, String>> categoryComboBox;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -51,7 +64,8 @@ public class OrderCuisineController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadCuisine();
+        loadCategoryComboBox();
+        loadCuisine("", "");
         try {
             loadBill();
             setCuisinesInfoFromJSON();
@@ -60,8 +74,29 @@ public class OrderCuisineController implements Initializable {
         }
     }
 
-    private void loadCuisine() {
-        List<Cuisine> cuisines = new ArrayList<>(getCuisineData());
+    public void loadCategoryComboBox() {
+        List<Category> categories = CategoryDAO.getInstance().getAll();
+        ObservableList<Pair<String, String>> categoryItems = FXCollections.observableArrayList();
+        categoryItems.add(new Pair<>("-1", "Loại món"));
+        for (Category category : categories) {
+            categoryItems.add(new Pair<>(String.valueOf(category.getCategoryId()), category.getName()));
+        }
+        categoryComboBox.setItems(categoryItems);
+        categoryComboBox.setConverter(new StringConverter<Pair<String, String>>() {
+            @Override
+            public String toString(Pair<String, String> pair) {
+                return pair.getValue();
+            }
+            @Override
+            public Pair<String, String> fromString(String string) {
+                return null;
+            }
+        });
+        categoryComboBox.getSelectionModel().selectFirst();
+    }
+
+    private void loadCuisine(String cuisineName, String category) {
+        List<Cuisine> cuisines = new ArrayList<>(getCuisineData(cuisineName, category));
         int columns = 0;
         int rows = 1;
         try {
@@ -135,9 +170,9 @@ public class OrderCuisineController implements Initializable {
         return orderDetailsList;
     }
 
-    private List<Cuisine> getCuisineData() {
+    private List<Cuisine> getCuisineData(String cuisineName, String category) {
         CuisineDAO cuisineDAO = CuisineDAO.getInstance();
-        return cuisineDAO.getAll();
+        return cuisineDAO.getLookUpCuisine(cuisineName, category);
     }
 
     private List<OrderDetail> getBillData() throws FileNotFoundException {
@@ -203,9 +238,46 @@ public class OrderCuisineController implements Initializable {
 
     @FXML
     void onClearCuisineButtonAction(ActionEvent event) throws FileNotFoundException, SQLException {
-        Utils.writeJsonToFile(new JsonArray(), Constants.CUISINE_PATH);
-        billGridPane.getChildren().clear();
-        loadBill();
-        setCuisinesInfoFromJSON();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.setHeaderText("Thông báo");
+        alert.setContentText("Bạn có chắc chắn muốn xóa tất cả món ăn đã chọn?");
+        ButtonType btn_ok = new ButtonType("Xoá tất cả");
+        ButtonType btn_cancel = new ButtonType("Không");
+        alert.getButtonTypes().setAll(btn_ok, btn_cancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == btn_ok) {
+            Utils.writeJsonToFile(new JsonArray(), Constants.CUISINE_PATH);
+            billGridPane.getChildren().clear();
+            loadBill();
+        }
+        ToastsMessage.showMessage("Đã xóa tất cả món ăn ra khỏi danh sách!", "success");
+    }
+
+    public void filterFoodHandler() {
+        String cuisineName = cuisineNameTextField.getText();
+        Pair<String, String> selectedCategory = categoryComboBox.getValue();
+        String categoryId = selectedCategory != null ? selectedCategory.getKey() : "";
+        cuisineGridPane.getChildren().clear();
+        loadCuisine(cuisineName, categoryId.equals("-1") ? "" : categoryId);
+    }
+
+    @FXML
+    void cuisineNameTextField(KeyEvent event) {
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        pause.setOnFinished(e -> filterFoodHandler());
+        pause.play();
+    }
+
+    @FXML
+    void categoryComboBox(ActionEvent event) {
+        filterFoodHandler();
+    }
+
+    @FXML
+    void onCuisineNameTextFieldButton(ActionEvent event) {
+        cuisineNameTextField.setText("");
+        filterFoodHandler();
     }
 }

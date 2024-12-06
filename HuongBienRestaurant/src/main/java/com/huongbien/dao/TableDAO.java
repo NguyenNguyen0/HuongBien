@@ -58,6 +58,23 @@ public class    TableDAO extends GenericDAO<Table> {
         return getMany("SELECT * FROM [Table] WHERE id IN (SELECT tableId FROM Order_Table WHERE orderId = ?)", orderId);
     }
 
+    public int getstatisticalOverviewTable() {
+        return count("SELECT COUNT(*) FROM [Table] WHERE status != N'Bàn đóng'");
+    }
+
+    public int getstatisticalOverviewTableEmpty() {
+        return count("SELECT COUNT(*) FROM [Table] WHERE status = N'Bàn trống'");
+    }
+
+    public int getstatisticalFloorTable(int floor) {
+        return count("SELECT COUNT(*) FROM [Table] WHERE status != N'Bàn đóng' AND floor = ?", floor);
+    }
+
+    public int getstatisticalFloorTableEmpty(int floor) {
+        return count("SELECT COUNT(*) FROM [Table] WHERE status = N'Bàn trống' AND floor = ?", floor);
+    }
+
+    //TODO: Sửa return getMany cho nó gọn (- Minh -)
     public List<Table> getByCriteria(String floor, String status, String typeID, String seat) {
         List<Table> tables = new ArrayList<>();
         StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM [Table] WHERE status != N'Bàn đóng'");
@@ -132,7 +149,7 @@ public class    TableDAO extends GenericDAO<Table> {
         }
     }
 
-    //TODO: Tối ưu cho gọn giúp t (Minh)
+    //TODO: Tối ưu cho gọn giúp t (- Minh -)
     public Table getTopFloor() {
         try {
             PreparedStatement statement = statementHelper.prepareStatement("SELECT TOP 1 floor FROM [Table] ORDER BY floor ASC");

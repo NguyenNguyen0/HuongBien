@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.dao.CuisineDAO;
 import com.huongbien.entity.OrderDetail;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -60,7 +62,7 @@ public class OrderCuisineBillItemController {
             String existingCuisineID = jsonObject.get("Cuisine ID").getAsString();
             if (existingCuisineID.equals(cuisineID)) {
                 jsonArray.remove(i);
-                System.out.println("Removed item with Cuisine ID: " + cuisineID);
+                ToastsMessage.showMessage("Đã xoá món"+ CuisineDAO.getInstance().getById(cuisineID).getName() +" ra khỏi danh sách", "success");
                 break;
             }
         }
@@ -119,11 +121,9 @@ public class OrderCuisineBillItemController {
 
                     double newMoney = price * newQuantity;
                     jsonObject.addProperty("Cuisine Money", newMoney);
-
-                    System.out.println("Decreased quantity for Cuisine ID: " + cuisineID + ". New Quantity: " + newQuantity);
                 } else {
                     jsonArray.remove(i);
-                    System.out.println("Removed item with Cuisine ID: " + cuisineID + " due to zero quantity.");
+                    ToastsMessage.showMessage("Đã xoá món: "+ CuisineDAO.getInstance().getById(cuisineID).getName() +" ra khỏi danh sách", "success");
                 }
                 break;
             }
@@ -146,7 +146,7 @@ public class OrderCuisineBillItemController {
 
             if (existingCuisineID.equals(cuisineID)) {
                 jsonObject.addProperty("Cuisine Note", newNote);
-                System.out.println("Updated note for Cuisine ID: " + cuisineID + ". New Note: " + newNote);
+                ToastsMessage.showMessage("Đã cập nhật ghi chú cho món: "+ CuisineDAO.getInstance().getById(cuisineID).getName()+" với nội dung là: "+newNote, "success");
                 break;
             }
         }
@@ -195,17 +195,12 @@ public class OrderCuisineBillItemController {
         Optional<String> result = inputDialog.showAndWait();
         result.ifPresent(newNote -> {
             String cuisineID = cuisineIdLabel.getText();
+            updateNoteInJSON(cuisineID, newNote);
+            orderCuisineController.billGridPane.getChildren().clear();
             try {
-                updateNoteInJSON(cuisineID, newNote);
-                orderCuisineController.billGridPane.getChildren().clear();
                 orderCuisineController.loadBill();
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText("Không thể cập nhật ghi chú.");
-                alert.setContentText("Đã xảy ra lỗi khi cập nhật ghi chú vào JSON.");
-                alert.showAndWait();
+                throw new RuntimeException(e);
             }
         });
     }

@@ -38,6 +38,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OrderTableController implements Initializable {
+    @FXML public Label statisticalOverviewLabel;
+    @FXML public Label currentFloorLabel;
+    @FXML public Label statisticalFloorLabel;
     @FXML private ScrollPane orderTableScrollPane;
     @FXML private GridPane orderTableGridPane;
     @FXML public ComboBox<String> tableFloorComboBox;
@@ -49,7 +52,6 @@ public class OrderTableController implements Initializable {
     @FXML public Label seatTotalLabel;
     @FXML public Label tableAmountLabel;
     @FXML public Label noteTableFeeLabel;
-
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -63,12 +65,23 @@ public class OrderTableController implements Initializable {
         noteTableFeeLabel.setText(noteTableFeeLabel.getText()+Converter.formatMoney(Variable.tableVipPrice)+" VNĐ");
         loadTablesToGridPane(Variable.floor , Variable.status, Variable.tableTypeName, Variable.seats); //value mặc định
         setComboBoxValue();
+        statisticalRestaurant(Variable.floor);
         try {
             readTableDataFromJSON();
         } catch (FileNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
+    private void statisticalRestaurant(int floor) {
+        int statisticalOverviewTableEmpty = TableDAO.getInstance().getstatisticalOverviewTableEmpty();
+        int statisticalOverview = TableDAO.getInstance().getstatisticalOverviewTable();
+        int statisticalFloorTableEmpty = TableDAO.getInstance().getstatisticalFloorTableEmpty(floor);
+        int statisticalFloor = TableDAO.getInstance().getstatisticalFloorTable(floor);
+        currentFloorLabel.setText(floor == 0 ? "Tầng trệt:" : "Tầng " + floor+":");
+        statisticalOverviewLabel.setText("("+statisticalOverviewTableEmpty+"/"+statisticalOverview+")");
+        statisticalFloorLabel.setText("("+statisticalFloorTableEmpty+"/"+statisticalFloor+")");
+    }
+
     //---
     private void loadTablesToGridPane(int floor, String status, String type, String seat) {
         List<Table> tables = new ArrayList<>(getTableDataByCriteria(floor, status, type, seat));
@@ -259,6 +272,7 @@ public class OrderTableController implements Initializable {
     //comboBox
     @FXML
     void onTableFloorComboBoxSelected(ActionEvent event) throws SQLException {
+        statisticalRestaurant(Integer.parseInt(tableFloorComboBox.getValue()));
         handleLoadTableFromComboBoxSelection();
     }
 

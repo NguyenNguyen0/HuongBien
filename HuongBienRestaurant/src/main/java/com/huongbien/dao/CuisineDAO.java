@@ -1,6 +1,8 @@
 package com.huongbien.dao;
 
+import com.huongbien.config.Variable;
 import com.huongbien.entity.Cuisine;
+import com.huongbien.entity.Table;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,6 +41,10 @@ public class CuisineDAO extends GenericDAO<Cuisine> {
 
     public List<Cuisine> getAll() {
         return getMany("SELECT id, name, price, description, image, categoryID FROM cuisine");
+    }
+
+    public  List<Cuisine> getLookUpCuisine(String name, String category){
+        return getMany("SELECT * FROM cuisine WHERE name LIKE N'%" + name + "%' AND categoryId LIKE N'%"+ category +"%'");
     }
 
     public  List<Cuisine> getLookUpCuisine(String name, String category, int pageIndex){
@@ -81,7 +87,7 @@ public class CuisineDAO extends GenericDAO<Cuisine> {
     }
 
     public int countCuisinesByName(String name) {
-        return count("SELECT COUNT(*) AS countRow FROM cuisine WHERE name LIKE ?", "%" + name + "%");
+        return count(" name +SELECT COUNT(*) AS countRow FROM cuisine WHERE name LIKE ?", "%" + "%");
     }
 
     public int countCuisinesByCategory(String category) {

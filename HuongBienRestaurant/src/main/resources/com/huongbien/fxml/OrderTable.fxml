@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
+<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
    <top>
       <HBox prefHeight="150.0" prefWidth="1584.0" BorderPane.alignment="CENTER">
          <children>
@@ -51,7 +51,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="471.0">
                      <children>
-                        <Label text="Tổng quan nhà hàng:" textFill="WHITE">
+                        <Label text="Tổng quan nhà hàng đang trống:" textFill="WHITE">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -59,9 +59,9 @@
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
                         </Label>
-                        <Label text="Unknown" textFill="WHITE">
+                        <Label fx:id="statisticalOverviewLabel" text="Unknown" textFill="WHITE">
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
@@ -75,7 +75,7 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <Label text="Tầng trệt:" textFill="WHITE">
+                        <Label fx:id="currentFloorLabel" text="Unknown" textFill="WHITE">
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
@@ -83,12 +83,12 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <Label text="Unknown" textFill="WHITE">
+                        <Label fx:id="statisticalFloorLabel" text="Unknown" textFill="WHITE">
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="10.0" />
                            </HBox.margin>
                         </Label>
                         <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />

@@ -6,6 +6,7 @@ import com.huongbien.config.Constants;
 import com.huongbien.dao.CuisineDAO;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -96,5 +97,6 @@ public class OrderCuisineItemController {
         orderCuisineController.loadBill();
         //update lbl
         orderCuisineController.setCuisinesInfoFromJSON();
+        ToastsMessage.showMessage("Đã thêm món: "+cuisine.getName()+" vào danh sách", "success");
     }
 }

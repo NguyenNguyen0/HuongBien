@@ -3,6 +3,10 @@ package com.huongbien.config;
 import com.huongbien.dao.TableDAO;
 
 public class Variable {
+    //OrderCuisineController.java
+    //---
+    public static String category = "Loại món";
+
     //OrderTableController
     //--
     public static int floor = TableDAO.getInstance().getTopFloor().getFloor();
