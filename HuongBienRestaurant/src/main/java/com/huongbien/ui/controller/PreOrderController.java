@@ -285,26 +285,45 @@ public class PreOrderController implements Initializable {
         }
 
         //TODO: Xử lý database ghi đơn đặt taị đây
-        String reservationID = "";
+        Reservation reservation = new Reservation();
+
+        String reservationID = null;
         for (JsonElement element : jsonArrayReservation) {
             JsonObject jsonObject = element.getAsJsonObject();
-            reservationID = jsonObject.has("Reservation ID") ? jsonObject.get("Reservation ID").getAsString() : "";
+            reservationID = jsonObject.has("Reservation ID") ? jsonObject.get("Reservation ID").getAsString() : null;
             break;
         }
 
         String employeeID = null;
+        for(JsonElement element : jsonArrayEmployee) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            employeeID = jsonObject.get("Employee ID").getAsString();
+            break;
+        }
+
         String customerID = customerIDField.getText();
         LocalDate receiveDate = receiveDatePicker.getValue();
         LocalTime receiveTime = LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()));
         int partySize = Integer.parseInt(numOfAttendeesField.getText());
         String note = noteField.getText();
         String partyType = partyTypeComboBox.getValue();
+        Customer customer = CustomerDAO.getInstance().getById(customerID);
+        Employee employee = EmployeeDAO.getInstance().getOneById(employeeID);
+//        double deposit = Double.parseDouble(totalAmoutLabel.getText().replaceAll("\\.", "").replaceAll(" VNĐ", ""));
+        double deposit = Double.parseDouble(totalAmoutLabel.getText().replaceAll(",", "").replaceAll(" VNĐ", ""));
 
-        for(JsonElement element : jsonArrayEmployee) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            employeeID = jsonObject.get("Employee ID").getAsString();
-            break;
-        }
+        reservation.setReservationId(reservationID);
+        reservation.setPartyType(partyType);
+        reservation.setPartySize(partySize);
+        reservation.setReservationDate(LocalDate.now());
+        reservation.setReservationTime(LocalTime.now());
+        reservation.setReceiveDate(receiveDate);
+        reservation.setReceiveTime(receiveTime);
+        reservation.setStatus(Variable.statusReservation[0]);
+        reservation.setDeposit(deposit);
+        reservation.setNote(note);
+        reservation.setEmployee(employee);
+        reservation.setCustomer(customer);
 
         ArrayList<Table> tables = new ArrayList<>();
         for(JsonElement element : jsonArrayTable) {
@@ -325,7 +344,7 @@ public class PreOrderController implements Initializable {
             int cuisineQuantity = jsonObject.get("Cuisine Quantity").getAsInt();
 
             FoodOrder foodOrder = new FoodOrder();
-            foodOrder.setFoodOrderId(null);
+            foodOrder.setFoodOrderId(reservation.getReservationId());
             foodOrder.setQuantity(cuisineQuantity);
             foodOrder.setNote(cuisineNote);
             foodOrder.setSalePrice(cuisinePrice);
@@ -337,21 +356,22 @@ public class PreOrderController implements Initializable {
             foodOrders.add(foodOrder);
         }
 
-        Customer customer = CustomerDAO.getInstance().getById(customerID);
-        Employee employee = EmployeeDAO.getInstance().getOneById(employeeID);
+        reservation.setTables(tables);
+        reservation.setFoodOrders(foodOrders);
 
-        double deposit = Double.parseDouble(totalAmoutLabel.getText().replaceAll("\\.", "").replaceAll(" VNĐ", ""));
-
-        if(reservationID.isEmpty()) {
-            Reservation reservation = new Reservation(partyType, partySize, receiveDate, receiveTime, deposit, note, null, employee, customer, tables, foodOrders);
-            ReservationBUS reservationBUS = new ReservationBUS();
-            reservationBUS.addReservation(reservation);
-            System.out.println(reservation.getReservationId());
-            ToastsMessage.showMessage("Tạo đơn đặt trước thành công, trang quản lý đặt bàn sẽ mở sau 3 giây", "success");
+        ReservationBUS reservationBUS = new ReservationBUS();
+        if(reservationID == null) {
+            if (reservationBUS.addReservation(reservation)) {
+                ToastsMessage.showMessage("Tạo đơn đặt trước thành công, trang quản lý đặt bàn sẽ mở sau 3 giây", "success");
+            } else {
+                ToastsMessage.showMessage("Tạo đơn đặt trước thất bại, vui lòng thử lại", "error");
+            }
         } else {
-            //TODO: update reservation
-
-            ToastsMessage.showMessage("Cập nhật đơn đặt trước: "+reservationID+" thành công, trang quản lý đặt bàn sẽ mở sau 3 giây", "success");
+            if (reservationBUS.updateReservation(reservation)) {
+                ToastsMessage.showMessage("Cập nhật đơn đặt trước: "+reservationID+" thành công, trang quản lý đặt bàn sẽ mở sau 3 giây", "success");
+            } else {
+                ToastsMessage.showMessage("Cập nhật đơn đặt trước: "+reservationID+" thất bại, vui lòng thử lại", "error");
+            }
         }
 
         //Delay để thông báo thao tác hợp lệ rồi mới chuyển trang

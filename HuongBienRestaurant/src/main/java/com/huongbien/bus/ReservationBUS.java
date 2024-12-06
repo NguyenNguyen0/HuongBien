@@ -28,6 +28,11 @@ public class ReservationBUS {
         return reservationDao.add(reservation);
     }
 
+    public boolean updateReservation(Reservation reservation){
+        if (reservation == null) return false;
+        return reservationDao.update(reservation);
+    }
+
     public List<Reservation> getLookUpReservation(String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate, int pageIndex){
         return reservationDao.getLookUpReservation(reservationId, reservationCusId, reservationDate, receiveDate, pageIndex);
     }

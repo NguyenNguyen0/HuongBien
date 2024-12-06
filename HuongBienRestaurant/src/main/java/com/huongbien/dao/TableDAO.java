@@ -319,6 +319,17 @@ public class    TableDAO extends GenericDAO<Table> {
         }
     }
 
+    public boolean updateTablesToReservation(String reservationId, List<Table> tables) {
+        try {
+            String sql = "DELETE FROM Reservation_Table WHERE reservationId = ?";
+            PreparedStatement statement = statementHelper.prepareStatement(sql, reservationId);
+            statement.executeUpdate();
+            return addTablesToReservation(reservationId, tables);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean addTablesToReservation(String reservationId, List<Table> tables) {
         try {
             String sql = "INSERT INTO Reservation_Table (reservationId, tableId) VALUES (?, ?)";

@@ -35,6 +35,21 @@ public class PaymentDAO extends GenericDAO<Payment> {
         return getOne("SELECT * FROM Payment WHERE id = ?", id);
     }
 
+    public boolean update(Payment payment) {
+        try {
+            String sql = "UPDATE Payment SET amount = ?, paymentDate = ?, paymentMethod = ?, paymentTime = ? WHERE id = ?";
+            PreparedStatement statement = statementHelper.prepareStatement(sql);
+            statement.setDouble(1, payment.getAmount());
+            statement.setDate(2, Date.valueOf(payment.getPaymentDate()));
+            statement.setString(3, payment.getPaymentMethod());
+            statement.setTime(4, Time.valueOf(payment.getPaymentTime()));
+            statement.setString(5, payment.getPaymentId());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public boolean add(Payment payment) {
         try {

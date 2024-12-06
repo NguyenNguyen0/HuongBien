@@ -43,6 +43,19 @@ public class FoodOrderDAO extends GenericDAO<FoodOrder> {
         return getOne("SELECT id, quantity, salePrice, note, cuisineId FROM FoodOrder WHERE id = ?", foodOrderId);
     }
 
+    public boolean updateReservationFoodOrders(String reservationId, List<FoodOrder> foodOrders) {
+        if (foodOrders.isEmpty()) return false;
+        try {
+            String sql = "DELETE FROM FoodOrder WHERE reservationId = ?";
+            PreparedStatement statement = statementHelper.prepareStatement(sql);
+            statement.setString(1, reservationId);
+            statement.executeUpdate();
+            return add(foodOrders);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public boolean add(FoodOrder foodOrder) {
         String sql = "INSERT INTO FoodOrder (id, quantity, note, salePrice, cuisineId, reservationId) VALUES (?, ?, ?, ?, ?, ?)";

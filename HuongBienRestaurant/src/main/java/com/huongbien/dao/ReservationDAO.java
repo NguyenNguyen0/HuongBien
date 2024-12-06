@@ -1,5 +1,6 @@
 package com.huongbien.dao;
 
+import com.huongbien.bus.ReservationBUS;
 import com.huongbien.config.Variable;
 import com.huongbien.entity.FoodOrder;
 import com.huongbien.entity.Reservation;
@@ -106,6 +107,45 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         }
         sqlQuery += reserDate + receiDate;
         return count(sqlQuery);
+    }
+
+    public boolean update(Reservation reservation) {
+        String sql = """
+               UPDATE reservation
+               SET partyType = ?, partySize = ?, reservationDate = ?, reservationTime = ?, receiveDate = ?, receiveTime = ?,
+               status = ?, deposit = ?, refundDeposit = ?, note = ?, employeeId = ?, customerId = ?, paymentId = ?
+               WHERE id = ?
+        """;
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement(
+                    sql,
+                    reservation.getPartyType(),
+                    reservation.getPartySize(),
+                    reservation.getReservationDate(),
+                    reservation.getReservationTime(),
+                    reservation.getReceiveDate(),
+                    reservation.getReceiveTime(),
+                    reservation.getStatus(),
+                    reservation.getDeposit(),
+                    reservation.getRefundDeposit(),
+                    reservation.getNote(),
+                    reservation.getEmployee().getEmployeeId(),
+                    reservation.getCustomer().getCustomerId(),
+                    reservation.getPayment() == null ? null : reservation.getPayment().getPaymentId(),
+                    reservation.getReservationId()
+            );
+
+            if (reservation.getPayment() != null) paymentDao.update(reservation.getPayment());
+
+            int rowAffected = statement.executeUpdate();
+
+            foodOrderDao.updateReservationFoodOrders(reservation.getReservationId(), reservation.getFoodOrders());
+            tableDao.updateTablesToReservation(reservation.getReservationId(), reservation.getTables());
+
+            return rowAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
