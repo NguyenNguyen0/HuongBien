@@ -17,21 +17,21 @@ VALUES
 -- Insert tables for the ground floor (Tầng Trệt)
 INSERT INTO [Table] (id, name, seats, [floor], tableTypeId, [status])
 VALUES
-('T0B001', N'Bàn 01', 4, 2, 'LB001', N'Bàn trống'),
-('T0B002', N'Bàn 02', 4, 2, 'LB001', N'Bàn trống'),
-('T0B003', N'Bàn 03', 4, 2, 'LB001', N'Bàn trống'),
-('T0B004', N'Bàn 04', 4, 2, 'LB001', N'Bàn trống'),
-('T0B005', N'Bàn 05', 4, 2, 'LB001', N'Bàn trống'),
-('T0B006', N'Bàn 06', 4, 2, 'LB001', N'Bàn trống'),
-('T0B007', N'Bàn 07', 4, 2, 'LB001', N'Bàn trống'),
-('T0B008', N'Bàn 08', 4, 2, 'LB001', N'Bàn trống'),
-('T0B009', N'Bàn 09', 4, 2, 'LB001', N'Bàn trống'),
-('T0B010', N'Bàn 10', 4, 2, 'LB001', N'Bàn trống'),
-('T0B011', N'Bàn 11', 6, 2, 'LB002', N'Bàn trống'),
-('T0B012', N'Bàn 12', 6, 2, 'LB002', N'Bàn trống'),
-('T0B013', N'Bàn 13', 6, 2, 'LB002', N'Bàn trống'),
-('T0B014', N'Bàn 14', 6, 2, 'LB002', N'Bàn trống'),
-('T0B015', N'Bàn 15', 6, 2, 'LB002', N'Bàn trống');
+('T0B001', N'Bàn 01', 4, 0, 'LB001', N'Bàn đóng'),
+('T0B002', N'Bàn 02', 4, 0, 'LB001', N'Đặt trước'),
+('T0B003', N'Bàn 03', 4, 0, 'LB001', N'Đặt trước'),
+('T0B004', N'Bàn 04', 4, 0, 'LB001', N'Đặt trước'),
+('T0B005', N'Bàn 05', 4, 0, 'LB001', N'Đặt trước'),
+('T0B006', N'Bàn 06', 4, 0, 'LB001', N'Bàn trống'),
+('T0B007', N'Bàn 07', 4, 0, 'LB001', N'Bàn trống'),
+('T0B008', N'Bàn 08', 4, 0, 'LB001', N'Bàn trống'),
+('T0B009', N'Bàn 09', 4, 0, 'LB001', N'Phục vụ'),
+('T0B010', N'Bàn 10', 4, 0, 'LB001', N'Phục vụ'),
+('T0B011', N'Bàn 11', 6, 0, 'LB002', N'Phục vụ'),
+('T0B012', N'Bàn 12', 6, 0, 'LB002', N'Đặt trước'),
+('T0B013', N'Bàn 13', 6, 0, 'LB002', N'Đặt trước'),
+('T0B014', N'Bàn 14', 6, 0, 'LB002', N'Bàn trống'),
+('T0B015', N'Bàn 15', 6, 0, 'LB002', N'Bàn trống');
 
 -- Insert tables for floor "Tầng 1"
 INSERT INTO [Table] (id, name, seats, [floor], tableTypeId, [status])
@@ -39,30 +39,30 @@ VALUES
 ('T1B001', N'Bàn 01', 4, 1, 'LB001', N'Bàn trống'),
 ('T1B002', N'Bàn 02', 4, 1, 'LB001', N'Bàn trống'),
 ('T1B003', N'Bàn 03', 4, 1, 'LB001', N'Bàn trống'),
-('T1B004', N'Bàn 04', 4, 1, 'LB001', N'Bàn trống'),
-('T1B005', N'Bàn 05', 4, 1, 'LB001', N'Bàn trống'),
-('T1B006', N'Bàn 06', 4, 1, 'LB001', N'Bàn trống'),
-('T1B007', N'Bàn 07', 4, 1, 'LB001', N'Bàn trống'),
-('T1B008', N'Bàn 08', 4, 1, 'LB001', N'Bàn trống'),
-('T1B009', N'Bàn 09', 4, 1, 'LB001', N'Bàn trống'),
-('T1B010', N'Bàn 10', 4, 1, 'LB001', N'Bàn trống'),
+('T1B004', N'Bàn 04', 4, 1, 'LB001', N'Phục vụ'),
+('T1B005', N'Bàn 05', 4, 1, 'LB001', N'Phục vụ'),
+('T1B006', N'Bàn 06', 4, 1, 'LB001', N'Phục vụ'),
+('T1B007', N'Bàn 07', 4, 1, 'LB001', N'Phục vụ'),
+('T1B008', N'Bàn 08', 4, 1, 'LB001', N'Đặt trước'),
+('T1B009', N'Bàn 09', 4, 1, 'LB001', N'Đặt trước'),
+('T1B010', N'Bàn 10', 4, 1, 'LB001', N'Đặt trước'),
 ('T1B011', N'Bàn 11', 6, 1, 'LB002', N'Bàn trống'),
-('T1B012', N'Bàn 12', 6, 1, 'LB002', N'Bàn trống'),
+('T1B012', N'Bàn 12', 6, 1, 'LB002', N'Bàn đóng'),
 ('T1B013', N'Bàn 13', 6, 1, 'LB002', N'Bàn trống');
 
 -- Insert tables for floor "Tầng 2"
 INSERT INTO [Table] (id, name, seats, [floor], tableTypeId, [status])
 VALUES
-('T2B001', N'Bàn 01', 4, 2, 'LB001', N'Bàn trống'),
+('T2B001', N'Bàn 01', 4, 2, 'LB001', N'Bàn đóng'),
 ('T2B002', N'Bàn 02', 4, 2, 'LB001', N'Bàn trống'),
-('T2B003', N'Bàn 03', 4, 2, 'LB001', N'Bàn trống'),
-('T2B004', N'Bàn 04', 4, 2, 'LB001', N'Bàn trống'),
-('T2B005', N'Bàn 05', 4, 2, 'LB001', N'Bàn trống'),
+('T2B003', N'Bàn 03', 4, 2, 'LB001', N'Phục vụ'),
+('T2B004', N'Bàn 04', 4, 2, 'LB001', N'Phục vụ'),
+('T2B005', N'Bàn 05', 4, 2, 'LB001', N'Phục vụ'),
 ('T2B006', N'Bàn 06', 4, 2, 'LB001', N'Bàn trống'),
 ('T2B007', N'Bàn 07', 4, 2, 'LB001', N'Bàn trống'),
-('T2B008', N'Bàn 08', 4, 2, 'LB001', N'Bàn trống'),
-('T2B009', N'Bàn 09', 4, 2, 'LB001', N'Bàn trống'),
-('T2B010', N'Bàn 10', 4, 2, 'LB001', N'Bàn trống'),
+('T2B008', N'Bàn 08', 4, 2, 'LB001', N'Đặt trước'),
+('T2B009', N'Bàn 09', 4, 2, 'LB001', N'Đặt trước'),
+('T2B010', N'Bàn 10', 4, 2, 'LB001', N'Đặt trước'),
 ('T2B011', N'Bàn 11', 6, 2, 'LB002', N'Bàn trống');
 
 -- Insert 5 rows into the Promotion table
@@ -86,77 +86,77 @@ VALUES
 ('CG009', N'Lẩu', N'Món lẩu đa dạng, phù hợp ăn chung nhóm.'),
 ('CG010', N'Nước uống', N'Nước uống giải khát.');
 
-INSERT INTO Cuisine (id, name, price, description, image, categoryId)
+INSERT INTO Cuisine (id, name, price, description, image, status, categoryId)
 VALUES
 -- Khai vị
-('M001', N'Gỏi tôm', 120000, N'Tôm tươi trộn cùng rau và sốt chua ngọt.', NULL, 'CG001'),
-('M002', N'Chả mực', 150000, N'Mực giã nhuyễn, chiên giòn, thơm ngon.', NULL, 'CG001'),
-('M003', N'Gỏi cá hồi', 170000, N'Cá hồi tươi trộn rau củ và nước sốt.', NULL, 'CG001'),
-('M004', N'Nghêu hấp', 110000, N'Nghêu hấp với sả và ớt, thơm lừng.', NULL, 'CG001'),
-('M005', N'Tôm chiên', 140000, N'Tôm chiên giòn rụm, ăn kèm nước chấm.', NULL, 'CG001'),
+('M001', N'Gỏi tôm', 120000, N'Tôm tươi trộn cùng rau và sốt chua ngọt.', NULL, 'Còn bán', 'CG001'),
+('M002', N'Chả mực', 150000, N'Mực giã nhuyễn, chiên giòn, thơm ngon.', NULL, 'Còn bán', 'CG001'),
+('M003', N'Gỏi cá hồi', 170000, N'Cá hồi tươi trộn rau củ và nước sốt.', NULL, 'Còn bán', 'CG001'),
+('M004', N'Nghêu hấp', 110000, N'Nghêu hấp với sả và ớt, thơm lừng.', NULL, 'Còn bán', 'CG001'),
+('M005', N'Tôm chiên', 140000, N'Tôm chiên giòn rụm, ăn kèm nước chấm.', NULL, 'Còn bán', 'CG001'),
 
 -- Súp
-('M006', N'Súp cua', 90000, N'Súp cua bổ dưỡng với thịt cua tươi ngon.', NULL, 'CG002'),
-('M007', N'Súp tôm', 95000, N'Súp tôm ngọt, đậm đà với rau củ.', NULL, 'CG002'),
-('M008', N'Súp hải sản', 120000, N'Súp hải sản tổng hợp, thơm ngọt.', NULL, 'CG002'),
-('M009', N'Súp cá hồi', 130000, N'Súp từ cá hồi, giàu dinh dưỡng.', NULL, 'CG002'),
-('M010', N'Súp nghêu', 85000, N'Nghêu nấu súp cùng rau củ, đậm vị.', NULL, 'CG002'),
+('M006', N'Súp cua', 90000, N'Súp cua bổ dưỡng với thịt cua tươi ngon.', NULL, 'Còn bán', 'CG002'),
+('M007', N'Súp tôm', 95000, N'Súp tôm ngọt, đậm đà với rau củ.', NULL, 'Còn bán', 'CG002'),
+('M008', N'Súp hải sản', 120000, N'Súp hải sản tổng hợp, thơm ngọt.', NULL, 'Còn bán', 'CG002'),
+('M009', N'Súp cá hồi', 130000, N'Súp từ cá hồi, giàu dinh dưỡng.', NULL, 'Còn bán', 'CG002'),
+('M010', N'Súp nghêu', 85000, N'Nghêu nấu súp cùng rau củ, đậm vị.', NULL, 'Còn bán', 'CG002'),
 
 -- Salad
-('M011', N'Salad tôm', 100000, N'Tôm tươi kết hợp rau xanh và sốt.', NULL, 'CG003'),
-('M012', N'Salad cá ngừ', 120000, N'Cá ngừ cùng rau xanh tươi mát.', NULL, 'CG003'),
-('M013', N'Salad mực', 110000, N'Mực tươi và rau sống, sốt chua ngọt.', NULL, 'CG003'),
-('M014', N'Salad hải sản', 130000, N'Hải sản kết hợp cùng salad rau.', NULL, 'CG003'),
-('M015', N'Sasimi bạch tuộc', 140000, N'Sasimi bạch tuộc tươi ngon.', NULL, 'CG003'),
+('M011', N'Salad tôm', 100000, N'Tôm tươi kết hợp rau xanh và sốt.', NULL, 'Còn bán', 'CG003'),
+('M012', N'Salad cá ngừ', 120000, N'Cá ngừ cùng rau xanh tươi mát.', NULL, 'Còn bán', 'CG003'),
+('M013', N'Salad mực', 110000, N'Mực tươi và rau sống, sốt chua ngọt.', NULL, 'Còn bán', 'CG003'),
+('M014', N'Salad hải sản', 130000, N'Hải sản kết hợp cùng salad rau.', NULL, 'Còn bán', 'CG003'),
+('M015', N'Sasimi bạch tuộc', 140000, N'Sasimi bạch tuộc tươi ngon.', NULL, 'Còn bán', 'CG003'),
 
 -- Món nướng
-('M016', N'Tôm nướng', 180000, N'Tôm nướng muối ớt thơm lừng.', NULL, 'CG004'),
-('M017', N'Cá nướng giấy bạc', 200000, N'Cá nướng giấy bạc giữ nguyên hương vị.', NULL, 'CG004'),
-('M018', N'Mực nướng sa tế', 170000, N'Mực tươi nướng sa tế cay nồng.', NULL, 'CG004'),
-('M019', N'Hàu nướng phô mai', 190000, N'Hàu nướng phô mai béo ngậy.', NULL, 'CG004'),
-('M020', N'Sò điệp nướng', 150000, N'Sò điệp nướng thơm ngon.', NULL, 'CG004'),
+('M016', N'Tôm nướng', 180000, N'Tôm nướng muối ớt thơm lừng.', NULL, 'Còn bán', 'CG004'),
+('M017', N'Cá nướng giấy bạc', 200000, N'Cá nướng giấy bạc giữ nguyên hương vị.', NULL, 'Còn bán', 'CG004'),
+('M018', N'Mực nướng sa tế', 170000, N'Mực tươi nướng sa tế cay nồng.', NULL, 'Còn bán', 'CG004'),
+('M019', N'Hàu nướng phô mai', 190000, N'Hàu nướng phô mai béo ngậy.', NULL, 'Còn bán', 'CG004'),
+('M020', N'Sò điệp nướng', 150000, N'Sò điệp nướng thơm ngon.', NULL, 'Còn bán', 'CG004'),
 
 -- Món hấp
-('M021', N'Cua hấp bia', 220000, N'Cua biển hấp bia, giữ nguyên vị ngọt.', NULL, 'CG005'),
-('M022', N'Tôm hấp nước dừa', 180000, N'Tôm hấp với nước dừa tươi.', NULL, 'CG005'),
-('M023', N'Nghêu hấp sả', 120000, N'Nghêu hấp sả, cay thơm.', NULL, 'CG005'),
-('M024', N'Mực hấp gừng', 160000, N'Mực hấp với gừng tươi, thơm ngon.', NULL, 'CG005'),
-('M025', N'Cá hồi hấp xì dầu', 200000, N'Cá hồi hấp xì dầu.', NULL, 'CG005'),
+('M021', N'Cua hấp bia', 220000, N'Cua biển hấp bia, giữ nguyên vị ngọt.', NULL, 'Còn bán', 'CG005'),
+('M022', N'Tôm hấp nước dừa', 180000, N'Tôm hấp với nước dừa tươi.', NULL, 'Còn bán', 'CG005'),
+('M023', N'Nghêu hấp sả', 120000, N'Nghêu hấp sả, cay thơm.', NULL, 'Còn bán', 'CG005'),
+('M024', N'Mực hấp gừng', 160000, N'Mực hấp với gừng tươi, thơm ngon.', NULL, 'Còn bán', 'CG005'),
+('M025', N'Cá hồi hấp xì dầu', 200000, N'Cá hồi hấp xì dầu.', NULL, 'Còn bán', 'CG005'),
 
 -- Món chiên
-('M026', N'Tôm chiên xù', 150000, N'Tôm chiên giòn, ăn kèm nước sốt.', NULL, 'CG006'),
-('M027', N'Mực chiên giòn', 140000, N'Mực chiên giòn, vàng ươm.', NULL, 'CG006'),
-('M028', N'Cá chiên sốt me', 160000, N'Cá chiên giòn sốt me chua ngọt.', NULL, 'CG006'),
-('M029', N'Tôm chiên tempura', 170000, N'Tôm chiên tNV0ura kiểu Nhật.', NULL, 'CG006'),
-('M030', N'Cua chiên bơ tỏi', 210000, N'Cua chiên với bơ tỏi.', NULL, 'CG006'),
+('M026', N'Tôm chiên xù', 150000, N'Tôm chiên giòn, ăn kèm nước sốt.', NULL, 'Còn bán', 'CG006'),
+('M027', N'Mực chiên giòn', 140000, N'Mực chiên giòn, vàng ươm.', NULL, 'Còn bán', 'CG006'),
+('M028', N'Cá chiên sốt me', 160000, N'Cá chiên giòn sốt me chua ngọt.', NULL, 'Còn bán', 'CG006'),
+('M029', N'Tôm chiên tempura', 170000, N'Tôm chiên tNV0ura kiểu Nhật.', NULL, 'Còn bán', 'CG006'),
+('M030', N'Cua chiên bơ tỏi', 210000, N'Cua chiên với bơ tỏi.', NULL, 'Còn bán', 'CG006'),
 
 -- Hải sản
-('M031', N'Gỏi cá trích', 130000, N'Cá trích tươi trộn rau và nước mắm.', NULL, 'CG007'),
-('M032', N'Tôm hùm hấp', 350000, N'Tôm hùm hấp giữ nguyên hương vị.', NULL, 'CG007'),
-('M033', N'Cua rang me', 250000, N'Cua rang me chua ngọt.', NULL, 'CG007'),
-('M034', N'Hàu nướng phô mai', 180000, N'Hàu nướng phô mai béo ngậy.', NULL, 'CG007'),
-('M035', N'Sò huyết sốt me', 140000, N'Sò huyết sốt me đậm vị.', NULL, 'CG007'),
+('M031', N'Gỏi cá trích', 130000, N'Cá trích tươi trộn rau và nước mắm.', NULL, 'Còn bán', 'CG007'),
+('M032', N'Tôm hùm hấp', 350000, N'Tôm hùm hấp giữ nguyên hương vị.', NULL, 'Còn bán', 'CG007'),
+('M033', N'Cua rang me', 250000, N'Cua rang me chua ngọt.', NULL, 'Còn bán', 'CG007'),
+('M034', N'Hàu nướng phô mai', 180000, N'Hàu nướng phô mai béo ngậy.', NULL, 'Còn bán', 'CG007'),
+('M035', N'Sò huyết sốt me', 140000, N'Sò huyết sốt me đậm vị.', NULL, 'Còn bán', 'CG007'),
 
 -- Cơm
-('M036', N'Cơm chiên hải sản', 120000, N'Cơm chiên với tôm, mực, sò.', NULL, 'CG008'),
-('M037', N'Cơm chiên Dương Châu', 100000, N'Cơm chiên kiểu Dương Châu.', NULL, 'CG008'),
-('M038', N'Cơm hải sản xốt XO', 140000, N'Cơm xào hải sản với xốt XO.', NULL, 'CG008'),
-('M039', N'Cơm chiên cua', 130000, N'Cơm chiên cùng cua tươi ngon.', NULL, 'CG008'),
-('M040', N'Cơm chiên hải sản trứng muối', 150000, N'Cơm chiên hải sản với trứng muối.', NULL, 'CG008'),
+('M036', N'Cơm chiên hải sản', 120000, N'Cơm chiên với tôm, mực, sò.', NULL, 'Còn bán', 'CG008'),
+('M037', N'Cơm chiên Dương Châu', 100000, N'Cơm chiên kiểu Dương Châu.', NULL, 'Còn bán', 'CG008'),
+('M038', N'Cơm hải sản xốt XO', 140000, N'Cơm xào hải sản với xốt XO.', NULL, 'Còn bán', 'CG008'),
+('M039', N'Cơm chiên cua', 130000, N'Cơm chiên cùng cua tươi ngon.', NULL, 'Còn bán', 'CG008'),
+('M040', N'Cơm chiên hải sản trứng muối', 150000, N'Cơm chiên hải sản với trứng muối.', NULL, 'Còn bán', 'CG008'),
 
 -- Lẩu
-('M041', N'Lẩu hải sản', 300000, N'Lẩu tổng hợp các loại hải sản.', NULL, 'CG009'),
-('M042', N'Lẩu cua đồng', 280000, N'Lẩu cua đồng tươi ngon.', NULL, 'CG009'),
-('M043', N'Lẩu tôm chua cay', 270000, N'Tôm nấu lẩu chua cay.', NULL, 'CG009'),
-('M044', N'Lẩu cá hồi', 320000, N'Lẩu cá hồi giàu dinh dưỡng.', NULL, 'CG009'),
-('M045', N'Lẩu nghêu', 250000, N'Nghêu nấu lẩu thanh ngọt.', NULL, 'CG009'),
+('M041', N'Lẩu hải sản', 300000, N'Lẩu tổng hợp các loại hải sản.', NULL, 'Còn bán', 'CG009'),
+('M042', N'Lẩu cua đồng', 280000, N'Lẩu cua đồng tươi ngon.', NULL, 'Còn bán', 'CG009'),
+('M043', N'Lẩu tôm chua cay', 270000, N'Tôm nấu lẩu chua cay.', NULL, 'Còn bán', 'CG009'),
+('M044', N'Lẩu cá hồi', 320000, N'Lẩu cá hồi giàu dinh dưỡng.', NULL, 'Còn bán', 'CG009'),
+('M045', N'Lẩu nghêu', 250000, N'Nghêu nấu lẩu thanh ngọt.', NULL, 'Còn bán', 'CG009'),
 
 -- Nước uống
-('M046', N'Coca cola', 15000, N'Nước uống có ga Coca cola.', NULL, 'CG010'),
-('M047', N'Pepsi', 15000, N'Nước uống có ga Pepsi.', NULL, 'CG010'),
-('M048', N'Bia Tiger', 37000, N'Đồ uống có cồn bia Tiger.', NULL, 'CG010'),
-('M049', N'Bia Sài Gòn', 32000, N'Đồ uống có cồn bia Sài Gòn.', NULL, 'CG010'),
-('M050', N'Bia Heineken', 35000, N'Đồ uống có cồn bia Heineken.', NULL, 'CG010');
+('M046', N'Coca cola', 15000, N'Nước uống có ga Coca cola.', NULL, 'Còn bán', 'CG010'),
+('M047', N'Pepsi', 15000, N'Nước uống có ga Pepsi.', NULL, 'Còn bán', 'CG010'),
+('M048', N'Bia Tiger', 37000, N'Đồ uống có cồn bia Tiger.', NULL, 'Còn bán', 'CG010'),
+('M049', N'Bia Sài Gòn', 32000, N'Đồ uống có cồn bia Sài Gòn.', NULL, 'Còn bán', 'CG010'),
+('M050', N'Bia Heineken', 35000, N'Đồ uống có cồn bia Heineken.', NULL, 'Còn bán', 'CG010');
 
 --GO
 --BEGIN TRANSACTION

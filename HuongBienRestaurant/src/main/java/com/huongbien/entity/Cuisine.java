@@ -10,23 +10,26 @@ public class Cuisine {
     private double price;
     private String description;
     private byte[] image;
+    private String status;
     private Category category;
 
-    public Cuisine(String cuisineId, String name, double price, String description, byte[] image, Category category) {
+    public Cuisine(String cuisineId, String name, double price, String description, byte[] image, String status, Category category) {
         setCuisineId(cuisineId);
         setName(name);
         setPrice(price);
         setDescription(description);
         setImage(image);
+        setStatus(status);
         setCategory(category);
     }
 
-    public Cuisine(String name, double price, String description, byte[] image, Category category) {
+    public Cuisine(String name, double price, String description, byte[] image, String status, Category category) {
         setCuisineId(null);
         setName(name);
         setPrice(price);
         setDescription(description);
         setImage(image);
+        setStatus(status);
         setCategory(category);
     }
 
@@ -74,6 +77,10 @@ public class Cuisine {
         this.image = image;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public void setCategory(Category category) {
         this.category = category;
     }
@@ -98,6 +105,10 @@ public class Cuisine {
         return image;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -109,6 +120,7 @@ public class Cuisine {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
                 ", category=" + category +
                 '}';
     }

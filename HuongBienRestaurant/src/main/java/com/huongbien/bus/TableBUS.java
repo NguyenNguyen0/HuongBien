@@ -15,7 +15,6 @@ public class TableBUS {
         tableDao = TableDAO.getInstance();
     }
 
-
     public int countTotalTables() {
         return tableDao.countTotalTables();
     }
@@ -75,7 +74,7 @@ public class TableBUS {
 
     public List<Integer> getDistinctSeats(){ return tableDao.getDistinctSeats(); }
 
-    public  List<String> getDistinctTableTypes(){ return tableDao.getDistinctTableType(); }
+    public List<String> getDistinctTableTypes(){ return tableDao.getDistinctTableType(); }
 
     public List<Table> getLookUpTable(int floor, String name, int seat, String type, String status, int pageIndex){
         return tableDao.getLookUpTable(floor, name, seat, type, status, pageIndex);

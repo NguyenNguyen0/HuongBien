@@ -7,7 +7,6 @@ import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Pagination;
-import com.huongbien.utils.ToastsMessage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,6 +48,8 @@ public class CuisineManagementController implements Initializable {
     @FXML
     private TableColumn<Cuisine, String> cuisineNameColumn;
     @FXML
+    private TableColumn<Cuisine, String> cuisineStatusColumn;
+    @FXML
     private TableColumn<Cuisine, Double> cuisinePriceColumn;
     @FXML
     private TableView<Cuisine> cuisineTable;
@@ -56,6 +57,8 @@ public class CuisineManagementController implements Initializable {
     private TextField cuisineNameField;
     @FXML
     private TextField cuisinePriceField;
+    @FXML
+    public ComboBox<String> cuisineStatusComboBox;
     @FXML
     private ComboBox<Category> cuisineCategoryComboBox;
     @FXML
@@ -92,6 +95,7 @@ public class CuisineManagementController implements Initializable {
         setCuisineTableColumns();
         setCuisineTableValues();
         setCategoryComboBoxValue();
+        setCuisineStatusComboBoxValue();
     }
 
     public void setCuisineTableColumns() {
@@ -99,6 +103,7 @@ public class CuisineManagementController implements Initializable {
         cuisineIdColumn.setCellValueFactory(new PropertyValueFactory<>("cuisineId"));
         cuisineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         cuisinePriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        cuisineStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         cuisinePriceColumn.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
             private final DecimalFormat priceFormat = new DecimalFormat("#,###");
 
@@ -124,6 +129,12 @@ public class CuisineManagementController implements Initializable {
         ObservableList<Cuisine> listCuisine = FXCollections.observableArrayList(cuisineList);
         cuisineTable.setItems(listCuisine);
         setPageIndexLabel();
+    }
+
+    private void setCuisineStatusComboBoxValue() {
+        ObservableList<String> status = FXCollections.observableArrayList("Còn bán", "Ngừng bán");
+        cuisineStatusComboBox.setItems(status);
+        cuisineStatusComboBox.getSelectionModel().selectFirst();
     }
 
     private void setCategoryComboBoxValue() {
@@ -205,6 +216,7 @@ public class CuisineManagementController implements Initializable {
         cuisinePriceField.clear();
         cuisineDescriptionTextArea.clear();
         cuisineCategoryComboBox.getSelectionModel().clearSelection();
+        cuisineStatusComboBox.getSelectionModel().clearSelection();
         cuisineTable.getSelectionModel().clearSelection();
         deleteCuisineButton.setVisible(false);
         clearChooserImage();
@@ -251,11 +263,12 @@ public class CuisineManagementController implements Initializable {
     }
 
     private void loadCuisineDetails(Cuisine cuisine) {
+        loadImage(cuisine.getImage());
         cuisineNameField.setText(cuisine.getName());
         cuisinePriceField.setText(new DecimalFormat("#,###").format(cuisine.getPrice()));
         cuisineCategoryComboBox.getSelectionModel().select(cuisine.getCategory());
         cuisineDescriptionTextArea.setText(cuisine.getDescription());
-        loadImage(cuisine.getImage());
+        cuisineStatusComboBox.getSelectionModel().select(cuisine.getStatus());
         deleteCuisineButton.setVisible(true);
         clearCuisineButton.setVisible(true);
         swapModeCuisineButton.setVisible(true);
@@ -310,17 +323,18 @@ public class CuisineManagementController implements Initializable {
         Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             Cuisine cuisine = createCuisineFromForm(selectedItem.getCuisineId());
-            if (CuisineDAO.getInstance().updateCuisineInfo(cuisine)) {
+            if (cuisineBUS.updateCuisineInfo(cuisine)) {
                 System.out.println("Đã sửa món thành công");
             } else {
                 System.out.println("Sửa món không thành công");
             }
         }
+        clearCuisineForm();
     }
 
     private void addCuisine() {
         Cuisine cuisine = createCuisineFromForm(null);
-        if (CuisineDAO.getInstance().add(cuisine)) {
+        if (cuisineBUS.addCuisine(cuisine)) {
             System.out.println("Thêm món thành công");
         } else {
             System.out.println("Thêm món không thành công");
@@ -333,7 +347,8 @@ public class CuisineManagementController implements Initializable {
         double price = cuisinePriceField.getText().isEmpty() ? 0.0 : Converter.parseMoney(cuisinePriceField.getText());
         String description = cuisineDescriptionTextArea.getText();
         Category category = cuisineCategoryComboBox.getValue();
-        return new Cuisine(cuisineId, name, price, description, imageCuisineByte, category);
+        String status = cuisineStatusComboBox.getValue();
+        return new Cuisine(cuisineId, name, price, description, imageCuisineByte, status, category);
     }
 
     private void refreshCuisineTable() {
@@ -342,13 +357,13 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
-    private void onDeleteCuisineButtonClicked(ActionEvent event) throws SQLException {
+    private void onDeleteCuisineButtonClicked(ActionEvent event) {
         Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            if (CuisineDAO.getInstance().delete(selectedItem.getCuisineId())) {
-                System.out.println("Xoá món thành công");
+            if (cuisineBUS.stopSellCuisine(selectedItem.getCuisineId())) {
+                System.out.println("Ngừng bán món thành công");
             } else {
-                System.out.println("Xoá món không thành công");
+                System.out.println("Ngừng bán món không thành công");
             }
         }
         refreshCuisineTable();

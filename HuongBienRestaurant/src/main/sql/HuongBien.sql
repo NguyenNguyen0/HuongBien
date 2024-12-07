@@ -118,6 +118,7 @@ CREATE TABLE Cuisine (
     price REAL NOT NULL,
     description NVARCHAR(50) NOT NULL,
     image VARBINARY(MAX),
+    status NVARCHAR(50) NOT NULL,
 
     categoryId CHAR(5) NOT NULL,
     FOREIGN KEY (categoryId) REFERENCES Category(id),

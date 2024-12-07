@@ -52,4 +52,25 @@ public class CuisineBUS {
     }
 
     public  List<String> getCuisineCategory(){ return cuisineDao.getCuisineCategory();}
+
+    public boolean stopSellCuisine(String cuisineId) {
+        if (cuisineId == null) {
+            return false;
+        }
+        return cuisineDao.updateCuisineStatus(cuisineId, "Ngừng bán");
+    }
+
+    public boolean updateCuisineInfo(Cuisine cuisine) {
+        if (cuisine == null) {
+            return false;
+        }
+        return cuisineDao.updateCuisineInfo(cuisine);
+    }
+
+    public boolean addCuisine(Cuisine cuisine) {
+        if (cuisine == null) {
+            return false;
+        }
+        return cuisineDao.add(cuisine);
+    }
 }

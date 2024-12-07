@@ -105,9 +105,9 @@ public class Reservation {
     }
 
     public void setPartySize(int partySize) {
-//        if (partySize <= 1) {
-//            throw new IllegalArgumentException("Party size must be greater than 1");
-//        }
+        if (partySize <= 1) {
+            throw new IllegalArgumentException("Party size must be greater than 1");
+        }
         this.partySize = partySize;
     }
 
@@ -120,9 +120,9 @@ public class Reservation {
     }
 
     public void setReceiveDate(LocalDate receiveDate) {
-//        if (receiveDate == null || receiveDate.isBefore(getReservationDate())) {
-//            throw new IllegalArgumentException("Receive date must be today or later");
-//        }
+        if (receiveDate == null || receiveDate.isBefore(getReservationDate())) {
+            throw new IllegalArgumentException("Receive date must be today or later");
+        }
         this.receiveDate = receiveDate;
     }
 
