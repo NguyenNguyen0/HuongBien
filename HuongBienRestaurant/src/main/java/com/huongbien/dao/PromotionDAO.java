@@ -214,4 +214,8 @@ public class PromotionDAO extends GenericDAO<Promotion> {
         sqlQuery += startDateSQL + endDateSQL + discountSQL + minimumOrderAmountSQL;
         return count(sqlQuery);
     }
+
+    public List<Promotion> getPaymentPromotion(int memberShipLevel){
+        return getMany("SELECT * FROM promotion WHERE memberShipLevel <= "+memberShipLevel+" AND status LIKE N'Còn hiệu lực'");
+    }
 }

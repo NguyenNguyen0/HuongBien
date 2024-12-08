@@ -112,8 +112,8 @@ public class PromotionManagementController implements Initializable {
                         .orElse(null);
             }
         });
-
-        promotionStatusComboBox.setItems(statusList);
+        ObservableList<String> statusListShow = FXCollections.observableArrayList("Còn hiệu lực", "Hết hiệu lực");
+        promotionStatusComboBox.setItems(statusListShow);
         promotionStatusComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(String status) {
@@ -267,6 +267,7 @@ public class PromotionManagementController implements Initializable {
     }
 
     public Promotion getPromotionFromForm() {
+        System.out.println(memberShipLevelComboBox.getValue());
         String name = promotionNameField.getText();
         LocalDate startDate = startedDateDatePicker.getValue();
         LocalDate endDate = endedDateDatePicker.getValue();
@@ -274,7 +275,8 @@ public class PromotionManagementController implements Initializable {
         String description = promotionDescriptionTextArea.getText();
         double minimumOrder = Double.parseDouble(minimumOrderField.getText().replace(",", ""));
         double discount = Double.parseDouble(discountField.getText().replace("%", "")) / 100;
-        int membershipLevel = Utils.toIntMembershipLevel(memberShipLevelComboBox.getSelectionModel().getSelectedItem());
+        int membershipLevel = Utils.toIntMembershipLevel(memberShipLevelComboBox.getValue());
+
 
         return new Promotion(name, startDate, endDate, discount, description, minimumOrder, membershipLevel, status);
     }
@@ -348,6 +350,7 @@ public class PromotionManagementController implements Initializable {
                 enableInput();
                 promotionStatusComboBox.getSelectionModel().select(0);
                 promotionStatusComboBox.setDisable(true);
+                memberShipLevelComboBox.getSelectionModel().selectFirst();
             }
             case "Sửa" -> {
                 disableInput();

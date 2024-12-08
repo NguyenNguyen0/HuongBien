@@ -209,7 +209,7 @@ public class OrderPaymentFinalController implements Initializable {
         int rows = 0;
         for (int label : suggestedMoneys) {
             Button button = createSuggestMoneyButton(Converter.formatMoney(label));
-            button.addEventHandler(MouseEvent.MOUSE_CLICKED, _ -> {
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED, s -> {
                 resultField.setText(Converter.formatMoney(label));
                 resultLabel.setText(Converter.formatMoney(label) + " VNĐ");
                 setFinalAmountInfo();

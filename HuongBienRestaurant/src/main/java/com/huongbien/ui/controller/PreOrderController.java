@@ -76,6 +76,7 @@ public class PreOrderController implements Initializable {
         minuteComboBox.getItems().clear();
         for (int i = 0; i < 60; i++) {
             minuteComboBox.getItems().add(String.format("%02d", i));
+            i+=4;
         }
         hourComboBox.setValue(String.format("%02d", LocalTime.now().getHour()));
         minuteComboBox.setValue(String.format("%02d", LocalTime.now().getMinute()));

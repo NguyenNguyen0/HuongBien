@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.PromotionBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
@@ -89,11 +90,10 @@ public class OrderPaymentController implements Initializable {
             this.qrCodeHandler = new QRCodeHandler();
             loadCuisine();
             setPaymentInfo();
-            setPromotionTableValue();
+            searchCustomerButton.fire();
         } catch (FileNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
-        searchCustomerButton.fire();
         promotionTableView.setMouseTransparent(true);
         vatNameLabel.setText(vatNameLabel.getText()+"("+(int)(Constants.VAT * 100)+"%):");
     }
@@ -209,26 +209,30 @@ public class OrderPaymentController implements Initializable {
     }
 
     public void setPromotionTableValue() {
-        PromotionDAO promotionDAO = PromotionDAO.getInstance();
-        List<Promotion> promotionList = promotionDAO.getAll();
-        promotionList.sort(Comparator.comparing(Promotion::getDiscount).reversed());
+        promotionTableView.getItems().clear();
+        PromotionBUS promotionBUS = new PromotionBUS();
+        if (!customerRankField.getText().isEmpty()) {
+            int memberShipLevel = Utils.toIntMembershipLevel(customerRankField.getText());
+            List<Promotion> promotionList = promotionBUS.getPaymentPromotion(memberShipLevel);
+            promotionList.sort(Comparator.comparing(Promotion::getDiscount).reversed());
 
-        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
-        promotionIdColumn.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
-        promotionNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        promotionDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
-        promotionDiscountColumn.setCellFactory(col -> new TableCell<Promotion, Double>() {
-            @Override
-            public void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("%.0f%%", item * 100));
+            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+            promotionIdColumn.setCellValueFactory(new PropertyValueFactory<>("promotionId"));
+            promotionNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            promotionDiscountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
+            promotionDiscountColumn.setCellFactory(col -> new TableCell<Promotion, Double>() {
+                @Override
+                public void updateItem(Double item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(String.format("%.0f%%", item * 100));
+                    }
                 }
-            }
-        });
-        promotionTableView.setItems(listPromotion);
+            });
+            promotionTableView.setItems(listPromotion);
+        }
     }
 
     private void readCumtomerExistsFromJSON() throws FileNotFoundException {
@@ -262,19 +266,21 @@ public class OrderPaymentController implements Initializable {
             totalAmount += cuisineMoney;
         }
         double discount = 0.0;
-        PromotionDAO promotionDAO = PromotionDAO.getInstance();
-        List<Promotion> promotionList = promotionDAO.getAll();
-        ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
-        if (!listPromotion.isEmpty()) {
-            Promotion maxDiscountPromotion = listPromotion.stream()
-                    .max(Comparator.comparingDouble(Promotion::getDiscount))
-                    .orElse(null);
+        if(!customerRankField.getText().isEmpty()){
+            PromotionDAO promotionDAO = PromotionDAO.getInstance();
+            List<Promotion> promotionList = promotionDAO.getPaymentPromotion(Utils.toIntMembershipLevel(customerRankField.getText()));
+            ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
+            if (!listPromotion.isEmpty()) {
+                Promotion maxDiscountPromotion = listPromotion.stream()
+                        .max(Comparator.comparingDouble(Promotion::getDiscount))
+                        .orElse(null);
 
-            promotionTableView.getSelectionModel().select(maxDiscountPromotion);
-            discount = maxDiscountPromotion.getDiscount();
-        } else {
-            //Not promotion set default 0
-            discount = 0.0;
+                promotionTableView.getSelectionModel().select(maxDiscountPromotion);
+                discount = maxDiscountPromotion.getDiscount();
+            } else {
+                //Not promotion set default 0
+                discount = 0.0;
+            }
         }
         //calc table amount
         double tableAmount = 0.0;
@@ -302,11 +308,12 @@ public class OrderPaymentController implements Initializable {
         CustomerDAO customerDAO = CustomerDAO.getInstance();
         Customer customer = customerDAO.getByOnePhoneNumber(inputPhone);
         if (customer != null) {
-            // Set discount
-            setDiscountFromPromotionSearch();
             //Write Down JSON
             String customerID = customer.getCustomerId();
-            String promotionID = promotionTableView.getSelectionModel().getSelectedItem().getPromotionId();
+            String promotionID = "";
+            if(!promotionTableView.getSelectionModel().isEmpty()){
+                promotionID = promotionTableView.getSelectionModel().getSelectedItem().getPromotionId();
+            }
             JsonArray customerArray = new JsonArray();
             JsonObject customerObject = new JsonObject();
             customerObject.addProperty("Customer ID", customerID);
@@ -319,6 +326,8 @@ public class OrderPaymentController implements Initializable {
             customerRankField.setText(Utils.toStringMembershipLevel(customer.getMembershipLevel()));
             //enable table
             promotionTableView.setDisable(false);
+            // Set discount
+            setDiscountFromPromotionSearch();
         } else {
             customerIdField.setText("");
             customerNameField.setText("");
@@ -329,6 +338,8 @@ public class OrderPaymentController implements Initializable {
             Utils.writeJsonToFile(new JsonArray(), Constants.CUSTOMER_PATH);
             setPaymentInfo();
         }
+        //load list promotion
+        setPromotionTableValue();
     }
 
     @FXML

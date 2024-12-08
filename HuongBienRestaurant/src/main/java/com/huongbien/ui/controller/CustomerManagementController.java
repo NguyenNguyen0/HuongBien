@@ -302,6 +302,7 @@ public class CustomerManagementController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        disableInput();
         clearSearchButton.setVisible(false);
         searchCustomerField.setDisable(true);
         setSearchMethodComboBoxValue();

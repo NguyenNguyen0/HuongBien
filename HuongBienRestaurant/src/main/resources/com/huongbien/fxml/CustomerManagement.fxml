@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.CustomerManagementController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.CustomerManagementController">
    <right>
       <VBox alignment="CENTER" prefHeight="956.0" prefWidth="755.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -30,7 +30,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="customerNameField" editable="false" minHeight="50.0" promptText="Tên khách hàng" styleClass="textField-line-bot">
+                        <TextField fx:id="customerNameField" minHeight="50.0" promptText="Tên khách hàng" styleClass="textField-line-bot">
                            <font>
                               <Font size="25.0" />
                            </font>
