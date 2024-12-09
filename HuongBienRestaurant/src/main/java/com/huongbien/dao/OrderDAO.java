@@ -93,7 +93,7 @@ public class OrderDAO extends GenericDAO<Order> {
     }
 
     public int countTotalByOrderId(String orderId) {
-        return count("SELECT COUNT(*) AS totalOrder FROM [Order] WHERE id = ?", orderId);
+        return count("SELECT COUNT(*) AS totalOrder FROM [Order] WHERE id LIKE ?", orderId + '%');
     }
 
     public int countTotalByCustomerPhoneNumber(String customerPhoneNumber) {

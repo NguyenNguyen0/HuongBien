@@ -27,7 +27,7 @@
                         <Image url="@../icon/all/gallery-512px.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="chooseImageButton" disable="true" mnemonicParsing="false" onAction="#onImageChooserButtonClicked" styleClass="transperant">
+                  <Button fx:id="chooseImageButton" mnemonicParsing="false" onAction="#onImageChooserButtonClicked" styleClass="transperant">
                      <VBox.margin>
                         <Insets top="20.0" />
                      </VBox.margin>
@@ -48,7 +48,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="cuisineNameField" disable="true" minHeight="50.0" styleClass="textField-line-bot">
+                  <TextField fx:id="cuisineNameField" minHeight="50.0" promptText="Tên món" styleClass="textField-line-bot">
                      <font>
                         <Font size="25.0" />
                      </font>
@@ -74,7 +74,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="cuisinePriceField" disable="true" minHeight="50.0" onKeyReleased="#onCuisinePriceTextFieldKeyReleased" styleClass="textField-line-bot">
+                        <TextField fx:id="cuisinePriceField" minHeight="50.0" onKeyReleased="#onCuisinePriceTextFieldKeyReleased" promptText="Giá bán" styleClass="textField-line-bot">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -90,15 +90,7 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <ComboBox fx:id="cuisineCategoryComboBox" disable="true" prefHeight="54.0" prefWidth="279.0" styleClass="textField-line-bot" />
-                              <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="104.0" text="Edit">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
+                              <ComboBox fx:id="cuisineCategoryComboBox" editable="true" prefHeight="54.0" prefWidth="279.0" promptText="Loại món" styleClass="textField-line-bot" />
                            </children>
                         </HBox>
                      </children>
@@ -115,7 +107,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextArea fx:id="cuisineDescriptionTextArea" disable="true" prefHeight="152.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
+                  <TextArea fx:id="cuisineDescriptionTextArea" prefHeight="152.0" prefWidth="670.0" promptText="Không bắt buộc" style="-fx-border-color: black; -fx-border-width: 2;" VBox.vgrow="ALWAYS">
                      <font>
                         <Font size="25.0" />
                      </font>

@@ -7,6 +7,7 @@ import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.Pagination;
+import com.huongbien.utils.ToastsMessage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -89,6 +90,7 @@ public class CuisineManagementController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         clearCuisineSearchButton.setVisible(false);
+        setHandleActionButtonToAddCuisine();
 
         setSearchMethodComboBoxValue();
         setCuisinePaginationGetAll();
@@ -202,7 +204,7 @@ public class CuisineManagementController implements Initializable {
 
     public void setPageIndexLabel() {
         int currentPageIndex = cuisinePagination.getCurrentPageIndex();
-        int totalPage = cuisinePagination.getTotalPages();
+        int totalPage = cuisinePagination.getTotalPages() == 0 ? 1 : cuisinePagination.getTotalPages();
         pageIndexLabel.setText(currentPageIndex + "/" + totalPage);
     }
 
@@ -227,6 +229,7 @@ public class CuisineManagementController implements Initializable {
         handleActionCuisineButton.setText("Sửa món");
         swapModeCuisineButton.setStyle("-fx-background-color: #1D557E");
         handleActionCuisineButton.setStyle("-fx-background-color: #761D7E");
+        deleteCuisineButton.setVisible(true);
     }
 
     private void setHandleActionButtonToAddCuisine() {
@@ -234,6 +237,7 @@ public class CuisineManagementController implements Initializable {
         handleActionCuisineButton.setText("Thêm món");
         swapModeCuisineButton.setStyle("-fx-background-color: #761D7E");
         handleActionCuisineButton.setStyle("-fx-background-color: #1D557E");
+        deleteCuisineButton.setVisible(false);
     }
 
     private void disableInput() {
@@ -241,12 +245,14 @@ public class CuisineManagementController implements Initializable {
         cuisinePriceField.setDisable(true);
         cuisineCategoryComboBox.setDisable(true);
         cuisineDescriptionTextArea.setDisable(true);
+        cuisineStatusComboBox.setDisable(true);
         chooseImageButton.setDisable(true);
     }
 
     private void enableInput() {
         cuisineNameField.setDisable(false);
         cuisinePriceField.setDisable(false);
+        cuisineStatusComboBox.setDisable(false);
         cuisineCategoryComboBox.setDisable(false);
         cuisineDescriptionTextArea.setDisable(false);
         chooseImageButton.setDisable(false);
@@ -324,9 +330,9 @@ public class CuisineManagementController implements Initializable {
         if (selectedItem != null) {
             Cuisine cuisine = createCuisineFromForm(selectedItem.getCuisineId());
             if (cuisineBUS.updateCuisineInfo(cuisine)) {
-                System.out.println("Đã sửa món thành công");
+                ToastsMessage.showMessage("Sửa món thành công", "success");
             } else {
-                System.out.println("Sửa món không thành công");
+                ToastsMessage.showMessage("Sửa món không thành công, vui lòng kiểm tra lại", "error");
             }
         }
         clearCuisineForm();
@@ -335,9 +341,9 @@ public class CuisineManagementController implements Initializable {
     private void addCuisine() {
         Cuisine cuisine = createCuisineFromForm(null);
         if (cuisineBUS.addCuisine(cuisine)) {
-            System.out.println("Thêm món thành công");
+            ToastsMessage.showMessage("Thêm món thành công", "success");
         } else {
-            System.out.println("Thêm món không thành công");
+            ToastsMessage.showMessage("Thêm món không thành công", "error");
         }
         clearCuisineForm();
     }
@@ -361,9 +367,9 @@ public class CuisineManagementController implements Initializable {
         Cuisine selectedItem = cuisineTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             if (cuisineBUS.stopSellCuisine(selectedItem.getCuisineId())) {
-                System.out.println("Ngừng bán món thành công");
+                ToastsMessage.showMessage("Ngừng bán món thành công", "success");
             } else {
-                System.out.println("Ngừng bán món không thành công");
+                ToastsMessage.showMessage("Ngừng bán món thất bại", "error");
             }
         }
         refreshCuisineTable();
@@ -418,12 +424,12 @@ public class CuisineManagementController implements Initializable {
                 cuisineSearchField.setPromptText("Thông tin món ăn");
                 cuisineSearchField.clear();
                 cuisineSearchField.setDisable(true);
+                searchCuisine();
                 break;
         }
     }
 
-    @FXML
-    public void onSearchCuisineButtonClicked(MouseEvent mouseEvent) {
+    public void searchCuisine() {
         String selectedMethod = searchMethodComboBox.getValue();
         String searchValue = cuisineSearchField.getText();
         if (selectedMethod == null) return;
@@ -436,12 +442,18 @@ public class CuisineManagementController implements Initializable {
     }
 
     @FXML
+    public void onSearchCuisineButtonClicked(MouseEvent mouseEvent) {
+        searchCuisine();
+    }
+
+    @FXML
     private void onCuisineSearchTextFieldClicked(MouseEvent event) {
     }
 
     @FXML
     private void onCuisineSearchTextFieldKeyReleased(KeyEvent event) {
         clearCuisineSearchButton.setVisible(!cuisineSearchField.getText().isEmpty());
+        searchCuisine();
     }
 
     @FXML

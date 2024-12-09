@@ -4,6 +4,7 @@ package com.huongbien.bus;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.entity.Customer;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CustomerBUS {
@@ -43,6 +44,10 @@ public class CustomerBUS {
 
     public List<Customer> getAllCustomersWithPagination(int offset, int limit) {
         return customerDao.getAllWithPagination(offset, limit);
+    }
+
+    public List<Customer> getCustomerInDay(LocalDate date) {
+        return customerDao.getCustomerInDay(date);
     }
 
     public List<Customer> getAllCustomer() {

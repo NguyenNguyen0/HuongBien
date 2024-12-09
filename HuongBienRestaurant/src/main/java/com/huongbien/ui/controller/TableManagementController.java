@@ -6,6 +6,7 @@ import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
 import com.huongbien.utils.Pagination;
+import com.huongbien.utils.ToastsMessage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
 
@@ -89,6 +91,8 @@ public class TableManagementController implements Initializable {
     @FXML
     private TextField tableSeatsField;
 
+    private final Image DEFAULT_IMAGE = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/all/gallery-512px.png")));
+
     private final TableBUS tableBUS = new TableBUS();
 
     private Pagination<Table> tablePagination;
@@ -118,6 +122,7 @@ public class TableManagementController implements Initializable {
             case "Đặt trước" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tableReserved-512px.png"));
             case "Phục vụ" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tableOpen-512px.png"));
             case "Bàn đóng" -> tableImageView.setImage(new Image("/com/huongbien/icon/order/tableClosed-512px.png"));
+            default -> tableImageView.setImage(DEFAULT_IMAGE);
         }
     }
 
@@ -167,7 +172,9 @@ public class TableManagementController implements Initializable {
     }
 
     public void setPageIndexLabel() {
-        pageIndexLabel.setText(tablePagination.getCurrentPageIndex() + "/" + tablePagination.getTotalPages());
+        int currentPageIndex = tablePagination.getCurrentPageIndex();
+        int totalPage = tablePagination.getTotalPages() == 0 ? 1 : tablePagination.getTotalPages();
+        pageIndexLabel.setText(currentPageIndex + "/" + totalPage);
     }
 
     public void setTablePaginationDataGetter(BiFunction<Integer, Integer, List<Table>> dataGetter, int totalItems) {
@@ -215,12 +222,13 @@ public class TableManagementController implements Initializable {
             seats = Integer.parseInt(tableSeatsField.getText());
             floor = tableFloorComboBox.getValue();
         } catch (NumberFormatException e) {
-            System.out.println("Lỗi: Giá trị số ghế hoặc tầng không hợp lệ.");
+            ToastsMessage.showMessage("Giá trị số ghế hoặc tầng không hợp lệ.", "error");
             return null;
         }
 
         if (selectedTableType == null) {
             System.out.println("Lỗi: Chưa chọn loại bàn.");
+            ToastsMessage.showMessage("Chưa chọn loại bàn.", "error");
             return null;
         }
 
@@ -230,16 +238,16 @@ public class TableManagementController implements Initializable {
     public void addNewTable() {
         Table table = getTableFromForm();
         if (tableBUS.addTable(table)) {
-            System.out.println("Thêm bàn thành công");
+            ToastsMessage.showMessage("Thêm bàn thành công", "success");
         } else {
-            System.out.println("Thêm bàn không thành công");
+            ToastsMessage.showMessage("Thêm bàn không thành công", "error");
         }
     }
 
     public void updateTable() {
         Table selectedTable = tableTableView.getSelectionModel().getSelectedItem();
         if (selectedTable == null) {
-            System.out.println("Lỗi: Chưa chọn bàn để sửa.");
+            ToastsMessage.showMessage("Chưa chọn bàn để sửa.", "error");
             return;
         }
 
@@ -248,13 +256,14 @@ public class TableManagementController implements Initializable {
         table.setId(existingTableId);
 
         if (tableBUS.updateTableInfo(table)) {
-            System.out.println("Sửa bàn thành công");
+            ToastsMessage.showMessage("Sửa bàn thành công", "success");
         } else {
-            System.out.println("Sửa bàn không thành công");
+            ToastsMessage.showMessage("Sửa bàn không thành công", "error");
         }
     }
 
     public void clearTableForm() {
+        tableImageView.setImage(DEFAULT_IMAGE);
         tableNameField.setText("");
         tableSeatsField.setText("");
         tableTypeComboBox.getSelectionModel().clearSelection();
@@ -297,10 +306,22 @@ public class TableManagementController implements Initializable {
         tableTypeComboBox.setDisable(false);
     }
 
+    void setSearchTablePagination() {
+        String searchMethod = searchMethodComboBox.getValue();
+        switch (searchMethod) {
+            case "Tầng" -> setTablePaginationGetByFloor();
+            case "Tên Bàn" -> setTablePaginationGetByName();
+            case "Tất cả" -> setTablePaginationGetAll();
+        }
+
+        setTableTableValue();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableSearchField.setDisable(true);
         clearSearchFieldButton.setVisible(false);
+        changeHandleButtonModeToAddTable();
         setTableTypeComboBox();
         setTableStatusComboBox();
         setTableFloorComboBox();
@@ -389,18 +410,12 @@ public class TableManagementController implements Initializable {
     public void onSearchTableFieldKeyReleased(KeyEvent keyEvent) {
         String searchValue = tableSearchField.getText();
         clearSearchFieldButton.setVisible(!searchValue.isEmpty());
+        setSearchTablePagination();
     }
 
     @FXML
     void onSearchTableButtonClicked(MouseEvent mouseEvent) {
-        String searchMethod = searchMethodComboBox.getValue();
-        switch (searchMethod) {
-            case "Tầng" -> setTablePaginationGetByFloor();
-            case "Tên Bàn" -> setTablePaginationGetByName();
-            case "Tất cả" -> setTablePaginationGetAll();
-        }
-
-        setTableTableValue();
+        setSearchTablePagination();
     }
 
     @FXML
@@ -417,6 +432,7 @@ public class TableManagementController implements Initializable {
             case "Tất cả" -> {
                 tableSearchField.setDisable(true);
                 tableSearchField.setPromptText("Tìm kiếm");
+                setSearchTablePagination();
             }
         }
     }

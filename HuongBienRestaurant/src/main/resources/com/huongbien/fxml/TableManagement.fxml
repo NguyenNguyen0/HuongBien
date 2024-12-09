@@ -37,7 +37,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="tableNameField" disable="true" minHeight="50.0" prefHeight="51.0" prefWidth="670.0" styleClass="textField-line-bot">
+                        <TextField fx:id="tableNameField" minHeight="50.0" prefHeight="51.0" prefWidth="670.0" styleClass="textField-line-bot">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -58,7 +58,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="tableSeatsField" disable="true" minHeight="50.0" prefHeight="54.0" prefWidth="290.0" styleClass="textField-line-bot">
+                        <TextField fx:id="tableSeatsField" minHeight="50.0" prefHeight="54.0" prefWidth="290.0" styleClass="textField-line-bot">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -77,7 +77,7 @@
                         </Label>
                         <HBox prefHeight="96.0" prefWidth="388.0">
                            <children>
-                              <ComboBox fx:id="tableTypeComboBox" disable="true" prefHeight="54.0" prefWidth="338.0" styleClass="textField-line-bot" />
+                              <ComboBox fx:id="tableTypeComboBox" prefHeight="54.0" prefWidth="338.0" styleClass="textField-line-bot" />
                            </children>
                         </HBox>
                      </children>
@@ -101,7 +101,7 @@
                         </Label>
                         <HBox prefHeight="96.0" prefWidth="279.0">
                            <children>
-                              <ComboBox fx:id="tableStatusComboBox" disable="true" prefHeight="54.0" prefWidth="327.0" styleClass="textField-line-bot" />
+                              <ComboBox fx:id="tableStatusComboBox" prefHeight="54.0" prefWidth="327.0" styleClass="textField-line-bot" />
                            </children>
                            <VBox.margin>
                               <Insets />
@@ -121,15 +121,7 @@
                         </Label>
                         <HBox prefHeight="83.0" prefWidth="312.0">
                            <children>
-                              <ComboBox fx:id="tableFloorComboBox" disable="true" prefHeight="54.0" prefWidth="260.0" styleClass="textField-line-bot" />
-                              <Button mnemonicParsing="false" prefHeight="54.0" prefWidth="68.0" text="Edit">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
+                              <ComboBox fx:id="tableFloorComboBox" prefHeight="54.0" prefWidth="330.0" styleClass="textField-line-bot" />
                            </children>
                         </HBox>
                      </children>

@@ -112,7 +112,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
     }
 
     public List<Employee> getByPositionWithPagination(String position, int offset, int limit) {
-        return getMany("SELECT * FROM Employee WHERE position LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", "%" + position, offset, limit);
+        return getMany("SELECT * FROM Employee WHERE position LIKE ? ORDER BY status OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;", "%" + position + "%", offset, limit);
     }
 
     public List<Employee> getByPhoneNumberWithPagination(String phoneNumber, int offset, int limit) {
@@ -132,7 +132,7 @@ public class EmployeeDAO extends GenericDAO<Employee> {
     }
 
     public int countByPosition(String position) {
-        return count("SELECT COUNT(*) FROM Employee WHERE position LIKE ?;", "%" + position);
+        return count("SELECT COUNT(*) FROM Employee WHERE position LIKE ?;", "%" + position + "%");
     }
 
     public int countStillWorking() {

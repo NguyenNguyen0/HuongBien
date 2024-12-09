@@ -5,6 +5,7 @@ import com.huongbien.entity.Customer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +70,10 @@ public class CustomerDAO extends GenericDAO<Customer> {
 
     public List<Customer> getAllWithPaginationById(String id, int offset, int limit) {
         return getMany("SELECT * FROM Customer WHERE id LIKE ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", id + "%", offset, limit);
+    }
+
+    public List<Customer> getCustomerInDay(LocalDate date) {
+        return getMany("SELECT * FROM Customer WHERE registrationDate = ?", date);
     }
 
     public int countTotalById(String id) {

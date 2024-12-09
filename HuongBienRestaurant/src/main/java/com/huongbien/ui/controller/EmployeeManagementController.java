@@ -45,46 +45,83 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class EmployeeManagementController implements Initializable {
-    @FXML private TableColumn<Employee, String> employeeGenderColumn;
-    @FXML private TableColumn<Employee, String> employeeIdColumn;
-    @FXML private TableColumn<Employee, String> employeeNameColumn;
-    @FXML private TableColumn<Employee, String> employeePhoneColumn;
-    @FXML private TableColumn<Employee, String> employeePositionColumn;
-    @FXML private TableColumn<Employee, String> employeeStatusColumn;
-    @FXML private TableView<Employee> employeeTable;
-    @FXML private ComboBox<String> employeeStatusComboBox;
-    @FXML private ComboBox<Employee> employeePositionComboBox;
-    @FXML private DatePicker employeeBirthdayDatePicker;
-    @FXML private DatePicker employeeHiredateDatePicker;
-    @FXML private RadioButton femaleRadioButton;
-    @FXML private RadioButton maleRadioButton;
-    @FXML public TextField employeeAddressField;
-    @FXML private TextField employeeCitizenIdField;
-    @FXML private ComboBox<Employee> employeeManagerIdComboBox;
-    @FXML private TextField employeeEmailField;
-    @FXML private TextField employeeNameField;
-    @FXML private TextField employeeIdField;
-    @FXML private TextField employeePhoneField;
-    @FXML private TextField employeeSalaryField;
-    @FXML private TextField employeeHourlyPayField;
-    @FXML private ImageView clearSearchButton;
-    @FXML private ComboBox<String> searchMethodComboBox;
-    @FXML private TextField employeeSearchField;
-    @FXML public Label pageIndexLabel;
-    @FXML private Button searchEmployeeButton;
-    @FXML private ToggleGroup genderGroup;
-    @FXML private Button employeeClearFormButton;
-    @FXML private Button fireEmployeeButton;
-    @FXML private Button handleActionEmployeeButton;
-    @FXML private Button swapModeEmployeeButton;
-    @FXML private Button chooseImageButton;
-    @FXML private Circle employeeAvatarCircle;
+    @FXML
+    private TableColumn<Employee, String> employeeGenderColumn;
+    @FXML
+    private TableColumn<Employee, String> employeeIdColumn;
+    @FXML
+    private TableColumn<Employee, String> employeeNameColumn;
+    @FXML
+    private TableColumn<Employee, String> employeePhoneColumn;
+    @FXML
+    private TableColumn<Employee, String> employeePositionColumn;
+    @FXML
+    private TableColumn<Employee, String> employeeStatusColumn;
+    @FXML
+    private TableView<Employee> employeeTable;
+    @FXML
+    private ComboBox<String> employeeStatusComboBox;
+    @FXML
+    private ComboBox<Employee> employeePositionComboBox;
+    @FXML
+    private DatePicker employeeBirthdayDatePicker;
+    @FXML
+    private DatePicker employeeHiredateDatePicker;
+    @FXML
+    private RadioButton femaleRadioButton;
+    @FXML
+    private RadioButton maleRadioButton;
+    @FXML
+    public TextField employeeAddressField;
+    @FXML
+    private TextField employeeCitizenIdField;
+    @FXML
+    private ComboBox<Employee> employeeManagerIdComboBox;
+    @FXML
+    private TextField employeeEmailField;
+    @FXML
+    private TextField employeeNameField;
+    @FXML
+    private TextField employeeIdField;
+    @FXML
+    private TextField employeePhoneField;
+    @FXML
+    private TextField employeeSalaryField;
+    @FXML
+    private TextField employeeHourlyPayField;
+    @FXML
+    private ImageView clearSearchButton;
+    @FXML
+    private ComboBox<String> searchMethodComboBox;
+    @FXML
+    private TextField employeeSearchField;
+    @FXML
+    public Label pageIndexLabel;
+    @FXML
+    private Button searchEmployeeButton;
+    @FXML
+    private ToggleGroup genderGroup;
+    @FXML
+    private Button employeeClearFormButton;
+    @FXML
+    private Button fireEmployeeButton;
+    @FXML
+    private Button handleActionEmployeeButton;
+    @FXML
+    private Button swapModeEmployeeButton;
+    @FXML
+    private Button chooseImageButton;
+    @FXML
+    private Circle employeeAvatarCircle;
     public TextField employeeWorkingHourField;
     private byte[] employeeImageBytes = null;
     private Pagination<Employee> employeePagination;
     private final EmployeeBUS employeeBUS = new EmployeeBUS();
 
+    private final Image DEFAULT_AVATAR = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")));
+
     public RestaurantMainController restaurantMainController;
+
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
@@ -98,7 +135,7 @@ public class EmployeeManagementController implements Initializable {
         setEmployeePaginationGetStillWorking();
         setEmployeeTable();
         setEmployeeTableValue();
-        employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
+        employeeAvatarCircle.setFill(new ImagePattern(DEFAULT_AVATAR));
     }
 
     public void setEmployeePaginationGetAll() {
@@ -180,7 +217,9 @@ public class EmployeeManagementController implements Initializable {
     }
 
     public void setPageIndexLabel() {
-        pageIndexLabel.setText(employeePagination.getCurrentPageIndex() + "/" + employeePagination.getTotalPages());
+        int currentPageIndex = employeePagination.getCurrentPageIndex();
+        int totalPage = employeePagination.getTotalPages() == 0 ? 1 : employeePagination.getTotalPages();
+        pageIndexLabel.setText(currentPageIndex + "/" + totalPage);
     }
 
     public void setComboBoxValue() {
@@ -264,7 +303,7 @@ public class EmployeeManagementController implements Initializable {
 
     public void clearChooserImage() {
         employeeImageBytes = null;
-        employeeAvatarCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")))));
+        employeeAvatarCircle.setFill(new ImagePattern(DEFAULT_AVATAR));
     }
 
     public void clearEmployeeForm() {
@@ -323,6 +362,10 @@ public class EmployeeManagementController implements Initializable {
 
     public void changeHandleActionButtonToAddEmployee() {
         fireEmployeeButton.setVisible(false);
+        employeeHourlyPayField.setText("20000");
+        employeeSalaryField.setText("1000000");
+        employeeHiredateDatePicker.setValue(LocalDate.now());
+        employeeStatusComboBox.setValue("Đang làm");
         setButtonMode(Variable.editMode, Variable.addMode, "#761D7E", "#1D557E");
     }
 
@@ -383,24 +426,28 @@ public class EmployeeManagementController implements Initializable {
     public boolean validateEmployeeInfo() {
         if (employeeNameField.getText().isEmpty()) {
             employeeNameField.setStyle("-fx-border-color: red");
+            ToastsMessage.showMessage("Tên nhân viên không được để trống", "error");
             return false;
         } else {
             employeeNameField.setStyle(null);
         }
         if (employeePhoneField.getText().isEmpty()) {
             employeePhoneField.setStyle("-fx-border-color: red");
+            ToastsMessage.showMessage("Số điện thoại không được để trống", "error");
             return false;
         } else {
             employeePhoneField.setStyle(null);
         }
         if (employeePositionComboBox.getValue() == null) {
             employeePositionComboBox.setStyle("-fx-border-color: red");
+            ToastsMessage.showMessage("Chức vụ không được để trống", "error");
             return false;
         } else {
             employeePositionComboBox.setStyle(null);
         }
         if (employeeStatusComboBox.getValue() == null) {
             employeeStatusComboBox.setStyle("-fx-border-color: red");
+            ToastsMessage.showMessage("Trạng thái không được để trống", "error");
             return false;
         } else {
             employeeStatusComboBox.setStyle(null);
@@ -427,6 +474,8 @@ public class EmployeeManagementController implements Initializable {
     }
 
     public void addEmployee() {
+        if (!validateEmployeeInfo()) return;
+
         Employee newEmployee = createEmployeeFromForm(null, 0, LocalDate.now(), employeeImageBytes);
         if (employeeBUS.addEmployee(newEmployee)) {
             clearEmployeeForm();
@@ -465,6 +514,20 @@ public class EmployeeManagementController implements Initializable {
 
     public String formatMoney(double amount) {
         return new DecimalFormat("#,###").format(amount);
+    }
+
+    public void setEmployeeSearchPagination() {
+        String selectedMethod = searchMethodComboBox.getValue();
+        String searchValue = employeeSearchField.getText();
+        switch (selectedMethod) {
+            case "Tất cả" -> setEmployeePaginationGetAll();
+            case "Còn làm việc" -> setEmployeePaginationGetStillWorking();
+            case "Tìm theo tên" -> setEmployeePaginationGetByName(searchValue);
+            case "Tìm theo số điện thoại" -> setEmployeePaginationGetByPhone(searchValue);
+            case "Tìm theo chức vụ" -> setEmployeePaginationGetByPosition(searchValue);
+        }
+
+        setEmployeeTableValue();
     }
 
     @FXML
@@ -530,15 +593,7 @@ public class EmployeeManagementController implements Initializable {
 
     @FXML
     public void onSearchEmployeeButtonClicked(ActionEvent event) {
-        String selectedMethod = searchMethodComboBox.getValue();
-        String searchValue = employeeSearchField.getText();
-        switch (selectedMethod) {
-            case "Tìm theo tên" -> setEmployeePaginationGetByName(searchValue);
-            case "Tìm theo số điện thoại" -> setEmployeePaginationGetByPhone(searchValue);
-            case "Tìm theo chức vụ" -> setEmployeePaginationGetByPosition(searchValue);
-        }
-
-        setEmployeeTableValue();
+        setEmployeeSearchPagination();
     }
 
     @FXML
@@ -586,19 +641,16 @@ public class EmployeeManagementController implements Initializable {
     public void onEmployeeSearchFieldKeyReleased(KeyEvent keyEvent) {
         String searchValue = employeeSearchField.getText();
         clearSearchButton.setVisible(!searchValue.isEmpty());
+        setEmployeeSearchPagination();
     }
 
     @FXML
     public void onSearchMethodComboBoxSelected(ActionEvent actionEvent) {
         String selectedMethod = searchMethodComboBox.getValue();
         switch (selectedMethod) {
-            case "Còn làm việc":
+            case "Còn làm việc", "Tất cả":
                 employeeSearchField.setDisable(true);
-                setEmployeePaginationGetStillWorking();
-                break;
-            case "Tất cả":
-                employeeSearchField.setDisable(true);
-                setEmployeePaginationGetAll();
+                setEmployeeSearchPagination();
                 break;
             case "Tìm theo tên", "Tìm theo số điện thoại", "Tìm theo chức vụ":
                 employeeSearchField.setDisable(false);

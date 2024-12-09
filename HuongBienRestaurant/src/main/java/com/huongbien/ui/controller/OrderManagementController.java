@@ -26,34 +26,62 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderManagementController implements Initializable {
-    @FXML public TextField orderIdField;
-    @FXML public TextField orderDiscountField;
-    @FXML public TextField orderTotalOrderDetailAmount;
-    @FXML public TextField orderVATField;
-    @FXML public TextField orderTotalAmountField;
-    @FXML public TextField orderCustomerField;
-    @FXML public TextField orderEmployeeIdField;
-    @FXML public TextField orderPromotionIdField;
-    @FXML public TextField orderPaymentIdField;
-    @FXML private TextField orderTablesField;
-    @FXML public TextArea orderNoteTextArea;
-    @FXML private ComboBox<String> searchMethodComboBox;
-    @FXML public TextField orderSearchField;
-    @FXML public Button searchOrderButton;
-    @FXML public ImageView clearSearchButton;
-    @FXML public TableView<Order> orderTable;
-    @FXML public TableColumn<Order, String> orderIdColumn;
-    @FXML public TableColumn<Order, Date> orderCreatedDateColumn;
-    @FXML public TableColumn<Order, Double> orderTotalAmountColumn;
-    @FXML public TableColumn<Order, String> orderEmployeeIdColumn;
-    @FXML public TableColumn<Order, String> customerPhoneNumberColumn;
-    @FXML public DatePicker orderDateDatePicker;
-    @FXML private Label pageIndexLabel;
-    @FXML private TableColumn<OrderDetail, String> orderDetailCuisineColumn;
-    @FXML private TableColumn<OrderDetail, String> orderDetailNoteColumn;
-    @FXML private TableColumn<OrderDetail, Integer> orderDetailQuantityColumn;
-    @FXML private TableColumn<OrderDetail, Double> orderDetailSalePriceColumn;
-    @FXML private TableView<OrderDetail> orderDetailTable;
+    @FXML
+    public TextField orderIdField;
+    @FXML
+    public TextField orderDiscountField;
+    @FXML
+    public TextField orderTotalOrderDetailAmount;
+    @FXML
+    public TextField orderVATField;
+    @FXML
+    public TextField orderTotalAmountField;
+    @FXML
+    public TextField orderCustomerField;
+    @FXML
+    public TextField orderEmployeeIdField;
+    @FXML
+    public TextField orderPromotionIdField;
+    @FXML
+    public TextField orderPaymentIdField;
+    @FXML
+    private TextField orderTablesField;
+    @FXML
+    public TextArea orderNoteTextArea;
+    @FXML
+    private ComboBox<String> searchMethodComboBox;
+    @FXML
+    public TextField orderSearchField;
+    @FXML
+    public Button searchOrderButton;
+    @FXML
+    public ImageView clearSearchButton;
+    @FXML
+    public TableView<Order> orderTable;
+    @FXML
+    public TableColumn<Order, String> orderIdColumn;
+    @FXML
+    public TableColumn<Order, Date> orderCreatedDateColumn;
+    @FXML
+    public TableColumn<Order, Double> orderTotalAmountColumn;
+    @FXML
+    public TableColumn<Order, String> orderEmployeeIdColumn;
+    @FXML
+    public TableColumn<Order, String> customerPhoneNumberColumn;
+    @FXML
+    public DatePicker orderDateDatePicker;
+    @FXML
+    private Label pageIndexLabel;
+    @FXML
+    private TableColumn<OrderDetail, String> orderDetailCuisineColumn;
+    @FXML
+    private TableColumn<OrderDetail, String> orderDetailNoteColumn;
+    @FXML
+    private TableColumn<OrderDetail, Integer> orderDetailQuantityColumn;
+    @FXML
+    private TableColumn<OrderDetail, Double> orderDetailSalePriceColumn;
+    @FXML
+    private TableView<OrderDetail> orderDetailTable;
 
     private static final OrderBUS orderBUS = new OrderBUS();
     private static Pagination<Order> orderPagination;
@@ -130,7 +158,9 @@ public class OrderManagementController implements Initializable {
     }
 
     public void setPageIndexLabel() {
-        pageIndexLabel.setText(orderPagination.getCurrentPageIndex() + "/" + orderPagination.getTotalPages());
+        int currentPageIndex = orderPagination.getCurrentPageIndex();
+        int totalPage = orderPagination.getTotalPages() == 0 ? 1 : orderPagination.getTotalPages();
+        pageIndexLabel.setText(currentPageIndex + "/" + totalPage);
     }
 
     public void setOrderDetailTableValue(List<OrderDetail> orderDetails) {
@@ -186,8 +216,7 @@ public class OrderManagementController implements Initializable {
         );
     }
 
-    @FXML
-    void onSearchOrderButtonClicked(MouseEvent event) {
+    public void searchOrder() {
         String searchInfo = orderSearchField.getText();
 
         switch (searchMethodComboBox.getValue()) {
@@ -201,6 +230,11 @@ public class OrderManagementController implements Initializable {
     }
 
     @FXML
+    void onSearchOrderButtonClicked(MouseEvent event) {
+        searchOrder();
+    }
+
+    @FXML
     void onClearSearchButtonClicked(MouseEvent mouseEvent) {
         orderSearchField.clear();
         clearSearchButton.setVisible(false);
@@ -209,20 +243,28 @@ public class OrderManagementController implements Initializable {
 
     @FXML
     void onSearchFieldKeyReleased(KeyEvent keyEvent) {
-        clearSearchButton.setVisible(!orderSearchField.getText().isEmpty());
+        boolean isSearchFieldEmpty = orderSearchField.getText().isEmpty();
+        clearSearchButton.setVisible(isSearchFieldEmpty);
+        searchOrder();
     }
 
     @FXML
     void onSearchMethodComboBoxSelected(ActionEvent actionEvent) {
-        String selectedMethod = searchMethodComboBox.getValue();
-        orderSearchField.setDisable(selectedMethod.equals("Tất cả"));
         String searchMethod = searchMethodComboBox.getValue();
+        orderSearchField.setDisable(searchMethod.equals("Tất cả"));
         switch (searchMethod) {
             case "Mã nhân viên" -> orderSearchField.setPromptText("Nhập mã nhân viên");
             case "Số điện thoại khách hàng" -> orderSearchField.setPromptText("Nhập số điện thoại khách hàng");
             case "Mã hóa đơn" -> orderSearchField.setPromptText("Nhập mã hóa đơn");
-            case "Tất cả" -> orderSearchField.setPromptText("Tìm kiếm");
+            case "Tất cả" -> {
+                orderSearchField.setPromptText("Tìm kiếm");
+                searchOrder();
+            }
         }
+
+        clearSearchButton.setVisible(false);
+        orderSearchField.clear();
+        setOrderTableValue();
     }
 
     @FXML

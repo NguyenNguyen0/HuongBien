@@ -1,5 +1,6 @@
 package com.huongbien.dao;
 
+import com.huongbien.bus.CustomerBUS;
 import com.huongbien.database.StatementHelper;
 import com.huongbien.entity.Customer;
 import com.huongbien.entity.Order;
@@ -182,34 +183,8 @@ public class StatisticsDAO {
 
     // Lấy thông tin khác hàng mới trong này hôm nay
     public static List<Customer> getNewCusomterInDay() {
-        //        TODO: sửa lại hàm này sau khi tối ưu dao
-        List<Customer> customers = new ArrayList<>();
-        String sql = "SELECT * FROM Customer WHERE registrationDate = ?;";
-
-        try {
-            StatementHelper statementHelper = StatementHelper.getInstances();
-            PreparedStatement stmt = statementHelper.prepareStatement(sql, LocalDate.now());
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Customer customer = new Customer();
-                customer.setCustomerId(rs.getString("id"));
-                customer.setName(rs.getString("name"));
-                customer.setAddress(rs.getString("address"));
-                customer.setGender(rs.getInt("gender"));
-                customer.setPhoneNumber(rs.getString("phoneNumber"));
-                customer.setEmail(rs.getString("email"));
-                customer.setBirthday(rs.getDate("birthday") == null ? null : rs.getDate("birthday").toLocalDate());
-                customer.setRegistrationDate(rs.getDate("registrationDate").toLocalDate());
-                customer.setAccumulatedPoints(rs.getInt("accumulatedPoints"));
-                customer.setMembershipLevel(rs.getInt("membershipLevel"));
-                customers.add(customer);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return customers;
+        CustomerBUS customerBUS = new CustomerBUS();
+        return customerBUS.getCustomerInDay(LocalDate.now());
     }
 
     // Lấy các hóa đơn mới lập trong hôm nay

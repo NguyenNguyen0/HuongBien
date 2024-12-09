@@ -72,7 +72,7 @@
                               </Label>
                               <HBox alignment="CENTER_LEFT" prefHeight="68.0" prefWidth="295.0">
                                  <children>
-                                    <RadioButton fx:id="maleRadioButton" disable="true" mnemonicParsing="false" prefHeight="36.0" prefWidth="117.0" text="Nam">
+                                    <RadioButton fx:id="maleRadioButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="117.0" text="Nam">
                                        <HBox.margin>
                                           <Insets right="50.0" />
                                        </HBox.margin>
@@ -83,7 +83,7 @@
                                           <ToggleGroup fx:id="genderGroup" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="femaleRadioButton" disable="true" mnemonicParsing="false" prefHeight="36.0" prefWidth="103.0" text="Nữ" toggleGroup="$genderGroup">
+                                    <RadioButton fx:id="femaleRadioButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="103.0" text="Nữ" toggleGroup="$genderGroup">
                                        <HBox.margin>
                                           <Insets right="50.0" />
                                        </HBox.margin>
@@ -126,7 +126,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <DatePicker fx:id="customerBirthdayDatePicker" editable="false" prefHeight="50.0" prefWidth="295.0" promptText="Ngày sinh" showWeekNumbers="true" styleClass="textField-line-bot" VBox.vgrow="ALWAYS">
+                              <DatePicker fx:id="customerBirthdayDatePicker" prefHeight="50.0" prefWidth="295.0" promptText="Ngày sinh" showWeekNumbers="true" styleClass="textField-line-bot" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets top="5.0" />
                                  </VBox.margin>
@@ -151,7 +151,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="customerAddressField" editable="false" minHeight="50.0" promptText="Địa chỉ" styleClass="textField-line-bot">
+                              <TextField fx:id="customerAddressField" minHeight="50.0" promptText="Địa chỉ" styleClass="textField-line-bot">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
@@ -170,7 +170,7 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="registrationDateDatePicker" disable="true" prefHeight="53.0" prefWidth="264.0" promptText="Ngày tham gia" />
+                                    <DatePicker fx:id="customerRegistrationDateDatePicker" prefHeight="53.0" prefWidth="264.0" promptText="Ngày tham gia" />
                                  </children>
                                  <HBox.margin>
                                     <Insets />
@@ -183,7 +183,7 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="customerAccumulatedPointsField" alignment="TOP_LEFT" disable="true" minHeight="50.0" prefHeight="52.0" prefWidth="135.0" promptText="Điểm tích lũy" styleClass="textField-line-bot">
+                                    <TextField fx:id="customerAccumulatedPointsField" alignment="TOP_LEFT" minHeight="50.0" prefHeight="52.0" prefWidth="135.0" promptText="Điểm tích lũy" styleClass="textField-line-bot">
                                        <font>
                                           <Font size="25.0" />
                                        </font>
@@ -200,7 +200,7 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="customerMembershipLevelField" alignment="TOP_LEFT" disable="true" minHeight="50.0" prefHeight="52.0" prefWidth="135.0" promptText="Hạng thành viên" styleClass="textField-line-bot">
+                                    <TextField fx:id="customerMembershipLevelField" alignment="TOP_LEFT" minHeight="50.0" prefHeight="52.0" prefWidth="135.0" promptText="Hạng thành viên" styleClass="textField-line-bot">
                                        <font>
                                           <Font size="25.0" />
                                        </font>

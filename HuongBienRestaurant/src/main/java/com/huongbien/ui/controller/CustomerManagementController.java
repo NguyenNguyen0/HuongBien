@@ -7,6 +7,7 @@ import com.huongbien.dao.CustomerDAO;
 import com.huongbien.entity.Customer;
 import com.huongbien.service.EmailService;
 import com.huongbien.service.QRCodeHandler;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import com.huongbien.utils.Pagination;
 import javafx.beans.property.SimpleStringProperty;
@@ -33,6 +34,8 @@ public class CustomerManagementController implements Initializable {
 
     @FXML
     public Button searchCustomerButton;
+
+    @FXML
     public ComboBox<String> searchMethodComboBox;
 
     @FXML
@@ -45,7 +48,7 @@ public class CustomerManagementController implements Initializable {
     private DatePicker customerBirthdayDatePicker;
 
     @FXML
-    private DatePicker registrationDateDatePicker;
+    private DatePicker customerRegistrationDateDatePicker;
 
     @FXML
     private ToggleGroup genderGroup;
@@ -195,10 +198,11 @@ public class CustomerManagementController implements Initializable {
     }
 
     public Customer getCustomerInfoFromForm() {
-        String id = customerTable.getSelectionModel().getSelectedItem().getCustomerId();
+        Customer customer = customerTable.getSelectionModel().getSelectedItem();
+        String id = customer == null ? null : customer.getCustomerId();
         int accumulatedPoints = Integer.parseInt(customerAccumulatedPointsField.getText());
-        int membershipLevel = customerTable.getSelectionModel().getSelectedItem().getMembershipLevel();
-        LocalDate registrationDate = registrationDateDatePicker.getValue();
+        int membershipLevel = customerMembershipLevelField.getText().isEmpty() ? 0 : Integer.parseInt(customerMembershipLevelField.getText());
+        LocalDate registrationDate = customerRegistrationDateDatePicker.getValue();
         String name = customerNameField.getText();
         String phone = customerPhoneField.getText();
         String email = customerEmailField.getText();
@@ -215,9 +219,15 @@ public class CustomerManagementController implements Initializable {
 
     public void addNewCustomer() {
         Customer customer = getCustomerInfoFromForm();
-        if (validateCustomerData()) {
-            customerBUS.addCustomer(customer);
+        if (!validateCustomerData()) return;
+
+        if (customerBUS.addCustomer(customer)) {
             setCustomerTableValues();
+            clearCustomerForm();
+            disableInput();
+            ToastsMessage.showMessage("Thêm khách hàng thành công", "success");
+        } else {
+            ToastsMessage.showMessage("Thêm thất bại bui lòng xem lại", "error");
         }
     }
 
@@ -226,8 +236,15 @@ public class CustomerManagementController implements Initializable {
         String customerId = customerTable.getSelectionModel().getSelectedItem().getCustomerId();
         customer.setCustomerId(customerId);
 
+        if (!validateCustomerData()) {
+            return;
+        }
+
         if (customerBUS.updateCustomerInfo(customer)) {
             setCustomerTableValues();
+            ToastsMessage.showMessage("Cập nhật thông tin khách hàng thành công", "success");
+        } else {
+            ToastsMessage.showMessage("Cập nhật thông tin khách hàng thất bại", "error");
         }
     }
 
@@ -237,7 +254,7 @@ public class CustomerManagementController implements Initializable {
         customerEmailField.setText("");
         customerBirthdayDatePicker.setValue(null);
         genderGroup.selectToggle(null);
-        registrationDateDatePicker.setValue(null);
+        customerRegistrationDateDatePicker.setValue(null);
         customerAddressField.setText("");
         customerMembershipLevelField.setText("");
         customerAccumulatedPointsField.setText("");
@@ -251,6 +268,8 @@ public class CustomerManagementController implements Initializable {
         customerPhoneField.setDisable(false);
         customerBirthdayDatePicker.setDisable(false);
         maleRadioButton.setDisable(false);
+        customerAccumulatedPointsField.setDisable(false);
+        customerMembershipLevelField.setDisable(false);
         femaleRadioButton.setDisable(false);
     }
 
@@ -260,6 +279,8 @@ public class CustomerManagementController implements Initializable {
         customerAddressField.setDisable(true);
         customerPhoneField.setDisable(true);
         customerBirthdayDatePicker.setDisable(true);
+        customerMembershipLevelField.setDisable(true);
+        customerAccumulatedPointsField.setDisable(true);
         maleRadioButton.setDisable(true);
         femaleRadioButton.setDisable(true);
     }
@@ -276,10 +297,15 @@ public class CustomerManagementController implements Initializable {
         handleActionCustomerButton.setText("Thêm");
         swapModeCustomerButton.setStyle("-fx-background-color:   #761D7E");
         handleActionCustomerButton.setStyle("-fx-background-color:  #1D557E");
+
+        customerMembershipLevelField.setText("0");
+        customerAccumulatedPointsField.setText("0");
+        customerRegistrationDateDatePicker.setValue(LocalDate.now());
     }
 
     public boolean validateCustomerData() {
         if (customerNameField.getText().trim().isEmpty()) {
+            ToastsMessage.showMessage("Tên khách hàng không được để trống", "error");
             return false;
         }
         if (!customerPhoneField.getText().trim().isEmpty()) {
@@ -288,23 +314,42 @@ public class CustomerManagementController implements Initializable {
             for (String phone : customerList) {
                 if (customerPhoneField.getText().equals(phone)) {
                     System.out.println("Số điện thoại đã được đăng kí thành viên");
+                    ToastsMessage.showMessage("Số điện thoại đã được đăng kí thành viên", "error");
                     return false;
                 }
             }
         } else {
+            ToastsMessage.showMessage("Số điện thoại không được để trống", "error");
             return false;
         }
-        if (customerBirthdayDatePicker.getValue() == null) {
+
+        if (genderGroup.getSelectedToggle() == null) {
+            ToastsMessage.showMessage("Vui lòng chọn giới tính", "error");
             return false;
         }
-        return genderGroup.getSelectedToggle() != null;
+
+        return true;
+    }
+
+    public void setCustomerSearchPagination() {
+        String searchValue = searchCustomerField.getText();
+        String searchMethod = searchMethodComboBox.getValue();
+        switch (searchMethod) {
+            case "Tên" -> setPaginationGetByCustomerName(searchValue);
+            case "Số điện thoại" -> setPaginationGetByCustomerPhoneNumber(searchValue);
+            case "Mã khách hàng" -> setPaginationGetByCustomerId(searchValue);
+            case "Tất cả" -> setPaginationGetAllCustomer();
+        }
+
+        setCustomerTableValues();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        disableInput();
         clearSearchButton.setVisible(false);
         searchCustomerField.setDisable(true);
+        enableInput();
+        setHandleActionButtonToAddCustomer();
         setSearchMethodComboBoxValue();
         setCustomerTableColumns();
         setPaginationGetAllCustomer();
@@ -324,9 +369,6 @@ public class CustomerManagementController implements Initializable {
             case "Thêm" -> addNewCustomer();
             case "Sửa" -> updateCustomerInfo();
         }
-
-        clearCustomerForm();
-        disableInput();
     }
 
     @FXML
@@ -352,7 +394,7 @@ public class CustomerManagementController implements Initializable {
             customerAddressField.setText(selectedItem.getAddress());
             customerPhoneField.setText(selectedItem.getPhoneNumber());
             customerBirthdayDatePicker.setValue(selectedItem.getBirthday());
-            registrationDateDatePicker.setValue(selectedItem.getRegistrationDate());
+            customerRegistrationDateDatePicker.setValue(selectedItem.getRegistrationDate());
             customerAccumulatedPointsField.setText(selectedItem.getAccumulatedPoints() + "");
             customerMembershipLevelField.setText(Utils.toStringMembershipLevel(selectedItem.getMembershipLevel()));
 
@@ -383,6 +425,7 @@ public class CustomerManagementController implements Initializable {
             case "Tất cả":
                 searchCustomerField.setPromptText("Thông tin tìm kiếm");
                 searchCustomerField.setDisable(true);
+                setCustomerSearchPagination();
                 break;
         }
     }
@@ -398,25 +441,14 @@ public class CustomerManagementController implements Initializable {
 
     @FXML
     void onSearchCustomerButtonClicked(ActionEvent actionEvent) {
-        String searchValue = searchCustomerField.getText();
-        String searchMethod = searchMethodComboBox.getValue();
-        switch (searchMethod) {
-            case "Tên" -> setPaginationGetByCustomerName(searchValue);
-            case "Số điện thoại" -> setPaginationGetByCustomerPhoneNumber(searchValue);
-            case "Mã khách hàng" -> setPaginationGetByCustomerId(searchValue);
-            case "Tất cả" -> setPaginationGetAllCustomer();
-        }
-
-        setCustomerTableValues();
+        setCustomerSearchPagination();
     }
 
     @FXML
     void onSearchCustomerPhoneFieldKeyReleased(KeyEvent event) {
-        clearSearchButton.setVisible(true);
-        String searchValue = searchCustomerField.getText();
-        if (searchValue.isEmpty()) {
-            clearSearchButton.setVisible(false);
-        }
+        boolean isSearchFieldEmpty = searchCustomerField.getText().isEmpty();
+        clearSearchButton.setVisible(isSearchFieldEmpty);
+        setCustomerSearchPagination();
     }
 
     @FXML

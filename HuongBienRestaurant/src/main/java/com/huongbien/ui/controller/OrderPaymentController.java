@@ -311,6 +311,16 @@ public class OrderPaymentController implements Initializable {
             //Write Down JSON
             String customerID = customer.getCustomerId();
             String promotionID = "";
+            //display label
+            customerIdField.setText(customerID);
+            customerNameField.setText(customer.getName());
+            customerRankField.setText(Utils.toStringMembershipLevel(customer.getMembershipLevel()));
+            //enable table
+            promotionTableView.setDisable(false);
+            // Set discount
+            setDiscountFromPromotionSearch();
+            //load list promotion
+            setPromotionTableValue();
             if(!promotionTableView.getSelectionModel().isEmpty()){
                 promotionID = promotionTableView.getSelectionModel().getSelectedItem().getPromotionId();
             }
@@ -320,14 +330,6 @@ public class OrderPaymentController implements Initializable {
             customerObject.addProperty("Promotion ID", promotionID);
             customerArray.add(customerObject);
             Utils.writeJsonToFile(customerArray, Constants.CUSTOMER_PATH);
-            //display label
-            customerIdField.setText(customerID);
-            customerNameField.setText(customer.getName());
-            customerRankField.setText(Utils.toStringMembershipLevel(customer.getMembershipLevel()));
-            //enable table
-            promotionTableView.setDisable(false);
-            // Set discount
-            setDiscountFromPromotionSearch();
         } else {
             customerIdField.setText("");
             customerNameField.setText("");
@@ -338,8 +340,6 @@ public class OrderPaymentController implements Initializable {
             Utils.writeJsonToFile(new JsonArray(), Constants.CUSTOMER_PATH);
             setPaymentInfo();
         }
-        //load list promotion
-        setPromotionTableValue();
     }
 
     @FXML

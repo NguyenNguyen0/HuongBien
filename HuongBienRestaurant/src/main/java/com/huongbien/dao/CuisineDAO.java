@@ -74,7 +74,7 @@ public class CuisineDAO extends GenericDAO<Cuisine> {
     }
 
     public List<Cuisine> getByCategoryWithPagination(int offset, int limit, String category) {
-        return getMany("SELECT * FROM cuisine WHERE categoryId LIKE ? ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", "%" + category + "%", offset, limit);
+        return getMany("SELECT * FROM cuisine WHERE categoryId IN (SELECT id FROM Category WHERE name LIKE ?) ORDER BY id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY", "%" + category + "%", offset, limit);
     }
 
     public List<Cuisine> getByNameWithPagination(int offset, int limit, String name) {
@@ -86,11 +86,11 @@ public class CuisineDAO extends GenericDAO<Cuisine> {
     }
 
     public int countCuisinesByName(String name) {
-        return count("SELECT COUNT(*) AS countRow FROM cuisine WHERE name LIKE ?", "%" + "%");
+        return count("SELECT COUNT(*) AS countRow FROM cuisine WHERE name LIKE ?", "%" + name + "%");
     }
 
     public int countCuisinesByCategory(String category) {
-        return count("SELECT COUNT(*) AS countRow FROM cuisine WHERE categoryId LIKE ?", "%" + category + "%");
+        return count("SELECT COUNT(*) AS countRow FROM cuisine WHERE categoryId IN (SELECT id FROM Category WHERE name LIKE ?)", "%" + category + "%");
     }
 
     public int countTotal() {

@@ -90,7 +90,8 @@ public class Employee {
     }
 
     public void setName(String name) {
-        if (name == null || name.isBlank() || name.split(" ").length < 2) {
+        if (name == null || !name.matches("^[a-zA-ZÀ-ỹ]+(?:[ ][a-zA-ZÀ-ỹ]+)*$")) {
+            System.out.println(name);
             throw new IllegalArgumentException("Invalid name");
         }
         this.name = name;

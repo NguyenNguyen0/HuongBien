@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.huongbien.bus.PromotionBUS;
 import com.huongbien.entity.Promotion;
 import com.huongbien.utils.Pagination;
+import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -26,26 +27,46 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class PromotionManagementController implements Initializable {
-    @FXML private Label pageIndexLabel;
-    @FXML private ImageView clearSearchButton;
-    @FXML private TextField promotionSearchField;
-    @FXML private TextField promotionNameField;
-    @FXML private DatePicker startedDateDatePicker;
-    @FXML private DatePicker endedDateDatePicker;
-    @FXML private TextField discountField;
-    @FXML private ComboBox<String> promotionStatusComboBox;
-    @FXML private TextField minimumOrderField;
-    @FXML private ComboBox<String> memberShipLevelComboBox;
-    @FXML private TextArea promotionDescriptionTextArea;
-    @FXML private Button handleActionPromotionButton;
-    @FXML private Button swapModePromotionButton;
-    @FXML private ComboBox<String> filterPromotionStatusComboBox;
-    @FXML private TableView<Promotion> promotionTable;
-    @FXML private TableColumn<Promotion, String> promotionIdColumn;
-    @FXML private TableColumn<Promotion, Date> promotionStartedDateColumn;
-    @FXML private TableColumn<Promotion, Date> promotionEndedDateColumn;
-    @FXML private TableColumn<Promotion, Double> promotionDiscountColumn;
-    @FXML private TableColumn<Promotion, String> promotionMembershipLevelColumn;
+    @FXML
+    private Label pageIndexLabel;
+    @FXML
+    private ImageView clearSearchButton;
+    @FXML
+    private TextField promotionSearchField;
+    @FXML
+    private TextField promotionNameField;
+    @FXML
+    private DatePicker startedDateDatePicker;
+    @FXML
+    private DatePicker endedDateDatePicker;
+    @FXML
+    private TextField discountField;
+    @FXML
+    private ComboBox<String> promotionStatusComboBox;
+    @FXML
+    private TextField minimumOrderField;
+    @FXML
+    private ComboBox<String> memberShipLevelComboBox;
+    @FXML
+    private TextArea promotionDescriptionTextArea;
+    @FXML
+    private Button handleActionPromotionButton;
+    @FXML
+    private Button swapModePromotionButton;
+    @FXML
+    private ComboBox<String> filterPromotionStatusComboBox;
+    @FXML
+    private TableView<Promotion> promotionTable;
+    @FXML
+    private TableColumn<Promotion, String> promotionIdColumn;
+    @FXML
+    private TableColumn<Promotion, Date> promotionStartedDateColumn;
+    @FXML
+    private TableColumn<Promotion, Date> promotionEndedDateColumn;
+    @FXML
+    private TableColumn<Promotion, Double> promotionDiscountColumn;
+    @FXML
+    private TableColumn<Promotion, String> promotionMembershipLevelColumn;
 
     PromotionBUS promotionBUS = new PromotionBUS();
     Pagination<Promotion> promotionPagination;
@@ -54,6 +75,7 @@ public class PromotionManagementController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         clearSearchButton.setVisible(false);
+        changeHandleButtonModeToAddPromotion();
         disableInput();
         setComboBoxValue();
         setPromotionTableColumn();
@@ -172,7 +194,7 @@ public class PromotionManagementController implements Initializable {
         int itemPerPage = 7;
         int totalPromotions = promotionBUS.countTotalPromotionByStatus(status);
         boolean isRollBack = false;
-        promotionPagination  = new Pagination<>(
+        promotionPagination = new Pagination<>(
                 (offset, limit) -> promotionBUS.getPromotionByStatusWithPagination(offset, limit, status),
                 itemPerPage,
                 totalPromotions,
@@ -194,7 +216,9 @@ public class PromotionManagementController implements Initializable {
     }
 
     public void setPageIndexLabel() {
-        pageIndexLabel.setText(promotionPagination.getCurrentPageIndex() + "/" + promotionPagination.getTotalPages());
+        int currentPageIndex = promotionPagination.getCurrentPageIndex();
+        int totalPage = promotionPagination.getTotalPages() == 0 ? 1 : promotionPagination.getTotalPages();
+        pageIndexLabel.setText(currentPageIndex + "/" + totalPage);
     }
 
     public void setPromotionDataToForm(Promotion promotion) {
@@ -252,18 +276,28 @@ public class PromotionManagementController implements Initializable {
 
     public boolean validatePromotionData() {
         if (promotionNameField.getText().trim().isEmpty()) {
+            ToastsMessage.showMessage("Tên khuyến mãi không được để trống", "error");
             return false;
         }
         if (discountField.getText().trim().isEmpty()) {
+            ToastsMessage.showMessage("Giảm giá không được để trống", "error");
             return false;
         }
         if (endedDateDatePicker.getValue() == null) {
+            ToastsMessage.showMessage("Ngày kết thúc không được để trống", "error");
             return false;
         }
         if (startedDateDatePicker.getValue() == null) {
+            ToastsMessage.showMessage("Ngày bắt đầu không được để trống", "error");
             return false;
         }
-        return !endedDateDatePicker.getValue().isBefore(startedDateDatePicker.getValue());
+
+        if (endedDateDatePicker.getValue().isBefore(startedDateDatePicker.getValue())) {
+            ToastsMessage.showMessage("Ngày kết thúc không được trước ngày bắt đầu", "error");
+            return false;
+        }
+
+        return true;
     }
 
     public Promotion getPromotionFromForm() {
@@ -292,7 +326,9 @@ public class PromotionManagementController implements Initializable {
             setPromotionTableValue();
             setPageIndexLabel();
             clearPromotionForm();
-//            TODO: show toast message here
+            ToastsMessage.showMessage("Sửa khuyến mãi thành công", "success");
+        } else {
+            ToastsMessage.showMessage("Sửa khuyến mãi thất bại", "error");
         }
     }
 
@@ -304,7 +340,9 @@ public class PromotionManagementController implements Initializable {
             setPromotionTableValue();
             setPageIndexLabel();
             clearPromotionForm();
-//            TODO: show toast message here
+            ToastsMessage.showMessage("Thêm khuyến mãi thành công", "success");
+        } else {
+            ToastsMessage.showMessage("Thêm khuyến mãi thất bại", "error");
         }
     }
 

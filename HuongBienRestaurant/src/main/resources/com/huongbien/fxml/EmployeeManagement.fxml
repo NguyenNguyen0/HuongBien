@@ -211,7 +211,7 @@
                                     <Font size="24.0" />
                                  </font>
                                  <graphic>
-                                    <ImageView fitHeight="39.0" fitWidth="42.0">
+                                    <ImageView disable="true" fitHeight="39.0" fitWidth="42.0">
                                        <image>
                                           <Image url="@../icon/all/edit-icon.png" />
                                        </image>
