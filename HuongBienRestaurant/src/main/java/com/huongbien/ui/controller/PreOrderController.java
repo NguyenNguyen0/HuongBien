@@ -11,22 +11,33 @@ import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.ReservationDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
+import com.huongbien.service.QRCodeHandler;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -52,6 +63,14 @@ public class PreOrderController implements Initializable {
     @FXML private TextField nameField;
     @FXML private TextField noteField;
 
+    private VideoCapture capture;
+    private Timer timer;
+    private QRCodeHandler qrCodeHandler;
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
     //Controller area
     public RestaurantMainController restaurantMainController;
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
@@ -61,6 +80,7 @@ public class PreOrderController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            this.qrCodeHandler = new QRCodeHandler();
             setInfoPreOrder();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -163,9 +183,93 @@ public class PreOrderController implements Initializable {
         totalAmoutLabel.setText(String.format("%,.0f VNĐ", tableAmount + cuisineAmount));
     }
 
+    private void openSwingWindow() {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Cửa sổ quét mã QR");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(640, 480);
+            frame.setLayout(new BorderLayout());
+            frame.setLocationRelativeTo(null);
+            JLabel cameraLabel = new JLabel();
+            frame.add(cameraLabel, BorderLayout.CENTER);
+            frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    stopCamera();
+                }
+            });
+
+            frame.setVisible(true);
+            readQRCode(cameraLabel, frame);
+        });
+    }
+
+    private void readQRCode(JLabel cameraLabel, JFrame frame) {
+        capture = new VideoCapture(0);
+        if (!capture.isOpened()) {
+            ToastsMessage.showMessage("Không thể mở camera!", "error");
+            return;
+        }
+
+        timer = new Timer(100, e -> {
+            Mat frameMat = new Mat();
+            if (capture != null && capture.read(frameMat)) {
+                if (!frameMat.empty()) {
+                    BufferedImage bufferedImage = qrCodeHandler.matToBufferedImage(frameMat);
+                    String qrCodeContent = qrCodeHandler.decodeQRCode(bufferedImage);
+                    if (qrCodeContent != null) {
+                        try {
+                            updateCustomerFields(qrCodeContent);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (FileNotFoundException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        stopCamera();
+                        capture.release();
+                        cameraLabel.setIcon(null);
+                        frame.dispose();
+                    } else {
+                        ImageIcon icon = new ImageIcon(bufferedImage);
+                        cameraLabel.setIcon(icon);
+                    }
+                }
+            } else {
+                ToastsMessage.showMessage("Không thể đọc frame từ camera.", "error");
+            }
+        });
+
+        timer.start();
+    }
+
+    private void stopCamera() {
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+        }
+        if (capture != null && capture.isOpened()) {
+            capture.release();
+        }
+    }
+
+    private void updateCustomerFields(String qrCodeContent) throws SQLException, FileNotFoundException {
+        String[] parts = qrCodeContent.split(",");
+        if (parts.length >= 4) {
+            Platform.runLater(() -> {
+                customerIDField.setText(parts[0]);
+                nameField.setText(parts[1]);
+                String inputPhone = parts[3];
+                phoneNumField.setText(inputPhone);
+            });
+        }
+    }
+
     @FXML
     void onBackButtonClicked(ActionEvent event) throws IOException {
         restaurantMainController.openOrderTable();
+    }
+    @FXML
+    void onQRButtonClicked(ActionEvent event) throws IOException {
+        openSwingWindow();
     }
 
     @FXML

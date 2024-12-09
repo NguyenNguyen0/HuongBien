@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="988.0" prefWidth="1496.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="988.0" prefWidth="1496.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderController">
    <center>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
          <children>
@@ -386,6 +386,11 @@
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#onQRButtonClicked" prefHeight="70.0" prefWidth="200.0" text="Quét QR">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
