@@ -169,6 +169,7 @@ public class ReservationManagementController implements Initializable {
         tablePreOrderLabel.setText("");
         cuisinePreOrderLabel.setText("");
         depositPreOrderLabel.setText("");
+        refundDepositPreOrderLabel.setText("");
         notePreOrderLabel.setText("");
         disablePreOrderButton();
     }
@@ -224,7 +225,7 @@ public class ReservationManagementController implements Initializable {
         }
     }
 
-    public void writeInfoToTempJsonHandlers() throws IOException {
+    public void writeInfoJsonHandlers() throws IOException {
         int selectedIndex = paymentQueueTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             Integer numericalOrder = numericalPaymentQueueOrderColumn.getCellData(selectedIndex);
@@ -270,7 +271,6 @@ public class ReservationManagementController implements Initializable {
         int selectedIndex = paymentQueueTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             Integer numericalOrder = numericalPaymentQueueOrderColumn.getCellData(selectedIndex);
-            System.out.println("Xóa Numerical Order: " + numericalOrder);
             JsonArray paymentQueueArray = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
             int selectedPaymentQueueIndex = -1;
             for (int i = 0; i < paymentQueueArray.size(); i++) {
@@ -282,6 +282,7 @@ public class ReservationManagementController implements Initializable {
             }
             if (selectedPaymentQueueIndex != -1) {
                 paymentQueueArray.remove(selectedPaymentQueueIndex);
+                Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
                 ToastsMessage.showMessage("Đã xóa mục thanh toán với số thứ tự: " + numericalOrder, "success");
             } else {
                 ToastsMessage.showMessage("Không tìm thấy mục thanh toán với số thứ tự: " + numericalOrder, "warning");
@@ -291,7 +292,6 @@ public class ReservationManagementController implements Initializable {
         }
     }
 
-    //Event area
     @FXML
     void onPaymentQueueTableViewClicked(MouseEvent event) throws FileNotFoundException {
         int selectedIndex = paymentQueueTableView.getSelectionModel().getSelectedIndex();
@@ -352,11 +352,11 @@ public class ReservationManagementController implements Initializable {
 
     @FXML
     void onOrderPaymentButtonAction(ActionEvent event) throws IOException {
-        writeInfoToTempJsonHandlers();
+        writeInfoJsonHandlers();
     }
 
     @FXML
-    void onDeletePaymentQueueButtonClicked(ActionEvent event) throws FileNotFoundException {
+    void onDeletePaymentQueueButtonAction(ActionEvent event) throws FileNotFoundException {
         deleteInfoFromPaymentQueueJsonHandlers();
         paymentQueueTableView.getItems().clear();
         loadPaymentQueueDataFromJSON();
@@ -438,7 +438,7 @@ public class ReservationManagementController implements Initializable {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
             String id = reservation.getReservationId();
             ToastsMessage.showMessage("Đang cập nhật bàn cho đơn hàng đặt trước: " + id, "success");
-
+//
             //reservation
             JsonArray jsonArrayReservation = new JsonArray();
             JsonObject jsonObjectReservation = new JsonObject();
@@ -484,8 +484,43 @@ public class ReservationManagementController implements Initializable {
 
     @FXML
     void onConfirmTablePreOrderButtonAction(ActionEvent event) throws IOException {
-        //TODO: Receive Pre-Order
-        restaurantMainController.openOrderPayment();
+        ReservationDAO reservationDAO = ReservationDAO.getInstance();
+        int selectedIndex = preOrderTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex != -1) {
+            Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
+            //Write JSON
+            ////----Table
+            JsonArray jsonArrayTable = new JsonArray();
+            for (Table table : reservation.getTables()) {
+                JsonObject tableObject = new JsonObject();
+                tableObject.addProperty("Table ID", table.getId());
+                jsonArrayTable.add(tableObject);
+            }
+            ////----Customer
+            JsonArray jsonArrayCustomer = new JsonArray();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("Customer ID", reservation.getCustomer().getCustomerId());
+            jsonArrayCustomer.add(jsonObject);
+            ////----Cuisine
+            JsonArray jsonArrayCuisine = new JsonArray();
+            for (FoodOrder foodOrder : reservation.getFoodOrders()) {
+                JsonObject foodOrderObject = new JsonObject();
+                foodOrderObject.addProperty("Cuisine ID", foodOrder.getCuisine().getCuisineId());
+                foodOrderObject.addProperty("Cuisine Name", foodOrder.getCuisine().getName());
+                foodOrderObject.addProperty("Cuisine Price", foodOrder.getCuisine().getPrice());
+                foodOrderObject.addProperty("Cuisine Note", foodOrder.getNote());
+                foodOrderObject.addProperty("Cuisine Quantity", foodOrder.getQuantity());
+                foodOrderObject.addProperty("Cuisine Money", foodOrder.getQuantity() * foodOrder.getCuisine().getPrice());
+                jsonArrayCuisine.add(foodOrderObject);
+            }
+            Utils.writeJsonToFile(jsonArrayTable, Constants.TABLE_PATH);
+            Utils.writeJsonToFile(jsonArrayCustomer, Constants.CUSTOMER_PATH);
+            Utils.writeJsonToFile(jsonArrayCuisine, Constants.CUISINE_PATH);
+            reservationDAO.updateStatus(reservation.getReservationId(), Variable.statusReservation[1]);
+            restaurantMainController.openOrderPayment();
+        } else {
+            ToastsMessage.showMessage("Vui lòng chọn một đơn đặt để xác nhận", "warning");
+        }
     }
 
     @FXML
@@ -516,9 +551,9 @@ public class ReservationManagementController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.initStyle(StageStyle.UNDECORATED);
                 alert.setHeaderText("Thông báo");
-                alert.setContentText("Đơn hàng với ID: " + id + " có yêu cầu huỷ đặt trước"+"\n"
+                alert.setContentText("Đơn hàng với ID: " + id + " có yêu cầu huỷ đặt trước" + "\n"
                         + notify + "\n"
-                        + "Số tiền đặt cọc là " + Converter.formatMoney(deposit) + " VNĐ"+"\n"
+                        + "Số tiền đặt cọc là " + Converter.formatMoney(deposit) + " VNĐ" + "\n"
                         + "Bạn sẽ được hoàn tiền là: " + Converter.formatMoney(refundDeposit) + " VNĐ" + "\n\n"
                         + "Bạn có chắc chắn muốn huỷ đơn hàng này không?"
                 );

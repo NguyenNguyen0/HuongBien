@@ -353,7 +353,7 @@
                               </VBox>
                               <HBox alignment="BOTTOM_RIGHT" prefHeight="350.0" prefWidth="500.0">
                                  <children>
-                                    <Button fx:id="deletePaymentQueueButton" mnemonicParsing="false" onAction="#onDeletePaymentQueueButtonClicked" prefHeight="70.0" prefWidth="235.0" styleClass="white-color" text="Huỷ thanh toán">
+                                    <Button fx:id="deletePaymentQueueButton" mnemonicParsing="false" onAction="#onDeletePaymentQueueButtonAction" prefHeight="70.0" prefWidth="235.0" styleClass="white-color" text="Huỷ thanh toán">
                                        <font>
                                           <Font size="24.0" />
                                        </font>

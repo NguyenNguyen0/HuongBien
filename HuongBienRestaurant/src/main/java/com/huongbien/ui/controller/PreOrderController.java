@@ -280,10 +280,11 @@ public class PreOrderController implements Initializable {
         String[] parts = qrCodeContent.split(",");
         if (parts.length >= 4) {
             Platform.runLater(() -> {
-                customerIDField.setText(parts[0]);
-                nameField.setText(parts[1]);
-                phoneNumField.setText(parts[3]);
-                emailField.setText(parts[4]);
+                Customer customer = CustomerDAO.getInstance().getById(parts[0]);
+                customerIDField.setText(customer.getCustomerId() == null ? "" : customer.getCustomerId());
+                nameField.setText(customer.getName() == null ? "" : customer.getName());
+                phoneNumField.setText(customer.getPhoneNumber() == null ? "" : customer.getPhoneNumber());
+                emailField.setText(customer.getEmail() == null ? "" : customer.getEmail());
 
                 JsonArray jsonArray = new JsonArray();
                 JsonObject jsonObject = new JsonObject();
@@ -393,6 +394,7 @@ public class PreOrderController implements Initializable {
             ToastsMessage.showToastsMessage("Thông báo", "Vui lòng nhập đầy đủ thông tin khách hàng để thực hiện đăng ký");
             return;
         }
+
         if (customerIDField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initStyle(StageStyle.UNDECORATED);
