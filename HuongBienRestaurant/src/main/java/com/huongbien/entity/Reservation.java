@@ -30,8 +30,8 @@ public class Reservation {
 
     public Reservation(String reservationId, String partyType, int partySize, LocalDate reservationDate,
                        LocalTime reservationTime, LocalDate receiveDate, LocalTime receiveTime, String status,
-                       String note, double deposit, double refundDeposit, Payment payment, Employee employee,
-                       ArrayList<Table> tables, Customer customer, ArrayList<FoodOrder> foodOrders) {
+                       double deposit, double refundDeposit, String note, Payment payment, Employee employee,
+                       Customer customer, ArrayList<Table> tables, ArrayList<FoodOrder> foodOrders) {
         setReservationId(reservationId);
         setPartyType(partyType);
         setPartySize(partySize);
@@ -42,29 +42,6 @@ public class Reservation {
         setStatus(status);
         setDeposit(deposit);
         setRefundDeposit(refundDeposit);
-        setNote(note);
-        setPayment(payment);
-        setEmployee(employee);
-        setTables(tables);
-        setCustomer(customer);
-        setFoodOrders(foodOrders);
-    }
-
-    //    constructor tạo mới 1 đơn đạt bàn
-    public Reservation(String partyType, int partySize, LocalDate receiveDate,
-                       LocalTime receiveTime, double deposit, String note, Payment payment,
-                       Employee employee, Customer customer,
-                       ArrayList<Table> tables, ArrayList<FoodOrder> foodOrders) {
-        setReservationId(null);
-        setPartyType(partyType);
-        setPartySize(partySize);
-        setReservationDate(LocalDate.now());
-        setReservationTime(LocalTime.now());
-        setReceiveDate(receiveDate);
-        setReceiveTime(receiveTime);
-        setStatus(Variable.statusReservation[0]);
-        setDeposit(deposit);
-        setRefundDeposit(0);
         setNote(note);
         setPayment(payment);
         setEmployee(employee);
@@ -105,9 +82,6 @@ public class Reservation {
     }
 
     public void setPartySize(int partySize) {
-        if (partySize <= 1) {
-            throw new IllegalArgumentException("Party size must be greater than 1");
-        }
         this.partySize = partySize;
     }
 
@@ -206,9 +180,7 @@ public class Reservation {
         return receiveTime;
     }
 
-    public String getStatus() {
-        return status;
-    }
+    public String getStatus() { return status; }
 
     public double getDeposit() {
         return deposit;

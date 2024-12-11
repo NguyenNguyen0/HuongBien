@@ -14,12 +14,9 @@ public class ToastsMessage {
         notifications.hideAfter(Duration.seconds(2));
         notifications.position(Pos.TOP_RIGHT);
         notifications.show();
-        //TODO: Còn nhiều option khác có thể thêm vào
     }
 
-    //TODO: Có thể thêm nhiều hàm khác để tùy chỉnh thông báo theo chủ đề cụ thể gọi để dùng
     public static void showMessage(String message, String type) {
-        // Tạo thông báo
         Notifications notifications = Notifications.create()
                 .title("Thông báo")
                 .text(message)

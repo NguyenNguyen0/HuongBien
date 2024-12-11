@@ -5,11 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
 import com.huongbien.dao.EmployeeDAO;
-import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.Employee;
-import com.huongbien.entity.OrderDetail;
 import com.huongbien.utils.Converter;
-import com.huongbien.utils.RefreshJSON;
+import com.huongbien.utils.ClearJSON;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.animation.FadeTransition;
@@ -756,7 +754,7 @@ public class RestaurantMainController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            RefreshJSON.clearAllJSON();
+            ClearJSON.clearAllJson();
         }
     }
 }

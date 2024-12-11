@@ -184,7 +184,7 @@ public class    TableDAO extends GenericDAO<Table> {
 
     public List<String> getDistinctStatuses() {
         try {
-            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT status FROM [Table]");
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT DISTINCT status FROM [Table] WHERE status != N'Bàn đóng'");
             ResultSet resultSet = statement.executeQuery();
             List<String> statuses = new ArrayList<>();
             while (resultSet.next()) {

@@ -459,7 +459,8 @@ public class CustomerManagementController implements Initializable {
             String qrContent = selectedCustomer.getCustomerId() + ","
                     + selectedCustomer.getName() + ","
                     + selectedCustomer.getMembershipLevel() + ","
-                    + selectedCustomer.getPhoneNumber();
+                    + selectedCustomer.getPhoneNumber() + ","
+                    + selectedCustomer.getEmail();
 
             QRCodeHandler qrCodeHandler = new QRCodeHandler();
             qrCodeHandler.createQRCode(selectedCustomer, qrContent);
