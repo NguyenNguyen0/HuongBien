@@ -283,12 +283,8 @@ public class PreOrderController implements Initializable {
                 customerIDField.setText(parts[0]);
                 nameField.setText(parts[1]);
                 phoneNumField.setText(parts[3]);
+                emailField.setText(parts[4]);
 
-                //TODO: Update thêm Email label
-                emailField.setText("");
-
-                System.out.println(parts[0] +" "+ parts[1] +" "+ parts[2] +" "+ parts[3]);
-                //Write JSON: current customer
                 JsonArray jsonArray = new JsonArray();
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("Customer ID", parts[0]);
