@@ -1,12 +1,6 @@
 package com.huongbien.ui.controller;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.huongbien.config.Constants;
-import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.StatisticsDAO;
-import com.huongbien.entity.Employee;
 import com.huongbien.utils.Utils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,15 +13,10 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class RestaurantHomeController implements Initializable {
     @FXML private MediaView mediaView;
@@ -76,9 +65,9 @@ public class RestaurantHomeController implements Initializable {
     private void setStatistics() {
         try {
             totalCustomersField.setText(String.valueOf(StatisticsDAO.getTotalCustomers()));
-            totalRevenuesField.setText(Utils.formatMoney(StatisticsDAO.getTotalRevenues()));
+            totalRevenuesField.setText(Utils.formatMoney(StatisticsDAO.getTotalRevenue()));
             totalReservationField.setText(String.valueOf(StatisticsDAO.getTotalReservations()));
-            totalOrderField.setText(String.valueOf(StatisticsDAO.getTotalInvoices()));
+            totalOrderField.setText(String.valueOf(StatisticsDAO.getTotalOrders()));
         } catch (Exception e) {
             System.err.println("Error fetching statistics: " + e.getMessage());
         }

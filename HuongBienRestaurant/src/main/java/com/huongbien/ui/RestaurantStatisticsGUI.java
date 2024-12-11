@@ -18,7 +18,7 @@ public class RestaurantStatisticsGUI extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/huongbien/fxml/RestaurantStatistics.fxml"));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root, 1200, 700));
         primaryStage.setTitle("Statistics - Huong Bien Restaurant");
         primaryStage.setMaximized(true);

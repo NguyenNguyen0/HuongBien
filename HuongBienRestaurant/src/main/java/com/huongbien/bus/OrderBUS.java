@@ -12,7 +12,7 @@ public class OrderBUS {
         orderDao = OrderDAO.getInstance();
     }
 
-    public int getTotalOrderCount() {
+    public int countTotalOrders() {
         return orderDao.countTotal();
     }
 

@@ -34,6 +34,36 @@ public class CuisineDAO extends GenericDAO<Cuisine> {
         return cuisine;
     }
 
+    public List<String> getAllCuisineNames() {
+        List<String> cuisineNames = new ArrayList<>();
+        String sql = "SELECT name FROM cuisine";
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                cuisineNames.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return cuisineNames;
+    }
+
+    public List<String> getCuisineNamesByCategory(String categoryName) {
+        List<String> cuisineNames = new ArrayList<>();
+        String sql = "SELECT name FROM cuisine WHERE categoryId IN (SELECT id FROM Category WHERE name LIKE ?)";
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement(sql, "%" + categoryName + "%");
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                cuisineNames.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return cuisineNames;
+    }
+
     public List<Cuisine> getByName(String name) {
         return getMany("SELECT * FROM cuisine WHERE name LIKE ?", "%" + name + "%");
     }

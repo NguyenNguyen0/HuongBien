@@ -109,6 +109,10 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         return count(sqlQuery);
     }
 
+    public int countTotal() {
+        return count("SELECT COUNT(*) AS totalReservation FROM reservation");
+    }
+
     public boolean update(Reservation reservation) {
         String sql = """
                UPDATE reservation

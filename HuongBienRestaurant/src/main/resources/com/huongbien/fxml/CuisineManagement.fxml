@@ -60,7 +60,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="cuisineStatusComboBox" prefHeight="52.0" prefWidth="305.0" promptText="Trạng thái" />
+                        <ComboBox fx:id="cuisineStatusComboBox" prefHeight="52.0" prefWidth="305.0" promptText="Trạng thái" styleClass="textField-line-bot" />
                      </children>
                   </VBox>
                </children>
@@ -90,7 +90,7 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <ComboBox fx:id="cuisineCategoryComboBox" editable="true" prefHeight="54.0" prefWidth="279.0" promptText="Loại món" styleClass="textField-line-bot" />
+                              <ComboBox fx:id="cuisineCategoryComboBox" prefHeight="54.0" prefWidth="279.0" promptText="Loại món" styleClass="textField-line-bot" />
                            </children>
                         </HBox>
                      </children>

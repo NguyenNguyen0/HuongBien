@@ -13,6 +13,14 @@ public class CuisineBUS {
         cuisineDao = CuisineDAO.getInstance();
     }
 
+    public List<String> getAllCuisineNames() {
+        return cuisineDao.getAllCuisineNames();
+    }
+
+    public List<String> getCuisineNamesByCategory(String categoryName) {
+        return cuisineDao.getCuisineNamesByCategory(categoryName);
+    }
+
     public int countTotalCuisine() {
         return cuisineDao.countTotal();
     }

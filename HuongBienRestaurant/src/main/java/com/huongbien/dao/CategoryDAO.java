@@ -5,6 +5,7 @@ import com.huongbien.entity.Category;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,6 +27,20 @@ public class CategoryDAO extends GenericDAO<Category> {
         category.setName(resultSet.getString("name"));
         category.setDescription(resultSet.getString("description"));
         return category;
+    }
+
+    public List<String> getAllCategoryNames() {
+        try {
+            PreparedStatement statement = statementHelper.prepareStatement("SELECT name FROM category");
+            ResultSet resultSet = statement.executeQuery();
+            List<String> categoryNames = new ArrayList<>();
+            while (resultSet.next()) {
+                categoryNames.add(resultSet.getString("name"));
+            }
+            return categoryNames;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Category> getAll() {

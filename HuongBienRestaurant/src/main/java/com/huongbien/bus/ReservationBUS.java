@@ -13,6 +13,10 @@ public class ReservationBUS {
         reservationDao = ReservationDAO.getInstance();
     }
 
+    public int countTotalReservations() {
+        return reservationDao.countTotal();
+    }
+
     public List<Reservation> getReservationsByCustomerId(String customerId) {
         if (customerId.isBlank() || customerId.isEmpty()) return null;
         return reservationDao.getAllByCustomerId(customerId);

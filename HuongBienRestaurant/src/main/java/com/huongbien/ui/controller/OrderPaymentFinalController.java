@@ -187,7 +187,7 @@ public class OrderPaymentFinalController implements Initializable {
         double discountMoney = cuisineAmount * discount;
         double vat = cuisineAmount * 0.1;
         double finalAmount = tableAmount + cuisineAmount + vat - discountMoney;
-        finalAmountLabel.setText(Converter.formatMoney((int) finalAmount) + " VNĐ");
+        finalAmountLabel.setText(Converter.formatMoney(finalAmount) + " VNĐ");
 
         renderSuggestMoneyButtons(finalAmount);
     }

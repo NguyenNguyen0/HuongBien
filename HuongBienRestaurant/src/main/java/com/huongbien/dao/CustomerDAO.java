@@ -76,6 +76,18 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return getMany("SELECT * FROM Customer WHERE registrationDate = ?", date);
     }
 
+    public List<Customer> getNewCustomersInYear(int year) {
+        return getMany("SELECT * FROM Customer WHERE YEAR(registrationDate) = ?", year);
+    }
+
+    public List<Customer> getTopMembershipCustomers(int year, int limit) {
+        return getMany("SELECT * FROM Customer WHERE YEAR(registrationDate) = ? ORDER BY membershipLevel DESC OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY", year, limit);
+    }
+
+    public int countNewCustomerQuantityByYear(int year) {
+        return count("SELECT COUNT(*) FROM Customer WHERE YEAR(registrationDate) = ?", year);
+    }
+
     public int countTotalById(String id) {
         return count("SELECT COUNT(*) FROM Customer WHERE id LIKE ?", id + "%");
     }

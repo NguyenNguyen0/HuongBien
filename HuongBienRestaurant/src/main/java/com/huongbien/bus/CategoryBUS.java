@@ -13,6 +13,10 @@ public class CategoryBUS {
         categoryDao = CategoryDAO.getInstance();
     }
 
+    public List<String> getAllCategoryNames() {
+        return categoryDao.getAllCategoryNames();
+    }
+
     public List<Category> getAllCategory() {
         return categoryDao.getAll();
     }

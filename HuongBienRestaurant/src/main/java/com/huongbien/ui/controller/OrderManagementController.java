@@ -171,7 +171,7 @@ public class OrderManagementController implements Initializable {
     public void setOrderPaginationGetAllOrder() {
         boolean isRollback = false;
         int itemsPerPage = 10;
-        int totalItems = orderBUS.getTotalOrderCount();
+        int totalItems = orderBUS.countTotalOrders();
         orderPagination = new Pagination<>(
                 orderBUS::getAllWithPagination,
                 itemsPerPage,

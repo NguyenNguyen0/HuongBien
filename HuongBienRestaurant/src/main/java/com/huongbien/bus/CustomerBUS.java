@@ -46,6 +46,18 @@ public class CustomerBUS {
         return customerDao.getAllWithPagination(offset, limit);
     }
 
+    public List<Customer> getNewCustomersInYear(int year) {
+        return customerDao.getNewCustomersInYear(year);
+    }
+
+    public List<Customer> getTopMembershipCustomers(int year, int limit) {
+        return customerDao.getTopMembershipCustomers(year, limit);
+    }
+
+    public int getTotalCustomersQuantityByYear(int year) {
+        return customerDao.countNewCustomerQuantityByYear(year);
+    }
+
     public List<Customer> getCustomerInDay(LocalDate date) {
         return customerDao.getCustomerInDay(date);
     }
