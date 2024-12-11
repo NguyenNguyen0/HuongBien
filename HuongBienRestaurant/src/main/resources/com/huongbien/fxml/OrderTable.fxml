@@ -92,7 +92,7 @@
                            </HBox.margin>
                         </Label>
                         <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                        <Label fx:id="noteTableFeeLabel" text="Lưu ý: Dịch vụ bàn VIP là: " textFill="RED">
+                        <Label fx:id="tableFeeLabel" text="Lưu ý: Dịch vụ bàn VIP là: " textFill="RED">
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
@@ -240,7 +240,7 @@
             </VBox>
             <HBox alignment="BOTTOM_CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onClearChooserTableButtonAction" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: white;">
+                  <Button mnemonicParsing="false" onAction="#onClearTableButtonAction" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: white;">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -263,7 +263,7 @@
                         <Font name="System Bold" size="30.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onChooseCuisineButtonClicked" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tại chỗ">
+                  <Button mnemonicParsing="false" onAction="#onOrderCuisineButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tại chỗ">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>

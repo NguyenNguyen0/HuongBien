@@ -6,12 +6,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.ReservationDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
-import com.huongbien.utils.RefreshJSON;
+import com.huongbien.utils.ClearJSON;
+import com.huongbien.utils.Converter;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
 import javafx.beans.property.SimpleObjectProperty;
@@ -24,15 +26,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ReservationManagementController implements Initializable {
@@ -79,13 +84,15 @@ public class ReservationManagementController implements Initializable {
     @FXML
     private TableColumn<Reservation, String> partyTypePreOrderColumn;
     @FXML
+    private ComboBox<String> statusPreOrderComboBox;
+    @FXML
     private DatePicker receivePreOrderDatePicker;
     @FXML
     private Button editPreOrderButton;
     @FXML
     private Button confirmTablePreOrderButton;
     @FXML
-    private Button deletePreOrderButton;
+    private Button cancelPreOrderButton;
     @FXML
     private Label countPreOrderLabel;
     @FXML
@@ -96,6 +103,8 @@ public class ReservationManagementController implements Initializable {
     private Label cuisinePreOrderLabel;
     @FXML
     private Label depositPreOrderLabel;
+    @FXML
+    private Label refundDepositPreOrderLabel;
     @FXML
     private Label notePreOrderLabel;
 
@@ -115,8 +124,8 @@ public class ReservationManagementController implements Initializable {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        //Payment Queue
         loadPaymentQueueDataFromJSON();
+
         //Pre-Order
         setPreOrderTableViewColumn();
     }
@@ -133,13 +142,13 @@ public class ReservationManagementController implements Initializable {
 
     private void disablePreOrderButton() {
         editPreOrderButton.setVisible(false);
-        deletePreOrderButton.setVisible(false);
+        cancelPreOrderButton.setVisible(false);
         confirmTablePreOrderButton.setVisible(false);
     }
 
     private void enablePreOrderButton() {
         editPreOrderButton.setVisible(true);
-        deletePreOrderButton.setVisible(true);
+        cancelPreOrderButton.setVisible(true);
         confirmTablePreOrderButton.setVisible(true);
     }
 
@@ -153,6 +162,8 @@ public class ReservationManagementController implements Initializable {
         countPaymentQueueLabel.setText("( " + Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH).size() + " )");
         disablePayQueueButton();
         //Pre-Order
+        statusPreOrderComboBox.getItems().addAll(Variable.statusReservation[0], Variable.statusReservation[1], Variable.statusReservation[2]);
+        statusPreOrderComboBox.getSelectionModel().selectFirst();
         receivePreOrderDatePicker.setValue(LocalDate.now());
         customerPreOrderLabel.setText("");
         tablePreOrderLabel.setText("");
@@ -249,12 +260,9 @@ public class ReservationManagementController implements Initializable {
             customerArray.add(customerObject);
             Utils.writeJsonToFile(customerArray, Constants.CUSTOMER_PATH);
             //
-            //remove after write CUISINE.json and TABLE.json
             paymentQueueArray.remove(selectedPaymentQueueIndex);
             Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
             restaurantMainController.openOrderPayment();
-        } else {
-            System.out.println("Chưa chọn hàng trong bảng!");
         }
     }
 
@@ -274,13 +282,12 @@ public class ReservationManagementController implements Initializable {
             }
             if (selectedPaymentQueueIndex != -1) {
                 paymentQueueArray.remove(selectedPaymentQueueIndex);
-                Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
-                System.out.println("Đã xóa mục thanh toán có Numerical Order: " + numericalOrder);
+                ToastsMessage.showMessage("Đã xóa mục thanh toán với số thứ tự: " + numericalOrder, "success");
             } else {
-                System.out.println("Không tìm thấy mục thanh toán với Numerical Order: " + numericalOrder);
+                ToastsMessage.showMessage("Không tìm thấy mục thanh toán với số thứ tự: " + numericalOrder, "warning");
             }
         } else {
-            System.out.println("Chưa chọn hàng trong bảng!");
+            ToastsMessage.showMessage("Vui lòng chọn một thanh toán để xóa", "warning");
         }
     }
 
@@ -360,12 +367,12 @@ public class ReservationManagementController implements Initializable {
     private void setPreOrderTableViewColumn() {
         ReservationDAO reservationDAO = ReservationDAO.getInstance();
         //set Quantity Pre Order
-        int quantity = reservationDAO.getCountReservationNotReceiveByDate(receivePreOrderDatePicker.getValue());
+        int quantity = reservationDAO.getCountStatusReservationByDate(receivePreOrderDatePicker.getValue(), statusPreOrderComboBox.getValue());
         countPreOrderLabel.setText("( " + quantity + " )");
         //table view
         preOrderTableView.getItems().clear();
         preOrderTableView.setPlaceholder(new Label("Không có dữ liệu"));
-        List<Reservation> reservationList = reservationDAO.getReservationNotReceiveByDate(receivePreOrderDatePicker.getValue());
+        List<Reservation> reservationList = reservationDAO.getStatusReservationByDate(receivePreOrderDatePicker.getValue(), statusPreOrderComboBox.getValue());
         idPreOrderColumn.setCellValueFactory(new PropertyValueFactory<>("reservationId"));
         customerPreOrderColumn.setCellValueFactory(cellData -> {
             Customer customer = cellData.getValue().getCustomer();
@@ -380,6 +387,11 @@ public class ReservationManagementController implements Initializable {
 
     @FXML
     void receivePreOrderDatePickerAction(ActionEvent event) {
+        setPreOrderTableViewColumn();
+    }
+
+    @FXML
+    void statusPreOrderComboBoxAction(ActionEvent event) {
         setPreOrderTableViewColumn();
     }
 
@@ -405,8 +417,9 @@ public class ReservationManagementController implements Initializable {
                 tableInfo.setLength(tableInfo.length() - 2);
             }
             tablePreOrderLabel.setText(tableInfo.toString());
-            cuisinePreOrderLabel.setText(reservation.getFoodOrders().size() + " món");
+            cuisinePreOrderLabel.setText(reservation.getFoodOrders().size() + " món"); //TODO: sai số lượng món
             depositPreOrderLabel.setText(String.format("%,.0f VNĐ", reservation.getDeposit()));
+            refundDepositPreOrderLabel.setText(String.format("%,.0f VNĐ", reservation.getRefundDeposit()));
             notePreOrderLabel.setText(reservation.getNote() != null ? reservation.getNote() : "");
             enablePreOrderButton();
         }
@@ -414,7 +427,7 @@ public class ReservationManagementController implements Initializable {
 
     @FXML
     void onPreOrderButtonAction(ActionEvent event) throws IOException {
-        RefreshJSON.clearAllJSONWithoutLoginSession();
+        ClearJSON.clearAllJsonWithoutLoginSession();
         restaurantMainController.openPreOrder();
     }
 
@@ -424,7 +437,7 @@ public class ReservationManagementController implements Initializable {
         if (selectedIndex != -1) {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
             String id = reservation.getReservationId();
-            ToastsMessage.showMessage("Đang cập nhật bàn cho đơn hàng đặt trước " + id, "success");
+            ToastsMessage.showMessage("Đang cập nhật bàn cho đơn hàng đặt trước: " + id, "success");
 
             //reservation
             JsonArray jsonArrayReservation = new JsonArray();
@@ -476,7 +489,56 @@ public class ReservationManagementController implements Initializable {
     }
 
     @FXML
-    void onDeletePreOrderButtonClicked(ActionEvent event) {
+    void onCancelPreOrderButtonAction(ActionEvent event) {
+        ReservationDAO reservationDAO = ReservationDAO.getInstance();
+        int selectedIndex = preOrderTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex != -1) {
+            Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
+            String id = reservation.getReservationId();
+            String status = reservation.getStatus();
+            double deposit = reservation.getDeposit();
+            double refundDeposit = 0;
+            if (status.equals(Variable.statusReservation[0])) {
+                //deposit refund processing
+                ////---Check deposit refund by datetime (ke tu luc dat den truoc luc huy la 12h 50%, con lai 0%)
+                LocalDateTime reservationDateTime = LocalDateTime.of(reservation.getReservationDate(), reservation.getReservationTime());
+                LocalDateTime deadline = reservationDateTime.plusHours(12);
+                LocalDateTime now = LocalDateTime.now();
+                String notify;
 
+                if (now.isBefore(deadline)) {
+                    refundDeposit = deposit / 2;
+                    notify = "Đơn đặt huỷ trước 12h, bạn sẽ nhận lại 50% số tiền đặt cọc.";
+                } else {
+                    notify = "Đơn đặt huỷ sau 12h, bạn sẽ không nhận lại số tiền đặt cọc.";
+                }
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.initStyle(StageStyle.UNDECORATED);
+                alert.setHeaderText("Thông báo");
+                alert.setContentText("Đơn hàng với ID: " + id + " có yêu cầu huỷ đặt trước"+"\n"
+                        + notify + "\n"
+                        + "Số tiền đặt cọc là " + Converter.formatMoney(deposit) + " VNĐ"+"\n"
+                        + "Bạn sẽ được hoàn tiền là: " + Converter.formatMoney(refundDeposit) + " VNĐ" + "\n\n"
+                        + "Bạn có chắc chắn muốn huỷ đơn hàng này không?"
+                );
+                ButtonType btn_ok = new ButtonType("Đồng ý");
+                ButtonType btn_cancel = new ButtonType("Không");
+                alert.getButtonTypes().setAll(btn_ok, btn_cancel);
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == btn_ok) {
+                    reservationDAO.updateRefundDeposit(id, refundDeposit);
+                    reservationDAO.updateStatus(id, Variable.statusReservation[2]);
+                    setPreOrderTableViewColumn();
+                    ToastsMessage.showMessage("Đã huỷ đơn đặt ID: " + id + ", thành công", "success");
+                    ToastsMessage.showMessage("Đã hoàn số tiền: " + Converter.formatMoney(refundDeposit) + " VNĐ", "success");
+                }
+            } else {
+                ToastsMessage.showMessage("Đơn hàng đang trạng thái " + status + ", nên không thể huỷ", "warning");
+            }
+        } else {
+            ToastsMessage.showMessage("Vui lòng chọn một đơn đặt để huỷ", "warning");
+        }
     }
 }

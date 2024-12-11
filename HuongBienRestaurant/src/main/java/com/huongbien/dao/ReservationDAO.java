@@ -1,7 +1,5 @@
 package com.huongbien.dao;
 
-import com.huongbien.bus.ReservationBUS;
-import com.huongbien.config.Variable;
 import com.huongbien.entity.FoodOrder;
 import com.huongbien.entity.Reservation;
 import com.huongbien.entity.Table;
@@ -68,13 +66,20 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         return getMany("SELECT * FROM reservation");
     }
 
-    //get bàn chưa nhận theo ngày chỉ định
-    public List<Reservation> getReservationNotReceiveByDate(LocalDate date) {
-        return getMany("SELECT * FROM reservation WHERE status = ? AND receiveDate = ?", Variable.statusReservation[0], date);
+    public List<Reservation> getStatusReservationByDate(LocalDate date, String status) {
+        return getMany("SELECT * FROM reservation WHERE status = ? AND receiveDate = ?", status, date);
     }
 
-    public int getCountReservationNotReceiveByDate(LocalDate date){
-        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND receiveDate = ?", Variable.statusReservation[0], date);
+    public int getCountStatusReservationByDate(LocalDate date, String status){
+        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND receiveDate = ?", status, date);
+    }
+
+    public void updateStatus (String reservationId, String status){
+        update("UPDATE reservation SET status = ? WHERE id = ?", status, reservationId);
+    }
+
+    public void updateRefundDeposit (String reservationId, double refundDeposit){
+        update("UPDATE reservation SET refundDeposit = ? WHERE id = ?", refundDeposit, reservationId);
     }
 
     public Reservation getById(String id) {

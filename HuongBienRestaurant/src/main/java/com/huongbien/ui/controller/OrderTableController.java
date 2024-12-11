@@ -38,23 +38,38 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OrderTableController implements Initializable {
-    @FXML public Label statisticalOverviewLabel;
-    @FXML public Label currentFloorLabel;
-    @FXML public Label statisticalFloorLabel;
-    @FXML private ScrollPane orderTableScrollPane;
-    @FXML private GridPane orderTableGridPane;
-    @FXML public ComboBox<String> tableFloorComboBox;
-    @FXML public ComboBox<String> tableStatusComboBox;
-    @FXML public ComboBox<String> tableTypeComboBox;
-    @FXML private ComboBox<String> tableSeatsComboBox;
-    @FXML public TabPane tableInfoTabPane;
-    @FXML public Label tableQuantityLabel;
-    @FXML public Label seatTotalLabel;
-    @FXML public Label tableAmountLabel;
-    @FXML public Label noteTableFeeLabel;
+    @FXML
+    public Label statisticalOverviewLabel;
+    @FXML
+    public Label currentFloorLabel;
+    @FXML
+    public Label statisticalFloorLabel;
+    @FXML
+    private ScrollPane orderTableScrollPane;
+    @FXML
+    private GridPane orderTableGridPane;
+    @FXML
+    public ComboBox<String> tableFloorComboBox;
+    @FXML
+    public ComboBox<String> tableStatusComboBox;
+    @FXML
+    public ComboBox<String> tableTypeComboBox;
+    @FXML
+    private ComboBox<String> tableSeatsComboBox;
+    @FXML
+    public TabPane tableInfoTabPane;
+    @FXML
+    public Label tableQuantityLabel;
+    @FXML
+    public Label seatTotalLabel;
+    @FXML
+    public Label tableAmountLabel;
+    @FXML
+    public Label tableFeeLabel;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
+
     public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
         this.restaurantMainController = restaurantMainController;
     }
@@ -62,8 +77,8 @@ public class OrderTableController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        noteTableFeeLabel.setText(noteTableFeeLabel.getText()+Converter.formatMoney(Variable.tableVipPrice)+" VNĐ");
-        loadTablesToGridPane(Variable.floor , Variable.status, Variable.tableTypeName, Variable.seats); //value mặc định
+        tableFeeLabel.setText(tableFeeLabel.getText() + Converter.formatMoney(Variable.tableVipPrice) + " VNĐ");
+        loadTablesToGridPane(Variable.floor, Variable.status, Variable.tableTypeName, Variable.seats); //value mặc định
         setComboBoxValue();
         statisticalRestaurant(Variable.floor);
         try {
@@ -72,14 +87,15 @@ public class OrderTableController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
     private void statisticalRestaurant(int floor) {
         int statisticalOverviewTableEmpty = TableDAO.getInstance().getstatisticalOverviewTableEmpty();
         int statisticalOverview = TableDAO.getInstance().getstatisticalOverviewTable();
         int statisticalFloorTableEmpty = TableDAO.getInstance().getstatisticalFloorTableEmpty(floor);
         int statisticalFloor = TableDAO.getInstance().getstatisticalFloorTable(floor);
-        currentFloorLabel.setText(floor == 0 ? "Tầng trệt:" : "Tầng " + floor+":");
-        statisticalOverviewLabel.setText("("+statisticalOverviewTableEmpty+"/"+statisticalOverview+")");
-        statisticalFloorLabel.setText("("+statisticalFloorTableEmpty+"/"+statisticalFloor+")");
+        currentFloorLabel.setText(floor == 0 ? "Tầng trệt:" : "Tầng " + floor + ":");
+        statisticalOverviewLabel.setText("(" + statisticalOverviewTableEmpty + "/" + statisticalOverview + ")");
+        statisticalFloorLabel.setText("(" + statisticalFloorTableEmpty + "/" + statisticalFloor + ")");
     }
 
     //---
@@ -111,7 +127,7 @@ public class OrderTableController implements Initializable {
 
     private List<Table> getTableDataByCriteria(int floor, String status, String type, String seat) {
         TableDAO tableDAO = TableDAO.getInstance();
-        return tableDAO.getByCriteria(String.valueOf(floor), status, type, seat); //Ép kiểu floor => string để dùng nối chuỗi SQL query đơn giản hơn
+        return tableDAO.getByCriteria(String.valueOf(floor), status, type, seat);
     }
 
     private void setComboBoxValue() {
@@ -292,7 +308,7 @@ public class OrderTableController implements Initializable {
     }
 
     @FXML
-    void onChooseCuisineButtonClicked(ActionEvent event) throws IOException {
+    void onOrderCuisineButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray;
         try {
             jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
@@ -300,7 +316,7 @@ public class OrderTableController implements Initializable {
             return;
         }
         if (jsonArray.isEmpty()) {
-            ToastsMessage.showToastsMessage("Nhắc nhở","Vui lòng chọn bàn");
+            ToastsMessage.showToastsMessage("Nhắc nhở", "Vui lòng chọn bàn");
             return;
         }
         restaurantMainController.openOrderCuisine();
@@ -308,25 +324,14 @@ public class OrderTableController implements Initializable {
 
     @FXML
     void onPreOrderButtonAction(ActionEvent event) throws IOException {
-        JsonArray jsonArray;
-        try {
-            jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
-        } catch (FileNotFoundException e) {
-            System.out.println("File không tồn tại.");
-            return;
-        }
-        if (jsonArray.isEmpty()) {
-            ToastsMessage.showToastsMessage("Nhắc nhở","Vui lòng chọn bàn");
-            return;
-        }
         restaurantMainController.openPreOrder();
     }
 
     @FXML
-    void onClearChooserTableButtonAction(ActionEvent event) throws IOException {
+    void onClearTableButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         if (jsonArray.isEmpty()) {
-            ToastsMessage.showToastsMessage("Nhắc nhở","Vui lòng chọn bàn");
+            ToastsMessage.showToastsMessage("Nhắc nhở", "Vui lòng chọn bàn");
             return;
         }
 
