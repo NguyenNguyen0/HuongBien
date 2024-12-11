@@ -90,5 +90,5 @@ public class PromotionBUS {
         return promotionDao.updateInfo(promotion);
     }
 
-    public List<Promotion> getPaymentPromotion(int memberShipLevel){ return promotionDao.getPaymentPromotion(memberShipLevel); }
+    public List<Promotion> getPaymentPromotion(int memberShipLevel, double totalMoney){ return promotionDao.getPaymentPromotion(memberShipLevel, totalMoney); }
 }

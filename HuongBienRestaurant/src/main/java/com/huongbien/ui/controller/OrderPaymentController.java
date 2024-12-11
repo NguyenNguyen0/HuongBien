@@ -208,12 +208,19 @@ public class OrderPaymentController implements Initializable {
         readCumtomerExistsFromJSON();
     }
 
-    public void setPromotionTableValue() {
+    public void setPromotionTableValue() throws FileNotFoundException {
+        double totalAmount = 0;
+        JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
+        for (JsonElement element : jsonArrayCuisine) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            double cuisineMoney = jsonObject.get("Cuisine Money").getAsDouble();
+            totalAmount += cuisineMoney;
+        }
         promotionTableView.getItems().clear();
         PromotionBUS promotionBUS = new PromotionBUS();
         if (!customerRankField.getText().isEmpty()) {
             int memberShipLevel = Utils.toIntMembershipLevel(customerRankField.getText());
-            List<Promotion> promotionList = promotionBUS.getPaymentPromotion(memberShipLevel);
+            List<Promotion> promotionList = promotionBUS.getPaymentPromotion(memberShipLevel, totalAmount);
             promotionList.sort(Comparator.comparing(Promotion::getDiscount).reversed());
 
             ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
@@ -268,7 +275,7 @@ public class OrderPaymentController implements Initializable {
         double discount = 0.0;
         if(!customerRankField.getText().isEmpty()){
             PromotionDAO promotionDAO = PromotionDAO.getInstance();
-            List<Promotion> promotionList = promotionDAO.getPaymentPromotion(Utils.toIntMembershipLevel(customerRankField.getText()));
+            List<Promotion> promotionList = promotionDAO.getPaymentPromotion(Utils.toIntMembershipLevel(customerRankField.getText()), totalAmount);
             ObservableList<Promotion> listPromotion = FXCollections.observableArrayList(promotionList);
             if (!listPromotion.isEmpty()) {
                 Promotion maxDiscountPromotion = listPromotion.stream()
