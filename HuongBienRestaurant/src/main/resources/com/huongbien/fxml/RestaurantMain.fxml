@@ -905,12 +905,12 @@
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Tổng số giờ làm tích luỹ:">
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Số giờ đã làm hôm nay:">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="worksHourDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                      <Label fx:id="countHourWorkDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
                                                          <font>
                                                             <Font name="System Bold" size="25.0" />
                                                          </font>
@@ -919,12 +919,12 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Số giờ đã làm hôm nay:">
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Tổng số giờ làm tích luỹ:">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="countHourWorkDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                      <Label fx:id="worksHourDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
                                                          <font>
                                                             <Font name="System Bold" size="25.0" />
                                                          </font>
