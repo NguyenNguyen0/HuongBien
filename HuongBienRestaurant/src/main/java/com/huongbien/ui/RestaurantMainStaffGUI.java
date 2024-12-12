@@ -11,7 +11,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Objects;
 
-public class RestaurantMainGUI extends Application {
+public class RestaurantMainStaffGUI extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -19,7 +19,7 @@ public class RestaurantMainGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/huongbien/fxml/RestaurantMain.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/huongbien/fxml/RestaurantMainStaff.fxml")));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(new Image("/com/huongbien/icon/favicon/favicon-logo-restaurant-128px.png"));
         primaryStage.setScene(new Scene(root, 1200, 700));

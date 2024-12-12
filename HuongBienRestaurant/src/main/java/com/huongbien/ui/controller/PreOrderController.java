@@ -32,7 +32,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.jetbrains.annotations.NotNull;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -96,10 +95,14 @@ public class PreOrderController implements Initializable {
     }
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
 
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -300,7 +303,11 @@ public class PreOrderController implements Initializable {
 
     @FXML
     void onBackButtonAction(ActionEvent event) throws IOException {
-        restaurantMainController.openOrderTable();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openOrderTable();
+        } else {
+            restaurantMainStaffController.openOrderTable();
+        }
     }
 
     @FXML
@@ -310,7 +317,11 @@ public class PreOrderController implements Initializable {
 
     @FXML
     void onReservationManagementButtonAction(ActionEvent event) throws IOException {
-        restaurantMainController.openReservationManagement();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openReservationManagement();
+        } else {
+            restaurantMainStaffController.openReservationManagement();
+        }
     }
 
     @FXML
@@ -329,12 +340,20 @@ public class PreOrderController implements Initializable {
 
     @FXML
     void onEditTableButtonAction(ActionEvent event) throws IOException {
-        restaurantMainController.openOrderTable();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openOrderTable();
+        } else {
+            restaurantMainStaffController.openOrderTable();
+        }
     }
 
     @FXML
     void onPreOrderCuisineButtonAction(ActionEvent event) throws IOException {
-        restaurantMainController.openPreOrderCuisine();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openPreOrderCuisine();
+        } else {
+            restaurantMainStaffController.openPreOrderCuisine();
+        }
     }
 
     @FXML
@@ -524,7 +543,7 @@ public class PreOrderController implements Initializable {
                 }
                 String tableInfo = "Không xác định";
 
-                if (jsonArrayTable != null && jsonArrayTable.size() > 0) {
+                if (!jsonArrayTable.isEmpty()) {
                     JsonObject tableObject = jsonArrayTable.get(0).getAsJsonObject();
                     tableInfo = tableObject.get("Table ID").getAsString();
                 }
@@ -558,9 +577,8 @@ public class PreOrderController implements Initializable {
                         "<p style=\"margin-top: 20px;\">Trân trọng,<br><b>Nhà Hàng Hương Biển</b></p>" +
                         "</body>" +
                         "</html>";
-                String emailContent = htmlContent;
 
-                EmailService.sendEmailWithReservation(customer.getEmail(), "Thông tin đặt trước", emailContent, AppConfig.getEmailUsername(), AppConfig.getEmailPassword());
+                EmailService.sendEmailWithReservation(customer.getEmail(), "Thông tin đặt trước", htmlContent, AppConfig.getEmailUsername(), AppConfig.getEmailPassword());
                 ToastsMessage.showMessage("Tạo đơn đặt trước thành công", "success");
             } else {
                 ToastsMessage.showMessage("Tạo đơn đặt trước thất bại, vui lòng thử lại", "error");
@@ -578,18 +596,12 @@ public class PreOrderController implements Initializable {
             }
         }
 
-        //Delay 1s để thông báo thao tác hợp lệ rồi mới chuyển trang
-        PauseTransition pause = new PauseTransition(Duration.seconds(1));
-        pause.setOnFinished(e -> {
-            try {
-                ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
-                restaurantMainController.openReservationManagement();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        System.out.println(reservationID);
-        pause.play();
+        ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openReservationManagement();
+        } else {
+            restaurantMainStaffController.openReservationManagement();
+        }
     }
 
     @FXML

@@ -91,7 +91,6 @@ public class CuisineManagementController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         clearCuisineSearchButton.setVisible(false);
         setHandleActionButtonToAddCuisine();
-
         setSearchMethodComboBoxValue();
         setCuisinePaginationGetAll();
         setCuisineTableColumns();

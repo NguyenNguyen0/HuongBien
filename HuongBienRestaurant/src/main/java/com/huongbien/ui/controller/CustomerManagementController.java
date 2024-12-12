@@ -113,7 +113,6 @@ public class CustomerManagementController implements Initializable {
 
     private void setCustomerTableColumns() {
         customerTable.setPlaceholder(new Label("Không có dữ liệu"));
-
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         customerGenderColumn.setCellValueFactory(cellData -> {

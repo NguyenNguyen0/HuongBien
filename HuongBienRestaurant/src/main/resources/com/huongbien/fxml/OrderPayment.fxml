@@ -20,11 +20,11 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="898.0" prefWidth="1730.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderPaymentController">
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <VBox style="-fx-background-color: #1D557E;" styleClass="border-line-bottom">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="730.0" style="-fx-background-color: #1D557E;">
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="730.0">
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -401,7 +401,7 @@
                               <Insets left="20.0" right="20.0" />
                            </padding>
                         </VBox>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1100.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#onSavePaymentQueueButtonClicked" prefHeight="60.0" prefWidth="200.0" text="Lưu tạm">
                                  <HBox.margin>

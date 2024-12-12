@@ -51,9 +51,14 @@ public class PreOrderCuisineController implements Initializable {
     @FXML public ComboBox<Pair<String, String>> categoryComboBox;
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
+
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -196,7 +201,11 @@ public class PreOrderCuisineController implements Initializable {
 
     @FXML
     void onUpdateCuisineButtonAction(ActionEvent event) throws IOException {
-        restaurantMainController.openPreOrder();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openPreOrder();
+        } else {
+            restaurantMainStaffController.openPreOrder();
+        }
     }
 
     @FXML

@@ -1,22 +1,9 @@
 /*tab pane*/
 /*theme*/
-.main-color {
-    -fx-background-color: #2E3192;
-}
-
-.white-color {
-    -fx-background-color: white;
-    -fx-text-fill: black;
-    -fx-font-weight: bold;
-}
-
-.transparent-color {
-    -fx-background-color: transparent;
-}
 
 * {
-    -fx-primary-color:  #2E3192;
-    -fx-secondary-color: #4B6EAF;
+    -fx-primary-color:  #1D557E;
+    -fx-secondary-color: #7890b7;
     -fx-focus-color: -fx-secondary-color;
 }
 
@@ -78,7 +65,7 @@
 
 .table-row-cell:selected {
     -fx-text-fill: white;
-    -fx-background-color: #4B6EAF;
+    -fx-background-color: #ccc;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" style="-fx-background-color: white;" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" stylesheets="@../css/ReservationManagement.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.ReservationManagementController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -24,9 +24,9 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <HBox alignment="CENTER" prefWidth="1675.0" style="-fx-background-color: #2E3192;">
+                        <HBox alignment="CENTER" prefWidth="1675.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt chỗ">
+                              <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 20px;" text="Đặt chỗ">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
@@ -34,7 +34,7 @@
                                     <Font name="System Bold" size="24.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="editPreOrderButton" mnemonicParsing="false" onAction="#onEditPreOrderButtonAction" prefHeight="55.0" prefWidth="200.0" style="-fx-background-color: white;" text="Sửa đặt chỗ">
+                              <Button fx:id="editPreOrderButton" mnemonicParsing="false" onAction="#onEditPreOrderButtonAction" prefHeight="55.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 20px;" text="Sửa đặt chỗ">
                                  <font>
                                     <Font name="System Bold" size="24.0" />
                                  </font>
@@ -45,9 +45,9 @@
                               <Pane prefHeight="55.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
                               <HBox alignment="CENTER" prefHeight="60.0">
                                  <children>
-                                    <Label text="Ngày nhận bàn" textFill="WHITE">
+                                    <Label text="Ngày nhận bàn">
                                        <font>
-                                          <Font name="System Bold" size="24.0" />
+                                          <Font name="System Bold" size="25.0" />
                                        </font>
                                        <HBox.margin>
                                           <Insets right="20.0" />
@@ -100,108 +100,108 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <HBox prefHeight="350.0" prefWidth="1675.0" style="-fx-background-color: #2E3192;">
+                        <HBox prefHeight="350.0" prefWidth="1675.0" style="-fx-background-color: white;">
                            <children>
                               <VBox prefHeight="200.0" prefWidth="499.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <Label prefHeight="34.0" prefWidth="400.0" text="Thông tin đặt trước của ông/bà:" textFill="WHITE">
+                                          <Label prefHeight="34.0" prefWidth="400.0" text="Thông tin đặt trước của ông/bà:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="customerPreOrderLabel" maxWidth="760.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="customerPreOrderLabel" maxWidth="760.0" text="Unknown">
                                              <font>
-                                                <Font name="System Bold" size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefWidth="400.0" text="Khu vực bàn:" textFill="WHITE">
+                                          <Label prefWidth="400.0" text="Khu vực bàn:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="tablePreOrderLabel" maxWidth="690.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="tablePreOrderLabel" maxWidth="690.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefHeight="34.0" prefWidth="400.0" text="Yêu cầu đặt món trước:" textFill="WHITE">
+                                          <Label prefHeight="34.0" prefWidth="400.0" text="Yêu cầu đặt món trước:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="cuisinePreOrderLabel" maxWidth="760.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="cuisinePreOrderLabel" maxWidth="760.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefWidth="400.0" text="Ghi chú:" textFill="WHITE">
+                                          <Label prefWidth="400.0" text="Ghi chú:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="notePreOrderLabel" prefHeight="34.0" prefWidth="760.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="notePreOrderLabel" prefHeight="34.0" prefWidth="760.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefWidth="400.0" text="Tiền đặt trước (VNĐ):" textFill="WHITE">
+                                          <Label prefWidth="400.0" text="Tiền đặt trước (VNĐ):">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="depositPreOrderLabel" maxWidth="760.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="depositPreOrderLabel" maxWidth="760.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefWidth="400.0" text="Hoàn tiền (VNĐ):" textFill="WHITE">
+                                          <Label prefWidth="400.0" text="Hoàn tiền (VNĐ):">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="refundDepositPreOrderLabel" maxWidth="760.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="refundDepositPreOrderLabel" maxWidth="760.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -210,7 +210,7 @@
                               </VBox>
                               <HBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="463.0">
                                  <children>
-                                    <Button fx:id="cancelPreOrderButton" mnemonicParsing="false" onAction="#onCancelPreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Huỷ đặt chỗ">
+                                    <Button fx:id="cancelPreOrderButton" mnemonicParsing="false" onAction="#onCancelPreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-radius: 20px; -fx-border-color: black;" text="Huỷ đặt chỗ">
                                        <font>
                                           <Font name="System Bold" size="24.0" />
                                        </font>
@@ -218,7 +218,7 @@
                                           <Insets bottom="20.0" right="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="confirmTablePreOrderButton" mnemonicParsing="false" onAction="#onConfirmTablePreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Nhận bàn">
+                                    <Button fx:id="confirmTablePreOrderButton" mnemonicParsing="false" onAction="#onConfirmTablePreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-radius: 20px; -fx-border-color: black;" text="Nhận bàn">
                                        <font>
                                           <Font name="System Bold" size="24.0" />
                                        </font>
@@ -245,9 +245,9 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1675.0" styleClass="main-color">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1675.0">
                            <children>
-                              <Label text="Danh sách hoá đơn chờ thanh toán trong ngày" textFill="WHITE">
+                              <Label text="Danh sách hoá đơn chờ thanh toán trong ngày">
                                  <font>
                                     <Font name="System Bold" size="25.0" />
                                  </font>
@@ -268,91 +268,91 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <HBox prefHeight="350.0" prefWidth="1675.0" styleClass="main-color">
+                        <HBox prefHeight="350.0" prefWidth="1675.0" style="-fx-background-color: white;">
                            <children>
                               <VBox prefHeight="200.0" prefWidth="499.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="95.0" prefWidth="1063.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <Label prefHeight="34.0" prefWidth="400.0" text="Thông tin thanh toán của ông/bà:" textFill="WHITE">
+                                          <Label prefHeight="34.0" prefWidth="400.0" text="Thông tin thanh toán của ông/bà:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="customerNamePaymentQueueLabel" maxWidth="730.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="customerNamePaymentQueueLabel" maxWidth="730.0" text="Unknown">
                                              <font>
-                                                <Font name="System Bold" size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefWidth="400.0" text="Khu vực bàn:" textFill="WHITE">
+                                          <Label prefWidth="400.0" text="Khu vực bàn:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="tableAreaPaymentQueueLabel" maxWidth="730.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="tableAreaPaymentQueueLabel" maxWidth="730.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefHeight="34.0" prefWidth="400.0" text="Món ăn:" textFill="WHITE">
+                                          <Label prefHeight="34.0" prefWidth="400.0" text="Món ăn:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="cuisineQuantityPaymentQueueLabel" maxWidth="730.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="cuisineQuantityPaymentQueueLabel" maxWidth="730.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefHeight="34.0" prefWidth="400.0" text="Khuyến mãi đã áp dụng" textFill="WHITE">
+                                          <Label prefHeight="34.0" prefWidth="400.0" text="Khuyến mãi đã áp dụng">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="promotionNamePaymentQueueLabel" maxWidth="730.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="promotionNamePaymentQueueLabel" maxWidth="730.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
-                                          <Label prefWidth="400.0" text="Tổng tiền:" textFill="WHITE">
+                                          <Label prefWidth="400.0" text="Tổng tiền:">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="totalAmountPaymentQueueLabel" maxWidth="730.0" text="Unknown" textFill="WHITE">
+                                          <Label fx:id="totalAmountPaymentQueueLabel" maxWidth="730.0" text="Unknown">
                                              <font>
-                                                <Font size="23.0" />
+                                                <Font name="System Bold" size="25.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -361,17 +361,17 @@
                               </VBox>
                               <HBox alignment="BOTTOM_RIGHT" prefHeight="350.0" prefWidth="500.0">
                                  <children>
-                                    <Button fx:id="deletePaymentQueueButton" mnemonicParsing="false" onAction="#onDeletePaymentQueueButtonAction" prefHeight="70.0" prefWidth="235.0" styleClass="white-color" text="Huỷ thanh toán">
+                                    <Button fx:id="deletePaymentQueueButton" mnemonicParsing="false" onAction="#onDeletePaymentQueueButtonAction" prefHeight="70.0" prefWidth="235.0" style="-fx-background-color: white; -fx-border-radius: 20px; -fx-border-color: black; -fx-background-radius: 20px;" styleClass="white-color" text="Huỷ thanh toán">
                                        <font>
-                                          <Font size="24.0" />
+                                          <Font name="System Bold" size="24.0" />
                                        </font>
                                        <HBox.margin>
                                           <Insets bottom="20.0" right="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="toOrderPaymentButton" mnemonicParsing="false" onAction="#onOrderPaymentButtonAction" prefHeight="70.0" prefWidth="211.0" styleClass="white-color" text="Đến thanh toán">
+                                    <Button fx:id="toOrderPaymentButton" mnemonicParsing="false" onAction="#onOrderPaymentButtonAction" prefHeight="70.0" prefWidth="211.0" style="-fx-background-color: white; -fx-border-radius: 20px; -fx-border-color: black; -fx-background-radius: 20px;" styleClass="white-color" text="Đến thanh toán">
                                        <font>
-                                          <Font size="24.0" />
+                                          <Font name="System Bold" size="24.0" />
                                        </font>
                                        <HBox.margin>
                                           <Insets bottom="20.0" right="20.0" />

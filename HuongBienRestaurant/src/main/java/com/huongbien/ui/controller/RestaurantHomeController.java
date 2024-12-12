@@ -19,10 +19,4 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class RestaurantHomeController implements Initializable {
-    //initialize area
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-}
+public class RestaurantHomeController {}

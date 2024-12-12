@@ -35,7 +35,7 @@
                   </ScrollPane>
                </center>
                <bottom>
-                  <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="1100.0" style="-fx-background-color: #1D557E;" BorderPane.alignment="CENTER">
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="1100.0" styleClass="gradient-main" BorderPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="105.0" prefWidth="1100.0" VBox.vgrow="ALWAYS">
                            <children>
@@ -104,7 +104,7 @@
                               <Insets left="20.0" right="20.0" />
                            </padding>
                         </VBox>
-                        <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #1D557E;">
+                        <HBox alignment="CENTER_RIGHT">
                            <children>
                               <Button mnemonicParsing="false" onAction="#onInvoicePrinterDialogAction" prefHeight="60.0" prefWidth="200.0" text="Xem hoá đơn">
                                  <HBox.margin>
@@ -114,7 +114,7 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Button>
-                              <Button disable="true" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Huỷ thanh toán">
+                              <Button mnemonicParsing="false" onAction="#onClearOrderPaymentFinalAction" prefHeight="60.0" prefWidth="200.0" text="Huỷ thanh toán">
                                  <HBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
@@ -136,7 +136,7 @@
                   </VBox>
                </bottom>
                <top>
-                  <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #1D557E;" BorderPane.alignment="CENTER_RIGHT">
+                  <HBox prefHeight="50.0" prefWidth="200.0" styleClass="gradient-main" BorderPane.alignment="CENTER_RIGHT">
                      <children>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
                            <children>
@@ -212,9 +212,9 @@
       </HBox>
    </top>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="100.0" styleClass="gradient-main" BorderPane.alignment="CENTER">
          <children>
-            <VBox style="-fx-background-color: #1D557E;">
+            <VBox>
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="630.0">
                      <children>
@@ -269,7 +269,7 @@
                   </HBox>
                </children>
             </VBox>
-            <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #1D557E;" VBox.vgrow="ALWAYS">
+            <StackPane prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox fx:id="screenCashMethodVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
@@ -519,7 +519,7 @@
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-radius: 0px;" text="300,000">
+                                                <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-radius: 0px;" text="Unknown">
                                                    <font>
                                                       <Font name="System Bold" size="30.0" />
                                                    </font>
@@ -535,7 +535,7 @@
                                                       <Insets bottom="10.0" left="32.0" right="32.0" top="10.0" />
                                                    </padding>
                                                 </Button>
-                                                <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-radius: 0px;" text="300,000" GridPane.columnIndex="1">
+                                                <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-radius: 0px;" text="Unknown" GridPane.columnIndex="1">
                                                    <font>
                                                       <Font name="System Bold" size="30.0" />
                                                    </font>
@@ -543,7 +543,7 @@
                                                       <Insets bottom="10.0" left="32.0" right="32.0" top="10.0" />
                                                    </padding>
                                                 </Button>
-                                                <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-radius: 0px;" text="300,000" GridPane.columnIndex="2">
+                                                <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-border-radius: 0px;" text="Unknown" GridPane.columnIndex="2">
                                                    <font>
                                                       <Font name="System Bold" size="30.0" />
                                                    </font>

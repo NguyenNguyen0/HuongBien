@@ -22,14 +22,6 @@
                   </TextArea>
                   <HBox alignment="CENTER_RIGHT">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#saveAsImageButtonAction" prefHeight="44.0" prefWidth="136.0" text="Xuất PDF">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets bottom="10.0" left="10.0" top="10.0" />
-                           </HBox.margin>
-                        </Button>
                         <Button mnemonicParsing="false" onAction="#onPrintButtonAction" prefHeight="44.0" prefWidth="136.0" text="In hoá đơn">
                            <font>
                               <Font size="20.0" />

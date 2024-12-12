@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.huongbien.bus.*;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
-import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
@@ -18,11 +17,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -71,10 +68,14 @@ public class OrderPaymentFinalController implements Initializable {
     private boolean statusFlags = false;
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
 
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -264,7 +265,12 @@ public class OrderPaymentFinalController implements Initializable {
 
     @FXML
     void onBackButtonClicked(ActionEvent event) throws IOException {
-        restaurantMainController.openOrderPayment();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openOrderPayment();
+        } else {
+            restaurantMainStaffController.openOrderPayment();
+
+        }
     }
 
     @FXML
@@ -315,8 +321,7 @@ public class OrderPaymentFinalController implements Initializable {
         setFinalAmountInfo();
     }
 
-    @FXML
-    void onInvoicePrinterDialogAction(ActionEvent event) throws IOException {
+    private void openPrinter() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/InvoicePrinterDialog.fxml"));
         Parent root = loader.load();
         Stage primaryStage = new Stage();
@@ -328,6 +333,11 @@ public class OrderPaymentFinalController implements Initializable {
         InvoicePrinterDialogController invoicePrinterDialogController = loader.getController();
         invoicePrinterDialogController.setOrderPaymentFinalController(this);
         primaryStage.show();
+    }
+
+    @FXML
+    void onInvoicePrinterDialogAction(ActionEvent event) throws IOException {
+        openPrinter();
     }
 
     @FXML
@@ -394,7 +404,7 @@ public class OrderPaymentFinalController implements Initializable {
 
             OrderBUS orderBUS = new OrderBUS();
             if (orderBUS.addOrder(order)) {
-                ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
+                openPrinter();
                 ToastsMessage.showMessage("Thanh toán thành công", "success");
                 //Alert
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -405,16 +415,38 @@ public class OrderPaymentFinalController implements Initializable {
                 ButtonType onCancelButtonClicked = new ButtonType("Không");
                 alert.getButtonTypes().setAll(btn_ok, onCancelButtonClicked);
                 Optional<ButtonType> result = alert.showAndWait();
+                ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
                 if (result.isPresent() && result.get() == btn_ok) {
-                    restaurantMainController.openOrderTable();
+                    if(restaurantMainManagerController != null) {
+                        restaurantMainManagerController.openOrderTable();
+                    } else {
+                        restaurantMainStaffController.openOrderTable();
+                    }
                 } else {
-                    restaurantMainController.openHome();
+                    if(restaurantMainManagerController != null) {
+                        restaurantMainManagerController.openHome();
+                    } else {
+                        restaurantMainStaffController.openHome();
+                    }
                 }
-                System.out.println(orderId);
             } else {
                 ToastsMessage.showMessage("Thanh toán thất bại", "success");
             }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @FXML
+    void onClearOrderPaymentFinalAction(ActionEvent event) throws IOException {
+        try {
+            ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
+            if(restaurantMainManagerController != null) {
+                restaurantMainManagerController.openOrderTable();
+            } else {
+                restaurantMainStaffController.openOrderTable();
+            }
+            ToastsMessage.showMessage("Hủy đơn hàng thành công", "success");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

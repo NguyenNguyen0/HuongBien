@@ -34,7 +34,6 @@ public class InvoicePrinterDialogController implements Initializable {
     private TextArea content;
 
     public OrderPaymentFinalController orderPaymentFinalController;
-
     public void setOrderPaymentFinalController(OrderPaymentFinalController orderPaymentFinalController) {
         this.orderPaymentFinalController = orderPaymentFinalController;
     }
@@ -181,15 +180,6 @@ public class InvoicePrinterDialogController implements Initializable {
         content.setText(content.getText() + String.format("%-20s %30s", "Thành tiền:", String.format("%,.0f VNĐ", finalAmount)));
         newLine();
         newLine();
-        double moneyFromCustomer = 0;
-        content.setText(content.getText() + String.format("%-20s %30s", "Tiền khách đưa:", String.format("%,.0f VNĐ", moneyFromCustomer)));
-        newLine();
-        double refund = 0;
-        content.setText(content.getText() + String.format("%-20s %30s", "Hoàn trả dư:", String.format("%,.0f VNĐ", refund)));
-        newLine();
-        boolean status = false; // TODO: change to true if paid
-        content.setText(content.getText() + String.format("%-20s %30s", "Trạng thái:", "Chưa thanh toán"));
-        newLine();
         //Other
         newLine();
         separator();
@@ -268,10 +258,5 @@ public class InvoicePrinterDialogController implements Initializable {
             pages.add(textFlow);
         }
         return pages;
-    }
-
-    @FXML
-    void saveAsImageButtonAction(ActionEvent event) {
-
     }
 }

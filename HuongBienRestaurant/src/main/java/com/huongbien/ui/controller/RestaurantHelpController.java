@@ -12,10 +12,4 @@ import javafx.util.StringConverter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RestaurantHelpController implements Initializable {
-    //initialize area
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-}
+public class RestaurantHelpController {}
