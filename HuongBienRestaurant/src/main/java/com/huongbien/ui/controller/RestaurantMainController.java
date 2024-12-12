@@ -3,15 +3,18 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.ReservationBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.dao.AccountDAO;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.entity.Account;
 import com.huongbien.entity.Employee;
+import com.huongbien.entity.Reservation;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.ClearJSON;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
+import com.sun.marlin.FloatArrayCache;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -44,10 +47,14 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RestaurantMainController implements Initializable {
     @FXML
@@ -127,6 +134,9 @@ public class RestaurantMainController implements Initializable {
 
     private byte[] employeeImageBytes = null;
 
+    private final ReservationBUS reservationBUS = new ReservationBUS();
+    private static ScheduledExecutorService scheduler;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setDefault();
@@ -141,6 +151,39 @@ public class RestaurantMainController implements Initializable {
         menuBorderPane.setTranslateX(-250);
         detailUserBorderPane.setTranslateX(250);
 
+        scheduler = Executors.newScheduledThreadPool(1);
+
+        Runnable task = () -> {
+            List<Reservation> reservationList = reservationBUS.getListWaitedToday();
+            if(reservationList != null){
+                for (Reservation reservation : reservationList) {
+                    LocalTime receiveTime = reservation.getReceiveTime();
+                    LocalTime now = LocalTime.now();
+                    int hoursDifference = receiveTime.getHour() - now.getHour();
+                    int minutesDifference = now.getMinute() - receiveTime.getMinute();
+                    int totalMinutesDifference = hoursDifference * 60 + minutesDifference;
+                    System.out.println(totalMinutesDifference);
+                    //Thời gian đơn sau thời gian hiện tại 15p
+                    if(totalMinutesDifference>=15){
+                        reservationBUS.updateReservationStatusToCancel(reservation.getReservationId());
+                    }
+                }
+            }
+        };
+
+        // Lên lịch để chạy mỗi 5 giây
+        scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
+        // Đăng ký shutdown hook để đảm bảo scheduler dừng khi chương trình kết thúc
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            scheduler.shutdown();  // Dừng scheduler
+            try {
+                if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    scheduler.shutdownNow();  // Buộc dừng nếu không hoàn thành trong 5 giây
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+            }
+        }));
     }
 
     public void setDefault() {
