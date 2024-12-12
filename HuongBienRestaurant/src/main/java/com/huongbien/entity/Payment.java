@@ -24,11 +24,11 @@ public class Payment {
         setPaymentTime(paymentTime);
     }
 
-    public Payment(double amount, LocalDate paymentDate, LocalTime paymentTime, String paymentMethod) {
-        setPaymentDate(paymentDate);
-        setPaymentTime(paymentTime);
-        setPaymentMethod(paymentMethod);
+    public Payment(double amount, String paymentMethod) {
         setAmount(amount);
+        setPaymentDate(LocalDate.now());
+        setPaymentTime(LocalTime.now());
+        setPaymentMethod(paymentMethod);
         setPaymentId(null);
     }
 
@@ -70,8 +70,7 @@ public class Payment {
     }
 
     public void setPaymentMethod(String paymentMethod) {
-        if (paymentMethod.equalsIgnoreCase("Chuyển khoản") ||
-                paymentMethod.equalsIgnoreCase("Tiền mặt")) {
+        if (paymentMethod.equalsIgnoreCase("Chuyển khoản") || paymentMethod.equalsIgnoreCase("Tiền mặt")) {
             this.paymentMethod = paymentMethod;
             return;
         }

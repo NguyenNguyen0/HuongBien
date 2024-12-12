@@ -30,6 +30,12 @@ public class Variable {
     //---
     public static String[] statusReservation = {"Chưa nhận", "Hoàn thành", "Đã hủy"};
 
+    //PreOrderController.java
+    //---
+    public static String[] paymentMethods = {"Tiền mặt", "Chuyển khoản"};
+
     //Password WIFI
     public static String PASSWORD_WIFI = "12345678";
+
+
 }

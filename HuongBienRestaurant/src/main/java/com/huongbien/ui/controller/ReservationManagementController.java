@@ -336,12 +336,14 @@ public class ReservationManagementController implements Initializable {
                     String promotionName = (promotion != null) ? promotion.getName() : "Không áp dụng";
 
                     JsonArray cuisineOrderArray = order.getAsJsonArray("Cuisine Order");
-                    int cuisineQuantity = cuisineOrderArray.size();
+                    int cuisineQuantity = 0;
                     double totalAmount = 0;
                     for (JsonElement cuisineElement : cuisineOrderArray) {
                         JsonObject cuisine = cuisineElement.getAsJsonObject();
                         double money = cuisine.get("Cuisine Money").getAsDouble();
+                        int quantity = cuisine.get("Cuisine Quantity").getAsInt();
                         totalAmount += money;
+                        cuisineQuantity += quantity;
                     }
                     //setLabel
                     customerNamePaymentQueueLabel.setText(customerName);
@@ -431,7 +433,11 @@ public class ReservationManagementController implements Initializable {
                 tableInfo.setLength(tableInfo.length() - 2);
             }
             tablePreOrderLabel.setText(tableInfo.toString());
-            cuisinePreOrderLabel.setText(reservation.getFoodOrders().size() + " món"); //TODO: sai số lượng món
+            int cuisineQuantity = 0;
+            for (FoodOrder foodOrder : reservation.getFoodOrders()) {
+                cuisineQuantity += foodOrder.getQuantity();
+            }
+            cuisinePreOrderLabel.setText(cuisineQuantity + " món");
             depositPreOrderLabel.setText(String.format("%,.0f VNĐ", reservation.getDeposit()));
             refundDepositPreOrderLabel.setText(String.format("%,.0f VNĐ", reservation.getRefundDeposit()));
             notePreOrderLabel.setText(reservation.getNote() != null ? reservation.getNote() : "");
@@ -452,7 +458,6 @@ public class ReservationManagementController implements Initializable {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
             String id = reservation.getReservationId();
             ToastsMessage.showMessage("Đang cập nhật bàn cho đơn hàng đặt trước: " + id, "success");
-//
             //reservation
             JsonArray jsonArrayReservation = new JsonArray();
             JsonObject jsonObjectReservation = new JsonObject();
@@ -502,6 +507,12 @@ public class ReservationManagementController implements Initializable {
         int selectedIndex = preOrderTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
+            //check status before write JSON
+            if(!reservation.getStatus().equals(Variable.statusReservation[0])){
+                ToastsMessage.showMessage("Đơn đặt đang ở trạng thái: "+ reservation.getStatus() +", nên không thể nhận bàn", "warning");
+                return;
+            }
+
             //Write JSON
             ////----Table
             JsonArray jsonArrayTable = new JsonArray();

@@ -106,7 +106,7 @@
                         </VBox>
                         <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #1D557E;">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#showInvoiceButtonAction" prefHeight="60.0" prefWidth="200.0" text="Xem hoá đơn">
+                              <Button mnemonicParsing="false" onAction="#onInvoicePrinterDialogAction" prefHeight="60.0" prefWidth="200.0" text="Xem hoá đơn">
                                  <HBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>

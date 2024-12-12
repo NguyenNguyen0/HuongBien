@@ -511,6 +511,8 @@ public class PreOrderController implements Initializable {
             }
 
             reservation.setStatus(Variable.statusReservation[0]);
+            Payment payment = new Payment(deposit, Variable.paymentMethods[0]); //Default payment method is cash
+            reservation.setPayment(payment);
 
             if (reservationBUS.addReservation(reservation)) {
                 TableBUS tableBUS = new TableBUS();
@@ -523,9 +525,10 @@ public class PreOrderController implements Initializable {
                 ToastsMessage.showMessage("Tạo đơn đặt trước thất bại, vui lòng thử lại", "error");
             }
         } else {
-            //Giai phap tam thoi
-            Reservation reservation_status = ReservationDAO.getInstance().getById(reservationID);
-            reservation.setStatus(reservation_status.getStatus());
+            //Temporary solution for updating reservation
+            Reservation reservationUpdate = ReservationDAO.getInstance().getById(reservationID);
+            reservation.setStatus(reservationUpdate.getStatus());
+            reservation.setPayment(reservationUpdate.getPayment());
 
             if (reservationBUS.updateReservation(reservation)) {
                 ToastsMessage.showMessage("Cập nhật đơn đặt trước: " + reservationID + " thành công", "success");
@@ -544,6 +547,7 @@ public class PreOrderController implements Initializable {
                 throw new RuntimeException(ex);
             }
         });
+        System.out.println(reservationID);
         pause.play();
     }
 
