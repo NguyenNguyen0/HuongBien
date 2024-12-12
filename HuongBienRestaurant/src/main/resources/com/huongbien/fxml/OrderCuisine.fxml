@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1445.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderCuisineController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1445.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderCuisineController">
    <right>
       <StackPane prefWidth="700.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -114,7 +114,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#onClearCuisineButtonAction" prefHeight="60.0" prefWidth="339.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black;" text="Xoá tất cả">
+                                    <Button mnemonicParsing="false" onAction="#onClearCuisineButtonAction" prefHeight="60.0" prefWidth="339.0" style="-fx-background-color: red;" text="Xoá tất cả" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -202,7 +202,7 @@
       </VBox>
    </center>
    <top>
-      <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1386.0" style="-fx-background-color: white;" styleClass="textField-line-bot" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1386.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="70.0" prefWidth="70.0">
                <children>
@@ -238,7 +238,7 @@
                               <Insets left="-50.0" />
                            </HBox.margin>
                         </Button>
-                        <ComboBox fx:id="categoryComboBox" onAction="#categoryComboBox" prefHeight="60.0" prefWidth="250.0">
+                        <ComboBox fx:id="categoryComboBox" onAction="#categoryComboBox" prefHeight="60.0" prefWidth="250.0" styleClass="textField-line-bot">
                            <HBox.margin>
                               <Insets left="20.0" right="20.0" />
                            </HBox.margin>

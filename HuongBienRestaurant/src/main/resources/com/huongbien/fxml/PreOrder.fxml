@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="988.0" prefWidth="1496.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="988.0" prefWidth="1496.0" style="-fx-background-color: #2E3192;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.PreOrderController">
    <center>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <VBox prefWidth="1300.0">
                <children>
@@ -24,7 +24,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="250.0" text="Số điện thoại:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="250.0" style="-fx-text-fill: white;" text="Số điện thoại:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -37,7 +37,7 @@
                                     <Font size="30.0" />
                                  </font>
                               </TextField>
-                              <Button mnemonicParsing="false" onAction="#onClearPhoneNumFieldButton" prefHeight="60.0" style="-fx-background-color: white;">
+                              <Button mnemonicParsing="false" onAction="#onClearPhoneNumFieldButton" prefHeight="60.0" style="-fx-background-color: transparent;">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -51,12 +51,12 @@
                               </Button>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets right="50.0" />
                            </HBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="200.0" text="Email:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="200.0" style="-fx-text-fill: white;" text="Email:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -71,7 +71,7 @@
                               </TextField>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets left="50.0" />
                            </HBox.margin>
                         </HBox>
                      </children>
@@ -80,7 +80,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="250.0" text="Tên khách hàng:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="250.0" style="-fx-text-fill: white;" text="Tên khách hàng:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -95,12 +95,12 @@
                               </TextField>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets right="50.0" />
                            </HBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="200.0" text="Mã khách hàng:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="200.0" style="-fx-text-fill: white;" text="Mã khách hàng:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -108,14 +108,14 @@
                                     <Insets />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="customerIDField" disable="true" prefHeight="60.0" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="customerIDField" disable="true" prefHeight="60.0" style="-fx-border-color: black;" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="30.0" />
                                  </font>
                               </TextField>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets left="50.0" />
                            </HBox.margin>
                         </HBox>
                      </children>
@@ -124,7 +124,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="250.0" text="Thông tin bàn:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="250.0" style="-fx-text-fill: white;" text="Thông tin bàn:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -132,12 +132,12 @@
                                     <Insets />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tableInfoField" disable="true" editable="false" prefHeight="60.0" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="tableInfoField" editable="false" prefHeight="60.0" style="-fx-border-color: black;" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="30.0" />
                                  </font>
                               </TextField>
-                              <Button mnemonicParsing="false" onAction="#onEditTableButtonAction" style="-fx-background-color: white;" text="Sửa bàn">
+                              <Button mnemonicParsing="false" onAction="#onEditTableButtonAction" style="-fx-background-color: white; -fx-text-fill: black;" text="Sửa bàn">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
@@ -147,7 +147,7 @@
                               </Button>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets />
                            </HBox.margin>
                         </HBox>
                      </children>
@@ -156,7 +156,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="250.0" text="Đặt món:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="250.0" style="-fx-text-fill: white;" text="Đặt món:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -164,25 +164,25 @@
                                     <Insets />
                                  </HBox.margin>
                               </Label>
-                              <Label fx:id="preOrderCuisineLabel" text="Unknown" textFill="WHITE">
+                              <Label fx:id="preOrderCuisineLabel" style="-fx-text-fill: white;" text="Unknown">
                                  <font>
                                     <Font name="System Bold" size="25.0" />
                                  </font>
                               </Label>
                               <Pane prefHeight="200.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                              <Button mnemonicParsing="false" onAction="#onPreOrderCuisineButtonAction" prefHeight="60.0" style="-fx-background-color: white;" text="Sửa thực đơn">
+                              <Button mnemonicParsing="false" onAction="#onPreOrderCuisineButtonAction" prefHeight="60.0" style="-fx-background-color: white; -fx-text-fill: black;" text="Sửa thực đơn">
                                  <font>
                                     <Font name="System Bold" size="25.0" />
                                  </font>
                               </Button>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets right="50.0" />
                            </HBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="200.0" text="Số người:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="200.0" style="-fx-text-fill: white;" text="Số người:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -190,12 +190,12 @@
                                     <Insets />
                                  </HBox.margin>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#onDecreaseButtonAction" prefHeight="60.0" prefWidth="70.0" text="-">
+                              <Button mnemonicParsing="false" onAction="#onDecreaseButtonAction" prefHeight="60.0" prefWidth="70.0" style="-fx-background-color: white; -fx-text-fill: black;" text="-">
                                  <font>
                                     <Font name="System Bold" size="30.0" />
                                  </font>
                               </Button>
-                              <TextField fx:id="numOfAttendeesField" alignment="CENTER" onKeyTyped="#onChangeValueQuantityKeyTyped" prefHeight="65.0" prefWidth="224.0" text="1" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="numOfAttendeesField" alignment="CENTER" onKeyTyped="#onChangeValueQuantityKeyTyped" prefHeight="65.0" prefWidth="224.0" style="-fx-border-color: black;" text="1" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="30.0" />
                                  </font>
@@ -203,14 +203,14 @@
                                     <Insets left="20.0" right="20.0" />
                                  </HBox.margin>
                               </TextField>
-                              <Button mnemonicParsing="false" onAction="#onIncreaseButtonAction" prefHeight="60.0" prefWidth="70.0" text="+">
+                              <Button mnemonicParsing="false" onAction="#onIncreaseButtonAction" prefHeight="60.0" prefWidth="70.0" style="-fx-background-color: white; -fx-text-fill: black;" text="+">
                                  <font>
                                     <Font name="System Bold" size="30.0" />
                                  </font>
                               </Button>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets left="50.0" />
                            </HBox.margin>
                         </HBox>
                      </children>
@@ -219,7 +219,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="250.0" text="Ngày nhận:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="250.0" style="-fx-text-fill: white;" text="Ngày nhận:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -227,15 +227,15 @@
                                     <Insets />
                                  </HBox.margin>
                               </Label>
-                              <DatePicker fx:id="receiveDatePicker" editable="false" prefHeight="60.0" prefWidth="382.0" />
+                              <DatePicker fx:id="receiveDatePicker" editable="false" prefHeight="60.0" prefWidth="382.0" style="-fx-border-color: black;" />
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets right="50.0" />
                            </HBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="200.0" text="Giờ đến:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="200.0" style="-fx-text-fill: white;" text="Giờ đến:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -255,7 +255,7 @@
                               </ComboBox>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets left="50.0" />
                            </HBox.margin>
                         </HBox>
                      </children>
@@ -264,7 +264,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="250.0" text="Ghi chú:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="250.0" style="-fx-text-fill: white;" text="Ghi chú:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -279,12 +279,12 @@
                               </TextField>
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets right="50.0" />
                            </HBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="36.0" prefWidth="200.0" text="Loại tiệc:" textFill="WHITE">
+                              <Label prefHeight="36.0" prefWidth="200.0" style="-fx-text-fill: white;" text="Loại tiệc:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -292,10 +292,10 @@
                                     <Insets />
                                  </HBox.margin>
                               </Label>
-                              <ComboBox fx:id="partyTypeComboBox" editable="true" prefHeight="60.0" prefWidth="432.0" />
+                              <ComboBox fx:id="partyTypeComboBox" editable="true" prefHeight="60.0" prefWidth="432.0" style="-fx-border-color: black;" />
                            </children>
                            <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
+                              <Insets left="50.0" />
                            </HBox.margin>
                         </HBox>
                      </children>
@@ -304,15 +304,15 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="60.0">
                            <children>
-                              <Label text="Phí đặt bàn:" textFill="WHITE">
+                              <Label style="-fx-text-fill: white;" text="Phí đặt bàn:">
                                  <font>
-                                    <Font size="23.0" />
+                                    <Font name="System Bold Italic" size="23.0" />
                                  </font>
                               </Label>
                               <Pane prefHeight="100.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                              <Label fx:id="tableAmountLabel" text="0 VNĐ" textFill="WHITE">
+                              <Label fx:id="tableAmountLabel" style="-fx-text-fill: white;" text="0 VNĐ">
                                  <font>
-                                    <Font name="System Italic" size="23.0" />
+                                    <Font name="System Bold Italic" size="23.0" />
                                  </font>
                               </Label>
                            </children>
@@ -322,15 +322,15 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="60.0">
                            <children>
-                              <Label text="Phí đặt món:" textFill="WHITE">
+                              <Label style="-fx-text-fill: white;" text="Phí đặt món:">
                                  <font>
-                                    <Font size="23.0" />
+                                    <Font name="System Bold Italic" size="23.0" />
                                  </font>
                               </Label>
                               <Pane prefHeight="100.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                              <Label fx:id="cuisineAmountLabel" text="0 VNĐ" textFill="WHITE">
+                              <Label fx:id="cuisineAmountLabel" style="-fx-text-fill: white;" text="0 VNĐ">
                                  <font>
-                                    <Font name="System Italic" size="23.0" />
+                                    <Font name="System Bold Italic" size="23.0" />
                                  </font>
                               </Label>
                            </children>
@@ -340,15 +340,15 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="60.0">
                            <children>
-                              <Label text="Tổng tiền trả trước:" textFill="WHITE">
+                              <Label style="-fx-text-fill: white;" text="Tổng tiền trả trước:">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
                               </Label>
                               <Pane prefHeight="100.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
-                              <Label fx:id="totalAmoutLabel" text="0 VNĐ" textFill="WHITE">
+                              <Label fx:id="totalAmoutLabel" style="-fx-text-fill: white;" text="0 VNĐ">
                                  <font>
-                                    <Font name="System Bold Italic" size="23.0" />
+                                    <Font name="System Bold" size="23.0" />
                                  </font>
                               </Label>
                            </children>
@@ -363,18 +363,18 @@
       </HBox>
    </center>
    <bottom>
-      <HBox alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="1496.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="1496.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="tableFeeLabel" text="Lưu ý: Dịch vụ bàn VIP là: " textFill="RED">
                <font>
                   <Font name="System Bold Italic" size="25.0" />
                </font>
                <HBox.margin>
-                  <Insets left="20.0" />
+                  <Insets left="110.0" />
                </HBox.margin>
             </Label>
             <Pane prefHeight="90.0" prefWidth="45.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" onAction="#onQRButtonAction" prefHeight="70.0" prefWidth="200.0" text="Quét QR">
+            <Button mnemonicParsing="false" onAction="#onQRButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white; -fx-text-fill: black;" text="Quét QR">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
@@ -382,7 +382,7 @@
                   <Insets right="20.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onSavePreOrderTableButtonAction" prefHeight="70.0" prefWidth="200.0" text="Lưu">
+            <Button mnemonicParsing="false" onAction="#onSavePreOrderTableButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white; -fx-text-fill: black;" text="Lưu">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>
@@ -394,9 +394,9 @@
       </HBox>
    </bottom>
    <top>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1496.0" style="-fx-background-color: darkblue;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1496.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#onBackButtonAction" prefHeight="68.0" prefWidth="80.0">
+            <Button mnemonicParsing="false" onAction="#onBackButtonAction" prefHeight="68.0" prefWidth="80.0" style="-fx-background-color: white;">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
@@ -411,7 +411,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onReservationManagementButtonAction" style="-fx-background-color: white;" text="Danh sách đặt trước">
+            <Button mnemonicParsing="false" onAction="#onReservationManagementButtonAction" style="-fx-background-color: white; -fx-text-fill: black;" text="Danh sách đặt trước" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>

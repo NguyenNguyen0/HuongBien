@@ -1,7 +1,7 @@
 /*tab pane*/
 /*theme*/
 .main-color {
-    -fx-background-color: darkblue;
+    -fx-background-color: #2E3192;
 }
 
 .white-color {
@@ -15,7 +15,7 @@
 }
 
 * {
-    -fx-primary-color:  darkblue;
+    -fx-primary-color:  #2E3192;
     -fx-secondary-color: #4B6EAF;
     -fx-focus-color: -fx-secondary-color;
 }
@@ -76,19 +76,14 @@
     -fx-alignment: CENTER;
 }
 
-/*
-.table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #616161;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;
-}
-
-*/
 .table-row-cell:selected {
     -fx-text-fill: white;
-    -fx-background-color: #005797;
+    -fx-background-color: #4B6EAF;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
+}
+.table-cell:selected {
+    -fx-text-fill: white;
 }
 
 .table-view .column-header-background .filler {

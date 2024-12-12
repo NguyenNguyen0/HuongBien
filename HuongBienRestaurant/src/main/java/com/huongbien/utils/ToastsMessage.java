@@ -6,16 +6,6 @@ import org.controlsfx.control.Notifications;
 
 
 public class ToastsMessage {
-    public static void showToastsMessage(String title, String message) {
-        Notifications notifications = Notifications.create();
-//        notifications.graphic(new ImageView(image)); //TODO: Có thể thêm biểu tượng ảnh vào thông báo
-        notifications.title(title);
-        notifications.text(message);
-        notifications.hideAfter(Duration.seconds(2));
-        notifications.position(Pos.TOP_RIGHT);
-        notifications.show();
-    }
-
     public static void showMessage(String message, String type) {
         Notifications notifications = Notifications.create()
                 .title("Thông báo")

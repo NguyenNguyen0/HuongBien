@@ -24,19 +24,19 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <HBox alignment="CENTER" prefWidth="1675.0" styleClass="main-color">
+                        <HBox alignment="CENTER" prefWidth="1675.0" style="-fx-background-color: #2E3192;">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="60.0" prefWidth="200.0" styleClass="white-color" text="Đặt chỗ">
+                              <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt chỗ">
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <font>
-                                    <Font size="24.0" />
+                                    <Font name="System Bold" size="24.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="editPreOrderButton" mnemonicParsing="false" onAction="#onEditPreOrderButtonAction" prefHeight="55.0" prefWidth="200.0" styleClass="white-color" text="Sửa đặt chỗ">
+                              <Button fx:id="editPreOrderButton" mnemonicParsing="false" onAction="#onEditPreOrderButtonAction" prefHeight="55.0" prefWidth="200.0" style="-fx-background-color: white;" text="Sửa đặt chỗ">
                                  <font>
-                                    <Font size="24.0" />
+                                    <Font name="System Bold" size="24.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets left="20.0" />
@@ -70,7 +70,7 @@
                                  <children>
                                     <TextField fx:id="searchReservation" onKeyTyped="#onSearchReservationKeyTyped" prefHeight="55.0" prefWidth="324.0" promptText="Tìm đơn đặt nhanh theo SĐT">
                                        <font>
-                                          <Font size="18.0" />
+                                          <Font size="22.0" />
                                        </font>
                                     </TextField>
                                  </children>
@@ -100,7 +100,7 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <HBox prefHeight="350.0" prefWidth="1675.0" styleClass="main-color">
+                        <HBox prefHeight="350.0" prefWidth="1675.0" style="-fx-background-color: #2E3192;">
                            <children>
                               <VBox prefHeight="200.0" prefWidth="499.0" HBox.hgrow="ALWAYS">
                                  <children>
@@ -157,6 +157,23 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
                                        <children>
+                                          <Label prefWidth="400.0" text="Ghi chú:" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" right="20.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label fx:id="notePreOrderLabel" prefHeight="34.0" prefWidth="760.0" text="Unknown" textFill="WHITE">
+                                             <font>
+                                                <Font size="23.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
+                                       <children>
                                           <Label prefWidth="400.0" text="Tiền đặt trước (VNĐ):" textFill="WHITE">
                                              <font>
                                                 <Font size="23.0" />
@@ -189,38 +206,21 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1212.0">
-                                       <children>
-                                          <Label prefWidth="400.0" text="Ghi chú:" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Label fx:id="notePreOrderLabel" prefHeight="34.0" prefWidth="760.0" text="Unknown" textFill="WHITE">
-                                             <font>
-                                                <Font size="23.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
                                  </children>
                               </VBox>
                               <HBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="463.0">
                                  <children>
-                                    <Button fx:id="cancelPreOrderButton" mnemonicParsing="false" onAction="#onCancelPreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Huỷ đặt chỗ">
+                                    <Button fx:id="cancelPreOrderButton" mnemonicParsing="false" onAction="#onCancelPreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Huỷ đặt chỗ">
                                        <font>
-                                          <Font size="24.0" />
+                                          <Font name="System Bold" size="24.0" />
                                        </font>
                                        <HBox.margin>
                                           <Insets bottom="20.0" right="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="confirmTablePreOrderButton" mnemonicParsing="false" onAction="#onConfirmTablePreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" styleClass="white-color" text="Nhận bàn">
+                                    <Button fx:id="confirmTablePreOrderButton" mnemonicParsing="false" onAction="#onConfirmTablePreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Nhận bàn">
                                        <font>
-                                          <Font size="24.0" />
+                                          <Font name="System Bold" size="24.0" />
                                        </font>
                                        <HBox.margin>
                                           <Insets bottom="20.0" right="20.0" />

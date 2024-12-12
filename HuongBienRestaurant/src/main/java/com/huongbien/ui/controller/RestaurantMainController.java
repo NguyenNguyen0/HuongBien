@@ -691,7 +691,7 @@ public class RestaurantMainController implements Initializable {
                 avatarMainCircle.setFill(new ImagePattern(image));
                 avatarDetailUserCircle.setFill(new ImagePattern(image));
             } catch (IOException e) {
-                ToastsMessage.showToastsMessage("Lỗi", "Không thể mở ảnh");
+                ToastsMessage.showMessage("Lỗi: " + e.getMessage(), "error");
             }
         }
     }

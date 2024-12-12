@@ -227,7 +227,7 @@ public class OrderCuisineController implements Initializable {
         if (!jsonArray.isEmpty()) {
             restaurantMainController.openOrderPayment();
         } else {
-            Utils.showAlert("Vui lòng chọn món", "Reminder");
+            ToastsMessage.showMessage("Vui lòng chọn món ăn trước khi thanh toán!", "warning");
         }
     }
 

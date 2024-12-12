@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Accordion?>
@@ -26,7 +27,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1039.0" prefWidth="1490.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.RestaurantMainController">
    <children>
       <BorderPane fx:id="mainBorderPane" prefHeight="200.0" prefWidth="1159.0" styleClass="gradient-main">
          <left>
@@ -452,7 +453,7 @@
                   <VBox fx:id="menuBarOverlayHBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: black;" />
                   <VBox prefHeight="553.0" prefWidth="230.0">
                      <children>
-                        <Button fx:id="showMenuButton" alignment="CENTER" mnemonicParsing="false" onAction="#onShowMenuButtonClicked" prefHeight="80.0" prefWidth="250.0" text=" Menu" textFill="WHITE">
+                        <Button fx:id="showMenuButton" alignment="CENTER" mnemonicParsing="false" onAction="#onShowMenuButtonClicked" prefHeight="80.0" prefWidth="250.0" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -461,7 +462,7 @@
                               </ImageView>
                            </graphic>
                            <font>
-                              <Font name="System Bold" size="22.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
                            <styleClass>
                               <String fx:value="transperant" />
@@ -1070,4 +1071,8 @@
          </right>
       </BorderPane>
    </children>
+   <stylesheets>
+      <URL value="@../css/hover.css" />
+      <URL value="@../css/style.css" />
+   </stylesheets>
 </StackPane>

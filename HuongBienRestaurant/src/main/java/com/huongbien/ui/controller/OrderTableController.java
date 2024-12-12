@@ -377,7 +377,7 @@ public class OrderTableController implements Initializable {
             return;
         }
         if (jsonArray.isEmpty()) {
-            ToastsMessage.showToastsMessage("Nhắc nhở", "Vui lòng chọn bàn");
+            ToastsMessage.showMessage("Vui lòng chọn bàn", "warning");
             return;
         }
         restaurantMainController.openOrderCuisine();
@@ -392,7 +392,7 @@ public class OrderTableController implements Initializable {
     void onClearTableButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.TABLE_PATH);
         if (jsonArray.isEmpty()) {
-            ToastsMessage.showToastsMessage("Nhắc nhở", "Vui lòng chọn bàn");
+            ToastsMessage.showMessage("Vui lòng chọn bàn", "warning");
             return;
         }
 

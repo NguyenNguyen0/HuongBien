@@ -139,9 +139,9 @@ public class OrderTableItemController {
         String tableId = tableIdLabel.getText();
         Table table = TableDAO.getInstance().getById(tableId);
         switch (table.getStatus()) {
-            case Constants.tableReserved -> ToastsMessage.showToastsMessage("Trạng thái bàn", "Bàn đang được đặt trước, không thể chọn bàn này.");
-            case Constants.tableOpen -> ToastsMessage.showToastsMessage("Trạng thái bàn", "Bàn đang được phục vụ, không thể chọn bàn này.");
-            case Constants.tableClosed -> ToastsMessage.showToastsMessage("Trạng thái bàn", "Bàn đã đóng, không thể chọn bàn này.");
+            case Constants.tableReserved -> ToastsMessage.showMessage("Bàn đang được đặt trước, không thể chọn bàn này.", "warning");
+            case Constants.tableOpen -> ToastsMessage.showMessage("Bàn đang được phục vụ, không thể chọn bàn này.", "warning");
+            case Constants.tableClosed -> ToastsMessage.showMessage("Bàn đã đóng, không thể chọn bàn này.", "warning");
             case Constants.tableEmpty -> {
                 writeDataToJSONFile(tableId);
                 orderTableController.tableInfoTabPane.getTabs().clear();

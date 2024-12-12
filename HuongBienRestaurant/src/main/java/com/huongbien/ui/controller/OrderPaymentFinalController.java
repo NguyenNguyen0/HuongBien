@@ -333,7 +333,7 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML
     void onCompleteOrderPaymentFinalAction(ActionEvent event) throws IOException {
         if(!statusFlags) {
-            ToastsMessage.showToastsMessage("Thông báo", "Vui lòng thu tiền thanh toán");
+            ToastsMessage.showMessage("Vui lòng thu tiền thanh toán", "warning");
             return;
         }
         try {

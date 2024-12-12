@@ -632,7 +632,7 @@ public class EmployeeManagementController implements Initializable {
                 Image image = new Image(Converter.bytesToInputStream(employeeImageBytes));
                 employeeAvatarCircle.setFill(new ImagePattern(image));
             } catch (IOException e) {
-                ToastsMessage.showToastsMessage("Lỗi", "Không thể mở ảnh");
+                ToastsMessage.showMessage("Không thể mở ảnh", "error");
             }
         }
     }

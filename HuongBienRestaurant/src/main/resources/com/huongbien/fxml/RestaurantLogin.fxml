@@ -19,7 +19,7 @@
    <right>
       <VBox alignment="CENTER" prefHeight="504.0" prefWidth="700.0" BorderPane.alignment="TOP_CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="496.0" prefWidth="700.0" style="-fx-background-radius: 20; -fx-background-color: rgba(255, 255, 255, 0.8);">
+            <VBox alignment="CENTER" prefHeight="496.0" prefWidth="700.0" style="-fx-background-radius: 20; -fx-background-color: white;">
                <children>
                   <VBox alignment="CENTER" prefHeight="371.0" prefWidth="700.0">
                      <children>

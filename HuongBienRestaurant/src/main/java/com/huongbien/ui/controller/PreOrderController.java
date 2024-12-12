@@ -343,12 +343,12 @@ public class PreOrderController implements Initializable {
         if (!phone.matches("\\d*")) {
             phoneNumField.setText(phone.replaceAll("[^\\d]", ""));
             phoneNumField.positionCaret(phoneNumField.getText().length());
-            ToastsMessage.showToastsMessage("Thông báo", "(VN +84) Chỉ nhập số, vui lòng không nhập ký tự khác");
+            ToastsMessage.showMessage("Chỉ nhập số, vui lòng không nhập ký tự khác", "warning");
             return;
         }
 
         if (phone.length() > 10) {
-            ToastsMessage.showToastsMessage("Thông báo", "(VN +84) Số điện thoại sai định dạng, phải bao gồm 10 số");
+            ToastsMessage.showMessage("Số điện thoại không hợp lệ, phải bao gồm 10 số", "warning");
             phoneNumField.setText(phone.substring(0, 10));
             phoneNumField.positionCaret(10);
             return;
@@ -371,7 +371,7 @@ public class PreOrderController implements Initializable {
                 jsonArray.add(jsonObject);
                 Utils.writeJsonToFile(jsonArray, Constants.CUSTOMER_PATH);
             } else {
-                ToastsMessage.showToastsMessage("Thông báo", "(VN +84) Không tìm thấy khách hàng, nhập thông tin khách hàng để đăng ký mới");
+                ToastsMessage.showMessage("Không tìm thấy khách hàng, nhập thông tin khách hàng để đăng ký mới", "warning");
             }
         }
     }
@@ -384,17 +384,17 @@ public class PreOrderController implements Initializable {
         JsonArray jsonArrayEmployee = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
 
         if (phoneNumField.getText().isEmpty()) {
-            ToastsMessage.showToastsMessage("Thông báo", "(VN +84) Vui lòng nhập số điện thoại để kiểm tra khách hàng");
+            ToastsMessage.showMessage("Vui lòng nhập số điện thoại để kiểm tra khách hàng", "warning");
             return;
         }
 
         if (phoneNumField.getText().length() != 10) {
-            ToastsMessage.showToastsMessage("Thông báo", "(VN +84) Số điện thoại không hợp lệ, phải bao gồm 10 số");
+            ToastsMessage.showMessage("Số điện thoại không hợp lệ, phải bao gồm 10 số", "warning");
             return;
         }
 
         if (nameField.getText().isEmpty() || phoneNumField.getText().isEmpty()) {
-            ToastsMessage.showToastsMessage("Thông báo", "Vui lòng nhập đầy đủ thông tin khách hàng để thực hiện đăng ký");
+            ToastsMessage.showMessage("Vui lòng nhập đầy đủ thông tin khách hàng để thực hiện đăng ký", "warning");
             return;
         }
 
@@ -416,7 +416,7 @@ public class PreOrderController implements Initializable {
                 customerDAO.add(new Customer(name, null, 0, phone, email, null));
                 Customer customer = customerDAO.getByOnePhoneNumber(phone);
                 customerIDField.setText(customer.getCustomerId());
-                ToastsMessage.showToastsMessage("Thông báo", "Đăng ký khách hàng mới thành công, nhấn LƯU để tạo đơn đặt mới");
+                ToastsMessage.showMessage("Đăng ký khách hàng mới thành công, nhấn LƯU để tạo đơn đặt mới", "success");
                 return;
             }
         }
@@ -532,7 +532,7 @@ public class PreOrderController implements Initializable {
                 String pickupTime = receiveDate.toString() + " " + receiveTime.toString();
 
                 String htmlContent = "<html>" +
-                        "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; text-align: center;\">" +
+                        "<body style=\"font-family: Arial, sans-serif; line-height: 1.6;\">" +
                         "<h2 style=\"color: #2c3e50;\">Cảm ơn quý khách đã đặt món tại nhà hàng!</h2>" +
                         "<p>Quý khách đã đặt bàn: " + tableInfo + "</p>" +
                         "<p>Thời gian đến nhận: " + pickupTime + "</p>" +
@@ -558,7 +558,6 @@ public class PreOrderController implements Initializable {
                         "<p style=\"margin-top: 20px;\">Trân trọng,<br><b>Nhà Hàng Hương Biển</b></p>" +
                         "</body>" +
                         "</html>";
-
                 String emailContent = htmlContent;
 
                 EmailService.sendEmailWithReservation(customer.getEmail(), "Thông tin đặt trước", emailContent, AppConfig.getEmailUsername(), AppConfig.getEmailPassword());
@@ -579,8 +578,8 @@ public class PreOrderController implements Initializable {
             }
         }
 
-        //Delay để thông báo thao tác hợp lệ rồi mới chuyển trang
-        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        //Delay 1s để thông báo thao tác hợp lệ rồi mới chuyển trang
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(e -> {
             try {
                 ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
@@ -594,11 +593,11 @@ public class PreOrderController implements Initializable {
     }
 
     @FXML
-    void onChangeValueQuantityKeyTyped(@NotNull KeyEvent event) {
+    void onChangeValueQuantityKeyTyped(KeyEvent event) {
         char c = event.getCharacter().charAt(0);
         if (!Character.isDigit(c) || c == '0') {
             numOfAttendeesField.setText("1");
-            ToastsMessage.showToastsMessage("Sai định dạng", "Vui lòng chỉ nhập số, từ 1 người trở lên");
+            ToastsMessage.showMessage("Vui lòng chỉ nhập số, từ 1 người trở lên", "warning");
         }
     }
 

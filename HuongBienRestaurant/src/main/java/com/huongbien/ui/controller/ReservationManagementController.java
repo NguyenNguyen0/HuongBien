@@ -189,6 +189,7 @@ public class ReservationManagementController implements Initializable {
         numericalPaymentQueueOrderColumn.setCellValueFactory(cellData ->
                 new SimpleObjectProperty<>((Integer) cellData.getValue().get("Numerical Order"))
         );
+
         customerPaymentQueueColumn.setCellValueFactory(cellData -> {
             String customerId = (String) cellData.getValue().get("Customer ID");
             if (customerId == null || customerId.isEmpty()) {
@@ -198,6 +199,7 @@ public class ReservationManagementController implements Initializable {
             String customerName = (customer != null) ? customer.getName() : "Không xác định";
             return new SimpleObjectProperty<>(customerName);
         });
+
         PromotionDAO promotionDAO = PromotionDAO.getInstance();
         promotionPaymentQueueColumn.setCellValueFactory(cellData -> {
             String promotionId = (String) cellData.getValue().get("Promotion ID");
@@ -208,16 +210,19 @@ public class ReservationManagementController implements Initializable {
             String promotionName = (promotion != null) ? promotion.getName() : "Không xác định";
             return new SimpleObjectProperty<>(promotionName);
         });
+
         quantityCuisinePaymentQueueColumn.setCellValueFactory(cellData -> {
             int cuisineCount = ((List<Map<String, Object>>) cellData.getValue().get("Cuisine Order")).size();
             return new SimpleObjectProperty<>(cuisineCount);
         });
+
         totalAmountPaymentQueueColumn.setCellValueFactory(cellData -> {
             double totalAmount = ((List<Map<String, Object>>) cellData.getValue().get("Cuisine Order")).stream()
                     .mapToDouble(cuisine -> (double) cuisine.get("Cuisine Money"))
                     .sum();
             return new SimpleObjectProperty<>(String.format("%,.0f VNĐ", totalAmount));
         });
+
         ObservableList<Map<String, Object>> paymentQueueObservableList = FXCollections.observableArrayList();
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -247,6 +252,7 @@ public class ReservationManagementController implements Initializable {
                     break;
                 }
             }
+
             //cuisine JSON
             assert selectedPaymentQueue != null;
             JsonArray cuisineOrderArray = selectedPaymentQueue.getAsJsonArray("Cuisine Order");
@@ -280,6 +286,7 @@ public class ReservationManagementController implements Initializable {
             Integer numericalOrder = numericalPaymentQueueOrderColumn.getCellData(selectedIndex);
             JsonArray paymentQueueArray = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
             int selectedPaymentQueueIndex = -1;
+
             for (int i = 0; i < paymentQueueArray.size(); i++) {
                 JsonObject paymentQueue = paymentQueueArray.get(i).getAsJsonObject();
                 if (paymentQueue.get("Numerical Order").getAsInt() == numericalOrder) {
@@ -287,6 +294,7 @@ public class ReservationManagementController implements Initializable {
                     break;
                 }
             }
+
             if (selectedPaymentQueueIndex != -1) {
                 paymentQueueArray.remove(selectedPaymentQueueIndex);
                 Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
