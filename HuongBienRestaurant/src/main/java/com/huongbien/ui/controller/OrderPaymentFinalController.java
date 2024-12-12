@@ -407,6 +407,11 @@ public class OrderPaymentFinalController implements Initializable {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == btn_ok) {
                     restaurantMainController.openOrderTable();
+                    if (customer != null) {
+                        int point = (int) (finalAmount/10000);
+                        CustomerBUS customerBUS = new CustomerBUS();
+                        customerBUS.increasePoint(customer.getCustomerId(), point);
+                    }
                 } else {
                     restaurantMainController.openHome();
                 }

@@ -475,7 +475,7 @@ public class RestaurantLookupController implements Initializable {
                 } else {
                     reservationIdColumn.setCellValueFactory(new PropertyValueFactory<>("reservationId"));
                     reservationCustomerPhoneColumn.setCellValueFactory(cellData -> {
-                        String phone = customerBUS.getCustomer(cellData.getValue().getCustomer().getCustomerId()).getPhoneNumber();
+                        String phone = customerBUS.getCustomer(cellData.getValue().getCustomer().getCustomerId()).getCustomerId();
                         return new SimpleStringProperty(phone);
                     });
                     reservationDateColumn.setCellValueFactory(new PropertyValueFactory<>("reservationDate"));

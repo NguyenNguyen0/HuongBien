@@ -169,7 +169,6 @@ public class RestaurantMainController implements Initializable {
                     int hoursDifference = now.getHour() - receiveTime.getHour();
                     int minutesDifference = now.getMinute() - receiveTime.getMinute();
                     int totalMinutesDifference = hoursDifference * 60 + minutesDifference;
-                    System.out.println(totalMinutesDifference);
                     //Thời gian đơn sau thời gian hiện tại 20p
                     if(totalMinutesDifference>=20){
                         reservationBUS.updateStatus(reservation.getReservationId(), "Đã hủy");
