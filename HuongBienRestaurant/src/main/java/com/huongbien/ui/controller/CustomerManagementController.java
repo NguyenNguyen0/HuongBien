@@ -201,7 +201,7 @@ public class CustomerManagementController implements Initializable {
         Customer customer = customerTable.getSelectionModel().getSelectedItem();
         String id = customer == null ? null : customer.getCustomerId();
         int accumulatedPoints = Integer.parseInt(customerAccumulatedPointsField.getText());
-        int membershipLevel = customerMembershipLevelField.getText().isEmpty() ? 0 : Integer.parseInt(customerMembershipLevelField.getText());
+        int membershipLevel = customerMembershipLevelField.getText().isEmpty() ? 0 : Utils.toIntMembershipLevel(customerMembershipLevelField.getText().trim());
         LocalDate registrationDate = customerRegistrationDateDatePicker.getValue();
         String name = customerNameField.getText();
         String phone = customerPhoneField.getText();
@@ -308,21 +308,22 @@ public class CustomerManagementController implements Initializable {
             ToastsMessage.showMessage("Tên khách hàng không được để trống", "error");
             return false;
         }
-        if (!customerPhoneField.getText().trim().isEmpty()) {
-            CustomerDAO customerDAO = CustomerDAO.getInstance();
-            List<String> customerList = customerDAO.getPhoneNumber();
-            for (String phone : customerList) {
-                if (customerPhoneField.getText().equals(phone)) {
-                    System.out.println("Số điện thoại đã được đăng kí thành viên");
-                    ToastsMessage.showMessage("Số điện thoại đã được đăng kí thành viên", "error");
-                    return false;
+        if(!swapModeCustomerButton.getText().equals("Thêm")) {
+            if (!customerPhoneField.getText().trim().isEmpty()) {
+                CustomerDAO customerDAO = CustomerDAO.getInstance();
+                List<String> customerList = customerDAO.getPhoneNumber();
+                for (String phone : customerList) {
+                    if (customerPhoneField.getText().equals(phone)) {
+                        ToastsMessage.showMessage("Số điện thoại đã được đăng kí thành viên", "error");
+                        return false;
+                    }
                 }
             }
-        } else {
+        }
+        if (customerPhoneField.getText().trim().isEmpty()) {
             ToastsMessage.showMessage("Số điện thoại không được để trống", "error");
             return false;
         }
-
         if (genderGroup.getSelectedToggle() == null) {
             ToastsMessage.showMessage("Vui lòng chọn giới tính", "error");
             return false;

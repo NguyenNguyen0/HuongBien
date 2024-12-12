@@ -54,7 +54,7 @@ public class ReservationBUS {
         return reservationDao.getListTableStatusToday(reservationList);
     }
 
-    public boolean updateReservationStatusToCancel(String id){
-        return reservationDao.updateReservationStatusToCancel(id);
+    public void updateStatus (String reservationId, String status){
+        reservationDao.updateStatus(reservationId, status);
     }
 }

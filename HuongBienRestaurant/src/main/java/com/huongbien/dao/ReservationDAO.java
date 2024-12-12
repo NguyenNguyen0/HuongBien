@@ -140,11 +140,6 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         return count(sqlQuery);
     }
 
-    public boolean updateReservationStatusToCancel(String id){
-        System.out.println("chạy");
-        return update("UPDATE reservation SET status = N'Đã hủy' WHERE id LIKE N'"+id+"'");
-    }
-
     public int countTotal() {
         return count("SELECT COUNT(*) AS totalReservation FROM reservation");
     }
