@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.bus.ReservationBUS;
 import com.huongbien.bus.TableBUS;
+import com.huongbien.config.AppConfig;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
@@ -12,6 +13,7 @@ import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.ReservationDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
+import com.huongbien.service.EmailService;
 import com.huongbien.service.QRCodeHandler;
 import com.huongbien.utils.ClearJSON;
 import com.huongbien.utils.Converter;
@@ -450,7 +452,7 @@ public class PreOrderController implements Initializable {
         Employee employee = EmployeeDAO.getInstance().getOneById(employeeID);
         double deposit = Double.parseDouble(
                 totalAmoutLabel.getText()
-                        .replaceAll("\\.", "")
+                        .replaceAll(",", "")
                         .replaceAll(" VNĐ", "")
         );
 
@@ -520,6 +522,46 @@ public class PreOrderController implements Initializable {
                 for (Table table : tables) {
                     tableBUS.updateStatusTable(table.getId(), Constants.tableReserved);
                 }
+                String tableInfo = "Không xác định";
+
+                if (jsonArrayTable != null && jsonArrayTable.size() > 0) {
+                    JsonObject tableObject = jsonArrayTable.get(0).getAsJsonObject();
+                    tableInfo = tableObject.get("Table ID").getAsString();
+                }
+
+                String pickupTime = receiveDate.toString() + " " + receiveTime.toString();
+
+                String htmlContent = "<html>" +
+                        "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; text-align: center;\">" +
+                        "<h2 style=\"color: #2c3e50;\">Cảm ơn quý khách đã đặt món tại nhà hàng!</h2>" +
+                        "<p>Quý khách đã đặt bàn: " + tableInfo + "</p>" +
+                        "<p>Thời gian đến nhận: " + pickupTime + "</p>" +
+                        "<p><b>Thông tin khách hàng:</b></p>" +
+                        "<ul style=\"list-style-type: none; padding: 0;\">" +
+                        "<li><b>Tên khách hàng:</b> " + customer.getName() + "</li>" +
+                        "<li><b>Loại khách:</b> " + partyType + "</li>" +
+                        "<li><b>Số khách:</b> " + partySize + "</li>" +
+                        "<li><b>Ghi chú:</b> " + note + "</li>" +
+                        "</ul>" +
+                        "<p><b>Thông tin đặt cọc:</b> " + String.format("%,.0f", deposit) + " VNĐ</p>" +
+                        "<p>Phí hủy đặt bàn:</p>" +
+                        "<ul style=\"list-style-type: none; padding: 0;\">" +
+                        "<li><b>Phí hủy sau thời gian quy định:</b> Nếu khách hàng hủy đặt bàn sau thời gian quy định, sẽ có khoản phí hủy được áp dụng. Phí này sẽ được thông báo rõ ràng trong quá trình đặt bàn.</li>" +
+                        "<li><b>Chính sách phí hủy:</b></li>" +
+                        "<ul>" +
+                        "<li>Hủy trước 24 giờ: Miễn phí.</li>" +
+                        "<li>Hủy trong vòng 24 giờ đến 1 giờ trước giờ đặt: Phí hủy bằng 50% số tiền cọc.</li>" +
+                        "<li>Hủy trong vòng 1 giờ hoặc không đến: Phí hủy bằng toàn bộ số tiền cọc.</li>" +
+                        "</ul>" +
+                        "</ul>" +
+                        "<p style=\"color: #34495e;\">Nếu có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi qua email hoặc số điện thoại được cung cấp.</p>" +
+                        "<p style=\"margin-top: 20px;\">Trân trọng,<br><b>Nhà Hàng Hương Biển</b></p>" +
+                        "</body>" +
+                        "</html>";
+
+                String emailContent = htmlContent;
+
+                EmailService.sendEmailWithReservation(customer.getEmail(), "Thông tin đặt trước", emailContent, AppConfig.getEmailUsername(), AppConfig.getEmailPassword());
                 ToastsMessage.showMessage("Tạo đơn đặt trước thành công", "success");
             } else {
                 ToastsMessage.showMessage("Tạo đơn đặt trước thất bại, vui lòng thử lại", "error");
