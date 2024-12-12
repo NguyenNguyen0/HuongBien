@@ -494,6 +494,12 @@ public class ReservationManagementController implements Initializable {
         int selectedIndex = preOrderTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
+            //check status before write JSON
+            if(!reservation.getStatus().equals(Variable.statusReservation[0])){
+                ToastsMessage.showMessage("Đơn đặt đang ở trạng thái: "+ reservation.getStatus() +", nên không thể nhận bàn", "warning");
+                return;
+            }
+
             //Write JSON
             ////----Table
             JsonArray jsonArrayTable = new JsonArray();
