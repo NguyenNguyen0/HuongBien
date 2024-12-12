@@ -32,6 +32,14 @@ public class Payment {
         setPaymentId(null);
     }
 
+    public Payment(double amount, LocalDate paymentDate, LocalTime paymentTime, String paymentMethod) {
+        setAmount(amount);
+        setPaymentDate(paymentDate);
+        setPaymentTime(paymentTime);
+        setPaymentMethod(paymentMethod);
+        setPaymentId(null);
+    }
+
     public void setPaymentId(String paymentId) {
         if (paymentId == null) {
             LocalDate currentDate = getPaymentDate() == null ? LocalDate.now() : getPaymentDate();

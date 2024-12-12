@@ -387,7 +387,7 @@ public class OrderPaymentFinalController implements Initializable {
 
             double moneyFromCustomer = Converter.parseMoney(resultField.getText());
             double finalAmount = Converter.parseMoney(finalAmountLabel.getText());
-            Payment payment = new Payment(moneyFromCustomer, LocalDate.now(), LocalTime.now(), "Tiền mặt");
+            Payment payment = new Payment(moneyFromCustomer, "Tiền mặt");
 
             Order order = new Order("", cashier, customer, payment, promotion, orderDetails, tables);
             order.setOrderId(orderId);
