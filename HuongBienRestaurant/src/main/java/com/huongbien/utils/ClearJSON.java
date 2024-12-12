@@ -23,6 +23,15 @@ public class ClearJSON {
         Utils.writeJsonToFile(new JsonArray(), Constants.TABLE_PATH);
     }
 
+    public static void clearAllJsonWithoutLoginSession_PaymentQueue() {
+        Utils.writeJsonToFile(new JsonArray(), Constants.CUISINE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.CUSTOMER_PATH);
+//      Utils.writeJsonToFile(new JsonArray(), Constants.LOGIN_SESSION_PATH);
+//      Utils.writeJsonToFile(new JsonArray(), Constants.PAYMENT_QUEUE_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.RESERVATION_PATH);
+        Utils.writeJsonToFile(new JsonArray(), Constants.TABLE_PATH);
+    }
+
     public static void clearCuisineJson() {
         Utils.writeJsonToFile(new JsonArray(), Constants.CUISINE_PATH);
     }

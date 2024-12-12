@@ -450,7 +450,7 @@ public class PreOrderController implements Initializable {
         Employee employee = EmployeeDAO.getInstance().getOneById(employeeID);
         double deposit = Double.parseDouble(
                 totalAmoutLabel.getText()
-                        .replaceAll(",", "")
+                        .replaceAll("\\.", "")
                         .replaceAll(" VNĐ", "")
         );
 
@@ -536,7 +536,7 @@ public class PreOrderController implements Initializable {
         PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
         pause.setOnFinished(e -> {
             try {
-                ClearJSON.clearAllJsonWithoutLoginSession();
+                ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
                 restaurantMainController.openReservationManagement();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

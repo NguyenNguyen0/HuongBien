@@ -150,6 +150,10 @@ public class EmployeeDAO extends GenericDAO<Employee> {
         return update("UPDATE Employee SET status = ? WHERE id = ?;", status, id);
     }
 
+    public void updateWorkHour(String id, double workHours) {
+        update("UPDATE Employee SET workHours = ? WHERE id = ?;", workHours, id);
+    }
+
     public boolean updateEmployeeInfo(Employee employee) {
         String sql = "UPDATE Employee SET name = ?, phoneNumber = ?, citizenIDNumber = ?, gender = ?, address = ?, birthday = ?, email = ?, status = ?, hireDate = ?, position = ?, workHours = ?, hourlyPay = ?, salary = ?, profileImage = ?, managerId = ? WHERE id = ?";
         return update(sql,

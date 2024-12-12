@@ -6,8 +6,6 @@ import com.google.gson.JsonObject;
 import com.huongbien.bus.*;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
-import com.huongbien.dao.EmployeeDAO;
-import com.huongbien.dao.OrderDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
@@ -58,13 +56,13 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML
     public GridPane cuisineGridPane;
     @FXML
-    private TextField resultField;
+    private TextField paymentAmountField;
     @FXML
-    private Label resultLabel;
+    private Label paymentAmountLabel;
     @FXML
-    private Label finalAmountLabel;
+    private Label totalAmountLabel;
     @FXML
-    private Label refundLabel;
+    private Label dispensedAmountLabel;
     @FXML
     private Label statusLabel;
 
@@ -90,10 +88,10 @@ public class OrderPaymentFinalController implements Initializable {
     }
 
     public void setDefaultInfo() {
-        resultField.setText("0");
-        resultLabel.setText("0 VNĐ");
-        finalAmountLabel.setText("0 VNĐ");
-        refundLabel.setText("0 VNĐ");
+        paymentAmountField.setText("0");
+        paymentAmountLabel.setText("0 VNĐ");
+        totalAmountLabel.setText("0 VNĐ");
+        dispensedAmountLabel.setText("0 VNĐ");
         statusLabel.setText("Chưa thu tiền khách");
         statusLabel.setStyle("-fx-text-fill: red");
     }
@@ -191,7 +189,7 @@ public class OrderPaymentFinalController implements Initializable {
         double discountMoney = cuisineAmount * discount;
         double vat = cuisineAmount * 0.1;
         double finalAmount = tableAmount + cuisineAmount + vat - discountMoney;
-        finalAmountLabel.setText(Converter.formatMoney(finalAmount) + " VNĐ");
+        totalAmountLabel.setText(Converter.formatMoney(finalAmount) + " VNĐ");
 
         renderSuggestMoneyButtons(finalAmount);
     }
@@ -214,8 +212,8 @@ public class OrderPaymentFinalController implements Initializable {
         for (int label : suggestedMoneys) {
             Button button = createSuggestMoneyButton(Converter.formatMoney(label));
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, s -> {
-                resultField.setText(Converter.formatMoney(label));
-                resultLabel.setText(Converter.formatMoney(label) + " VNĐ");
+                paymentAmountField.setText(Converter.formatMoney(label));
+                paymentAmountLabel.setText(Converter.formatMoney(label) + " VNĐ");
                 setFinalAmountInfo();
             });
             suggestMoneyButtonContainer.add(button, columns, rows);
@@ -228,18 +226,18 @@ public class OrderPaymentFinalController implements Initializable {
     }
 
     public void setFinalAmountInfo() {
-        double moneyFromCustomer = Converter.parseMoney(resultField.getText());
-        double finalAmount = Converter.parseMoney(finalAmountLabel.getText());
+        double moneyFromCustomer = Converter.parseMoney(paymentAmountField.getText());
+        double finalAmount = Converter.parseMoney(totalAmountLabel.getText());
         if (moneyFromCustomer >= finalAmount) {
             statusLabel.setText("Khách đưa đủ tiền");
             statusLabel.setStyle("-fx-text-fill: white");
             double refund = moneyFromCustomer - finalAmount;
-            refundLabel.setText(Converter.formatMoney((int) refund) + " VNĐ");
+            dispensedAmountLabel.setText(Converter.formatMoney((int) refund) + " VNĐ");
             statusFlags = true;
         } else {
             statusLabel.setText("Khách đưa thiếu tiền");
             statusLabel.setStyle("-fx-text-fill: red");
-            refundLabel.setText("0 VNĐ");
+            dispensedAmountLabel.setText("0 VNĐ");
             statusFlags = false;
         }
     }
@@ -286,11 +284,11 @@ public class OrderPaymentFinalController implements Initializable {
     @FXML
     void onNumberClicked(MouseEvent event) {
         int value = Integer.parseInt(((Pane) event.getSource()).getId().replace("keyFlowPane", ""));
-        double currentResult = Converter.parseMoney(resultField.getText());
+        double currentResult = Converter.parseMoney(paymentAmountField.getText());
         double newResult = currentResult == 0 ? (double) value : currentResult * 10 + value;
         String result = Converter.formatMoney((int) newResult);
-        resultField.setText(result);
-        resultLabel.setText(result + " VNĐ");
+        paymentAmountField.setText(result);
+        paymentAmountLabel.setText(result + " VNĐ");
         setFinalAmountInfo();
     }
 
@@ -299,16 +297,16 @@ public class OrderPaymentFinalController implements Initializable {
         String symbol = ((Pane) event.getSource()).getId().replace("keyFlowPane", "");
         switch (symbol) {
             case "Clear":
-                resultField.setText("0");
-                resultLabel.setText("0" + " VNĐ");
+                paymentAmountField.setText("0");
+                paymentAmountLabel.setText("0" + " VNĐ");
                 break;
             case "Delete":
-                String currentText = resultField.getText().replace(".", "");
+                String currentText = paymentAmountField.getText().replace(".", "");
                 if (!currentText.isEmpty()) {
                     currentText = currentText.substring(0, currentText.length() - 1);
                     String result = currentText.isEmpty() ? "0" : Converter.formatMoney(Converter.parseMoney(currentText));
-                    resultField.setText(result);
-                    resultLabel.setText(result + " VNĐ");
+                    paymentAmountField.setText(result);
+                    paymentAmountLabel.setText(result + " VNĐ");
                 }
                 break;
         }
@@ -336,8 +334,6 @@ public class OrderPaymentFinalController implements Initializable {
             ToastsMessage.showToastsMessage("Thông báo", "Vui lòng thu tiền thanh toán");
             return;
         }
-
-//        ToastsMessage.showToastsMessage("Thông báo gián đoạn", "Chức năng đang phát triển");
         try {
             String orderId = Order.generateOrderId(LocalDate.now(), LocalTime.now());
 
@@ -385,8 +381,8 @@ public class OrderPaymentFinalController implements Initializable {
                 orderDetails.add(orderDetail);
             }
 
-            double moneyFromCustomer = Converter.parseMoney(resultField.getText());
-            double finalAmount = Converter.parseMoney(finalAmountLabel.getText());
+            double moneyFromCustomer = Converter.parseMoney(paymentAmountField.getText());
+            double finalAmount = Converter.parseMoney(totalAmountLabel.getText());
             Payment payment = new Payment(moneyFromCustomer, "Tiền mặt");
 
             Order order = new Order("", cashier, customer, payment, promotion, orderDetails, tables);
@@ -398,6 +394,7 @@ public class OrderPaymentFinalController implements Initializable {
             if (orderBUS.addOrder(order)) {
                 ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thành công");
 //                TODO: clear file, show invoice, goback to ordetable page
+                System.out.println(orderId);
             } else {
                 ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thất bại");
             }

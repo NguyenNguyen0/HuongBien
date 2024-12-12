@@ -801,71 +801,6 @@
                         </VBox>
                         <TabPane prefHeight="422.0" prefWidth="780.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                           <tabs>
-                              <Tab text="Chấm công">
-                                 <content>
-                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
-                                       <center>
-                                          <VBox alignment="CENTER" prefHeight="299.0" prefWidth="780.0" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <Label prefHeight="36.0" prefWidth="636.0" text="Chưa cập nhật số giờ tích luỹ xuống dbs khi đăng xuất &lt;Xoá sau khi làm xong&gt;" textFill="RED">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Label>
-                                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="780.0">
-                                                   <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Số giờ đã làm hôm nay:">
-                                                         <font>
-                                                            <Font size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="countHourWorkDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
-                                                         <font>
-                                                            <Font name="System Bold" size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="780.0">
-                                                   <children>
-                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Tổng số giờ làm tích luỹ:">
-                                                         <font>
-                                                            <Font size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label fx:id="worksHourDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
-                                                         <font>
-                                                            <Font name="System Bold" size="25.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets left="60.0" right="60.0" />
-                                             </padding>
-                                          </VBox>
-                                       </center>
-                                       <bottom>
-                                          <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="780.0" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <Label prefHeight="36.0" text="Lưu ý: Hệ thống chỉ ghi nhận số GIỜ, vui lòng không thoát trong ca làm" textFill="RED">
-                                                   <font>
-                                                      <Font size="20.0" />
-                                                   </font>
-                                                   <HBox.margin>
-                                                      <Insets right="20.0" />
-                                                   </HBox.margin>
-                                                </Label>
-                                             </children>
-                                             <BorderPane.margin>
-                                                <Insets left="10.0" />
-                                             </BorderPane.margin>
-                                          </HBox>
-                                       </bottom>
-                                    </BorderPane>
-                                 </content>
-                              </Tab>
                             <Tab text="Hồ sơ nhân viên">
                                  <content>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
@@ -893,7 +828,7 @@
                                                             <Font size="25.0" />
                                                          </font>
                                                       </Label>
-                                                      <TextField fx:id="nameDetailUserField" text="Chưa cập nhật thông tin NV xuống dbs khi ấn lưu &lt;Xoá sau khi làm xong&gt;" HBox.hgrow="ALWAYS">
+                                                      <TextField fx:id="nameDetailUserField" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="25.0" />
                                                          </font>
@@ -962,12 +897,40 @@
                                     </BorderPane>
                                  </content>
                             </Tab>
-                              <Tab text="Hệ số lương">
+                              <Tab text="Chấm công và hệ số lương">
                                  <content>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
                                           <VBox alignment="CENTER" prefHeight="299.0" prefWidth="780.0" BorderPane.alignment="CENTER">
                                              <children>
+                                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="780.0">
+                                                   <children>
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Số giờ đã làm hôm nay:">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="countHourWorkDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                         <font>
+                                                            <Font name="System Bold" size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="780.0">
+                                                   <children>
+                                                      <Label prefHeight="36.0" prefWidth="280.0" text="Tổng số giờ làm tích luỹ:">
+                                                         <font>
+                                                            <Font size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="worksHourDetailUserLabel" alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="280.0" text="Unknown">
+                                                         <font>
+                                                            <Font name="System Bold" size="25.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
                                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="280.0" text="Chức vụ:">
@@ -1016,6 +979,13 @@
                                              </padding>
                                           </VBox>
                                        </center>
+                                       <bottom>
+                                          <Label prefHeight="36.0" text="Lưu ý: Hệ thống chỉ ghi nhận số GIỜ, vui lòng không thoát trong ca làm" textFill="RED" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Label>
+                                       </bottom>
                                     </BorderPane>
                                  </content>
                               </Tab>
@@ -1025,11 +995,6 @@
                                        <center>
                                           <VBox alignment="CENTER" prefHeight="299.0" prefWidth="780.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <Label prefHeight="36.0" prefWidth="636.0" text="Chưa cập nhật mật khẩu mới dbs khi ấn cập nhật &lt;Xoá sau khi làm xong&gt;" textFill="RED">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </Label>
                                                 <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="780.0">
                                                    <children>
                                                       <Label prefHeight="36.0" prefWidth="280.0" text="Mật khẩu hiện tại:">

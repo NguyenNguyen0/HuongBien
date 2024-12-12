@@ -1,5 +1,6 @@
 package com.huongbien.entity;
 
+import com.huongbien.config.Constants;
 import com.huongbien.utils.Utils;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public class Order {
     private LocalDate orderDate;
     private LocalTime orderTime;
     private String notes;
-    private final double vatTax = 0.1;
+    private final double vatTax = Constants.VAT;
     private double paymentAmount;
     private double dispensedAmount;
     private double totalAmount;
@@ -24,11 +25,10 @@ public class Order {
     private ArrayList<Table> tables = new ArrayList<>();
     private ArrayList<OrderDetail> orderDetails = new ArrayList<>();
 
-    public Order() {
-    }
+    public Order() {}
 
-    public Order(String orderId, LocalDate orderDate, LocalTime localTime, String notes, double paymentAmount,
-                 double dispensedAmount, double totalAmount, double discount,
+    public Order(String orderId, LocalDate orderDate, LocalTime localTime, String notes,
+                 double paymentAmount, double dispensedAmount, double totalAmount, double discount,
                  Customer customer, Employee employee, Promotion promotion, Payment payment,
                  ArrayList<Table> tables, ArrayList<OrderDetail> orderDetails) {
         setOrderId(orderId);
@@ -50,6 +50,14 @@ public class Order {
     public Order(String notes, Employee employee, Customer customer,
                  Payment payment, Promotion promotion,
                  ArrayList<OrderDetail> orderDetails, ArrayList<Table> tables) {
+        setOrderId(null);
+        setOrderDate(LocalDate.now());
+        setOrderTime(LocalTime.now());
+        setTotalAmount(calculateGrandTotal());
+        setPaymentAmount(payment.getAmount());
+        setDiscount(promotion == null ? 0 : promotion.getDiscount());
+        setDispensedAmount(getTotalAmount() - getPaymentAmount());
+
         setCustomer(customer);
         setEmployee(employee);
         setTables(tables);
@@ -57,14 +65,6 @@ public class Order {
         setPayment(payment);
         setPromotion(promotion);
         setNotes(notes);
-
-        setOrderDate(LocalDate.now());
-        setOrderTime(LocalTime.now());
-        setOrderId(null);
-        setDiscount(promotion == null ? 0 : promotion.getDiscount());
-        setPaymentAmount(payment.getAmount());
-        setTotalAmount(calculateGrandTotal());
-        setDispensedAmount(getPaymentAmount() - getTotalAmount());
     }
 
     public double calculateTotalAmount() {
@@ -144,9 +144,9 @@ public class Order {
     }
 
     public void setTotalAmount(double totalAmount) {
-        if (totalAmount <= 0) {
-            throw new IllegalArgumentException("Total amount must be greater than 0");
-        }
+//        if (totalAmount <= 0) {
+//            throw new IllegalArgumentException("Total amount must be greater than 0");
+//        }
         this.totalAmount = totalAmount;
     }
 
