@@ -444,7 +444,6 @@ public class ReservationManagementController implements Initializable {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
             String id = reservation.getReservationId();
             ToastsMessage.showMessage("Đang cập nhật bàn cho đơn hàng đặt trước: " + id, "success");
-//
             //reservation
             JsonArray jsonArrayReservation = new JsonArray();
             JsonObject jsonObjectReservation = new JsonObject();

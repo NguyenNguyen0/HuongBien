@@ -312,7 +312,7 @@ public class OrderPaymentFinalController implements Initializable {
     }
 
     @FXML
-    void showInvoiceButtonAction(ActionEvent event) throws IOException {
+    void onInvoicePrinterDialogAction(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/InvoicePrinterDialog.fxml"));
         Parent root = loader.load();
         Stage primaryStage = new Stage();
@@ -332,6 +332,7 @@ public class OrderPaymentFinalController implements Initializable {
             ToastsMessage.showToastsMessage("Thông báo", "Vui lòng thu tiền thanh toán");
             return;
         }
-        ToastsMessage.showToastsMessage("Thông báo gián đoạn", "Chức năng đang phát triển");
+        //TODO: Building...
+
     }
 }
