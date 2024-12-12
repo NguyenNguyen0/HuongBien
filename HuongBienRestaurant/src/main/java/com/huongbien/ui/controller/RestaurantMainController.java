@@ -3,15 +3,22 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.CustomerBUS;
+import com.huongbien.bus.ReservationBUS;
+import com.huongbien.config.AppConfig;
 import com.huongbien.config.Constants;
 import com.huongbien.dao.AccountDAO;
 import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.entity.Account;
+import com.huongbien.entity.Customer;
 import com.huongbien.entity.Employee;
+import com.huongbien.entity.Reservation;
+import com.huongbien.service.EmailService;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.ClearJSON;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
+import com.sun.marlin.FloatArrayCache;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -44,10 +51,14 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RestaurantMainController implements Initializable {
     @FXML
@@ -127,6 +138,11 @@ public class RestaurantMainController implements Initializable {
 
     private byte[] employeeImageBytes = null;
 
+    private final ReservationBUS reservationBUS = new ReservationBUS();
+    private static ScheduledExecutorService scheduler;
+
+    private static List<String> listSentEmailAlready = null;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setDefault();
@@ -141,6 +157,66 @@ public class RestaurantMainController implements Initializable {
         menuBorderPane.setTranslateX(-250);
         detailUserBorderPane.setTranslateX(250);
 
+        scheduler = Executors.newScheduledThreadPool(1);
+
+        Runnable task = () -> {
+            List<Reservation> reservationList = reservationBUS.getListWaitedToday();
+            CustomerBUS customerBUS = new CustomerBUS();
+            if(reservationList != null){
+                for (Reservation reservation : reservationList) {
+                    LocalTime receiveTime = reservation.getReceiveTime();
+                    LocalTime now = LocalTime.now();
+                    int hoursDifference = now.getHour() - receiveTime.getHour();
+                    int minutesDifference = now.getMinute() - receiveTime.getMinute();
+                    int totalMinutesDifference = hoursDifference * 60 + minutesDifference;
+                    System.out.println(totalMinutesDifference);
+                    //Thời gian đơn sau thời gian hiện tại 20p
+                    if(totalMinutesDifference>=20){
+                        reservationBUS.updateStatus(reservation.getReservationId(), "Đã hủy");
+                    }
+                    //Gửi email khi đơn đặt còn cách 1 tiếng
+                    if(totalMinutesDifference>=-60){
+                        int check = 0;
+                        if(listSentEmailAlready != null){
+                            for (String s: listSentEmailAlready) {
+                                if (s.equals(reservation.getReservationId())){
+                                    check = 1;
+                                }
+                            }
+                        }
+                        if(check == 0) {
+                            String htmlContent = "<html>" +
+                                    "<body style=\"font-family: Arial, sans-serif; line-height: 1.6; text-align: left;\">" +
+                                    "<h2 style=\"color: #2c3e50;\">Quý khách có đơn đặt bàn sắp đến giờ!</h2>" +
+                                    "<p>Mã đơn đặt: <b>" + reservation.getReservationId() + "<b> </p>" +
+                                    "<p>Thời gian đến nhận: " + receiveTime + "</p>" +
+                                    "<p style=\"color: #34495e;\">Đơn đặt sẽ bị hủy sau 20 phút nếu quý khách không đến nhận bàn, vui lòng chú ý thời gian nhận bàn!.</p>" +
+                                    "<p style=\"margin-top: 20px;\">Trân trọng,<br><b>Nhà Hàng Hương Biển</b></p>" +
+                                    "</body>" +
+                                    "</html>";
+                            String emailContent = htmlContent;
+                            Customer customer = customerBUS.getCustomerById(reservation.getCustomer().getCustomerId());
+                            EmailService.sendEmailWithReservation(customer.getEmail(), "Thông tin đặt trước", emailContent, AppConfig.getEmailUsername(), AppConfig.getEmailPassword());
+                            listSentEmailAlready.add(reservation.getReservationId());
+                        }
+                    }
+                }
+            }
+        };
+
+        // Lên lịch để chạy mỗi 5 giây
+        scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
+        // Đăng ký shutdown hook để đảm bảo scheduler dừng khi chương trình kết thúc
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            scheduler.shutdown();  // Dừng scheduler
+            try {
+                if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    scheduler.shutdownNow();  // Buộc dừng nếu không hoàn thành trong 5 giây
+                }
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+            }
+        }));
     }
 
     public void setDefault() {

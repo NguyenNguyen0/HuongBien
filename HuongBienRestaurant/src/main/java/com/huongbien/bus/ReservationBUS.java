@@ -53,4 +53,8 @@ public class ReservationBUS {
     public List<Table> getListTableStatusToday(List<Reservation> reservationList) throws SQLException {
         return reservationDao.getListTableStatusToday(reservationList);
     }
+
+    public void updateStatus (String reservationId, String status){
+        reservationDao.updateStatus(reservationId, status);
+    }
 }
