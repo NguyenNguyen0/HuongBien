@@ -52,6 +52,9 @@ public class EmployeeDAO extends GenericDAO<Employee> {
     public List<Employee> getManyById(String id) {
         return getMany("SELECT * FROM Employee WHERE id LIKE ?;", id + "%");
     }
+    public Employee getByEmail(String email) {
+        return getOne("SELECT * FROM Employee WHERE email = ?;", email);
+    }
 
     public List<Employee> getByPhoneNumber(String phoneNumber) {
         return getMany("SELECT * FROM Employee WHERE phoneNumber LIKE ?;", phoneNumber + "%");
@@ -165,6 +168,17 @@ public class EmployeeDAO extends GenericDAO<Employee> {
                 employee.getSalary(),
                 employee.getProfileImage(),
                 employee.getManager() != null ? employee.getManager().getEmployeeId() : null,
+                employee.getEmployeeId());
+    }
+
+    public boolean updateEmployeeInfoProfile(Employee employee) {
+        String sql = "UPDATE Employee SET name = ?, phoneNumber = ?, birthday = ?, email = ?, profileImage = ? WHERE id = ?";
+        return update(sql,
+                employee.getName(),
+                employee.getPhoneNumber(),
+                employee.getBirthday(),
+                employee.getEmail(),
+                employee.getProfileImage(),
                 employee.getEmployeeId());
     }
 
