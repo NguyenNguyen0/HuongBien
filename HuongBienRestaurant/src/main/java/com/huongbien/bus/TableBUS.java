@@ -108,4 +108,8 @@ public class TableBUS {
         if (tables.isEmpty() || reservationId.isBlank() || reservationId.isEmpty()) return false;
         return tableDao.addTablesToReservation(reservationId, tables);
     }
+
+    public boolean updateStatusTable(String id, String status){
+        return tableDao.updateStatusTable(id, status);
+    }
 }

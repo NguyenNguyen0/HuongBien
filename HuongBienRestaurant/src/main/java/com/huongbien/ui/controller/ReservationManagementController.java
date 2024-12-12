@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.CustomerBUS;
+import com.huongbien.bus.TableBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
@@ -25,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 
@@ -107,6 +110,8 @@ public class ReservationManagementController implements Initializable {
     private Label refundDepositPreOrderLabel;
     @FXML
     private Label notePreOrderLabel;
+    @FXML
+    private TextField searchReservation;
 
     //Controller area
     public RestaurantMainController restaurantMainController;
@@ -128,6 +133,7 @@ public class ReservationManagementController implements Initializable {
 
         //Pre-Order
         setPreOrderTableViewColumn();
+        searchReservation.clear();
     }
 
     private void disablePayQueueButton() {
@@ -366,13 +372,21 @@ public class ReservationManagementController implements Initializable {
     //Pre-Order here
     private void setPreOrderTableViewColumn() {
         ReservationDAO reservationDAO = ReservationDAO.getInstance();
+        CustomerBUS customerBUS = new CustomerBUS();
+        String id = "";
+        if(!searchReservation.getText().isEmpty()) {
+            String search = searchReservation.getText();
+            if(customerBUS.getCustomerSearchReservation(search) != null){
+                id = customerBUS.getCustomerSearchReservation(search).getCustomerId();
+            }
+        }
         //set Quantity Pre Order
-        int quantity = reservationDAO.getCountStatusReservationByDate(receivePreOrderDatePicker.getValue(), statusPreOrderComboBox.getValue());
+        int quantity = reservationDAO.getCountStatusReservationByDate(receivePreOrderDatePicker.getValue(), statusPreOrderComboBox.getValue(), id);
         countPreOrderLabel.setText("( " + quantity + " )");
         //table view
         preOrderTableView.getItems().clear();
         preOrderTableView.setPlaceholder(new Label("Không có dữ liệu"));
-        List<Reservation> reservationList = reservationDAO.getStatusReservationByDate(receivePreOrderDatePicker.getValue(), statusPreOrderComboBox.getValue());
+        List<Reservation> reservationList = reservationDAO.getStatusReservationByDate(receivePreOrderDatePicker.getValue(), statusPreOrderComboBox.getValue(), id);
         idPreOrderColumn.setCellValueFactory(new PropertyValueFactory<>("reservationId"));
         customerPreOrderColumn.setCellValueFactory(cellData -> {
             Customer customer = cellData.getValue().getCustomer();
@@ -526,6 +540,7 @@ public class ReservationManagementController implements Initializable {
     @FXML
     void onCancelPreOrderButtonAction(ActionEvent event) {
         ReservationDAO reservationDAO = ReservationDAO.getInstance();
+        TableBUS tableBUS = new TableBUS();
         int selectedIndex = preOrderTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             Reservation reservation = preOrderTableView.getSelectionModel().getSelectedItem();
@@ -569,11 +584,18 @@ public class ReservationManagementController implements Initializable {
                     ToastsMessage.showMessage("Đã huỷ đơn đặt ID: " + id + ", thành công", "success");
                     ToastsMessage.showMessage("Đã hoàn số tiền: " + Converter.formatMoney(refundDeposit) + " VNĐ", "success");
                 }
+                for (Table table : reservation.getTables()) {
+                    tableBUS.updateStatusTable(table.getId(), "Bàn trống");
+                }
             } else {
                 ToastsMessage.showMessage("Đơn hàng đang trạng thái " + status + ", nên không thể huỷ", "warning");
             }
         } else {
             ToastsMessage.showMessage("Vui lòng chọn một đơn đặt để huỷ", "warning");
         }
+    }
+    @FXML
+    void onSearchReservationKeyTyped(KeyEvent keyEvent) {
+        setPreOrderTableViewColumn();
     }
 }

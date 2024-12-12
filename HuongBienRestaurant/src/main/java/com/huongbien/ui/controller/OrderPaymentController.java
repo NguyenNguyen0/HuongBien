@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.bus.PromotionBUS;
+import com.huongbien.bus.TableBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
@@ -475,6 +476,13 @@ public class OrderPaymentController implements Initializable {
             tableIDs.add(tableObject.get("Table ID").getAsString());
         }
         newPaymentQueue.add("Table ID", tableIDs);
+        //Update status table
+        TableBUS tableBUS = new TableBUS();
+        System.out.println(tableArray.size());
+        for (int i = 0; i < tableArray.size(); i++) {
+            System.out.println(tableIDs.get(i).toString());
+            tableBUS.updateStatusTable(tableIDs.get(i).toString().replace("\"",""), "Phục vụ");
+        }
 
         JsonArray cuisineOrderArray = new JsonArray();
         for (int i = 0; i < cuisineArray.size(); i++) {

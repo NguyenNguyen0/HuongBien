@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.bus.ReservationBUS;
+import com.huongbien.bus.TableBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
@@ -449,7 +450,7 @@ public class PreOrderController implements Initializable {
         Employee employee = EmployeeDAO.getInstance().getOneById(employeeID);
         double deposit = Double.parseDouble(
                 totalAmoutLabel.getText()
-                        .replaceAll("\\.", "")
+                        .replaceAll(",", "")
                         .replaceAll(" VNĐ", "")
         );
 
@@ -512,6 +513,11 @@ public class PreOrderController implements Initializable {
             reservation.setStatus(Variable.statusReservation[0]);
 
             if (reservationBUS.addReservation(reservation)) {
+                TableBUS tableBUS = new TableBUS();
+                //Update status table
+                for (Table table : tables) {
+                    tableBUS.updateStatusTable(table.getId(), "Đặt trước");
+                }
                 ToastsMessage.showMessage("Tạo đơn đặt trước thành công", "success");
             } else {
                 ToastsMessage.showMessage("Tạo đơn đặt trước thất bại, vui lòng thử lại", "error");

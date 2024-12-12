@@ -134,6 +134,10 @@ public class CustomerDAO extends GenericDAO<Customer> {
                 customer.getAccumulatedPoints(), customer.getMembershipLevel(), customer.getCustomerId());
     }
 
+    public Customer getCustomerSearchReservation(String search){
+        return getOne("SELECT * FROM customer WHERE phoneNumber LIKE N'%"+search+"%'");
+    }
+
     @Override
     public boolean add(Customer customer) {
         String sql = "INSERT INTO Customer (id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel) "

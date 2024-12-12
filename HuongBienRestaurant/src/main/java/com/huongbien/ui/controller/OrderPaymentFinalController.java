@@ -3,6 +3,7 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.TableBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.PromotionDAO;
@@ -159,9 +160,11 @@ public class OrderPaymentFinalController implements Initializable {
         screenEWalletMethodVBox.setVisible(false);
         //calc table amount
         double tableAmount = 0.0;
+        TableBUS tableBUS = new TableBUS();
         for (JsonElement element : jsonArrayTable) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
+            tableBUS.updateStatusTable(id, "Bàn trống");
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
             tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tableVipPrice : 0;

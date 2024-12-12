@@ -373,4 +373,9 @@ public class    TableDAO extends GenericDAO<Table> {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean updateStatusTable(String id, String status) {
+        String sql = "UPDATE [Table] SET status = ? WHERE id = ?";
+        return update(sql, status, id);
+    }
 }
