@@ -124,7 +124,7 @@ public class OrderDAO extends GenericDAO<Order> {
                     object.getDispensedAmount(),
                     object.getTotalAmount(),
                     object.getDiscount(),
-                    object.getCustomer().getCustomerId(),
+                    object.getCustomer() != null ? object.getCustomer().getCustomerId() : null,
                     object.getEmployee().getEmployeeId(),
                     object.getPromotion() != null ? object.getPromotion().getPromotionId() : null,
                     object.getPayment() != null ? object.getPayment().getPaymentId() : null

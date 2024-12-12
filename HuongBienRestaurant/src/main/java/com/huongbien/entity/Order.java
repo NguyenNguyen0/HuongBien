@@ -183,9 +183,6 @@ public class Order {
     }
 
     public void setCustomer(Customer customer) {
-        if (customer == null) {
-            throw new IllegalArgumentException("Customer cannot be null");
-        }
         this.customer = customer;
     }
 

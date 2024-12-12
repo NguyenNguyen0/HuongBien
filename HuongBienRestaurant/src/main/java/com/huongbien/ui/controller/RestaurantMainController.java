@@ -790,11 +790,7 @@ public class RestaurantMainController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle("Exit");
-        String currentEmpID = idDetailUserField.getText();
         double hours = Double.parseDouble(countHourWorkDetailUserLabel.getText().split(":")[0]);
-        System.out.println("Employee ID: " + currentEmpID + " - Hours: " + hours);
-        //---Write here...........
-
         alert.setHeaderText("Bạn có muốn kết thúc phiên làm việc, với số giờ đã ghi nhận là " + (int)hours + " giờ?");
         ButtonType btn_ok = new ButtonType("Ok");
         ButtonType onCancelButtonClicked = new ButtonType("Cancel");

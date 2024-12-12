@@ -38,6 +38,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -512,8 +513,12 @@ public class ReservationManagementController implements Initializable {
                 ToastsMessage.showMessage("Đơn đặt đang ở trạng thái: "+ reservation.getStatus() +", nên không thể nhận bàn", "warning");
                 return;
             }
-
-            //Write JSON
+            //check receice date valid
+            if(!reservation.getReceiveDate().equals(LocalDate.now())){
+                ToastsMessage.showMessage("Vui lòng đợi đến ngày: " + reservation.getReceiveDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " để nhận bàn.", "success");
+                ToastsMessage.showMessage("Chưa đến ngày nhận bàn này!", "warning");
+                return;
+            }
             ////----Table
             JsonArray jsonArrayTable = new JsonArray();
             for (Table table : reservation.getTables()) {

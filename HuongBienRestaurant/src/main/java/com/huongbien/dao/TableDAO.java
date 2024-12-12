@@ -56,20 +56,28 @@ public class    TableDAO extends GenericDAO<Table> {
         return getMany("SELECT * FROM [Table] WHERE id IN (SELECT tableId FROM Order_Table WHERE orderId = ?)", orderId);
     }
 
-    public int getstatisticalOverviewTable() {
+    public int getCountStatisticalOverviewTable() {
         return count("SELECT COUNT(*) FROM [Table] WHERE status != N'Bàn đóng'");
     }
 
-    public int getstatisticalOverviewTableEmpty() {
+    public int getCountStatisticalOverviewTableEmpty() {
         return count("SELECT COUNT(*) FROM [Table] WHERE status = N'Bàn trống'");
     }
 
-    public int getstatisticalFloorTable(int floor) {
+    public int getCountStatisticalFloorTable(int floor) {
         return count("SELECT COUNT(*) FROM [Table] WHERE status != N'Bàn đóng' AND floor = ?", floor);
     }
 
-    public int getstatisticalFloorTableEmpty(int floor) {
+    public int getCountStatisticalFloorTableEmpty(int floor) {
         return count("SELECT COUNT(*) FROM [Table] WHERE status = N'Bàn trống' AND floor = ?", floor);
+    }
+
+    public int getCountStatisticalFloorTablePreOrder(int floor) {
+        return count("SELECT COUNT(*) FROM [Table] WHERE status = N'Đặt trước' AND floor = ?", floor);
+    }
+
+    public int getCountStatisticalFloorTableOpen(int floor) {
+        return count("SELECT COUNT(*) FROM [Table] WHERE status = N'Phục vụ' AND floor = ?", floor);
     }
 
     //TODO: Sửa return getMany cho nó gọn (- Minh -)

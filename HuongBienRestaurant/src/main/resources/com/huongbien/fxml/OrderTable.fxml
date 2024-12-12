@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
+<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
    <top>
       <HBox prefHeight="150.0" prefWidth="1584.0" BorderPane.alignment="CENTER">
          <children>
@@ -105,9 +105,9 @@
                </children>
             </VBox>
             <Pane prefHeight="150.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
-            <HBox alignment="CENTER_RIGHT">
+            <HBox alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="560.0">
                <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0" HBox.hgrow="ALWAYS">
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -117,14 +117,26 @@
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="145.0" text="Bàn trống" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </Label>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="CENTER" text="Bàn trống" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="tableEmptyCountLabel" alignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0" HBox.hgrow="ALWAYS">
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -134,14 +146,26 @@
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="169.0" text="Bàn đặt trước" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </Label>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="CENTER" text="Đặt trước" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="tablePreOrderCountLabel" alignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="180.0" HBox.hgrow="ALWAYS">
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -151,11 +175,23 @@
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="30.0" prefWidth="202.0" text="Bàn đang phục vụ" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </Label>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="CENTER" text="Phục vụ" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="tableOpenCountLabel" alignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -167,9 +203,9 @@
       </HBox>
    </top>
    <bottom>
-      <HBox prefHeight="120.0" prefWidth="1692.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="130.0" prefWidth="1692.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER_LEFT">
+            <VBox alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-background-radius: 20 20 0 0;">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0">
                      <children>
@@ -215,17 +251,23 @@
                   </HBox>
                </children>
                <HBox.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets bottom="5.0" left="10.0" right="10.0" />
                </HBox.margin>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
             </VBox>
-            <VBox prefHeight="120.0" prefWidth="632.0" HBox.hgrow="ALWAYS">
+            <VBox prefHeight="120.0" prefWidth="632.0" style="-fx-background-color: white; -fx-background-radius: 20px;" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label text="Danh sách bàn đã chọn:">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
                         </Label>
                      </children>
                   </HBox>
@@ -255,7 +297,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
+                  <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
@@ -263,7 +305,7 @@
                         <Font name="System Bold" size="30.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onOrderCuisineButtonAction" prefHeight="70.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tại chỗ">
+                  <Button mnemonicParsing="false" onAction="#onOrderCuisineButtonAction" prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tại Quán">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>

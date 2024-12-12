@@ -515,6 +515,11 @@ public class PreOrderController implements Initializable {
             reservation.setPayment(payment);
 
             if (reservationBUS.addReservation(reservation)) {
+                TableBUS tableBUS = new TableBUS();
+                //Update status table
+                for (Table table : tables) {
+                    tableBUS.updateStatusTable(table.getId(), Constants.tableReserved);
+                }
                 ToastsMessage.showMessage("Tạo đơn đặt trước thành công", "success");
             } else {
                 ToastsMessage.showMessage("Tạo đơn đặt trước thất bại, vui lòng thử lại", "error");

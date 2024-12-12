@@ -6,9 +6,11 @@ import com.google.gson.JsonObject;
 import com.huongbien.bus.*;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
+import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
+import com.huongbien.utils.ClearJSON;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
@@ -16,12 +18,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -40,6 +41,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OrderPaymentFinalController implements Initializable {
@@ -329,7 +331,7 @@ public class OrderPaymentFinalController implements Initializable {
     }
 
     @FXML
-    void onCompleteOrderPaymentFinalAction(ActionEvent event) {
+    void onCompleteOrderPaymentFinalAction(ActionEvent event) throws IOException {
         if(!statusFlags) {
             ToastsMessage.showToastsMessage("Thông báo", "Vui lòng thu tiền thanh toán");
             return;
@@ -338,12 +340,12 @@ public class OrderPaymentFinalController implements Initializable {
             String orderId = Order.generateOrderId(LocalDate.now(), LocalTime.now());
 
             JsonArray jsonArraySession = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
-            Employee cashier = null;
+            Employee employee = null;
             for (JsonElement element : jsonArraySession) {
                 JsonObject jsonObject = element.getAsJsonObject();
                 String id = jsonObject.get("Employee ID").getAsString();
                 EmployeeBUS employeeBUS = new EmployeeBUS();
-                cashier = employeeBUS.getEmployeeById(id).get(0);
+                employee = employeeBUS.getEmployeeById(id).get(0);
             }
 
             JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.CUSTOMER_PATH);
@@ -383,20 +385,34 @@ public class OrderPaymentFinalController implements Initializable {
 
             double moneyFromCustomer = Converter.parseMoney(paymentAmountField.getText());
             double finalAmount = Converter.parseMoney(totalAmountLabel.getText());
-            Payment payment = new Payment(moneyFromCustomer, "Tiền mặt");
+            Payment payment = new Payment(moneyFromCustomer, Variable.paymentMethods[0]);
 
-            Order order = new Order("", cashier, customer, payment, promotion, orderDetails, tables);
+            Order order = new Order("", employee, customer, payment, promotion, orderDetails, tables);
             order.setOrderId(orderId);
             order.setTotalAmount(finalAmount);
             order.setDispensedAmount(moneyFromCustomer - finalAmount);
 
             OrderBUS orderBUS = new OrderBUS();
             if (orderBUS.addOrder(order)) {
-                ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thành công");
-//                TODO: clear file, show invoice, goback to ordetable page
+                ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
+                ToastsMessage.showMessage("Thanh toán thành công", "success");
+                //Alert
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.initStyle(StageStyle.UNDECORATED);
+                alert.setHeaderText("Thanh toán thành công");
+                alert.setContentText("Bạn có muốn tiếp tục bán hàng không?");
+                ButtonType btn_ok = new ButtonType("Đồng ý");
+                ButtonType onCancelButtonClicked = new ButtonType("Không");
+                alert.getButtonTypes().setAll(btn_ok, onCancelButtonClicked);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == btn_ok) {
+                    restaurantMainController.openOrderTable();
+                } else {
+                    restaurantMainController.openHome();
+                }
                 System.out.println(orderId);
             } else {
-                ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thất bại");
+                ToastsMessage.showMessage("Thanh toán thất bại", "success");
             }
 
         } catch (FileNotFoundException e) {

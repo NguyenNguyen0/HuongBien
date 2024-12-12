@@ -42,6 +42,12 @@ import java.util.ResourceBundle;
 
 public class OrderTableController implements Initializable {
     @FXML
+    private Label tableEmptyCountLabel;
+    @FXML
+    private Label tablePreOrderCountLabel;
+    @FXML
+    private Label tableOpenCountLabel;
+    @FXML
     public Label statisticalOverviewLabel;
     @FXML
     public Label currentFloorLabel;
@@ -103,13 +109,18 @@ public class OrderTableController implements Initializable {
     }
 
     private void statisticalRestaurant(int floor) {
-        int statisticalOverviewTableEmpty = TableDAO.getInstance().getstatisticalOverviewTableEmpty();
-        int statisticalOverview = TableDAO.getInstance().getstatisticalOverviewTable();
-        int statisticalFloorTableEmpty = TableDAO.getInstance().getstatisticalFloorTableEmpty(floor);
-        int statisticalFloor = TableDAO.getInstance().getstatisticalFloorTable(floor);
+        int statisticalOverviewTableEmpty = TableDAO.getInstance().getCountStatisticalOverviewTableEmpty();
+        int statisticalOverview = TableDAO.getInstance().getCountStatisticalOverviewTable();
+        int statisticalFloorTableEmpty = TableDAO.getInstance().getCountStatisticalFloorTableEmpty(floor);
+        int statisticalFloorTablePreOrder = TableDAO.getInstance().getCountStatisticalFloorTablePreOrder(floor);
+        int statisticalFloorTableOpen = TableDAO.getInstance().getCountStatisticalFloorTableOpen(floor);
+        int statisticalFloor = TableDAO.getInstance().getCountStatisticalFloorTable(floor);
+        tableEmptyCountLabel.setText("( " + statisticalFloorTableEmpty + " )");
+        tablePreOrderCountLabel.setText("( " + statisticalFloorTablePreOrder + ")");
+        tableOpenCountLabel.setText("( " + statisticalFloorTableOpen + " )");
         currentFloorLabel.setText(floor == 0 ? "Tầng trệt:" : "Tầng " + floor + ":");
-        statisticalOverviewLabel.setText("(" + statisticalOverviewTableEmpty + "/" + statisticalOverview + ")");
-        statisticalFloorLabel.setText("(" + statisticalFloorTableEmpty + "/" + statisticalFloor + ")");
+        statisticalOverviewLabel.setText("(" + statisticalOverviewTableEmpty + " / " + statisticalOverview + ")");
+        statisticalFloorLabel.setText("(" + statisticalFloorTableEmpty + " / " + statisticalFloor + ")");
     }
 
     //---

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class InvoicePrinterDialog extends Application {
+public class InvoicePrinterDialogGUI extends Application {
 
     public static void main(String[] args) {
         launch(args);
