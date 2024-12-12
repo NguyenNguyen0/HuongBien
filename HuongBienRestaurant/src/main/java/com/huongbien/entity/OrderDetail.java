@@ -8,11 +8,10 @@ public class OrderDetail {
     private String orderDetailId;
     private int quantity;
     private String note;
-    private double salePrice;
+    private double salePrice; // giá bán của món ăn luu rieng^
     private Cuisine cuisine;
 
-    public OrderDetail() {
-    }
+    public OrderDetail() {}
 
     //  truyền mã OrderDetail hoặc truyền mã Order để tự động tạo mã mới nếu tạo OrderDetail mới
     public OrderDetail(String orderDetailId, int quantity, String note, double salePrice, Cuisine cuisine) {
@@ -32,11 +31,9 @@ public class OrderDetail {
             this.orderDetailId = String.format("%sCT%03d", orderDetailId, Utils.randomNumber(1, 999));
             return;
         }
-
 //        if (orderDetailId == null || !orderDetailId.matches("^HD\\d{15}CT\\d{3}$")) {
 //            throw new IllegalArgumentException("Invalid order detail ID format");
 //        }
-
         this.orderDetailId = orderDetailId;
     }
 
