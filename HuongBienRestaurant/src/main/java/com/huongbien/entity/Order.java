@@ -50,14 +50,6 @@ public class Order {
     public Order(String notes, Employee employee, Customer customer,
                  Payment payment, Promotion promotion,
                  ArrayList<OrderDetail> orderDetails, ArrayList<Table> tables) {
-        setOrderDate(LocalDate.now());
-        setOrderTime(LocalTime.now());
-        setOrderId(null);
-        setTotalAmount(calculateGrandTotal());
-        setPaymentAmount(payment.getAmount());
-        setDiscount(promotion == null ? 0 : promotion.getDiscount());
-        setDispensedAmount(getTotalAmount() - getPaymentAmount());
-
         setCustomer(customer);
         setEmployee(employee);
         setTables(tables);
@@ -65,6 +57,14 @@ public class Order {
         setPayment(payment);
         setPromotion(promotion);
         setNotes(notes);
+
+        setOrderDate(LocalDate.now());
+        setOrderTime(LocalTime.now());
+        setOrderId(null);
+        setDiscount(promotion == null ? 0 : promotion.getDiscount());
+        setPaymentAmount(payment.getAmount());
+        setTotalAmount(calculateGrandTotal());
+        setDispensedAmount(getPaymentAmount() - getTotalAmount());
     }
 
     public double calculateTotalAmount() {
@@ -88,19 +88,23 @@ public class Order {
         return Math.round((calculateTotalAmount() - reducedAmount) + calculateVatTaxAmount());
     }
 
+    public static String generateOrderId(LocalDate orderDate, LocalTime orderTime) {
+        LocalDate currentDate = orderDate == null ? LocalDate.now() : orderDate;
+        LocalTime currentTime = orderTime == null ? LocalTime.now() : orderTime;
+        return String.format("HD%02d%02d%02d%02d%02d%02d%03d",
+                currentDate.getYear() % 100,
+                currentDate.getMonthValue(),
+                currentDate.getDayOfMonth(),
+                currentTime.getHour(),
+                currentTime.getMinute(),
+                currentTime.getSecond(),
+                Utils.randomNumber(1, 999)
+        );
+    }
+
     public void setOrderId(String orderId) {
         if (orderId == null) {
-            LocalDate currentDate = getOrderDate() == null ? LocalDate.now() : getOrderDate();
-            LocalTime currentTime = LocalTime.now();
-            this.orderId = String.format("HD%02d%02d%02d%02d%02d%02d%03d",
-                    currentDate.getYear() % 100,
-                    currentDate.getMonthValue(),
-                    currentDate.getDayOfMonth(),
-                    currentTime.getHour(),
-                    currentTime.getMinute(),
-                    currentTime.getSecond(),
-                    Utils.randomNumber(1, 999)
-            );
+            this.orderId = Order.generateOrderId(orderDate, orderTime);
             return;
         }
         if (orderId.matches("^HD\\d{15}$")) {

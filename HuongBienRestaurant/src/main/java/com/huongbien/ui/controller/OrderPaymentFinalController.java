@@ -3,14 +3,14 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.*;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
+import com.huongbien.dao.EmployeeDAO;
+import com.huongbien.dao.OrderDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
-import com.huongbien.entity.Cuisine;
-import com.huongbien.entity.OrderDetail;
-import com.huongbien.entity.Promotion;
-import com.huongbien.entity.Table;
+import com.huongbien.entity.*;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
@@ -38,6 +38,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -332,6 +334,74 @@ public class OrderPaymentFinalController implements Initializable {
             ToastsMessage.showToastsMessage("Thông báo", "Vui lòng thu tiền thanh toán");
             return;
         }
-        ToastsMessage.showToastsMessage("Thông báo gián đoạn", "Chức năng đang phát triển");
+
+//        ToastsMessage.showToastsMessage("Thông báo gián đoạn", "Chức năng đang phát triển");
+        try {
+            String orderId = Order.generateOrderId(LocalDate.now(), LocalTime.now());
+
+            JsonArray jsonArraySession = Utils.readJsonFromFile(Constants.LOGIN_SESSION_PATH);
+            Employee cashier = null;
+            for (JsonElement element : jsonArraySession) {
+                JsonObject jsonObject = element.getAsJsonObject();
+                String id = jsonObject.get("Employee ID").getAsString();
+                EmployeeBUS employeeBUS = new EmployeeBUS();
+                cashier = employeeBUS.getEmployeeById(id).get(0);
+            }
+
+            JsonArray jsonArrayCustomer = Utils.readJsonFromFile(Constants.CUSTOMER_PATH);
+            Customer customer = null;
+            Promotion promotion = null;
+            for (JsonElement element : jsonArrayCustomer) {
+                JsonObject jsonObject = element.getAsJsonObject();
+                String customerId = jsonObject.get("Customer ID").getAsString();
+                String promotionId = jsonObject.get("Promotion ID").getAsString();
+                CustomerBUS customerBUS = new CustomerBUS();
+                customer = customerBUS.getCustomerById(customerId);
+                promotion = new PromotionBUS().getPromotion(promotionId);
+            }
+
+            JsonArray jsonArrayTable = Utils.readJsonFromFile(Constants.TABLE_PATH);
+            ArrayList<Table> tables = new ArrayList<>();
+            for (JsonElement element : jsonArrayTable) {
+                JsonObject jsonObject = element.getAsJsonObject();
+                String id = jsonObject.get("Table ID").getAsString();
+                TableBUS tableBUS = new TableBUS();
+                Table table = tableBUS.getTable(id);
+                tables.add(table);
+            }
+
+            JsonArray jsonArrayCuisine = Utils.readJsonFromFile(Constants.CUISINE_PATH);
+            ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+            for (JsonElement element : jsonArrayCuisine) {
+                JsonObject jsonObject = element.getAsJsonObject();
+                String cuisineId = jsonObject.get("Cuisine ID").getAsString();
+                String note = jsonObject.get("Cuisine Note").getAsString();
+                int quantity = jsonObject.get("Cuisine Quantity").getAsInt();
+                double salePrice = jsonObject.get("Cuisine Price").getAsDouble();
+                CuisineBUS cuisineBUS = new CuisineBUS();
+                OrderDetail orderDetail = new OrderDetail(orderId, quantity, note, salePrice, cuisineBUS.getCuisineById(cuisineId));
+                orderDetails.add(orderDetail);
+            }
+
+            double moneyFromCustomer = Converter.parseMoney(resultField.getText());
+            double finalAmount = Converter.parseMoney(finalAmountLabel.getText());
+            Payment payment = new Payment(moneyFromCustomer, LocalDate.now(), LocalTime.now(), "Tiền mặt");
+
+            Order order = new Order("", cashier, customer, payment, promotion, orderDetails, tables);
+            order.setOrderId(orderId);
+            order.setTotalAmount(finalAmount);
+            order.setDispensedAmount(moneyFromCustomer - finalAmount);
+
+            OrderBUS orderBUS = new OrderBUS();
+            if (orderBUS.addOrder(order)) {
+                ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thành công");
+//                TODO: clear file, show invoice, goback to ordetable page
+            } else {
+                ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thất bại");
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

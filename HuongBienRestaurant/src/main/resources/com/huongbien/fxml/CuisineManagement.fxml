@@ -178,7 +178,7 @@
                               <Insets left="-50.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="52.0" prefWidth="239.0" promptText="Tìm theo">
+                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="52.0" prefWidth="239.0" promptText="Tìm theo" styleClass="textField-line-bot">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>

@@ -102,8 +102,14 @@ public class InvoicePrinterDialogController implements Initializable {
             System.out.println(promotionID);
             PromotionDAO promotionDAO = PromotionDAO.getInstance();
             Promotion promotion = promotionDAO.getById(promotionID);
-            discount = promotion.getDiscount();
-            promotionId = (promotion.getPromotionId() != null ? promotion.getPromotionId() : "Không áp dụng");
+
+            if (promotion == null) {
+                discount = 0;
+                promotionId = null;
+            } else {
+                discount = promotion.getDiscount();
+                promotionId = (promotion.getPromotionId() != null ? promotion.getPromotionId() : "Không áp dụng");
+            }
         }
         content.setText(content.getText() + String.format("%-13s %37s", "Khách hàng:", currentCustomer));
         newLine();
@@ -269,5 +275,4 @@ public class InvoicePrinterDialogController implements Initializable {
     void saveAsImageButtonAction(ActionEvent event) {
 
     }
-
 }

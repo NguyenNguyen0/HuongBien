@@ -19,7 +19,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="956.0" prefWidth="1675.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.CustomerManagementController">
    <right>
-      <VBox alignment="CENTER" prefHeight="956.0" prefWidth="755.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="971.0" prefWidth="756.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" prefHeight="130.0" prefWidth="750.0">
                <children>
@@ -279,7 +279,7 @@
                                     <Insets left="-30.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="61.0" prefWidth="193.0" promptText="Tìm theo">
+                              <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="61.0" prefWidth="193.0" promptText="Tìm theo" styleClass="textField-line-bot">
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>

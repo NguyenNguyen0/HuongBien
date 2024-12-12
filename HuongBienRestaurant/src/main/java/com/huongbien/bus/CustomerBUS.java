@@ -74,6 +74,10 @@ public class CustomerBUS {
         return customerDao.getByManyPhoneNumber(phoneNumber);
     }
 
+    public Customer getCustomerById(String id) {
+        return customerDao.getById(id);
+    }
+
     public Customer getCustomer(String customerId) {
         return customerDao.getById(customerId);
     }

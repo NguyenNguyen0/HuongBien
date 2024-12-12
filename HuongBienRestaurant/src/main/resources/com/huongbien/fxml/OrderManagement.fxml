@@ -375,7 +375,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="150.0" prefWidth="604.0">
                      <children>
-                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="65.0" prefWidth="253.0" promptText="Tìm kiếm theo">
+                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="65.0" prefWidth="253.0" promptText="Tìm kiếm theo" styleClass="textField-line-bot">
                            <HBox.margin>
                               <Insets right="10.0" />
                            </HBox.margin>

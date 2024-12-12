@@ -253,7 +253,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="employeeManagerIdComboBox" disable="true" prefHeight="52.0" prefWidth="346.0" promptText="Không có" />
+                              <ComboBox fx:id="employeeManagerIdComboBox" disable="true" prefHeight="52.0" prefWidth="346.0" promptText="Không có" styleClass="textField-line-bot" />
                            </children>
                            <VBox.margin>
                               <Insets left="20.0" right="20.0" />
@@ -362,7 +362,7 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="employeePositionComboBox" disable="true" editable="true" prefHeight="54.0" prefWidth="218.0" promptText="Nhân viên" />
+                                    <ComboBox fx:id="employeePositionComboBox" disable="true" editable="true" prefHeight="54.0" prefWidth="218.0" promptText="Nhân viên" styleClass="textField-line-bot" />
                                  </children>
                                  <HBox.margin>
                                     <Insets />
@@ -453,7 +453,7 @@
                               <Insets left="-40.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="52.0" prefWidth="427.0" promptText="Tìm theo" />
+                        <ComboBox fx:id="searchMethodComboBox" onAction="#onSearchMethodComboBoxSelected" prefHeight="52.0" prefWidth="427.0" promptText="Tìm theo" styleClass="textField-line-bot" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="52.0" prefWidth="390.0" spacing="10.0">

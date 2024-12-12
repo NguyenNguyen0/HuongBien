@@ -109,7 +109,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="promotionStatusComboBox" prefHeight="52.0" prefWidth="358.0" promptText="Còn hiệu lực" />
+                              <ComboBox fx:id="promotionStatusComboBox" prefHeight="52.0" prefWidth="358.0" promptText="Còn hiệu lực" styleClass="textField-line-bot" />
                            </children>
                            <HBox.margin>
                               <Insets />
@@ -247,7 +247,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="150.0" prefWidth="495.0">
                      <children>
-                        <ComboBox fx:id="filterPromotionStatusComboBox" onAction="#onFilterPromotionStatusComboBoxSelected" prefHeight="62.0" prefWidth="207.0" promptText="Trạng thái">
+                        <ComboBox fx:id="filterPromotionStatusComboBox" onAction="#onFilterPromotionStatusComboBoxSelected" prefHeight="62.0" prefWidth="207.0" promptText="Trạng thái" styleClass="textField-line-bot">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin></ComboBox>
