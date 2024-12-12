@@ -394,6 +394,7 @@ public class OrderPaymentFinalController implements Initializable {
             if (orderBUS.addOrder(order)) {
                 ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thành công");
 //                TODO: clear file, show invoice, goback to ordetable page
+                System.out.println(orderId);
             } else {
                 ToastsMessage.showToastsMessage("Thông báo", "Thanh toán thất bại");
             }
