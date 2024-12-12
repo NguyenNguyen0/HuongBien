@@ -82,8 +82,13 @@ public class OrderTableController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setDefaultStatusTable();
         try {
-            setStatusTablesToday();
+            setTablesStatusWaitedToday();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            setTablesStatusServingToday();
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
         tableFeeLabel.setText(tableFeeLabel.getText() + Converter.formatMoney(Variable.tableVipPrice) + " VNĐ");
@@ -139,7 +144,7 @@ public class OrderTableController implements Initializable {
         return tableDAO.getByCriteria(String.valueOf(floor), status, type, seat);
     }
 
-    private void setStatusTablesToday() throws SQLException {
+    private void setTablesStatusWaitedToday() throws SQLException {
         ReservationBUS reservationBUS = new ReservationBUS();
         TableBUS tableBUS = new TableBUS();
         List<Reservation> reservationList = reservationBUS.getListWaitedToday();
@@ -158,6 +163,20 @@ public class OrderTableController implements Initializable {
         List<Table> tableList = tableBUS.getAllTable();
         for (Table table : tableList) {
             tableBUS.updateStatusTable(table.getId(), "Bàn trống");
+        }
+    }
+
+    private void setTablesStatusServingToday() throws FileNotFoundException {
+        TableBUS tableBUS = new TableBUS();
+        JsonArray jsonArrayPaymentQueue = Utils.readJsonFromFile(Constants.PAYMENT_QUEUE_PATH);
+        for (JsonElement element : jsonArrayPaymentQueue) {
+            JsonObject table = element.getAsJsonObject();
+            JsonArray tableIdArray = table.getAsJsonArray("Table ID");
+            for (JsonElement tableIdElement : tableIdArray) {
+                String tableId = tableIdElement.getAsString();
+                tableBUS.updateStatusTable(tableId, "Phục vụ");
+            }
+
         }
     }
 
