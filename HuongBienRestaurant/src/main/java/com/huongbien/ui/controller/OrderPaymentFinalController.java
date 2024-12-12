@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.huongbien.bus.*;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
+import com.huongbien.dao.EmployeeDAO;
 import com.huongbien.dao.PromotionDAO;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.*;
@@ -17,9 +18,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -404,7 +407,7 @@ public class OrderPaymentFinalController implements Initializable {
 
             OrderBUS orderBUS = new OrderBUS();
             if (orderBUS.addOrder(order)) {
-                openPrinter();
+                ClearJSON.clearAllJsonWithoutLoginSession_PaymentQueue();
                 ToastsMessage.showMessage("Thanh toán thành công", "success");
                 //Alert
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
