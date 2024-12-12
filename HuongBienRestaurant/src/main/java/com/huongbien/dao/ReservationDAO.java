@@ -113,7 +113,7 @@ public class ReservationDAO extends GenericDAO<Reservation> {
     }
 
     public List<Reservation> getLookUpReservation(String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate, int pageIndex){
-        String sqlQuery = "SELECT * FROM reservation WHERE id LIKE N'%" + reservationId + "%' AND customerId LIKE N'%" + reservationCusId + "%'";
+        String sqlQuery = "SELECT * FROM reservation WHERE id LIKE N'%" + reservationId + "%' AND customerId LIKE N'%" + reservationCusId + "%' AND status LIKE N'Chưa nhận'";
         String reserDate = "";
         String receiDate = "";
         if (reservationDate != null){
@@ -127,7 +127,7 @@ public class ReservationDAO extends GenericDAO<Reservation> {
     }
 
     public int getCountLookUpReservation(String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate){
-        String sqlQuery = "SELECT COUNT (*) AS countRow FROM reservation WHERE id LIKE N'%" + reservationId + "%' AND customerId LIKE N'%" + reservationCusId + "%'";
+        String sqlQuery = "SELECT COUNT (*) AS countRow FROM reservation WHERE id LIKE N'%" + reservationId + "%' AND customerId LIKE N'%" + reservationCusId + "%' AND status LIKE N'Chưa nhận'";
         String reserDate = "";
         String receiDate = "";
         if (reservationDate != null){
