@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.bus.ReservationBUS;
+import com.huongbien.bus.TableBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.CustomerDAO;
@@ -280,10 +281,11 @@ public class PreOrderController implements Initializable {
         String[] parts = qrCodeContent.split(",");
         if (parts.length >= 4) {
             Platform.runLater(() -> {
-                customerIDField.setText(parts[0]);
-                nameField.setText(parts[1]);
-                phoneNumField.setText(parts[3]);
-                emailField.setText(parts[4]);
+                Customer customer = CustomerDAO.getInstance().getById(parts[0]);
+                customerIDField.setText(customer.getCustomerId() == null ? "" : customer.getCustomerId());
+                nameField.setText(customer.getName() == null ? "" : customer.getName());
+                phoneNumField.setText(customer.getPhoneNumber() == null ? "" : customer.getPhoneNumber());
+                emailField.setText(customer.getEmail() == null ? "" : customer.getEmail());
 
                 JsonArray jsonArray = new JsonArray();
                 JsonObject jsonObject = new JsonObject();
@@ -393,6 +395,7 @@ public class PreOrderController implements Initializable {
             ToastsMessage.showToastsMessage("Thông báo", "Vui lòng nhập đầy đủ thông tin khách hàng để thực hiện đăng ký");
             return;
         }
+
         if (customerIDField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initStyle(StageStyle.UNDECORATED);
@@ -447,7 +450,7 @@ public class PreOrderController implements Initializable {
         Employee employee = EmployeeDAO.getInstance().getOneById(employeeID);
         double deposit = Double.parseDouble(
                 totalAmoutLabel.getText()
-                        .replaceAll("\\.", "")
+                        .replaceAll(",", "")
                         .replaceAll(" VNĐ", "")
         );
 
@@ -508,16 +511,24 @@ public class PreOrderController implements Initializable {
             }
 
             reservation.setStatus(Variable.statusReservation[0]);
+            Payment payment = new Payment(deposit, Variable.paymentMethods[0]); //Default payment method is cash
+            reservation.setPayment(payment);
 
             if (reservationBUS.addReservation(reservation)) {
+                TableBUS tableBUS = new TableBUS();
+                //Update status table
+                for (Table table : tables) {
+                    tableBUS.updateStatusTable(table.getId(), "Đặt trước");
+                }
                 ToastsMessage.showMessage("Tạo đơn đặt trước thành công", "success");
             } else {
                 ToastsMessage.showMessage("Tạo đơn đặt trước thất bại, vui lòng thử lại", "error");
             }
         } else {
-            //Giai phap tam thoi
-            Reservation reservation_status = ReservationDAO.getInstance().getById(reservationID);
-            reservation.setStatus(reservation_status.getStatus());
+            //Temporary solution for updating reservation
+            Reservation reservationUpdate = ReservationDAO.getInstance().getById(reservationID);
+            reservation.setStatus(reservationUpdate.getStatus());
+            reservation.setPayment(reservationUpdate.getPayment());
 
             if (reservationBUS.updateReservation(reservation)) {
                 ToastsMessage.showMessage("Cập nhật đơn đặt trước: " + reservationID + " thành công", "success");
@@ -536,6 +547,7 @@ public class PreOrderController implements Initializable {
                 throw new RuntimeException(ex);
             }
         });
+        System.out.println(reservationID);
         pause.play();
     }
 

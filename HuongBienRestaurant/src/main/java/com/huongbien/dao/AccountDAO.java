@@ -39,10 +39,17 @@ public class AccountDAO extends GenericDAO<Account> {
     public Account getByUsername(String username) {
         return getOne("SELECT * FROM Account WHERE username LIKE ?;", username);
     }
+    public Account getByEmail(String email) {
+        return getOne("SELECT * FROM Account WHERE email = ?;", email);
+    }
 
     public boolean changePassword(String email, String newPassword) {
         return update("UPDATE Account SET hashcode = ? WHERE email = ?;", newPassword, email);
     }
+    public boolean updateEmail(String username, String newEmail) {
+        return update("UPDATE Account SET email = ? WHERE username = ?;", newEmail, username);
+    }
+
 
     @Override
     public boolean add(Account object) {

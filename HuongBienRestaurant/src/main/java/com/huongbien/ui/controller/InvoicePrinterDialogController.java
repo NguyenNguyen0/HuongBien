@@ -99,7 +99,6 @@ public class InvoicePrinterDialogController implements Initializable {
             currentCustomer = (customer.getName() != null ? customer.getName() : "Khách vãng lai");
             //get promotion
             String promotionID = jsonObject.get("Promotion ID").getAsString();
-            System.out.println(promotionID);
             PromotionDAO promotionDAO = PromotionDAO.getInstance();
             Promotion promotion = promotionDAO.getById(promotionID);
 

@@ -89,4 +89,8 @@ public class CustomerBUS {
     public boolean addCustomer(Customer customer) {
         return customerDao.add(customer);
     }
+
+    public Customer getCustomerSearchReservation(String search){
+        return customerDao.getCustomerSearchReservation(search);
+    }
 }

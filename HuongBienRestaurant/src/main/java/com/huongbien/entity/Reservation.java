@@ -52,8 +52,6 @@ public class Reservation {
 
     public void setReservationId(String reservationId) {
         if (reservationId == null) {
-//            LocalDate currentDate = getReservationDate();
-//            LocalTime currentTime = getReservationTime();
             LocalDate currentDate = LocalDate.now();
             LocalTime currentTime = LocalTime.now();
             this.reservationId = String.format("DB%02d%02d%02d%02d%02d%02d%03d",

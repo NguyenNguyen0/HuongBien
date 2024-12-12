@@ -161,9 +161,11 @@ public class OrderPaymentFinalController implements Initializable {
         screenEWalletMethodVBox.setVisible(false);
         //calc table amount
         double tableAmount = 0.0;
+        TableBUS tableBUS = new TableBUS();
         for (JsonElement element : jsonArrayTable) {
             JsonObject jsonObject = element.getAsJsonObject();
             String id = jsonObject.get("Table ID").getAsString();
+            tableBUS.updateStatusTable(id, "Bàn trống");
             TableDAO dao_table = TableDAO.getInstance();
             Table table = dao_table.getById(id);
             tableAmount += (table.getTableType().getTableId().equals(Variable.tableVipID)) ? Variable.tableVipPrice : 0;
@@ -314,7 +316,7 @@ public class OrderPaymentFinalController implements Initializable {
     }
 
     @FXML
-    void showInvoiceButtonAction(ActionEvent event) throws IOException {
+    void onInvoicePrinterDialogAction(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/InvoicePrinterDialog.fxml"));
         Parent root = loader.load();
         Stage primaryStage = new Stage();

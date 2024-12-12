@@ -66,12 +66,12 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         return getMany("SELECT * FROM reservation");
     }
 
-    public List<Reservation> getStatusReservationByDate(LocalDate date, String status) {
-        return getMany("SELECT * FROM reservation WHERE status = ? AND receiveDate = ?", status, date);
+    public List<Reservation> getStatusReservationByDate(LocalDate date, String status, String cusId) {
+        return getMany("SELECT * FROM reservation WHERE status = ? AND receiveDate = ? AND customerId LIKE N'%"+cusId+"%'", status, date);
     }
 
-    public int getCountStatusReservationByDate(LocalDate date, String status){
-        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND receiveDate = ?", status, date);
+    public int getCountStatusReservationByDate(LocalDate date, String status, String cusId){
+        return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND receiveDate = ? AND customerId LIKE N'%"+cusId+"%'", status, date);
     }
 
     public void updateStatus (String reservationId, String status){

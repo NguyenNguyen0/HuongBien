@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -45,8 +46,15 @@
                                  <HBox.margin>
                                     <Insets left="20.0" />
                                  </HBox.margin>
+                                 <children>
+                                    <TextField fx:id="searchReservation" onKeyTyped="#onSearchReservationKeyTyped" prefHeight="55.0" prefWidth="324.0" promptText="Tìm đơn đặt nhanh theo SĐT">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
                               </HBox>
-                              <Pane prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                              <Pane prefHeight="55.0" prefWidth="1.0" HBox.hgrow="ALWAYS" />
                               <HBox alignment="CENTER" prefHeight="60.0">
                                  <children>
                                     <Label text="Ngày nhận bàn" textFill="WHITE">
@@ -353,7 +361,7 @@
                               </VBox>
                               <HBox alignment="BOTTOM_RIGHT" prefHeight="350.0" prefWidth="500.0">
                                  <children>
-                                    <Button fx:id="deletePaymentQueueButton" mnemonicParsing="false" onAction="#onDeletePaymentQueueButtonClicked" prefHeight="70.0" prefWidth="235.0" styleClass="white-color" text="Huỷ thanh toán">
+                                    <Button fx:id="deletePaymentQueueButton" mnemonicParsing="false" onAction="#onDeletePaymentQueueButtonAction" prefHeight="70.0" prefWidth="235.0" styleClass="white-color" text="Huỷ thanh toán">
                                        <font>
                                           <Font size="24.0" />
                                        </font>

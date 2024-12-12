@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.huongbien.config.Constants;
+import com.huongbien.dao.AccountDAO;
 import com.huongbien.dao.EmployeeDAO;
+import com.huongbien.entity.Account;
 import com.huongbien.entity.Employee;
 import com.huongbien.utils.Converter;
 import com.huongbien.utils.ClearJSON;
@@ -694,31 +696,91 @@ public class RestaurantMainController implements Initializable {
 
     @FXML
     void saveInfoDetailUserButtonAction(ActionEvent event) throws FileNotFoundException {
-        byte[] profileImage = employeeImageBytes;
-        String name = nameDetailUserField.getText();
-        LocalDate birthDate = birthDateDetailUserDatePicker.getValue();
-        String phone = phoneDetailUserField.getText();
-        String email = emailDetailUserField.getText();
-        //TODO: update info to database
-        System.out.println(profileImage + " " + name + " " + birthDate + " " + phone + " " + email);
-        ToastsMessage.showMessage("Chức năng đang phát triển (Chưa update vào database)", "warning");
-        //---write here
-//
+        try {
+            String employeeId = idDetailUserField.getText();
+            EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
+            AccountDAO accountDAO = AccountDAO.getInstance();
 
-        //update info
-        setDetailUserInfo();
+            Employee existingEmployee = employeeDAO.getOneById(employeeId);
+
+            byte[] profileImage = (employeeImageBytes != null)
+                    ? employeeImageBytes
+                    : existingEmployee.getProfileImage();
+
+            String name = nameDetailUserField.getText();
+            LocalDate birthDate = birthDateDetailUserDatePicker.getValue();
+            String phone = phoneDetailUserField.getText();
+            String email = emailDetailUserField.getText();
+
+            Employee employee = new Employee();
+            employee.setEmployeeId(employeeId);
+            employee.setName(name);
+            employee.setBirthday(birthDate);
+            employee.setPhoneNumber(phone);
+            employee.setEmail(email);
+            employee.setProfileImage(profileImage);
+
+            boolean isUpdated = employeeDAO.updateEmployeeInfoProfile(employee);
+            if (isUpdated) {
+                boolean isEmailUpdated = accountDAO.updateEmail(employeeId, email);
+                if (isEmailUpdated) {
+                    ToastsMessage.showMessage("Cập nhật thông tin thành công", "success");
+                } else {
+                    ToastsMessage.showMessage("Cập nhật thông tin thành công nhưng không thể cập nhật email", "warning");
+                }
+            } else {
+                ToastsMessage.showMessage("Cập nhật thông tin thất bại, vui lòng thử lại", "error");
+            }
+
+            setDetailUserInfo();
+        } catch (Exception e) {
+            ToastsMessage.showMessage("Lỗi cơ sở dữ liệu: " + e.getMessage(), "error");
+        }
     }
 
     @FXML
     void updatePwdDetailUserButtonAction(ActionEvent event) {
-        //TODO: regex valid form change password
         String currentPwd = currentPwdField.getText();
         String newPwd = newPwdField.getText();
         String new2Pwd = new2PwdField.getText();
-        System.out.println(currentPwd + " " + newPwd + " " + new2Pwd);
-        //TODO: update password to database
 
-        ToastsMessage.showMessage("Chức năng đang phát triển (Chưa update vào database)", "warning");
+        if (currentPwd.isEmpty() || newPwd.isEmpty() || new2Pwd.isEmpty()) {
+            ToastsMessage.showMessage("Vui lòng nhập đầy đủ thông tin", "warning");
+            return;
+        }
+
+        if (!newPwd.equals(new2Pwd)) {
+            ToastsMessage.showMessage("Mật khẩu mới không khớp", "error");
+            return;
+        }
+
+        String email = emailDetailUserField.getText();
+
+        AccountDAO accountDAO = AccountDAO.getInstance();
+        Account account = accountDAO.getByEmail(email);
+
+        if (account == null) {
+            ToastsMessage.showMessage("Không tìm thấy tài khoản", "error");
+            return;
+        }
+
+        String hashedCurrentPwd = Utils.hashPassword(currentPwd);
+        if (!account.getHashcode().equals(hashedCurrentPwd)) {
+            ToastsMessage.showMessage("Mật khẩu hiện tại không đúng", "error");
+            return;
+        }
+
+        String hashedNewPwd = Utils.hashPassword(newPwd);
+
+        boolean isUpdated = accountDAO.changePassword(email, hashedNewPwd);
+        if (isUpdated) {
+            ToastsMessage.showMessage("Đổi mật khẩu thành công", "success");
+            currentPwdField.clear();
+            newPwdField.clear();
+            new2PwdField.clear();
+        } else {
+            ToastsMessage.showMessage("Đổi mật khẩu thất bại, vui lòng thử lại", "error");
+        }
     }
 
     @FXML
