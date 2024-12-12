@@ -330,12 +330,14 @@ public class ReservationManagementController implements Initializable {
                     String promotionName = (promotion != null) ? promotion.getName() : "Không áp dụng";
 
                     JsonArray cuisineOrderArray = order.getAsJsonArray("Cuisine Order");
-                    int cuisineQuantity = cuisineOrderArray.size();
+                    int cuisineQuantity = 0;
                     double totalAmount = 0;
                     for (JsonElement cuisineElement : cuisineOrderArray) {
                         JsonObject cuisine = cuisineElement.getAsJsonObject();
                         double money = cuisine.get("Cuisine Money").getAsDouble();
+                        int quantity = cuisine.get("Cuisine Quantity").getAsInt();
                         totalAmount += money;
+                        cuisineQuantity += quantity;
                     }
                     //setLabel
                     customerNamePaymentQueueLabel.setText(customerName);
@@ -417,7 +419,11 @@ public class ReservationManagementController implements Initializable {
                 tableInfo.setLength(tableInfo.length() - 2);
             }
             tablePreOrderLabel.setText(tableInfo.toString());
-            cuisinePreOrderLabel.setText(reservation.getFoodOrders().size() + " món"); //TODO: sai số lượng món
+            int cuisineQuantity = 0;
+            for (FoodOrder foodOrder : reservation.getFoodOrders()) {
+                cuisineQuantity += foodOrder.getQuantity();
+            }
+            cuisinePreOrderLabel.setText(cuisineQuantity + " món");
             depositPreOrderLabel.setText(String.format("%,.0f VNĐ", reservation.getDeposit()));
             refundDepositPreOrderLabel.setText(String.format("%,.0f VNĐ", reservation.getRefundDeposit()));
             notePreOrderLabel.setText(reservation.getNote() != null ? reservation.getNote() : "");
