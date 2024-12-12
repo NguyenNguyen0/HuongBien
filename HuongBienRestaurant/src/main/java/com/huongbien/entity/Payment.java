@@ -63,7 +63,7 @@ public class Payment {
     }
 
     public void setAmount(double amount) {
-        if (amount > 0) {
+        if (amount >= 0) {
             this.amount = amount;
         } else {
             throw new IllegalArgumentException("Amount must be greater than 0.");

@@ -3,7 +3,6 @@ package com.huongbien.bus;
 
 import com.huongbien.dao.TableDAO;
 import com.huongbien.entity.Table;
-import javafx.scene.control.Tab;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -109,7 +108,7 @@ public class TableBUS {
         return tableDao.addTablesToReservation(reservationId, tables);
     }
 
-    public boolean updateStatusTable(String id, String status){
-        return tableDao.updateStatusTable(id, status);
+    public void updateStatusTable(String id, String status){
+        tableDao.updateStatusTable(id, status);
     }
 }

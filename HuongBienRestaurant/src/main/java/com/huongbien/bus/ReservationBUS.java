@@ -2,7 +2,9 @@ package com.huongbien.bus;
 
 import com.huongbien.dao.ReservationDAO;
 import com.huongbien.entity.Reservation;
+import com.huongbien.entity.Table;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,5 +45,12 @@ public class ReservationBUS {
 
     public int getCountLookUpReservation (String reservationId, String reservationCusId, LocalDate reservationDate, LocalDate receiveDate){
         return reservationDao.getCountLookUpReservation(reservationId, reservationCusId, reservationDate, receiveDate);
+    }
+
+    public List<Reservation> getListWaitedToday(){
+        return reservationDao.getListWaitedToday();
+    }
+    public List<Table> getListTableStatusToday(List<Reservation> reservationList) throws SQLException {
+        return reservationDao.getListTableStatusToday(reservationList);
     }
 }

@@ -3,10 +3,13 @@ package com.huongbien.ui.controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.huongbien.bus.ReservationBUS;
+import com.huongbien.bus.TableBUS;
 import com.huongbien.config.Constants;
 import com.huongbien.config.Variable;
 import com.huongbien.dao.TableDAO;
 import com.huongbien.dao.TableTypeDAO;
+import com.huongbien.entity.Reservation;
 import com.huongbien.entity.Table;
 import com.huongbien.entity.TableType;
 import com.huongbien.utils.Converter;
@@ -77,6 +80,12 @@ public class OrderTableController implements Initializable {
     //initialize area
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setDefaultStatusTable();
+        try {
+            setStatusTablesToday();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         tableFeeLabel.setText(tableFeeLabel.getText() + Converter.formatMoney(Variable.tableVipPrice) + " VNĐ");
         loadTablesToGridPane(Variable.floor, Variable.status, Variable.tableTypeName, Variable.seats); //value mặc định
         setComboBoxValue();
@@ -128,6 +137,28 @@ public class OrderTableController implements Initializable {
     private List<Table> getTableDataByCriteria(int floor, String status, String type, String seat) {
         TableDAO tableDAO = TableDAO.getInstance();
         return tableDAO.getByCriteria(String.valueOf(floor), status, type, seat);
+    }
+
+    private void setStatusTablesToday() throws SQLException {
+        ReservationBUS reservationBUS = new ReservationBUS();
+        TableBUS tableBUS = new TableBUS();
+        List<Reservation> reservationList = reservationBUS.getListWaitedToday();
+        if(reservationList !=null ){
+            List<Table> tableList = reservationBUS.getListTableStatusToday(reservationList);
+            if(tableList != null) {
+                for (Table table : tableList) {
+                    tableBUS.updateStatusTable(table.getId(), "Đặt trước");
+                }
+            }
+        }
+    }
+
+    private void setDefaultStatusTable(){
+        TableBUS tableBUS = new TableBUS();
+        List<Table> tableList = tableBUS.getAllTable();
+        for (Table table : tableList) {
+            tableBUS.updateStatusTable(table.getId(), "Bàn trống");
+        }
     }
 
     private void setComboBoxValue() {

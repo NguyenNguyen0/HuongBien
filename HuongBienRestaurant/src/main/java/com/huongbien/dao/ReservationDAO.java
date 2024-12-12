@@ -74,6 +74,32 @@ public class ReservationDAO extends GenericDAO<Reservation> {
         return count("SELECT COUNT(*) FROM reservation WHERE status = ? AND receiveDate = ? AND customerId LIKE N'%"+cusId+"%'", status, date);
     }
 
+    public List<Reservation> getListWaitedToday(){
+        return getMany("SELECT * FROM reservation WHERE status LIKE N'Chưa nhận' AND receiveDate = CONVERT(DATE, GETDATE())");
+    }
+
+    public List<Table> getListTableStatusToday(List<Reservation> reservationList) throws SQLException {
+        List<Table> tableList = new ArrayList<>();
+        try{
+            if(reservationList != null){
+                for (Reservation reservation : reservationList) {
+                    String sql = "SELECT * FROM reservation_table WHERE reservationId LIKE N'"+reservation.getReservationId()+"'";
+                    PreparedStatement statement = statementHelper.prepareStatement(sql);
+                    ResultSet resultSet = statement.executeQuery();
+                    while (resultSet.next()) {
+                        Table table = new Table();
+                        table.setId(resultSet.getString("tableId"));
+                        System.out.println(table.getId());
+                        assert false;
+                        tableList.add(table);
+                    }
+                }
+            }
+        }catch (SQLException e){
+            throw new RuntimeException();
+        }
+        return tableList;
+    }
     public void updateStatus (String reservationId, String status){
         update("UPDATE reservation SET status = ? WHERE id = ?", status, reservationId);
     }

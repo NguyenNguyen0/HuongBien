@@ -1,9 +1,7 @@
 package com.huongbien.dao;
 
 import com.huongbien.config.Variable;
-import com.huongbien.entity.Customer;
 import com.huongbien.entity.Table;
-import javafx.scene.control.Tab;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -374,8 +372,8 @@ public class    TableDAO extends GenericDAO<Table> {
         }
     }
 
-    public boolean updateStatusTable(String id, String status) {
+    public void updateStatusTable(String id, String status) {
         String sql = "UPDATE [Table] SET status = ? WHERE id = ?";
-        return update(sql, status, id);
+        update(sql, status, id);
     }
 }
