@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" styleClass="gradient-main" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
+<BorderPane fx:id="compoent_borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1102.0" prefWidth="1692.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.huongbien.ui.controller.OrderTableController">
    <top>
       <HBox prefHeight="150.0" prefWidth="1584.0" BorderPane.alignment="CENTER">
          <children>
@@ -282,7 +282,7 @@
             </VBox>
             <HBox alignment="BOTTOM_CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onClearTableButtonAction" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: white;">
+                  <Button mnemonicParsing="false" onAction="#onClearTableButtonAction" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: white; -fx-border-color: black;">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -297,7 +297,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: white;" text="Đặt trước">
+                  <Button mnemonicParsing="false" onAction="#onPreOrderButtonAction" prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black;" text="Đặt trước">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
@@ -305,7 +305,7 @@
                         <Font name="System Bold" size="30.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#onOrderCuisineButtonAction" prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: white;" text="Tại Quán">
+                  <Button mnemonicParsing="false" onAction="#onOrderCuisineButtonAction" prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black;" text="Tại Quán">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>

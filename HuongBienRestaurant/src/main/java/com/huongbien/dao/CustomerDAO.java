@@ -138,6 +138,10 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return getOne("SELECT * FROM customer WHERE phoneNumber LIKE N'%"+search+"%'");
     }
 
+    public boolean increasePoint (String id, int point){
+        return update("UPDATE customer SET accumulatedPoints = accumulatedPoints + "+point+" WHERE id = '"+id+"'");
+    }
+
     @Override
     public boolean add(Customer customer) {
         String sql = "INSERT INTO Customer (id, name, address, gender, phoneNumber, email, birthday, registrationDate, accumulatedPoints, membershipLevel) "

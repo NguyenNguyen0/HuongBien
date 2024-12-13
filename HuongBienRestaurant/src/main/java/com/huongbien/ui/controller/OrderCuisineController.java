@@ -8,7 +8,6 @@ import com.huongbien.config.Variable;
 import com.huongbien.dao.CategoryDAO;
 import com.huongbien.dao.CuisineDAO;
 import com.huongbien.dao.TableDAO;
-import com.huongbien.dao.TableTypeDAO;
 import com.huongbien.entity.Category;
 import com.huongbien.entity.Cuisine;
 import com.huongbien.entity.OrderDetail;
@@ -56,9 +55,14 @@ public class OrderCuisineController implements Initializable {
     @FXML public ComboBox<Pair<String, String>> categoryComboBox;
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
+
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -225,7 +229,11 @@ public class OrderCuisineController implements Initializable {
     void onOrderPaymentButtonAction(ActionEvent event) throws IOException {
         JsonArray jsonArray = Utils.readJsonFromFile(Constants.CUISINE_PATH);
         if (!jsonArray.isEmpty()) {
-            restaurantMainController.openOrderPayment();
+            if(restaurantMainManagerController != null) {
+                restaurantMainManagerController.openOrderPayment();
+            } else {
+                restaurantMainStaffController.openOrderPayment();
+            }
         } else {
             ToastsMessage.showMessage("Vui lòng chọn món ăn trước khi thanh toán!", "warning");
         }
@@ -233,7 +241,11 @@ public class OrderCuisineController implements Initializable {
 
     @FXML
     void onBackButtonClicked(ActionEvent event) throws IOException {
-        restaurantMainController.openOrderTable();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openOrderTable();
+        } else {
+            restaurantMainStaffController.openOrderTable();
+        }
     }
 
     @FXML

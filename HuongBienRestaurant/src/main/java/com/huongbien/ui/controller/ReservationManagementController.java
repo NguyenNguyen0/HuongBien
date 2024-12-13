@@ -115,10 +115,14 @@ public class ReservationManagementController implements Initializable {
     private TextField searchReservation;
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
 
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -276,7 +280,11 @@ public class ReservationManagementController implements Initializable {
             //
             paymentQueueArray.remove(selectedPaymentQueueIndex);
             Utils.writeJsonToFile(paymentQueueArray, Constants.PAYMENT_QUEUE_PATH);
-            restaurantMainController.openOrderPayment();
+            if(restaurantMainManagerController != null) {
+                restaurantMainManagerController.openOrderPayment();
+            } else {
+                restaurantMainStaffController.openOrderPayment();
+            }
         }
     }
 
@@ -457,7 +465,11 @@ public class ReservationManagementController implements Initializable {
     @FXML
     void onPreOrderButtonAction(ActionEvent event) throws IOException {
         ClearJSON.clearAllJsonWithoutLoginSession();
-        restaurantMainController.openPreOrder();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openPreOrder();
+        } else {
+            restaurantMainStaffController.openPreOrder();
+        }
     }
 
     @FXML
@@ -507,7 +519,11 @@ public class ReservationManagementController implements Initializable {
             jsonArrayCustomer.add(jsonObjectCustomer);
             Utils.writeJsonToFile(jsonArrayCustomer, Constants.CUSTOMER_PATH);
         }
-        restaurantMainController.openPreOrder();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openPreOrder();
+        } else {
+            restaurantMainStaffController.openPreOrder();
+        }
     }
 
     @FXML
@@ -555,7 +571,11 @@ public class ReservationManagementController implements Initializable {
             Utils.writeJsonToFile(jsonArrayCustomer, Constants.CUSTOMER_PATH);
             Utils.writeJsonToFile(jsonArrayCuisine, Constants.CUISINE_PATH);
             reservationDAO.updateStatus(reservation.getReservationId(), Variable.statusReservation[1]);
-            restaurantMainController.openOrderPayment();
+            if(restaurantMainManagerController != null) {
+                restaurantMainManagerController.openOrderPayment();
+            } else {
+                restaurantMainStaffController.openOrderPayment();
+            }
         } else {
             ToastsMessage.showMessage("Vui lòng chọn một đơn đặt để xác nhận", "warning");
         }

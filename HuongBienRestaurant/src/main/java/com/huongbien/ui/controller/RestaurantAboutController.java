@@ -5,11 +5,4 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RestaurantAboutController implements Initializable {
-
-    //initialize area
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-}
+public class RestaurantAboutController {}

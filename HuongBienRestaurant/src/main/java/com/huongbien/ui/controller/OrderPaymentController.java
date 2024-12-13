@@ -79,9 +79,14 @@ public class OrderPaymentController implements Initializable {
     }
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
+
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -256,12 +261,20 @@ public class OrderPaymentController implements Initializable {
 
     @FXML
     void onBackButtonClicked(ActionEvent event) throws IOException {
-        restaurantMainController.openOrderCuisine();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openOrderCuisine();
+        } else {
+            restaurantMainStaffController.openOrderCuisine();
+        }
     }
 
     @FXML
     void addCustomerButton(ActionEvent event) throws IOException {
-        restaurantMainController.openCustomerManagement();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openCustomerManagement();
+        } else {
+            restaurantMainStaffController.openCustomerManagement();
+        }
     }
 
     private void setDiscountFromPromotionSearch() throws FileNotFoundException {
@@ -511,7 +524,11 @@ public class OrderPaymentController implements Initializable {
     @FXML
     void onSavePaymentQueueButtonClicked(ActionEvent event) throws IOException {
         addNewPaymentQueue();
-        restaurantMainController.openReservationManagement();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openReservationManagement();
+        } else {
+            restaurantMainStaffController.openReservationManagement();
+        }
     }
 
     @FXML
@@ -523,6 +540,11 @@ public class OrderPaymentController implements Initializable {
 
     @FXML
     void onPaymentButtonClicked(ActionEvent event) throws IOException {
-        restaurantMainController.openOrderPaymentFinal();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openOrderPaymentFinal();
+        } else {
+            restaurantMainStaffController.openOrderPaymentFinal();
+
+        }
     }
 }

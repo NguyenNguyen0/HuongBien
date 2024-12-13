@@ -39,7 +39,6 @@ public class OrderCuisineBillItemController {
         this.orderCuisineController = orderCuisineController;
     }
 
-
     public void setDataBill(OrderDetail orderDetail) {
         cuisineIdLabel.setText(orderDetail.getCuisine().getCuisineId());
         cuisineNameLabel.setText(orderDetail.getCuisine().getName());

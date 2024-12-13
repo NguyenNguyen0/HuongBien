@@ -117,7 +117,6 @@ public class EmployeeAddressDialogController implements Initializable {
     }
 
     private EmployeeManagementController employeeManagementController;
-
     public void setEmployeeManagementController(EmployeeManagementController employeeManagementController) {
         this.employeeManagementController = employeeManagementController;
     }

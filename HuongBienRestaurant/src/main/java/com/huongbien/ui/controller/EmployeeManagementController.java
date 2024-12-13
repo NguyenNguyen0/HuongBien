@@ -120,10 +120,14 @@ public class EmployeeManagementController implements Initializable {
 
     private final Image DEFAULT_AVATAR = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/huongbien/icon/mg_employee/user-256px.png")));
 
-    public RestaurantMainController restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
 
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     @Override
@@ -569,7 +573,12 @@ public class EmployeeManagementController implements Initializable {
             addEmployee();
         }
         clearEmployeeForm();
-        restaurantMainController.setDetailUserInfo();
+
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.setDetailUserInfo();
+        }else {
+            restaurantMainStaffController.setDetailUserInfo();
+        }
     }
 
     @FXML

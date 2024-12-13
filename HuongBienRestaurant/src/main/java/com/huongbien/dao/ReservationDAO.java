@@ -89,7 +89,6 @@ public class ReservationDAO extends GenericDAO<Reservation> {
                     while (resultSet.next()) {
                         Table table = new Table();
                         table.setId(resultSet.getString("tableId"));
-                        System.out.println(table.getId());
                         assert false;
                         tableList.add(table);
                     }

@@ -7,8 +7,10 @@ import com.huongbien.config.Constants;
 import com.huongbien.dao.AccountDAO;
 import com.huongbien.entity.Account;
 import com.huongbien.service.EmailService;
+import com.huongbien.utils.ClearJSON;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +29,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Pair;
+import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,12 +51,6 @@ public class RestaurantLoginController implements Initializable {
     private final String emailPassword = AppConfig.getEmailPassword();
     @FXML
     private boolean status = false;
-
-    //Controller area
-    public RestaurantMainController restaurantMainController;
-    public void setRestaurantMainController(RestaurantMainController restaurant_mainController) {
-        this.restaurantMainController = restaurant_mainController;
-    }
 
     //initialize area
     @Override
@@ -212,17 +208,28 @@ public class RestaurantLoginController implements Initializable {
             ToastsMessage.showMessage("Tài khoản không tồn tại.", "warning");
             return;
         }
+
+        if(!account.getIsActive()) {
+            ToastsMessage.showMessage("Tài khoản của bạn đã bị khoá, vui lòng liên hệ quản lý để mở lại!", "warning");
+            return;
+        }
+
         if (username.equals(account.getUsername().trim()) && passwordHash.equals(account.getHashcode().trim())) {
             ToastsMessage.showMessage("Đăng nhập thành công", "success");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/RestaurantMain.fxml"));
+            //Role check
+            String path;
+            if(account.getRole().equals("Quản lý")) {
+                path = "/com/huongbien/fxml/RestaurantMainManager.fxml";
+                ToastsMessage.showMessage("Bạn đang đăng nhập với quyền quản lý", "success");
+            } else {
+                path = "/com/huongbien/fxml/RestaurantMainStaff.fxml";
+                ToastsMessage.showMessage("Bạn đang đăng nhập với quyền nhân viên", "success");
+            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent root = loader.load();
-            // Ensure this is called after setting the controller
-            //
             Scene mainScene = new Scene(root);
-            //
             Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             loginStage.close();
-            //
             Stage mainStage = new Stage();
             mainStage.setScene(mainScene);
             mainStage.setMaximized(true);
@@ -230,6 +237,7 @@ public class RestaurantLoginController implements Initializable {
             mainStage.initStyle(StageStyle.UNDECORATED);
             mainStage.getIcons().add(new Image("/com/huongbien/icon/favicon/favicon-logo-restaurant-128px.png"));
             mainStage.show();
+
             //write JSON user current
             JsonArray jsonArray;
             try {
@@ -246,8 +254,14 @@ public class RestaurantLoginController implements Initializable {
             jsonObject.addProperty("Employee ID", id);
             jsonArray.add(jsonObject);
             Utils.writeJsonToFile(jsonArray, Constants.LOGIN_SESSION_PATH);
-            RestaurantMainController restaurantMainController = loader.getController();
-            restaurantMainController.loadUserInfoFromJSON();
+
+            if(account.getRole().equals("Quản lý")) {
+                RestaurantMainManagerController restaurantMainManagerController = loader.getController();
+                restaurantMainManagerController.loadUserInfoFromJSON();
+            } else {
+                RestaurantMainStaffController restaurantMainStaffController = loader.getController();
+                restaurantMainStaffController.loadUserInfoFromJSON();
+            }
         } else {
             ToastsMessage.showMessage("Sai mã nhân viên và mật khẩu đăng nhập", "warning");
         }

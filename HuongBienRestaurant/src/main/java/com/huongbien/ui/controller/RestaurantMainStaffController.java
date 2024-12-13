@@ -14,11 +14,10 @@ import com.huongbien.entity.Customer;
 import com.huongbien.entity.Employee;
 import com.huongbien.entity.Reservation;
 import com.huongbien.service.EmailService;
-import com.huongbien.utils.Converter;
 import com.huongbien.utils.ClearJSON;
+import com.huongbien.utils.Converter;
 import com.huongbien.utils.ToastsMessage;
 import com.huongbien.utils.Utils;
-import com.sun.marlin.FloatArrayCache;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -60,7 +59,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class RestaurantMainController implements Initializable {
+public class RestaurantMainStaffController implements Initializable {
     @FXML
     private Label userNameDetailUserLabel;
     @FXML
@@ -204,7 +203,6 @@ public class RestaurantMainController implements Initializable {
             }
         };
 
-        // Lên lịch để chạy mỗi 5 giây
         scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
         // Đăng ký shutdown hook để đảm bảo scheduler dừng khi chương trình kết thúc
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -315,7 +313,7 @@ public class RestaurantMainController implements Initializable {
         lookup.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         RestaurantLookupController restaurantLookupController = loader.getController();
-        restaurantLookupController.setRestaurantMainController(this);
+        restaurantLookupController.setRestaurantMainStaffController(this);
     }
 
     public void openOrderTable() throws IOException {
@@ -327,7 +325,7 @@ public class RestaurantMainController implements Initializable {
         orderTable.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         OrderTableController orderTableController = loader.getController();
-        orderTableController.setRestaurantMainController(this);
+        orderTableController.setRestaurantMainStaffController(this);
     }
 
     public void openPreOrder() throws IOException {
@@ -339,7 +337,7 @@ public class RestaurantMainController implements Initializable {
         preOrderTable.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         PreOrderController preOrderController = loader.getController();
-        preOrderController.setRestaurantMainController(this);
+        preOrderController.setRestaurantMainStaffController(this);
     }
 
     public void openOrderCuisine() throws IOException {
@@ -351,7 +349,7 @@ public class RestaurantMainController implements Initializable {
         orderCuisine.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         OrderCuisineController orderCuisineController = loader.getController();
-        orderCuisineController.setRestaurantMainController(this);
+        orderCuisineController.setRestaurantMainStaffController(this);
     }
 
     public void openPreOrderCuisine() throws IOException {
@@ -363,7 +361,7 @@ public class RestaurantMainController implements Initializable {
         orderCuisine.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         PreOrderCuisineController preOrderCuisineController = loader.getController();
-        preOrderCuisineController.setRestaurantMainController(this);
+        preOrderCuisineController.setRestaurantMainStaffController(this);
     }
 
     public void openOrderPayment() throws IOException {
@@ -375,7 +373,7 @@ public class RestaurantMainController implements Initializable {
         orderPayment.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         OrderPaymentController orderPaymentController = loader.getController();
-        orderPaymentController.setRestaurantMainController(this);
+        orderPaymentController.setRestaurantMainStaffController(this);
     }
 
     public void openOrderPaymentFinal() throws IOException {
@@ -387,7 +385,7 @@ public class RestaurantMainController implements Initializable {
         orderPaymentFinal.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         OrderPaymentFinalController orderPaymentFinalController = loader.getController();
-        orderPaymentFinalController.setRestaurantMainController(this);
+        orderPaymentFinalController.setRestaurantMainStaffController(this);
     }
 
     public void openStatistics() throws IOException {
@@ -408,7 +406,7 @@ public class RestaurantMainController implements Initializable {
         listOrder.prefHeightProperty().bind(mainBorderPane.heightProperty());
         //setController
         ReservationManagementController reservationManagementController = loader.getController();
-        reservationManagementController.setRestaurantMainController(this);
+        reservationManagementController.setRestaurantMainStaffController(this);
     }
 
     public void openOrderManagement() throws IOException {
@@ -445,27 +443,6 @@ public class RestaurantMainController implements Initializable {
         mainBorderPane.setCenter(manageCustomer);
         manageCustomer.prefWidthProperty().bind(mainBorderPane.widthProperty());
         manageCustomer.prefHeightProperty().bind(mainBorderPane.heightProperty());
-    }
-
-    public void openEmployeeManagement() throws IOException {
-        featureTitleLabel.setText("Quản lý nhân viên");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/EmployeeManagement.fxml"));
-        BorderPane manageEmployee = loader.load();
-        mainBorderPane.setCenter(manageEmployee);
-        manageEmployee.prefWidthProperty().bind(mainBorderPane.widthProperty());
-        manageEmployee.prefHeightProperty().bind(mainBorderPane.heightProperty());
-        //setController
-        EmployeeManagementController employeeManagementController = loader.getController();
-        employeeManagementController.setRestaurantMainController(this);
-    }
-
-    public void openPromotionManagement() throws IOException {
-        featureTitleLabel.setText("Quản lý khuyến mãi");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/huongbien/fxml/PromotionManagement.fxml"));
-        BorderPane managePromotion = loader.load();
-        mainBorderPane.setCenter(managePromotion);
-        managePromotion.prefWidthProperty().bind(mainBorderPane.widthProperty());
-        managePromotion.prefHeightProperty().bind(mainBorderPane.heightProperty());
     }
 
     public void openRestaurantHelp() throws IOException {
@@ -543,16 +520,6 @@ public class RestaurantMainController implements Initializable {
         openCustomerManagement();
     }
 
-    @FXML
-    void onHideEmployeeButtonClicked(ActionEvent event) throws IOException {
-        openEmployeeManagement();
-    }
-
-    @FXML
-    void onHidePromotionButtonClicked(ActionEvent event) throws IOException {
-        openPromotionManagement();
-    }
-
     //navbar-show
     @FXML
     void onShowMenuButtonClicked(ActionEvent event) {
@@ -612,19 +579,6 @@ public class RestaurantMainController implements Initializable {
         hideMenu();
         openCustomerManagement();
     }
-
-    @FXML
-    void onShowEmployeeButtonClicked(MouseEvent event) throws IOException {
-        hideMenu();
-        openEmployeeManagement();
-    }
-
-    @FXML
-    void onShowPromotionButtonClicked(MouseEvent event) throws IOException {
-        hideMenu();
-        openPromotionManagement();
-    }
-
     //service button
     @FXML
     void onShowRestaurantHelpButtonAction(ActionEvent event) throws IOException {

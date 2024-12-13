@@ -77,10 +77,14 @@ public class OrderTableController implements Initializable {
     public Label tableFeeLabel;
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
 
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -380,12 +384,20 @@ public class OrderTableController implements Initializable {
             ToastsMessage.showMessage("Vui lòng chọn bàn", "warning");
             return;
         }
-        restaurantMainController.openOrderCuisine();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openOrderCuisine();
+        }else {
+            restaurantMainStaffController.openOrderCuisine();
+        }
     }
 
     @FXML
     void onPreOrderButtonAction(ActionEvent event) throws IOException {
-        restaurantMainController.openPreOrder();
+        if(restaurantMainManagerController != null) {
+            restaurantMainManagerController.openPreOrder();
+        }else {
+            restaurantMainStaffController.openPreOrder();
+        }
     }
 
     @FXML
@@ -407,7 +419,11 @@ public class OrderTableController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == btn_ok) {
             Utils.writeJsonToFile(new JsonArray(), Constants.TABLE_PATH);
-            restaurantMainController.openOrderTable();
+            if(restaurantMainManagerController != null) {
+                restaurantMainManagerController.openOrderTable();
+            }else {
+                restaurantMainStaffController.openOrderTable();
+            }
         }
     }
 }

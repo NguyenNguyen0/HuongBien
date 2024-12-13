@@ -93,4 +93,8 @@ public class CustomerBUS {
     public Customer getCustomerSearchReservation(String search){
         return customerDao.getCustomerSearchReservation(search);
     }
+
+    public boolean increasePoint(String id, int point){
+        return customerDao.increasePoint(id, point);
+    }
 }

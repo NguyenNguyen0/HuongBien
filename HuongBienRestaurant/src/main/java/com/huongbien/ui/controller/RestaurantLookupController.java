@@ -146,10 +146,14 @@ public class RestaurantLookupController implements Initializable {
     private final CustomerBUS customerBUS = new CustomerBUS();
 
     //Controller area
-    public RestaurantMainController restaurantMainController;
+    public RestaurantMainManagerController restaurantMainManagerController;
+    public void setRestaurantMainManagerController(RestaurantMainManagerController restaurantMainManagerController) {
+        this.restaurantMainManagerController = restaurantMainManagerController;
+    }
 
-    public void setRestaurantMainController(RestaurantMainController restaurantMainController) {
-        this.restaurantMainController = restaurantMainController;
+    public RestaurantMainStaffController restaurantMainStaffController;
+    public void setRestaurantMainStaffController(RestaurantMainStaffController restaurantMainStaffController) {
+        this.restaurantMainStaffController = restaurantMainStaffController;
     }
 
     //initialize area
@@ -475,7 +479,7 @@ public class RestaurantLookupController implements Initializable {
                 } else {
                     reservationIdColumn.setCellValueFactory(new PropertyValueFactory<>("reservationId"));
                     reservationCustomerPhoneColumn.setCellValueFactory(cellData -> {
-                        String phone = customerBUS.getCustomer(cellData.getValue().getCustomer().getCustomerId()).getPhoneNumber();
+                        String phone = customerBUS.getCustomer(cellData.getValue().getCustomer().getCustomerId()).getCustomerId();
                         return new SimpleStringProperty(phone);
                     });
                     reservationDateColumn.setCellValueFactory(new PropertyValueFactory<>("reservationDate"));
@@ -544,7 +548,11 @@ public class RestaurantLookupController implements Initializable {
         restaurantLookupTableVBox.setVisible(false);
         switch (selectedItem) {
             case "Bàn":
-                restaurantMainController.featureTitleLabel.setText("Tra cứu bàn");
+                if(restaurantMainManagerController != null) {
+                    restaurantMainManagerController.featureTitleLabel.setText("Tra cứu bàn");
+                } else {
+                    restaurantMainStaffController.featureTitleLabel.setText("Tra cứu bàn");
+                }
                 restaurantLookupTableVBox.setVisible(true);
                 tableNameTextField.clear();
                 selectFirstWithoutAction(tableTypesComboBox);
@@ -554,14 +562,22 @@ public class RestaurantLookupController implements Initializable {
                 setTableViewColumn();
                 break;
             case "Món ăn":
-                restaurantMainController.featureTitleLabel.setText("Tra cứu món ăn");
+                if(restaurantMainManagerController != null) {
+                    restaurantMainManagerController.featureTitleLabel.setText("Tra cứu món ăn");
+                } else {
+                    restaurantMainStaffController.featureTitleLabel.setText("Tra cứu món ăn");
+                }
                 restaurantLookupCuisineVBox.setVisible(true);
                 cuisineNameTextField.clear();
                 selectFirstWithoutAction(cuisineCategoryComboBox);
                 setTableViewColumn();
                 break;
             case "Khuyến mãi":
-                restaurantMainController.featureTitleLabel.setText("Tra cứu khuyến mãi");
+                if(restaurantMainManagerController != null) {
+                    restaurantMainManagerController.featureTitleLabel.setText("Tra cứu khuyến mãi");
+                } else {
+                    restaurantMainStaffController.featureTitleLabel.setText("Tra cứu khuyến mãi");
+                }
                 restaurantLookupPromotionVBox.setVisible(true);
                 promotionNameTextField.clear();
                 promotionEndDate.setValue(null);
@@ -572,7 +588,11 @@ public class RestaurantLookupController implements Initializable {
                 setTableViewColumn();
                 break;
             case "Đơn đặt trước":
-                restaurantMainController.featureTitleLabel.setText("Tra cứu đơn đặt trước");
+                if(restaurantMainManagerController != null) {
+                    restaurantMainManagerController.featureTitleLabel.setText("Tra cứu đơn đặt trước");
+                } else {
+                    restaurantMainStaffController.featureTitleLabel.setText("Tra cứu đơn đặt trước");
+                }
                 restaurantLookupPreOrderTableVBox.setVisible(true);
                 reservationIdTextField.clear();
                 reservationCustomerPhoneTextField.clear();
@@ -724,6 +744,4 @@ public class RestaurantLookupController implements Initializable {
         reservationReceiveDate.setValue(null);
         setTableViewColumn();
     }
-    //---TODO: add more event
-
 }
